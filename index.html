@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code - AI 驅動的終端開發助手</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind 自訂配置 -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#06b6d4",
+                600: "#0891b2",
+                700: "#0e7490",
+                800: "#155e75",
+                900: "#164e63",
+              },
+              secondary: {
+                50: "#fdf4ff",
+                100: "#fae8ff",
+                500: "#a855f7",
+                600: "#9333ea",
+                700: "#7c3aed",
+                800: "#6b21a8",
+                900: "#581c87",
+              },
+              neutral: {
+                50: "#fafafa",
+                100: "#f5f5f5",
+                200: "#e5e5e5",
+                300: "#d4d4d4",
+                400: "#a3a3a3",
+                500: "#737373",
+                600: "#525252",
+                700: "#404040",
+                800: "#262626",
+                900: "#171717",
+                950: "#0a0a0a",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            spacing: {
+              18: "4.5rem",
+              22: "5.5rem",
+              28: "7rem",
+              36: "9rem",
+            },
+            animation: {
+              "fade-in": "fadeIn 0.6s ease-out",
+              "slide-up": "slideUp 0.8s ease-out",
+              float: "float 6s ease-in-out infinite",
+              "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              "terminal-cursor": "terminalCursor 1s infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              terminalCursor: {
+                "0%, 50%": { opacity: "1" },
+                "51%, 100%": { opacity: "0" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* 自訂樣式，補強 Tailwind 無法覆蓋的細節 */
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: linear-gradient(135deg, #0a0a0a 0%, #171717 100%);
+      }
+
+      /* 程式碼區塊樣式 */
+      .code-block {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      /* 玻璃形態效果 */
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* 隱藏彩蛋按鈕位置 */
+      .easter-egg-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 4px;
+        height: 4px;
+        opacity: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .easter-egg-btn:hover {
+        opacity: 0.3;
+        transform: scale(10);
+      }
+
+      /* 終端機效果 */
+      .terminal-line::after {
+        content: "█";
+        animation: terminalCursor 1s infinite;
+        color: #06b6d4;
+      }
+
+      /* 滑順捲動 */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* 觀察者動畫初始狀態 */
+      .observe-fade {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .observe-fade.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+
+  <body class="bg-neutral-950 text-neutral-100 min-h-screen">
+    <!-- Header 導航區 -->
+    <header class="fixed top-0 w-full z-50 glass-effect">
+      <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center"
+            >
+              <i class="fas fa-terminal text-white text-sm"></i>
+            </div>
+            <span class="text-xl font-bold text-white">Claude Code</span>
+          </div>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="#features"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >功能特色</a
+            >
+            <a
+              href="#installation"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >安裝指南</a
+            >
+            <a
+              href="#workflows"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >工作流程</a
+            >
+            <a
+              href="#mcp"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >MCP 整合</a
+            >
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button
+            id="mobile-menu-btn"
+            class="md:hidden text-neutral-300 hover:text-white transition-colors duration-200"
+          >
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div
+          id="mobile-menu"
+          class="md:hidden mt-4 pb-4 border-t border-neutral-700 pt-4 hidden"
+        >
+          <div class="flex flex-col space-y-4">
+            <a
+              href="#features"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >功能特色</a
+            >
+            <a
+              href="#installation"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >安裝指南</a
+            >
+            <a
+              href="#workflows"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >工作流程</a
+            >
+            <a
+              href="#mcp"
+              class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+              >MCP 整合</a
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero 主視覺區 -->
+    <section class="pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto text-center">
+        <div class="observe-fade">
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary-400 via-secondary-400 to-primary-500 bg-clip-text text-transparent leading-tight"
+          >
+            AI 驅動的終端開發助手
+          </h1>
+          <p
+            class="text-xl sm:text-2xl text-neutral-300 mb-8 max-w-3xl mx-auto leading-relaxed"
+          >
+            Claude Code
+            讓您在熟悉的終端環境中，享受智慧程式碼理解、自動化錯誤修復與無縫 Git
+            整合的革命性開發體驗。
+          </p>
+
+          <!-- Terminal Demo -->
+          <div class="max-w-4xl mx-auto mb-12">
+            <div class="code-block rounded-xl p-6 text-left">
+              <div class="flex items-center mb-4">
+                <div class="flex space-x-2">
+                  <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <span class="ml-4 text-neutral-400 text-sm font-mono"
+                  >terminal</span
+                >
+              </div>
+              <div class="font-mono text-sm space-y-2">
+                <div class="text-green-400">
+                  $ npm install -g @anthropic-ai/claude-code
+                </div>
+                <div class="text-neutral-300">
+                  ✓ Claude Code installed successfully
+                </div>
+                <div class="text-green-400">$ claude</div>
+                <div class="text-primary-400 terminal-line">
+                  Ready to assist with your development tasks
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <button
+              class="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+            >
+              <i class="fas fa-download mr-2"></i>
+              立即開始使用
+            </button>
+            <button
+              class="border border-neutral-600 hover:border-neutral-500 text-neutral-300 hover:text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+            >
+              <i class="fab fa-github mr-2"></i>
+              查看文檔
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features 功能特色區 -->
+    <section id="features" class="py-20 px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto">
+        <div class="text-center mb-16 observe-fade">
+          <h2
+            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
+          >
+            強大功能特色
+          </h2>
+          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
+            Claude Code 整合了最先進的 AI
+            技術，為開發者提供智慧、安全且高效的程式開發體驗。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1: 智慧程式碼理解 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+            >
+              <i class="fas fa-brain text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">智慧程式碼理解</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              深度分析整個程式碼庫架構，理解專案脈絡，提供精確的程式碼建議與重構方案。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-green-400">> explain the main architecture</div>
+              <div class="text-neutral-300">✓ Analyzing MVC patterns...</div>
+            </div>
+          </div>
+
+          <!-- Feature 2: 自動錯誤修復 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+              style="animation-delay: 1s"
+            >
+              <i class="fas fa-magic text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">自動錯誤修復</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              智慧識別程式錯誤並提供修復建議，支援即時測試與驗證，大幅提升開發效率。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-green-400">> fix the build error</div>
+              <div class="text-neutral-300">✓ Fixed TypeScript errors</div>
+            </div>
+          </div>
+
+          <!-- Feature 3: Git 整合 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+              style="animation-delay: 2s"
+            >
+              <i class="fab fa-git-alt text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">無縫 Git 整合</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              智慧生成 commit 訊息，協助處理合併衝突，自動化 PR
+              建立與程式碼審查流程。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-green-400">> commit with smart message</div>
+              <div class="text-neutral-300">
+                ✓ feat: add user authentication
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 4: MCP 工具整合 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+              style="animation-delay: 3s"
+            >
+              <i class="fas fa-plug text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">MCP 工具整合</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              透過模型上下文協議連接外部工具與資料來源，擴展 AI 助手的能力範圍。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-green-400">> claude mcp add postgres</div>
+              <div class="text-neutral-300">✓ Database connection ready</div>
+            </div>
+          </div>
+
+          <!-- Feature 5: 安全性設計 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+              style="animation-delay: 4s"
+            >
+              <i class="fas fa-shield-alt text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">企業級安全</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              嚴格的權限控管，所有操作需明確授權，支援企業政策與合規性要求。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-yellow-400">⚠ Permission required</div>
+              <div class="text-neutral-300">Allow file modification? [y/N]</div>
+            </div>
+          </div>
+
+          <!-- Feature 6: 多語言支援 -->
+          <div
+            class="observe-fade glass-effect rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+          >
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 animate-float"
+              style="animation-delay: 5s"
+            >
+              <i class="fas fa-code text-white text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">多語言支援</h3>
+            <p class="text-neutral-300 leading-relaxed mb-6">
+              支援 JavaScript、Python、Java、Go
+              等主流程式語言，提供語言特定的最佳實踐建議。
+            </p>
+            <div class="code-block rounded-lg p-4 text-sm font-mono">
+              <div class="text-green-400">> refactor to modern ES2024</div>
+              <div class="text-neutral-300">✓ Updated to async/await</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation 安裝指南區 -->
+    <section
+      id="installation"
+      class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-neutral-950 to-neutral-900"
+    >
+      <div class="container mx-auto">
+        <div class="text-center mb-16 observe-fade">
+          <h2
+            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
+          >
+            快速安裝指南
+          </h2>
+          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
+            只需幾個簡單步驟，即可在您的開發環境中啟用 Claude Code 智慧助手。
+          </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <!-- 系統需求 -->
+          <div class="observe-fade mb-12">
+            <h3 class="text-2xl font-bold mb-6 text-white flex items-center">
+              <i class="fas fa-laptop-code mr-3 text-primary-400"></i>
+              系統需求
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="glass-effect rounded-xl p-6">
+                <h4 class="text-lg font-semibold mb-4 text-primary-400">
+                  作業系統
+                </h4>
+                <ul class="space-y-2 text-neutral-300">
+                  <li><i class="fab fa-apple mr-2"></i>macOS 10.15+</li>
+                  <li>
+                    <i class="fab fa-ubuntu mr-2"></i>Ubuntu 20.04+ / Debian 10+
+                  </li>
+                  <li>
+                    <i class="fab fa-windows mr-2"></i>WSL (Windows Subsystem
+                    for Linux)
+                  </li>
+                </ul>
+              </div>
+              <div class="glass-effect rounded-xl p-6">
+                <h4 class="text-lg font-semibold mb-4 text-primary-400">
+                  硬體與軟體
+                </h4>
+                <ul class="space-y-2 text-neutral-300">
+                  <li><i class="fas fa-memory mr-2"></i>至少 4GB RAM</li>
+                  <li><i class="fab fa-node-js mr-2"></i>Node.js 18+</li>
+                  <li><i class="fab fa-git-alt mr-2"></i>git 2.23+ (選用)</li>
+                  <li><i class="fas fa-wifi mr-2"></i>網路連線</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 安裝步驟 -->
+          <div class="observe-fade">
+            <h3 class="text-2xl font-bold mb-6 text-white flex items-center">
+              <i class="fas fa-download mr-3 text-secondary-400"></i>
+              安裝步驟
+            </h3>
+
+            <div class="space-y-6">
+              <!-- Step 1 -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+                >
+                  <span class="text-white font-bold text-sm">1</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-lg font-semibold mb-2 text-white">
+                    安裝 Claude Code
+                  </h4>
+                  <div class="code-block rounded-lg p-4">
+                    <code class="text-green-400 font-mono"
+                      >npm install -g @anthropic-ai/claude-code</code
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-8 h-8 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+                >
+                  <span class="text-white font-bold text-sm">2</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-lg font-semibold mb-2 text-white">
+                    啟動並驗證
+                  </h4>
+                  <div class="code-block rounded-lg p-4 space-y-2">
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >cd your-project-directory</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-green-400 font-mono">claude</code>
+                    </div>
+                  </div>
+                  <p class="text-neutral-300 mt-2">
+                    首次啟動會引導您完成驗證設定
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
+                >
+                  <span class="text-white font-bold text-sm">3</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-lg font-semibold mb-2 text-white">
+                    開始使用
+                  </h4>
+                  <div class="code-block rounded-lg p-4 space-y-2">
+                    <div>
+                      <code class="text-primary-400 font-mono"
+                        >> what does this project do?</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-primary-400 font-mono"
+                        >> add a hello world function</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-primary-400 font-mono"
+                        >> commit my changes</code
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflows 工作流程區 -->
+    <section id="workflows" class="py-20 px-4 sm:px-6 lg:px-8">
+      <div class="container mx-auto">
+        <div class="text-center mb-16 observe-fade">
+          <h2
+            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
+          >
+            常見工作流程
+          </h2>
+          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
+            Claude Code
+            可以協助您處理各種開發任務，從程式碼理解到部署上線，全程智慧支援。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- 程式碼理解與分析 -->
+          <div class="observe-fade">
+            <div class="glass-effect rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4"
+                >
+                  <i class="fas fa-search text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">程式碼理解與分析</h3>
+              </div>
+              <div
+                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
+              >
+                <div class="text-green-400">
+                  > give me an overview of this codebase
+                </div>
+                <div class="text-neutral-300">
+                  📁 Analyzing project structure...
+                </div>
+                <div class="text-neutral-300">
+                  ✓ Found React app with Express backend
+                </div>
+                <div class="text-green-400">
+                  > explain the authentication flow
+                </div>
+                <div class="text-neutral-300">
+                  🔐 JWT-based auth with OAuth integration
+                </div>
+              </div>
+              <p class="text-neutral-300 leading-relaxed">
+                快速理解新專案架構，分析程式碼模式，找出關鍵檔案與功能流程。
+              </p>
+            </div>
+          </div>
+
+          <!-- 錯誤修復與重構 -->
+          <div class="observe-fade">
+            <div class="glass-effect rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mr-4"
+                >
+                  <i class="fas fa-wrench text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">錯誤修復與重構</h3>
+              </div>
+              <div
+                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
+              >
+                <div class="text-green-400">
+                  > I'm seeing an error when I run npm test
+                </div>
+                <div class="text-red-400">
+                  ❌ TypeError: Cannot read property 'name'
+                </div>
+                <div class="text-neutral-300">
+                  🔍 Found null check missing in user.js:23
+                </div>
+                <div class="text-green-400">
+                  ✓ Fixed with optional chaining operator
+                </div>
+              </div>
+              <p class="text-neutral-300 leading-relaxed">
+                智慧診斷程式錯誤，提供修復建議，並協助重構程式碼以提升品質。
+              </p>
+            </div>
+          </div>
+
+          <!-- Git 操作與 PR 管理 -->
+          <div class="observe-fade">
+            <div class="glass-effect rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4"
+                >
+                  <i class="fab fa-git-alt text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">
+                  Git 操作與 PR 管理
+                </h3>
+              </div>
+              <div
+                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
+              >
+                <div class="text-green-400">> what files have I changed?</div>
+                <div class="text-yellow-400">
+                  📝 Modified: src/auth.js, tests/auth.test.js
+                </div>
+                <div class="text-green-400">
+                  > commit with descriptive message
+                </div>
+                <div class="text-neutral-300">
+                  ✓ feat(auth): add password validation with tests
+                </div>
+                <div class="text-green-400">> create a pr</div>
+              </div>
+              <p class="text-neutral-300 leading-relaxed">
+                自動生成有意義的 commit 訊息，協助處理合併衝突，並建立詳細的 PR
+                描述。
+              </p>
+            </div>
+          </div>
+
+          <!-- 測試與文檔生成 -->
+          <div class="observe-fade">
+            <div class="glass-effect rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-4"
+                >
+                  <i class="fas fa-file-alt text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">測試與文檔生成</h3>
+              </div>
+              <div
+                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
+              >
+                <div class="text-green-400">
+                  > add tests for the notification service
+                </div>
+                <div class="text-neutral-300">
+                  🧪 Generated comprehensive test suite
+                </div>
+                <div class="text-green-400">
+                  > add JSDoc comments to auth module
+                </div>
+                <div class="text-neutral-300">
+                  📚 Updated documentation with examples
+                </div>
+              </div>
+              <p class="text-neutral-300 leading-relaxed">
+                自動生成測試案例，增加程式碼覆蓋率，並建立清晰的 API 文檔。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MCP Integration 區 -->
+    <section
+      id="mcp"
+      class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-neutral-900 to-neutral-950"
+    >
+      <div class="container mx-auto">
+        <div class="text-center mb-16 observe-fade">
+          <h2
+            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
+          >
+            MCP 模型上下文協議
+          </h2>
+          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
+            透過 MCP 協議連接外部工具與資料來源，讓 Claude Code 的能力無限擴展。
+          </p>
+        </div>
+
+        <div class="max-w-6xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- MCP 特色 1 -->
+            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
+              <div
+                class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i class="fas fa-database text-white text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-white">資料庫整合</h3>
+              <p class="text-neutral-300">
+                連接 PostgreSQL、MongoDB 等資料庫，直接查詢與操作資料。
+              </p>
+            </div>
+
+            <!-- MCP 特色 2 -->
+            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
+              <div
+                class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i class="fas fa-cloud text-white text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-white">雲端服務</h3>
+              <p class="text-neutral-300">
+                整合 AWS、Azure、GCP 等雲端平台 API 與服務。
+              </p>
+            </div>
+
+            <!-- MCP 特色 3 -->
+            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
+              <div
+                class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              >
+                <i class="fas fa-tools text-white text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-white">開發工具</h3>
+              <p class="text-neutral-300">
+                連接 JIRA、Slack、Docker 等開發團隊常用工具。
+              </p>
+            </div>
+          </div>
+
+          <!-- MCP 設定範例 -->
+          <div class="observe-fade">
+            <h3 class="text-2xl font-bold mb-6 text-white text-center">
+              MCP 設定範例
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-400">
+                  新增 Postgres MCP 伺服器
+                </h4>
+                <div
+                  class="code-block rounded-lg p-4 font-mono text-sm space-y-2"
+                >
+                  <div class="text-green-400">
+                    $ claude mcp add postgres-server \
+                  </div>
+                  <div class="text-green-400">
+                    /path/to/postgres-mcp-server \
+                  </div>
+                  <div class="text-green-400">--connection-string \</div>
+                  <div class="text-green-400">
+                    "postgresql://user:pass@localhost:5432/db"
+                  </div>
+                  <div class="text-neutral-300">
+                    ✓ Postgres MCP server added successfully
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="text-lg font-semibold mb-4 text-secondary-400">
+                  使用 MCP 資源
+                </h4>
+                <div
+                  class="code-block rounded-lg p-4 font-mono text-sm space-y-2"
+                >
+                  <div class="text-green-400">
+                    > describe the schema of users table
+                  </div>
+                  <div class="text-neutral-300">
+                    🔍 Querying database schema...
+                  </div>
+                  <div class="text-neutral-300">
+                    📊 Users table has: id, email, created_at
+                  </div>
+                  <div class="text-green-400">
+                    > show me recent user registrations
+                  </div>
+                  <div class="text-neutral-300">
+                    📈 Found 23 new users this week
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer 頁尾區 -->
+    <footer class="py-16 px-4 sm:px-6 lg:px-8 border-t border-neutral-800">
+      <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <!-- Logo 與簡介 -->
+          <div class="md:col-span-2">
+            <div class="flex items-center space-x-3 mb-4">
+              <div
+                class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center"
+              >
+                <i class="fas fa-terminal text-white text-sm"></i>
+              </div>
+              <span class="text-xl font-bold text-white">Claude Code</span>
+            </div>
+            <p class="text-neutral-300 leading-relaxed max-w-md">
+              AI 驅動的終端開發助手，讓程式設計變得更智慧、更高效、更安全。
+            </p>
+          </div>
+
+          <!-- 快速連結 -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4 text-white">快速連結</h4>
+            <ul class="space-y-2 text-neutral-300">
+              <li>
+                <a
+                  href="#features"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >功能特色</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#installation"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >安裝指南</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#workflows"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >工作流程</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#mcp"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >MCP 整合</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 支援資源 -->
+          <div>
+            <h4 class="text-lg font-semibold mb-4 text-white">支援資源</h4>
+            <ul class="space-y-2 text-neutral-300">
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >官方文檔</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >API 參考</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >社群論壇</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="hover:text-primary-400 transition-colors duration-200"
+                  >問題回報</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 版權與社群連結 -->
+        <div
+          class="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-neutral-400 mb-4 md:mb-0">
+            © 2025 Anthropic. All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
+            >
+              <i class="fab fa-github text-xl"></i>
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
+            >
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
+            >
+              <i class="fab fa-discord text-xl"></i>
+            </a>
+            <a
+              href="#"
+              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
+            >
+              <i class="fas fa-envelope text-xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 隱藏彩蛋按鈕 -->
+    <button
+      id="easter-egg"
+      class="easter-egg-btn bg-primary-500 rounded-full"
+      title="發現了嗎？🎉"
+    ></button>
+
+    <!-- JavaScript 功能實現 -->
+    <script>
+      // 用戶體驗增強：Mobile Menu 切換功能
+      // 設計考量：手機版導航的易用性，確保使用者能輕鬆瀏覽所有功能
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+
+        // 圖示切換動畫：提供視覺回饋，增強互動體驗
+        const icon = mobileMenuBtn.querySelector("i");
+        if (mobileMenu.classList.contains("hidden")) {
+          icon.className = "fas fa-bars text-xl";
+        } else {
+          icon.className = "fas fa-times text-xl";
+        }
+      });
+
+      // 響應式設計：行動裝置上點選連結自動關閉選單
+      // UX 考量：避免使用者點選後選單仍然展開造成混淆
+      const mobileMenuLinks = mobileMenu.querySelectorAll("a");
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          const icon = mobileMenuBtn.querySelector("i");
+          icon.className = "fas fa-bars text-xl";
+        });
+      });
+
+      // 微互動設計：平滑捲動效果，提升導航體驗
+      // 技術實現：Intersection Observer 搭配 CSS transitions
+      const observeOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -100px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 視覺回饋：元素進入視窗時觸發淡入動畫
+            entry.target.classList.add("in-view");
+
+            // 效能最佳化：已顯示的元素停止觀察，減少資源消耗
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observeOptions);
+
+      // 動畫系統：批次處理所有需要觀察的元素
+      const observeElements = document.querySelectorAll(".observe-fade");
+      observeElements.forEach((el) => observer.observe(el));
+
+      // 隱藏彩蛋功能：增加使用者探索樂趣
+      // UX 設計：隱蔽但可發現的互動元素，提升使用者參與度
+      const easterEggBtn = document.getElementById("easter-egg");
+      let clickCount = 0;
+
+      easterEggBtn.addEventListener("click", () => {
+        clickCount++;
+
+        // 彩蛋觸發邏輯：多次點擊解鎖特殊功能
+        if (clickCount === 1) {
+          showEasterEggMessage("🎉 恭喜你發現了隱藏彩蛋！");
+        } else if (clickCount === 3) {
+          showEasterEggMessage(
+            "🚀 Claude Code 的秘密：AI 讓程式設計變得有趣！"
+          );
+          triggerConfettiEffect();
+        } else if (clickCount === 5) {
+          showEasterEggMessage("🎯 你是真正的探索者！這裡是開發者的小驚喜 🎁");
+          triggerSecretTerminalGame();
+        }
+      });
+
+      // 彩蛋訊息顯示系統
+      // 設計原則：非侵入式通知，不干擾主要使用流程
+      function showEasterEggMessage(message) {
+        const notification = document.createElement("div");
+        notification.className =
+          "fixed top-20 right-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-3 rounded-lg shadow-2xl z-50 animate-slide-up";
+        notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        document.body.appendChild(notification);
+
+        // 自動消失機制：避免通知累積影響使用體驗
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, 5000);
+      }
+
+      // 視覺特效：彩蛋解鎖時的慶祝動畫
+      function triggerConfettiEffect() {
+        // 創建彩色紙屑動畫效果
+        for (let i = 0; i < 30; i++) {
+          setTimeout(() => {
+            createConfetti();
+          }, i * 100);
+        }
+      }
+
+      function createConfetti() {
+        const confetti = document.createElement("div");
+        const colors = ["#06b6d4", "#a855f7", "#10b981", "#f59e0b", "#ef4444"];
+
+        confetti.style.cssText = `
+                position: fixed;
+                top: -10px;
+                left: ${Math.random() * 100}vw;
+                width: 10px;
+                height: 10px;
+                background: ${
+                  colors[Math.floor(Math.random() * colors.length)]
+                };
+                transform: rotate(${Math.random() * 360}deg);
+                z-index: 1000;
+                pointer-events: none;
+                animation: confetti-fall 3s linear forwards;
+            `;
+
+        document.body.appendChild(confetti);
+
+        // 記憶體管理：動畫結束後清除元素
+        setTimeout(() => confetti.remove(), 3000);
+      }
+
+      // 彩蛋遊戲：終端機小遊戲
+      function triggerSecretTerminalGame() {
+        const gameModal = document.createElement("div");
+        gameModal.className =
+          "fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4";
+        gameModal.innerHTML = `
+                <div class="code-block rounded-xl p-8 max-w-2xl w-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-primary-400">🎮 Claude Code Terminal Game</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-neutral-400 hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="font-mono text-sm space-y-2 mb-6">
+                        <div class="text-green-400">$ claude --version</div>
+                        <div class="text-neutral-300">Claude Code v2025.07.14 🚀</div>
+                        <div class="text-green-400">$ claude --easter-egg-mode</div>
+                        <div class="text-yellow-400">🎯 挑戰：用一行指令讓 Claude 協助你重構一個複雜的 React 元件</div>
+                        <div class="mt-4">
+                            <input type="text" placeholder="輸入你的 Claude Code 指令..." 
+                                   class="w-full bg-neutral-800 text-green-400 p-3 rounded border border-neutral-600 focus:border-primary-500 focus:outline-none font-mono"
+                                   onkeypress="if(event.key==='Enter') checkTerminalGameAnswer(this.value)">
+                        </div>
+                    </div>
+                    <div class="text-neutral-400 text-sm">
+                        💡 提示：使用自然語言描述你想要的重構目標
+                    </div>
+                </div>
+            `;
+        document.body.appendChild(gameModal);
+      }
+
+      // 遊戲答案檢查邏輯
+      function checkTerminalGameAnswer(answer) {
+        const responses = [
+          "🎉 太棒了！Claude Code 確實能理解複雜的重構需求！",
+          "✨ 正確！自然語言讓 AI 協作變得如此簡單！",
+          "🚀 完美！你已經掌握了與 Claude Code 對話的精髓！",
+        ];
+
+        if (answer.trim().length > 10) {
+          const randomResponse =
+            responses[Math.floor(Math.random() * responses.length)];
+          showEasterEggMessage(randomResponse);
+          document.querySelector(".fixed.inset-0").remove();
+        }
+      }
+
+      // CSS 動畫支援：彩蛋動畫效果
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes confetti-fall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+      document.head.appendChild(style);
+
+      // 效能最佳化：延遲載入非關鍵動畫
+      // 設計考量：確保頁面載入速度，優先顯示核心內容
+      window.addEventListener("load", () => {
+        // 啟動浮動動畫，增加頁面活力
+        const floatingElements = document.querySelectorAll(".animate-float");
+        floatingElements.forEach((el, index) => {
+          el.style.animationDelay = `${index * 0.5}s`;
+        });
+      });
+
+      // 可維護性設計：事件委派處理動態元素
+      // 技術優勢：減少記憶體使用，提升效能
+      document.addEventListener("click", (e) => {
+        // 處理所有按鈕的hover音效（如果需要）
+        if (e.target.tagName === "BUTTON") {
+          // 可以在這裡添加音效或其他全域按鈕行為
+        }
+      });
+
+      // 輔助功能支援：鍵盤導航
+      // 無障礙設計：確保使用者可以透過鍵盤操作所有功能
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          // 關閉所有彈出視窗
+          const modals = document.querySelectorAll(".fixed.inset-0");
+          modals.forEach((modal) => modal.remove());
+
+          // 關閉手機選單
+          mobileMenu.classList.add("hidden");
+        }
+      });
+
+      // 使用者體驗追蹤：頁面互動統計（示範用）
+      // 實際應用可整合 Google Analytics 或其他分析工具
+      let interactionStats = {
+        pageViews: 1,
+        buttonClicks: 0,
+        easterEggDiscovered: false,
+      };
+
+      // 統計所有按鈕點擊
+      document.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
+          interactionStats.buttonClicks++;
+        }
+      });
+
+      console.log("🎉 Claude Code 展示頁面已載入完成！");
+      console.log("💡 技術特點：Mobile-first RWD、Tailwind CSS、微互動設計");
+      console.log("🎯 設計重點：WCAG AA 對比度、語意化 HTML、效能最佳化");
+      console.log("🚀 互動功能：Intersection Observer、CSS 動畫、隱藏彩蛋");
+    </script>
+  </body>
+</html>

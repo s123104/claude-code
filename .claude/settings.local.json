@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude-code --ui --monitor)",
+      "Bash(claude --ui --monitor)",
+      "Bash(for f in docs/*.md)",
+      "Bash(do iconv:*)",
+      "Bash(mv:*)",
+      "Bash(done)",
+      "Bash(ls:*)"
+    ],
+    "deny": []
+  }
+}
