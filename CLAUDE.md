@@ -26,6 +26,10 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 │   └── logo.png                 # Claude Code logo (pixelated style)
 ├── index.html                   # Modern interactive web interface
 ├── wsl_claude_code_setup.sh    # WSL automated installation script
+├── setup.bat                    # Windows batch installer entry point
+├── setup.ps1                    # PowerShell main installation script
+├── start.bat                    # Windows launcher for Claude Code
+├── start.sh                     # Linux/WSL Claude Code installer
 └── .claude/                     # Claude Code project configuration
     └── settings.local.json      # Local permissions and settings
 ```
@@ -49,6 +53,12 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 - **index.html**: Modern interactive web interface with responsive design, animations, and easter eggs
 - **wsl_claude_code_setup.sh**: Comprehensive WSL environment setup script with error handling
 
+### Installation Scripts
+- **setup.bat**: Windows batch file entry point with admin check and WSL validation
+- **setup.ps1**: PowerShell main installer with multilingual support and automated WSL2 setup
+- **start.bat**: Windows launcher with path conversion and error handling
+- **start.sh**: Linux/WSL installer with enhanced OS detection and npm configuration repair
+
 ## Working with Documentation
 
 ### Reading Order by Role
@@ -70,26 +80,28 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 - **Performance**: `--profile --optimize --cache`
 - **Security**: `--security --audit --scan`
 
-## New Features in v2.0.0
+## New Features in v3.0.0
 
-### Intelligent Agent System
-- **Multi-modal Analysis**: Support for images, documents, code visualization
-- **Deep Learning Intent Recognition**: Automatic parsing of ambiguous requirements
-- **Real-time Collaboration**: Multi-user synchronization and conflict resolution
-- **Sequential-Thinking Execution**: 4-stage execution process (analysis → planning → execution → integration)
+### Enhanced Installation System
+- **Cross-platform Compatibility**: Windows (setup.bat, setup.ps1) and Linux/WSL (start.sh) support
+- **Automated OS Detection**: Intelligent system environment detection and compatibility checks
+- **Version Updates**: nvm v0.40.3, Node.js 18 LTS, latest @anthropic-ai/claude-code
+- **Network Diagnostics**: Comprehensive connectivity and DNS resolution checks
+- **Resource Monitoring**: Memory, CPU, and disk space validation
+- **Windows 11 Support**: TPM 2.0 detection and advanced Windows 11 features
+
+### Smart Environment Diagnostics
+- **Multi-layer OS Detection**: WSL2, Linux distributions, system architecture identification
+- **Virtualization Validation**: VT-x/AMD-V, SLAT, Hyper-V requirements verification
+- **Path Pollution Cleanup**: Automatic npm configuration cleanup and repair
+- **Error Recovery**: Comprehensive error handling and logging system
+- **Performance Optimization**: Load balancing and resource usage monitoring
 
 ### Enhanced Web Interface (index.html)
 - **Modern Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Interactive Features**: Animations, easter eggs, terminal demo
 - **PWA Support**: Installable on desktop and mobile devices
 - **Accessibility**: WCAG AA compliance with keyboard navigation
-
-### WSL Automation (wsl_claude_code_setup.sh)
-- **Windows Environment Detection**: Automatic system compatibility checks
-- **Virtualization Verification**: VT-x/AMD-V, SLAT, Hyper-V requirements
-- **Path Pollution Cleanup**: Automatic npm configuration cleanup
-- **Error Recovery**: Comprehensive error handling and logging system
-- **One-click Installation**: Complete WSL to Claude Code deployment
 
 ## Development Commands
 
@@ -190,11 +202,11 @@ This repository serves as a comprehensive Chinese language resource for:
 
 ### Key Repository Information
 - **GitHub Repository**: s123104/claude-code
-- **Current Version**: v2.0.0
-- **Last Update**: 2025-07-15T14:16:31+08:00
+- **Current Version**: v3.0.0
+- **Last Update**: 2025-07-15T18:30:00+08:00
 - **Language**: Traditional Chinese (繁體中文)
 - **License**: MIT License
-- **Branch**: master (ahead of origin/master by 2 commits)
+- **Branch**: master (ahead of origin/master by 4 commits)
 
 ### Project Configuration
 - **Claude Code Settings**: `.claude/settings.local.json`

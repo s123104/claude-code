@@ -30,7 +30,12 @@
       "Bash(curl:*)",
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:stackoverflow.com)",
-      "WebFetch(domain:gist.github.com)"
+      "WebFetch(domain:gist.github.com)",
+      "Bash(grep:*)",
+      "Bash(bash:*)",
+      "Bash(powershell:*)",
+      "Bash(/dev/null)",
+      "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": []
   }

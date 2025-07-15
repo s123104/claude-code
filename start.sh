@@ -9,6 +9,9 @@ set -e
 
 # 首先檢查作業系統環境
 detect_os() {
+    info "正在偵測作業系統環境..."
+    
+    # 檢查是否在 Windows 原生環境執行
     if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ -n "$WINDIR" ]]; then
         echo "❌ 偵測到 Windows 環境，此腳本需要在 WSL 環境中執行"
         echo "請先安裝 WSL2 並使用以下 PowerShell 腳本："
@@ -21,12 +24,40 @@ detect_os() {
         exit 1
     fi
     
+    # 檢查是否在 WSL 環境
     if ! grep -qi microsoft /proc/version 2>/dev/null; then
-        echo "⚠️ 未偵測到 WSL 環境，將以純 Linux 模式執行"
+        warn "未偵測到 WSL 環境，將以純 Linux 模式執行"
         export LINUX_MODE=true
+        
+        # 檢查 Linux 發行版
+        if [[ -f /etc/os-release ]]; then
+            source /etc/os-release
+            info "Linux 發行版: $NAME $VERSION"
+        else
+            warn "無法識別 Linux 發行版，可能會遇到相容性問題"
+        fi
     else
-        echo "✅ WSL 環境偵測成功，開始安裝程序"
+        success "WSL 環境偵測成功，開始安裝程序"
         export WSL_MODE=true
+        
+        # 檢查 WSL 版本
+        local wsl_version=$(wsl.exe --version 2>/dev/null | head -1)
+        if [[ -n "$wsl_version" ]]; then
+            info "WSL 版本: $wsl_version"
+        fi
+    fi
+    
+    # 檢查系統架構
+    local arch=$(uname -m)
+    info "系統架構: $arch"
+    
+    # 檢查 Shell 類型
+    local shell_type=$(basename "$SHELL")
+    info "Shell 類型: $shell_type"
+    
+    # 檢查是否為 root 用戶
+    if [[ $EUID -eq 0 ]]; then
+        warn "偵測到 root 用戶，建議使用一般用戶執行此腳本"
     fi
 }
 
@@ -130,6 +161,60 @@ enable_windows_features() {
     fi
 }
 
+# 網路連線檢查
+check_network_connectivity() {
+    info "檢查網路連線..."
+    
+    # 檢查基本網路連線
+    if ! ping -c 1 8.8.8.8 >/dev/null 2>&1; then
+        error_exit "無法連線到網際網路，請檢查網路設定"
+    fi
+    
+    # 檢查 DNS 解析
+    if ! nslookup raw.githubusercontent.com >/dev/null 2>&1; then
+        warn "DNS 解析有問題，可能影響下載速度"
+    fi
+    
+    # 檢查重要網站連線
+    local sites=("github.com" "npmjs.com" "nodejs.org")
+    for site in "${sites[@]}"; do
+        if ! curl -s --connect-timeout 5 "https://$site" >/dev/null; then
+            warn "無法連線到 $site，可能影響安裝程序"
+        fi
+    done
+    
+    success "網路連線檢查通過"
+}
+
+# 系統資源檢查
+check_system_resources() {
+    info "檢查系統資源..."
+    
+    # 檢查記憶體
+    local mem_total=$(free -m | awk '/^Mem:/{print $2}')
+    local mem_available=$(free -m | awk '/^Mem:/{print $7}')
+    
+    info "記憶體總量：${mem_total}MB"
+    info "可用記憶體：${mem_available}MB"
+    
+    if [[ $mem_available -lt 512 ]]; then
+        warn "可用記憶體不足 512MB，可能影響安裝效能"
+    fi
+    
+    # 檢查 CPU 核心數
+    local cpu_cores=$(nproc)
+    info "CPU 核心數：$cpu_cores"
+    
+    # 檢查 Load Average
+    local load_avg=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | tr -d ',')
+    info "系統負載：$load_avg"
+    
+    # 使用 awk 替代 bc 進行浮點數比較
+    if [[ $(echo "$load_avg $cpu_cores" | awk '{print ($1 > $2)}') == "1" ]]; then
+        warn "系統負載過高，可能影響安裝效能"
+    fi
+}
+
 # 修復 WSL 常見問題
 fix_wsl_issues() {
     info "修復 WSL 常見問題..."
@@ -204,6 +289,18 @@ check_disk_space() {
     # 檢查是否有足夠空間（至少 1GB）
     if [[ $free_bytes -lt 1048576 ]]; then
         error_exit "磁碟空間不足（剩餘：$free_space），需要至少 1GB 空間"
+    fi
+    
+    # 檢查其他重要目錄空間
+    local tmp_space=$(df -h /tmp | awk 'NR==2 {print $4}')
+    info "臨時目錄空間：$tmp_space"
+    
+    # 檢查 WSL 磁碟使用量（如果在 WSL 環境）
+    if [[ -n "$WSL_MODE" ]]; then
+        local wsl_usage=$(df -h /mnt/c | awk 'NR==2 {print $5}' | tr -d '%')
+        if [[ $wsl_usage -gt 90 ]]; then
+            warn "Windows C: 磁碟使用率 ${wsl_usage}%，可能影響 WSL 效能"
+        fi
     fi
 }
 
@@ -280,7 +377,7 @@ install_nvm() {
     info "安裝 nvm..."
     
     # 下載並安裝 nvm
-    local nvm_install_url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
+    local nvm_install_url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
     if ! curl -o- "$nvm_install_url" | bash; then
         error_exit "nvm 安裝失敗"
     fi
@@ -454,6 +551,8 @@ final_system_check() {
 
 # 執行安裝流程
 check_disk_space
+check_network_connectivity
+check_system_resources
 install_system_dependencies
 fix_npm_config
 install_nvm

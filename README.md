@@ -5,14 +5,14 @@
   
   **🚀 完整的 Claude Code 與 Cursor AI 整合說明書集合**
   
-  [![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
+  [![Version](https://img.shields.io/badge/Version-3.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
   [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2025.07.15-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
   [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
   [![WSL](https://img.shields.io/badge/WSL-Auto%20Setup-orange.svg)](wsl_claude_code_setup.sh)
   
-  > 最後更新時間：2025-07-15T14:16:31+08:00  
+  > 最後更新時間：2025-07-15T18:30:00+08:00  
   > 文件語言：繁體中文  
   > 專案維護者：s123104
 </div>
@@ -41,9 +41,91 @@
 
 ---
 
+## ⚡ 快速開始 (5 分鐘內完成安裝)
+
+### 🖥️ Windows 用戶 (推薦)
+
+**一鍵安裝腳本 - 自動檢測環境並安裝 WSL2 + Claude Code**
+
+```batch
+# 方式一：批次檔 (最簡單)
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat && setup.bat
+
+# 方式二：PowerShell (功能完整)
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1 && powershell -ExecutionPolicy Bypass -File setup.ps1
+
+# 方式三：直接啟動 (如果已有 WSL)
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.bat && start.bat
+```
+
+### 🐧 Linux/WSL 用戶
+
+**自動安裝腳本 - 智能環境檢測與修復**
+
+```bash
+# 一鍵安裝 (推薦)
+curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
+
+# 或下載後執行
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
+```
+
+### 🍎 macOS 用戶
+
+```bash
+# 使用 Homebrew 安裝
+brew install node
+npm install -g @anthropic-ai/claude-code
+
+# 驗證安裝
+claude --version
+```
+
+### 🐳 Docker 用戶
+
+```bash
+# 使用 Docker 容器
+docker run -it --rm -v $(pwd):/workspace node:18-alpine sh -c "
+  npm install -g @anthropic-ai/claude-code && 
+  cd /workspace && 
+  claude --help
+"
+```
+
+### 🔑 快速認證設定
+
+```bash
+# 設定 API Key
+export ANTHROPIC_API_KEY=your_api_key_here
+
+# 或使用網頁認證 (推薦)
+claude auth login
+
+# 測試連線
+claude "Hello, Claude Code!"
+```
+
+### 🚀 立即開始使用
+
+```bash
+# 進入您的專案目錄
+cd your-project
+
+# 開始使用 Claude Code
+claude "幫我分析這個專案的架構"
+
+# 或查看完整功能
+claude --help
+```
+
+> 💡 **提示**: 使用腳本安裝會自動處理環境檢測、依賴修復、網路問題和路徑配置等常見問題！
+
+---
+
 ## 📋 目錄
 
 - [🎯 專案簡介](#-專案簡介)
+- [⚡ 快速開始 (5 分鐘內完成安裝)](#-快速開始-5-分鐘內完成安裝)
 - [📚 文件清單與功能索引](#-文件清單與功能索引)
   - [🎯 主要文件](#-主要文件)
   - [🔧 功能專門文件](#-功能專門文件)
@@ -188,21 +270,32 @@ docker run -it claude-code
 
 ### 🪟 Windows 用戶快速安裝（推薦）
 
-**Windows 用戶可以使用我們的一鍵安裝腳本：**
+**Windows 用戶可以使用我們的智能安裝腳本：**
 
 ```batch
-:: 方式一：下載並執行批次檔（最簡單）
+:: 方式一：批次檔入口點（最簡單）
 curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat
 setup.bat
 
-:: 方式二：PowerShell 腳本（功能完整）
+:: 方式二：PowerShell 主安裝器（功能完整）
 curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1
 powershell -ExecutionPolicy Bypass -File setup.ps1
+
+:: 方式三：直接啟動（如果已有 WSL）
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.bat
+start.bat
 ```
 
-**功能特色：**
+**v3.0.0 新功能：**
+- 🔍 **智能環境檢測**：自動識別 Windows 10/11、WSL2 狀態、虛擬化支援
+- 🛠️ **自動問題修復**：npm 路徑污染清理、WSL2 配置修復、網路連線診斷
+- 🌐 **網路優化**：DNS 解析檢查、GitHub 連線測試、下載加速
+- 💾 **資源監控**：記憶體、CPU、磁碟空間檢查與優化建議
+- 🔧 **Windows 11 支援**：TPM 2.0 檢測、進階安全功能整合
+
+**安裝腳本特色：**
 - 🔍 **智能環境偵測**：自動檢查 Windows 版本、虛擬化支援
-- 🔧 **一鍵 WSL2 安裝**：自動安裝 WSL2、Ubuntu、必要工具
+- 🔧 **一鍵 WSL2 安裝**：自動安裝 WSL2、Ubuntu、必要工具  
 - 🛠️ **自動修復**：修復常見的 Node.js 路徑衝突、WSL 配置問題
 - 🚀 **完整驗證**：確保所有組件正常運作
 - 📋 **詳細日誌**：提供完整的安裝日誌和錯誤診斷
@@ -212,8 +305,11 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 **如果您已經在 WSL 或 Linux 環境中，可以直接使用：**
 
 ```bash
-# 下載並執行安裝腳本
-wget https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+# 方式一：直接執行 (推薦)
+curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
+
+# 方式二：下載後執行
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 chmod +x start.sh
 ./start.sh
 ```

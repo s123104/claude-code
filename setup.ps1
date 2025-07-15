@@ -157,10 +157,24 @@ function Test-WindowsVersion {
     $buildNumber = [int]$osInfo.BuildNumber
     
     Write-ColorMessage "Windows: $($osInfo.Caption) (Build $buildNumber)" "White" "📋"
+    Write-ColorMessage "系統版本: $($osInfo.Version)" "White" "📋"
     
     if ($buildNumber -lt 19041) {
         Write-ColorMessage "Windows 版本過低，WSL2 需要 Windows 10 Build 19041 或更新版本" "Red" "❌"
         return $false
+    }
+    
+    # 檢查 Windows 11 特定需求
+    if ($buildNumber -ge 22000) {
+        Write-ColorMessage "偵測到 Windows 11，檢查進階功能..." "Blue" "🔵"
+        
+        # 檢查 TPM 2.0 (Windows 11 需求)
+        $tpm = Get-CimInstance -ClassName Win32_Tpm -ErrorAction SilentlyContinue
+        if ($tpm) {
+            Write-ColorMessage "TPM 2.0 可用" "Green" "✅"
+        } else {
+            Write-ColorMessage "TPM 2.0 不可用" "Yellow" "⚠️"
+        }
     }
     
     Write-ColorMessage "Windows 版本檢查通過" "Green" "✅"
@@ -396,6 +410,38 @@ function Test-WSLFunctionality {
     }
 }
 
+function Test-NetworkConnectivity {
+    Write-ColorMessage "檢查網路連線..." "Yellow" "🔍"
+    
+    # 檢查基本網路連線
+    try {
+        $ping = Test-Connection -ComputerName "8.8.8.8" -Count 1 -Quiet
+        if (-not $ping) {
+            Write-ColorMessage "無法連線到網際網路，請檢查網路設定" "Red" "❌"
+            return $false
+        }
+        
+        # 檢查重要網站連線
+        $sites = @("github.com", "npmjs.com", "nodejs.org", "raw.githubusercontent.com")
+        foreach ($site in $sites) {
+            try {
+                $response = Invoke-WebRequest -Uri "https://$site" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
+                if (-not $response) {
+                    Write-ColorMessage "無法連線到 $site，可能影響安裝程序" "Yellow" "⚠️"
+                }
+            } catch {
+                Write-ColorMessage "無法連線到 $site，可能影響安裝程序" "Yellow" "⚠️"
+            }
+        }
+        
+        Write-ColorMessage "網路連線檢查通過" "Green" "✅"
+        return $true
+    } catch {
+        Write-ColorMessage "網路連線檢查失敗: $($_.Exception.Message)" "Red" "❌"
+        return $false
+    }
+}
+
 function Install-WingetIfNeeded {
     if (Test-Command "winget") {
         Write-ColorMessage "$($msg.ComponentExists): Windows Package Manager" "Green" "✅"
@@ -535,6 +581,13 @@ if (-not (Test-WindowsVersion)) {
 
 if (-not (Test-Virtualization)) {
     Write-ColorMessage "虛擬化未啟用，某些功能可能無法使用" "Yellow" "⚠️"
+}
+
+# 檢查網路連線
+if (-not (Test-NetworkConnectivity)) {
+    Write-ColorMessage "網路連線有問題，可能影響安裝程序" "Red" "❌"
+    Read-Host $msg.PressEnterToContinue
+    exit 1
 }
 
 # 系統資訊顯示
