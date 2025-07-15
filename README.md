@@ -192,7 +192,7 @@ docker run -it claude-code
 
 ```bash
 # 下載並執行安裝腳本
-wget https://raw.githubusercontent.com/s123104/claude-code/main/wsl_claude_code_setup.sh
+wget https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh
 chmod +x wsl_claude_code_setup.sh
 ./wsl_claude_code_setup.sh
 ```
@@ -238,7 +238,7 @@ chmod +x wsl_claude_code_setup.sh
 
 ```bash
 # 方式一：直接執行
-curl -sSL https://raw.githubusercontent.com/s123104/claude-code/main/wsl_claude_code_setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh | bash
 
 # 方式二：本地執行
 git clone https://github.com/s123104/claude-code.git
