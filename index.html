@@ -493,7 +493,8 @@
                     <i class="fab fa-ubuntu mr-2"></i>Ubuntu 20.04+ / Debian 10+
                   </li>
                   <li>
-                    <i class="fab fa-windows mr-2"></i>WSL 2 (Windows 10 Build 19041+)
+                    <i class="fab fa-windows mr-2"></i>WSL 2 (Windows 10 Build
+                    19041+)
                   </li>
                 </ul>
               </div>
@@ -504,7 +505,9 @@
                 <ul class="space-y-2 text-neutral-300">
                   <li><i class="fas fa-memory mr-2"></i>至少 4GB RAM</li>
                   <li><i class="fas fa-hdd mr-2"></i>至少 1GB 可用空間</li>
-                  <li><i class="fas fa-microchip mr-2"></i>支援 VT-x/AMD-V 的 CPU</li>
+                  <li>
+                    <i class="fas fa-microchip mr-2"></i>支援 VT-x/AMD-V 的 CPU
+                  </li>
                   <li><i class="fas fa-wifi mr-2"></i>網路連線</li>
                 </ul>
               </div>
@@ -515,7 +518,9 @@
                 <ul class="space-y-2 text-neutral-300">
                   <li><i class="fab fa-node-js mr-2"></i>Node.js 18 LTS</li>
                   <li><i class="fab fa-git-alt mr-2"></i>Git 2.23+</li>
-                  <li><i class="fas fa-terminal mr-2"></i>curl, build-essential</li>
+                  <li>
+                    <i class="fas fa-terminal mr-2"></i>curl, build-essential
+                  </li>
                   <li><i class="fas fa-search mr-2"></i>ripgrep (選用)</li>
                 </ul>
               </div>
@@ -544,7 +549,9 @@
                   <div class="code-block rounded-lg p-4 space-y-2">
                     <div>
                       <code class="text-green-400 font-mono"
-                        >curl -fsSL https://raw.githubusercontent.com/your-repo/wsl_claude_code_setup.sh | bash</code
+                        >curl -fsSL
+                        https://raw.githubusercontent.com/s123104/wsl_claude_code_setup.sh
+                        | bash</code
                       >
                     </div>
                     <div class="text-neutral-400 text-sm mt-2">
@@ -552,12 +559,14 @@
                     </div>
                     <div>
                       <code class="text-green-400 font-mono"
-                        >wget https://raw.githubusercontent.com/your-repo/wsl_claude_code_setup.sh</code
+                        >wget
+                        https://raw.githubusercontent.com/s123104/wsl_claude_code_setup.sh</code
                       >
                     </div>
                     <div>
                       <code class="text-green-400 font-mono"
-                        >chmod +x wsl_claude_code_setup.sh && ./wsl_claude_code_setup.sh</code
+                        >chmod +x wsl_claude_code_setup.sh &&
+                        ./wsl_claude_code_setup.sh</code
                       >
                     </div>
                   </div>
@@ -579,10 +588,14 @@
                     手動安裝（其他平台）
                   </h4>
                   <div class="code-block rounded-lg p-4 space-y-2">
-                    <div class="text-neutral-400 text-sm">安裝 Node.js 18 LTS：</div>
+                    <div class="text-neutral-400 text-sm">
+                      安裝 Node.js 18 LTS：
+                    </div>
                     <div>
                       <code class="text-green-400 font-mono"
-                        >curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</code
+                        >curl -o-
+                        https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh
+                        | bash</code
                       >
                     </div>
                     <div>
@@ -590,7 +603,9 @@
                         >nvm install 18 && nvm use 18</code
                       >
                     </div>
-                    <div class="text-neutral-400 text-sm mt-2">安裝 Claude Code：</div>
+                    <div class="text-neutral-400 text-sm mt-2">
+                      安裝 Claude Code：
+                    </div>
                     <div>
                       <code class="text-green-400 font-mono"
                         >npm install -g @anthropic-ai/claude-code</code

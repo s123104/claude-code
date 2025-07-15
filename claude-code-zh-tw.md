@@ -74,20 +74,20 @@
 
 ### 🎯 主要文件
 
-| 文件名稱 | 核心功能 | 適用對象 | 快速連結 |
-|----------|----------|----------|----------|
+| 文件名稱                                                                            | 核心功能         | 適用對象 | 快速連結 |
+| ----------------------------------------------------------------------------------- | ---------------- | -------- | -------- |
 | **[cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md)** | 綜合代理主控手冊 | 所有用戶 | **必讀** |
 
 ### 🔧 功能專門文件
 
-| 文件名稱 | 主要內容 | 關鍵旗標 | 使用場景 |
-|----------|----------|----------|----------|
-| [awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐 | `--hooks` `--workflow` | 專案初始化、團隊協作 |
-| [superclaude-zh-tw.md](docs/superclaude-zh-tw.md) | 高階旗標系統 | `--persona` `--advanced` | 複雜任務自動化 |
-| [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) | 基礎 API 指南 | `--api` `--mcp` `--session` | 日常開發、基礎操作 |
-| [claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 用量監控與安全 | `--monitor` `--limit` `--audit` | 生產環境、成本控制 |
-| [claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard` | 圖形介面、遠端管理 |
-| [bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) | 效能優化策略 | `--cache` `--optimize` `--profile` | 大型專案、效能調優 |
+| 文件名稱                                                                      | 主要內容        | 關鍵旗標                           | 使用場景             |
+| ----------------------------------------------------------------------------- | --------------- | ---------------------------------- | -------------------- |
+| [awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md)             | 社群最佳實踐    | `--hooks` `--workflow`             | 專案初始化、團隊協作 |
+| [superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                             | 高階旗標系統    | `--persona` `--advanced`           | 複雜任務自動化       |
+| [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md)                 | 基礎 API 指南   | `--api` `--mcp` `--session`        | 日常開發、基礎操作   |
+| [claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 用量監控與安全  | `--monitor` `--limit` `--audit`    | 生產環境、成本控制   |
+| [claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md)                           | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理   |
+| [bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md)                               | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優   |
 
 ---
 
@@ -242,64 +242,64 @@ docker run -it claude-code
 
 ### 基本指令
 
-| 指令 | 功能 | 範例 | 說明 |
-|------|------|------|------|
-| `claude` | 啟動互動 REPL | `claude` | 進入交互式對話模式 |
-| `claude "query"` | 直接執行查詢 | `claude "分析這個專案"` | 執行單次查詢後退出 |
-| `claude -p "query"` | 非互動查詢 | `claude -p "解釋這個函數"` | 查詢後立即退出 |
-| `claude -c` | 繼續最近對話 | `claude -c` | 恢復上次對話狀態 |
-| `claude update` | 更新版本 | `claude update` | 升級到最新版本 |
-| `claude mcp` | MCP 管理 | `claude mcp list` | 管理 MCP 伺服器 |
+| 指令                | 功能          | 範例                       | 說明               |
+| ------------------- | ------------- | -------------------------- | ------------------ |
+| `claude`            | 啟動互動 REPL | `claude`                   | 進入交互式對話模式 |
+| `claude "query"`    | 直接執行查詢  | `claude "分析這個專案"`    | 執行單次查詢後退出 |
+| `claude -p "query"` | 非互動查詢    | `claude -p "解釋這個函數"` | 查詢後立即退出     |
+| `claude -c`         | 繼續最近對話  | `claude -c`                | 恢復上次對話狀態   |
+| `claude update`     | 更新版本      | `claude update`            | 升級到最新版本     |
+| `claude mcp`        | MCP 管理      | `claude mcp list`          | 管理 MCP 伺服器    |
 
 ### 進階旗標與選項
 
-| 旗標 | 功能 | 範例 | 適用場景 |
-|------|------|------|----------|
-| `--model` | 指定模型 | `--model claude-opus-4` | 選擇特定 AI 模型 |
-| `--verbose` | 詳細輸出 | `claude --verbose` | 除錯和詳細記錄 |
-| `--output-format` | 輸出格式 | `--output-format json` | 結構化輸出 |
-| `--allowedTools` | 允許工具 | `--allowedTools "Edit,View"` | 安全控制 |
-| `--timeout` | 逾時設定 | `--timeout 60` | 設定命令逾時 |
-| `--stream` | 串流輸出 | `--stream` | 大型輸出加速 |
-| `--add-dir` | 添加目錄 | `--add-dir ../shared` | 擴展專案範圍 |
+| 旗標              | 功能     | 範例                         | 適用場景         |
+| ----------------- | -------- | ---------------------------- | ---------------- |
+| `--model`         | 指定模型 | `--model claude-opus-4`      | 選擇特定 AI 模型 |
+| `--verbose`       | 詳細輸出 | `claude --verbose`           | 除錯和詳細記錄   |
+| `--output-format` | 輸出格式 | `--output-format json`       | 結構化輸出       |
+| `--allowedTools`  | 允許工具 | `--allowedTools "Edit,View"` | 安全控制         |
+| `--timeout`       | 逾時設定 | `--timeout 60`               | 設定命令逾時     |
+| `--stream`        | 串流輸出 | `--stream`                   | 大型輸出加速     |
+| `--add-dir`       | 添加目錄 | `--add-dir ../shared`        | 擴展專案範圍     |
 
 ### MCP 管理指令
 
-| 指令 | 功能 | 範例 | 說明 |
-|------|------|------|------|
-| `claude mcp add` | 新增 MCP 伺服器 | `claude mcp add weather /path/to/server` | 添加本地 stdio 伺服器 |
-| `claude mcp add --transport sse` | 新增 SSE 伺服器 | `claude mcp add --transport sse api https://api.example.com` | 添加遠端 SSE 伺服器 |
-| `claude mcp add --transport http` | 新增 HTTP 伺服器 | `claude mcp add --transport http rest https://api.example.com` | 添加 HTTP API 伺服器 |
-| `claude mcp list` | 列出伺服器 | `claude mcp list` | 查看所有已配置的伺服器 |
-| `claude mcp get` | 查看伺服器詳情 | `claude mcp get weather` | 檢視特定伺服器配置 |
-| `claude mcp remove` | 移除伺服器 | `claude mcp remove weather` | 刪除指定伺服器 |
-| `claude mcp serve` | 啟動伺服器模式 | `claude mcp serve` | 將 Claude Code 作為 MCP 伺服器 |
+| 指令                              | 功能             | 範例                                                           | 說明                           |
+| --------------------------------- | ---------------- | -------------------------------------------------------------- | ------------------------------ |
+| `claude mcp add`                  | 新增 MCP 伺服器  | `claude mcp add weather /path/to/server`                       | 添加本地 stdio 伺服器          |
+| `claude mcp add --transport sse`  | 新增 SSE 伺服器  | `claude mcp add --transport sse api https://api.example.com`   | 添加遠端 SSE 伺服器            |
+| `claude mcp add --transport http` | 新增 HTTP 伺服器 | `claude mcp add --transport http rest https://api.example.com` | 添加 HTTP API 伺服器           |
+| `claude mcp list`                 | 列出伺服器       | `claude mcp list`                                              | 查看所有已配置的伺服器         |
+| `claude mcp get`                  | 查看伺服器詳情   | `claude mcp get weather`                                       | 檢視特定伺服器配置             |
+| `claude mcp remove`               | 移除伺服器       | `claude mcp remove weather`                                    | 刪除指定伺服器                 |
+| `claude mcp serve`                | 啟動伺服器模式   | `claude mcp serve`                                             | 將 Claude Code 作為 MCP 伺服器 |
 
 ### 斜線命令系統
 
-| 命令 | 功能 | 範例 | 用途 |
-|------|------|------|------|
-| `/help` | 顯示幫助 | `/help` | 查看可用命令 |
-| `/clear` | 清除歷史 | `/clear` | 重置對話狀態 |
-| `/memory` | 記憶體管理 | `/memory view` | 管理專案記憶 |
-| `/config` | 配置管理 | `/config list` | 查看和修改設定 |
-| `/doctor` | 健康檢查 | `/doctor` | 診斷系統狀態 |
-| `/init` | 初始化專案 | `/init` | 創建 CLAUDE.md |
-| `/mcp` | MCP 管理 | `/mcp` | 互動式 MCP 管理 |
-| `/review` | 程式碼審查 | `/review src/` | 審查指定目錄 |
+| 命令      | 功能       | 範例           | 用途            |
+| --------- | ---------- | -------------- | --------------- |
+| `/help`   | 顯示幫助   | `/help`        | 查看可用命令    |
+| `/clear`  | 清除歷史   | `/clear`       | 重置對話狀態    |
+| `/memory` | 記憶體管理 | `/memory view` | 管理專案記憶    |
+| `/config` | 配置管理   | `/config list` | 查看和修改設定  |
+| `/doctor` | 健康檢查   | `/doctor`      | 診斷系統狀態    |
+| `/init`   | 初始化專案 | `/init`        | 創建 CLAUDE.md  |
+| `/mcp`    | MCP 管理   | `/mcp`         | 互動式 MCP 管理 |
+| `/review` | 程式碼審查 | `/review src/` | 審查指定目錄    |
 
 ---
 
 ## 🎯 常用旗標快查
 
-| 動作 | 推薦旗標組合 | 參考文件 | 使用範例 |
-|------|-------------|----------|----------|
-| 建立專案 | `--create --template --mcp` | superclaude + guide | `claude --create --template=react --mcp` |
-| 修復錯誤 | `--scan --fix --lint --test` | awesome + monitor | `claude "修復所有錯誤" --scan --fix` |
-| 部署上線 | `--build --deploy --monitor` | guide + ui | `claude "部署到生產" --build --deploy` |
-| 效能調優 | `--profile --optimize --cache` | bplustree + monitor | `claude "優化效能" --profile --optimize` |
-| 安全檢查 | `--security --audit --scan` | monitor + awesome | `claude "安全掃描" --security --audit` |
-| 程式碼審查 | `--review --verbose --format=json` | guide + awesome | `claude /review --verbose --output-format json` |
+| 動作       | 推薦旗標組合                       | 參考文件            | 使用範例                                        |
+| ---------- | ---------------------------------- | ------------------- | ----------------------------------------------- |
+| 建立專案   | `--create --template --mcp`        | superclaude + guide | `claude --create --template=react --mcp`        |
+| 修復錯誤   | `--scan --fix --lint --test`       | awesome + monitor   | `claude "修復所有錯誤" --scan --fix`            |
+| 部署上線   | `--build --deploy --monitor`       | guide + ui          | `claude "部署到生產" --build --deploy`          |
+| 效能調優   | `--profile --optimize --cache`     | bplustree + monitor | `claude "優化效能" --profile --optimize`        |
+| 安全檢查   | `--security --audit --scan`        | monitor + awesome   | `claude "安全掃描" --security --audit`          |
+| 程式碼審查 | `--review --verbose --format=json` | guide + awesome     | `claude /review --verbose --output-format json` |
 
 ---
 
@@ -308,11 +308,13 @@ docker run -it claude-code
 ### 📚 文件總覽 (README.md)
 
 **主要內容：**
+
 - 完整的文件索引和分類
 - 快速導航和使用建議
 - 按角色和任務的推薦閱讀順序
 
 **重點章節：**
+
 - 文件清單與功能對應
 - 常用旗標快速查詢
 - 文件更新機制說明
@@ -320,12 +322,14 @@ docker run -it claude-code
 ### 🎯 綜合代理主控手冊 (cursor-claude-master-guide-zh-tw.md)
 
 **主要內容：**
+
 - 模糊需求解析引擎
 - 統一旗標索引系統
 - Sequential-Thinking 執行流程
 - 安全控制與監控機制
 
 **重點章節：**
+
 - 核心架構與角色定義
 - 自動化指令映射表
 - 錯誤處理與修復流程
@@ -334,12 +338,14 @@ docker run -it claude-code
 ### 📖 基礎 API 指南 (claude-code-guide-zh-tw.md)
 
 **主要內容：**
+
 - Claude Code 產品概覽
 - 安裝與系統需求
 - 核心指令與旗標
 - CLAUDE.md 與記憶體管理
 
 **重點章節：**
+
 - 快速入門指南
 - Session/Config/MCP 指令
 - 自動化與腳本整合
@@ -348,12 +354,14 @@ docker run -it claude-code
 ### ⭐ 社群最佳實踐 (awesome-claude-code-zh-tw.md)
 
 **主要內容：**
+
 - Workflow & Knowledge Guides
 - Tooling & IDE 整合
 - Hooks 實例與最佳實踐
 - Slash-Commands 精選
 
 **重點章節：**
+
 - CLAUDE.md 實戰範例
 - MCP 整合與自動化
 - 社群貢獻與參與
@@ -362,12 +370,14 @@ docker run -it claude-code
 ### 📊 用量監控與安全 (claude-code-usage-monitor-zh-tw.md)
 
 **主要內容：**
+
 - 產品簡介與特色
 - 多種安裝方式詳解
 - 啟動與基本用法
 - 進階設定與參數
 
 **重點章節：**
+
 - Docker/Web Dashboard
 - 常見問題與除錯
 - 開發、測試與貢獻
@@ -376,12 +386,14 @@ docker run -it claude-code
 ### 🖥️ Web UI 與視覺化 (claudecodeui-zh-tw.md)
 
 **主要內容：**
+
 - 產品概覽與特色
 - 安裝與環境設置
 - 啟動與開發模式
 - PWA 圖示與資源生成
 
 **重點章節：**
+
 - CLI 與 Claude Code 整合
 - 開發流程與常用指令
 - 最佳實踐與疑難排解
@@ -390,12 +402,14 @@ docker run -it claude-code
 ### ⚡ 效能優化策略 (bplustree3-zh-tw.md)
 
 **主要內容：**
+
 - 設計理念與資料結構
 - 核心 API 與用法
 - 範例程式碼
 - 常見操作與進階技巧
 
 **重點章節：**
+
 - 最佳實踐與效能建議
 - 疑難排解與常見問題
 - 應用場景與實作範例
@@ -404,12 +418,14 @@ docker run -it claude-code
 ### 🔧 高階旗標系統 (superclaude-zh-tw.md)
 
 **主要內容：**
+
 - 安裝與啟動
 - 指令分類與旗標
 - 代表性 Workflow 範例
 - MCP、Persona、旗標整合
 
 **重點章節：**
+
 - 專案結構與自訂
 - 社群貢獻與參與
 - 最佳實踐與使用建議
@@ -504,4 +520,4 @@ claude --mcp-debug       # MCP 除錯
 
 ---
 
-*最後更新：2025-07-15 | 語言：繁體中文 | 專案維護者：Claude Code 中文社群*
+_最後更新：2025-07-15 | 語言：繁體中文 | 專案維護者：Claude Code 中文社群_

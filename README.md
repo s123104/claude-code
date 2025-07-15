@@ -5,7 +5,7 @@
   
   **🚀 完整的 Claude Code 與 Cursor AI 整合說明書集合**
   
-  [![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)](https://github.com/s123104/claude-code-zh-tw)
+  [![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
   [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2025.07.15-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
@@ -80,20 +80,20 @@
 
 ### 🎯 主要文件
 
-| 文件名稱 | 核心功能 | 適用對象 | 快速連結 |
-|----------|----------|----------|----------|
+| 文件名稱                                                                            | 核心功能         | 適用對象 | 快速連結 |
+| ----------------------------------------------------------------------------------- | ---------------- | -------- | -------- |
 | **[cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md)** | 綜合代理主控手冊 | 所有用戶 | **必讀** |
 
 ### 🔧 功能專門文件
 
-| 文件名稱 | 主要內容 | 關鍵旗標 | 使用場景 |
-|----------|----------|----------|----------|
-| [awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐 | `--hooks` `--workflow` | 專案初始化、團隊協作 |
-| [superclaude-zh-tw.md](docs/superclaude-zh-tw.md) | 高階旗標系統 | `--persona` `--advanced` | 複雜任務自動化 |
-| [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) | 基礎 API 指南 | `--api` `--mcp` `--session` | 日常開發、基礎操作 |
-| [claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 用量監控與安全 | `--monitor` `--limit` `--audit` | 生產環境、成本控制 |
-| [claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard` | 圖形介面、遠端管理 |
-| [bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) | 效能優化策略 | `--cache` `--optimize` `--profile` | 大型專案、效能調優 |
+| 文件名稱                                                                      | 主要內容        | 關鍵旗標                           | 使用場景             |
+| ----------------------------------------------------------------------------- | --------------- | ---------------------------------- | -------------------- |
+| [awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md)             | 社群最佳實踐    | `--hooks` `--workflow`             | 專案初始化、團隊協作 |
+| [superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                             | 高階旗標系統    | `--persona` `--advanced`           | 複雜任務自動化       |
+| [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md)                 | 基礎 API 指南   | `--api` `--mcp` `--session`        | 日常開發、基礎操作   |
+| [claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 用量監控與安全  | `--monitor` `--limit` `--audit`    | 生產環境、成本控制   |
+| [claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md)                           | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理   |
+| [bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md)                               | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優   |
 
 ---
 
@@ -189,7 +189,7 @@ docker run -it claude-code
 
 ```bash
 # 下載並執行安裝腳本
-wget https://raw.githubusercontent.com/your-repo/claude-code-zh-tw/main/wsl_claude_code_setup.sh
+wget https://raw.githubusercontent.com/s123104/claude-code/main/wsl_claude_code_setup.sh
 chmod +x wsl_claude_code_setup.sh
 ./wsl_claude_code_setup.sh
 ```
@@ -197,6 +197,7 @@ chmod +x wsl_claude_code_setup.sh
 #### 🛠️ 腳本功能特色
 
 **Windows 端自動化檢查：**
+
 - 🔍 **系統兼容性檢查**：自動檢查 Windows Build 版本 (需要 19041+)
 - 🔧 **虛擬化支援驗證**：檢查 VT-x/AMD-V、SLAT、Hyper-V 需求
 - ⚙️ **Windows 功能啟用**：自動啟用 WSL 2 與虛擬機器平台
@@ -204,6 +205,7 @@ chmod +x wsl_claude_code_setup.sh
 - 📦 **Ubuntu 自動安裝**：優先安裝 Ubuntu 24.04 LTS，失敗時降級至 22.04
 
 **Linux/WSL 端完整部署：**
+
 - 📊 **磁碟空間檢查**：確保至少 1GB 可用空間
 - 🔧 **系統依賴安裝**：curl、git、build-essential、python3、ripgrep
 - 🛠️ **npm 配置修復**：自動備份並清理 prefix、globalconfig、Windows 路徑污染
@@ -216,12 +218,14 @@ chmod +x wsl_claude_code_setup.sh
 #### 🔧 進階功能
 
 **錯誤處理與日誌系統：**
+
 - 📝 **完整日誌記錄**：自動保存至 `/tmp/claude_setup_YYYYMMDD_HHMMSS.log`
 - 🎨 **彩色輸出**：使用顏色區分錯誤、警告、成功、資訊訊息
 - 🔄 **錯誤恢復**：自動重試失敗的安裝步驟
 - 📋 **詳細診斷**：提供具體的錯誤原因和解決建議
 
 **安全性與穩定性：**
+
 - 🔐 **管理員權限檢查**：Windows 端需要管理員權限
 - 🛡️ **路徑污染防護**：自動檢測並清理 Windows 路徑汙染
 - 📦 **依賴版本鎖定**：使用指定版本避免相容性問題
@@ -231,11 +235,11 @@ chmod +x wsl_claude_code_setup.sh
 
 ```bash
 # 方式一：直接執行
-curl -sSL https://raw.githubusercontent.com/your-repo/claude-code-zh-tw/main/wsl_claude_code_setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/s123104/claude-code/main/wsl_claude_code_setup.sh | bash
 
 # 方式二：本地執行
-git clone https://github.com/your-repo/claude-code-zh-tw.git
-cd claude-code-zh-tw
+git clone https://github.com/s123104/claude-code.git
+cd claude-code
 ./wsl_claude_code_setup.sh
 
 # 執行後檢查
@@ -336,13 +340,13 @@ Git: git version 2.34.1
 
 ## 🎯 常用旗標快查
 
-| 動作 | 推薦旗標組合 | 參考文件 |
-|------|-------------|----------|
-| 建立專案 | `--create --template --mcp` | superclaude + guide |
-| 修復錯誤 | `--scan --fix --lint --test` | awesome + monitor |
-| 部署上線 | `--build --deploy --monitor` | guide + ui |
+| 動作     | 推薦旗標組合                   | 參考文件            |
+| -------- | ------------------------------ | ------------------- |
+| 建立專案 | `--create --template --mcp`    | superclaude + guide |
+| 修復錯誤 | `--scan --fix --lint --test`   | awesome + monitor   |
+| 部署上線 | `--build --deploy --monitor`   | guide + ui          |
 | 效能調優 | `--profile --optimize --cache` | bplustree + monitor |
-| 安全檢查 | `--security --audit --scan` | monitor + awesome |
+| 安全檢查 | `--security --audit --scan`    | monitor + awesome   |
 
 ---
 
@@ -351,11 +355,13 @@ Git: git version 2.34.1
 ### 📚 文件總覽 (README.md)
 
 **主要內容：**
+
 - 完整的文件索引和分類
 - 快速導航和使用建議
 - 按角色和任務的推薦閱讀順序
 
 **重點章節：**
+
 - 文件清單與功能對應
 - 常用旗標快速查詢
 - 文件更新機制說明
@@ -363,12 +369,14 @@ Git: git version 2.34.1
 ### 🎯 綜合代理主控手冊 (cursor-claude-master-guide-zh-tw.md)
 
 **主要內容：**
+
 - 模糊需求解析引擎
 - 統一旗標索引系統
 - Sequential-Thinking 執行流程
 - 安全控制與監控機制
 
 **重點章節：**
+
 - 核心架構與角色定義
 - 自動化指令映射表
 - 錯誤處理與修復流程
@@ -377,12 +385,14 @@ Git: git version 2.34.1
 ### 📖 基礎 API 指南 (claude-code-guide-zh-tw.md)
 
 **主要內容：**
+
 - Claude Code 產品概覽
 - 安裝與系統需求
 - 核心指令與旗標
 - CLAUDE.md 與記憶體管理
 
 **重點章節：**
+
 - 快速入門指南
 - Session/Config/MCP 指令
 - 自動化與腳本整合
@@ -391,12 +401,14 @@ Git: git version 2.34.1
 ### ⭐ 社群最佳實踐 (awesome-claude-code-zh-tw.md)
 
 **主要內容：**
+
 - Workflow & Knowledge Guides
 - Tooling & IDE 整合
 - Hooks 實例與最佳實踐
 - Slash-Commands 精選
 
 **重點章節：**
+
 - CLAUDE.md 實戰範例
 - MCP 整合與自動化
 - 社群貢獻與參與
@@ -405,12 +417,14 @@ Git: git version 2.34.1
 ### 📊 用量監控與安全 (claude-code-usage-monitor-zh-tw.md)
 
 **主要內容：**
+
 - 產品簡介與特色
 - 多種安裝方式詳解
 - 啟動與基本用法
 - 進階設定與參數
 
 **重點章節：**
+
 - Docker/Web Dashboard
 - 常見問題與除錯
 - 開發、測試與貢獻
@@ -419,12 +433,14 @@ Git: git version 2.34.1
 ### 🖥️ Web UI 與視覺化 (claudecodeui-zh-tw.md)
 
 **主要內容：**
+
 - 產品概覽與特色
 - 安裝與環境設置
 - 啟動與開發模式
 - PWA 圖示與資源生成
 
 **重點章節：**
+
 - CLI 與 Claude Code 整合
 - 開發流程與常用指令
 - 最佳實踐與疑難排解
@@ -433,12 +449,14 @@ Git: git version 2.34.1
 ### ⚡ 效能優化策略 (bplustree3-zh-tw.md)
 
 **主要內容：**
+
 - 設計理念與資料結構
 - 核心 API 與用法
 - 範例程式碼
 - 常見操作與進階技巧
 
 **重點章節：**
+
 - 最佳實踐與效能建議
 - 疑難排解與常見問題
 - 應用場景與實作範例
@@ -447,12 +465,14 @@ Git: git version 2.34.1
 ### 🔧 高階旗標系統 (superclaude-zh-tw.md)
 
 **主要內容：**
+
 - 安裝與啟動
 - 指令分類與旗標
 - 代表性 Workflow 範例
 - MCP、Persona、旗標整合
 
 **重點章節：**
+
 - 專案結構與自訂
 - 社群貢獻與參與
 - 最佳實踐與使用建議
@@ -546,6 +566,7 @@ claude --mcp-debug       # MCP 除錯
 #### 🎨 設計特色
 
 **響應式設計架構：**
+
 - 📱 **Mobile-first RWD**：優先考慮行動裝置體驗
 - 🎨 **Tailwind CSS**：現代化 CSS 框架，快速開發
 - 🌈 **漸變色彩系統**：Primary (藍色) + Secondary (紫色) 雙色調
@@ -553,6 +574,7 @@ claude --mcp-debug       # MCP 除錯
 - ⚡ **微互動設計**：hover 效果、過渡動畫、視差滾動
 
 **技術實現：**
+
 - 🔤 **Google Fonts**：Inter (無襯線) + JetBrains Mono (等寬字體)
 - 🎯 **Font Awesome 6.5.1**：完整的圖示系統
 - 📊 **Intersection Observer API**：高效能滾動動畫
@@ -561,11 +583,13 @@ claude --mcp-debug       # MCP 除錯
 #### 🗂️ 內容結構
 
 **1. Hero 主視覺區**
+
 - 🎯 **標題**：「AI 驅動的終端開發助手」
 - 📟 **終端機演示**：互動式命令列展示
 - 🎮 **CTA 按鈕**：立即開始使用 + 查看文檔
 
 **2. 功能特色展示**
+
 - 🧠 **智慧程式碼理解**：深度分析整個程式碼庫架構
 - 🔧 **自動錯誤修復**：智慧識別並修復程式錯誤
 - 🔗 **無縫 Git 整合**：智慧生成 commit 訊息
@@ -574,28 +598,33 @@ claude --mcp-debug       # MCP 除錯
 - 🌍 **多語言支援**：JavaScript、Python、Java、Go 等
 
 **3. 安裝指南區**
+
 - 💻 **系統需求**：作業系統、硬體需求、軟體相依性
 - 📦 **安裝步驟**：3 步驟完成安裝
 - 🔧 **平台特定**：各作業系統的詳細安裝指引
 
 **4. 文件導覽區**
+
 - 📚 **8 個專業文件**：每個文件都有獨立的卡片展示
 - 🎨 **彩色分類**：使用不同顏色區分文件類型
 - 📅 **更新時間**：顯示最後更新時間
 - 🔗 **直接連結**：點擊卡片直接跳轉到對應文件
 
 **5. 旗標/指令速查區**
+
 - 📋 **表格形式**：清晰的旗標組合對照
 - 🎯 **常用動作**：建立專案、修復錯誤、部署上線等
 - 📖 **參考文件**：每個旗標組合都標註來源文件
 
 **6. 工作流程與實戰範例**
+
 - 🔄 **Sequential-Thinking 標準流程**：4 階段執行模式
 - 🤖 **MCP 多代理協作**：外部工具整合
 - 🔍 **錯誤修復與自動診斷**：智慧診斷系統
 - 🖥️ **Web UI 與遠端管理**：PWA 支援
 
 **7. 常見問題與疑難排解**
+
 - 🔧 **安裝與啟動問題**：Node.js 版本、WSL 環境
 - 🔐 **權限與安全問題**：工具授權、環境變數
 - ⚠️ **常見錯誤與排查**：Rate limit、權限錯誤、MCP 問題
@@ -604,18 +633,21 @@ claude --mcp-debug       # MCP 除錯
 #### 🎮 互動功能
 
 **使用者體驗增強：**
+
 - 📱 **Mobile Menu**：手機版導航切換
 - 🎨 **圖示動畫**：漢堡選單 ↔ 關閉按鈕切換
 - 🔗 **智慧關閉**：點擊連結自動關閉選單
 - ⌨️ **鍵盤支援**：ESC 鍵關閉彈出視窗
 
 **視覺回饋系統：**
+
 - 👁️ **Intersection Observer**：元素進入視窗時淡入
 - 🎪 **浮動動畫**：功能卡片的漂浮效果
 - 🌊 **滑順滾動**：平滑的頁面導航
 - 🎯 **hover 效果**：按鈕和連結的互動回饋
 
 **隱藏彩蛋功能：**
+
 - 🎉 **探索獎勵**：右下角隱藏按鈕
 - 🎊 **彩蛋觸發**：多次點擊解鎖特殊功能
 - 🎮 **終端機遊戲**：Claude Code 指令挑戰
@@ -624,18 +656,21 @@ claude --mcp-debug       # MCP 除錯
 #### 🔧 技術實現細節
 
 **效能最佳化：**
+
 - 📦 **CDN 載入**：Tailwind CSS、Font Awesome 使用 CDN
 - 🎯 **延遲載入**：非關鍵動畫在頁面載入後啟動
 - 🔄 **事件委派**：減少記憶體使用
 - 🧹 **記憶體管理**：動畫結束後自動清理元素
 
 **可維護性設計：**
+
 - 🎨 **自訂 CSS 變數**：統一的色彩系統
 - 📝 **詳細註解**：每個功能都有清楚的說明
 - 🔧 **模組化結構**：功能分離、易於維護
 - 🎯 **語意化 HTML**：提升 SEO 和可讀性
 
 **無障礙設計：**
+
 - ⌨️ **鍵盤導航**：完整的鍵盤操作支援
 - 🎨 **對比度**：符合 WCAG AA 標準
 - 🔊 **語意標籤**：適合螢幕閱讀器
@@ -644,6 +679,7 @@ claude --mcp-debug       # MCP 除錯
 #### 🚀 使用方式
 
 **本地瀏覽：**
+
 ```bash
 # 直接開啟 index.html
 open index.html
@@ -653,6 +689,7 @@ npx http-server .
 ```
 
 **部署建議：**
+
 - 🌐 **GitHub Pages**：自動部署靜態網站
 - ⚡ **Netlify**：支援表單處理和 CDN
 - 🚀 **Vercel**：優化的靜態網站託管
@@ -765,8 +802,8 @@ SOFTWARE.
 
 ## 📞 聯絡我們
 
-- **GitHub Issues**: [提交問題和建議](https://github.com/your-repo/claude-code-zh-tw/issues)
-- **GitHub Discussions**: [參與社群討論](https://github.com/your-repo/claude-code-zh-tw/discussions)
+- **GitHub Issues**: [提交問題和建議](https://github.com/s123104/claude-code/issues)
+- **GitHub Discussions**: [參與社群討論](https://github.com/s123104/claude-code/discussions)
 - **官方文檔**: [Anthropic Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 
 ---
@@ -776,21 +813,25 @@ SOFTWARE.
 ### 🎯 獨特價值主張
 
 #### 📚 完整性
+
 - **8 個專業文件**：涵蓋從基礎到進階的所有使用場景
 - **繁體中文化**：完整的中文化翻譯和本地化適配
 - **持續更新**：跟隨官方版本同步更新內容
 
 #### 🔧 實用性
+
 - **一鍵部署**：WSL 環境自動化安裝腳本
 - **實戰導向**：包含大量實用範例和最佳實踐
 - **問題解決**：詳細的疑難排解和常見問題解答
 
 #### 🎨 現代化
+
 - **響應式設計**：適配桌面、平板、手機等各種裝置
 - **互動體驗**：現代化的 Web 介面和動畫效果
 - **無障礙支援**：符合 WCAG 標準的可訪問性設計
 
 #### 🚀 高效性
+
 - **快速上手**：清晰的安裝指引和快速開始指南
 - **場景導向**：依使用場景和角色提供差異化指引
 - **工具整合**：完整的開發工具鏈整合說明
@@ -798,32 +839,35 @@ SOFTWARE.
 ### 🏆 技術創新
 
 #### 🤖 AI 輔助開發
+
 - **智能代理系統**：多模態分析、意圖識別、協作優化
 - **自然語言處理**：支援模糊需求解析和自動化指令生成
 - **學習機制**：持續學習和優化的智能助手
 
 #### 🔗 生態系統整合
+
 - **MCP 協議**：Model Context Protocol 多代理協作
 - **IDE 整合**：VSCode、Cursor 等主流編輯器支援
 - **CI/CD 整合**：GitHub Actions、GitLab CI 等流程自動化
 
 #### 🛡️ 企業級特性
+
 - **安全控制**：細粒度的權限管理和審計日誌
 - **監控系統**：完整的用量監控和效能分析
 - **擴展性**：支援大型團隊和複雜專案的需求
 
 ### 📊 使用統計
 
-| 項目 | 數量 | 說明 |
-|------|------|------|
-| 📖 **文件總數** | 8+ | 專業功能文件 |
-| 🚩 **支援旗標** | 60+ | 涵蓋所有常用操作 |
-| 💻 **使用場景** | 25+ | 從入門到企業級應用 |
-| 🔧 **程式碼範例** | 150+ | 實用的指令與腳本範例 |
-| 🌟 **最佳實踐** | 40+ | 社群驗證的經驗分享 |
-| ❓ **問題解答** | 30+ | 常見問題與解決方案 |
-| 🌐 **語言支援** | 10+ | 主流程式語言覆蓋 |
-| 📱 **裝置適配** | 全平台 | 桌面、平板、手機完全適配 |
+| 項目              | 數量   | 說明                     |
+| ----------------- | ------ | ------------------------ |
+| 📖 **文件總數**   | 8+     | 專業功能文件             |
+| 🚩 **支援旗標**   | 60+    | 涵蓋所有常用操作         |
+| 💻 **使用場景**   | 25+    | 從入門到企業級應用       |
+| 🔧 **程式碼範例** | 150+   | 實用的指令與腳本範例     |
+| 🌟 **最佳實踐**   | 40+    | 社群驗證的經驗分享       |
+| ❓ **問題解答**   | 30+    | 常見問題與解決方案       |
+| 🌐 **語言支援**   | 10+    | 主流程式語言覆蓋         |
+| 📱 **裝置適配**   | 全平台 | 桌面、平板、手機完全適配 |
 
 ### 🎖️ 社群認可
 
@@ -835,6 +879,7 @@ SOFTWARE.
 ## 🔄 更新紀錄
 
 ### v2.0.0 (2025-07-15) - 重大更新
+
 - 🤖 **新增智能代理系統**：多模態分析、深度學習意圖識別、實時協作優化
 - 📚 **完整重構文件結構**：提升使用者體驗，統一時間戳記
 - 🐧 **新增 WSL 環境自動化安裝腳本**：完整的部署流程自動化
@@ -845,6 +890,7 @@ SOFTWARE.
 - 🎨 **統一視覺設計**：一致的色彩系統和使用者介面
 
 ### v1.0.0 (2025-01-15) - 初始發布
+
 - 📖 **8 個專業文件**：完整的功能覆蓋
 - 🔧 **基礎 Claude Code 功能整合**：核心功能文件化
 - 🌟 **社群最佳實踐收錄**：實戰經驗分享
@@ -874,15 +920,15 @@ Claude Code 中文文件整合專案致力於為華語地區的開發者提供�
 
 ### 📞 保持聯繫
 
-- 🐛 **遇到問題**：[提交 Issue](https://github.com/your-repo/claude-code-zh-tw/issues)
-- 💡 **功能建議**：[參與 Discussions](https://github.com/your-repo/claude-code-zh-tw/discussions)
-- 🤝 **貢獻代碼**：[Fork 專案](https://github.com/your-repo/claude-code-zh-tw/fork)
-- 📧 **商務合作**：claude-code-zh-tw@community.dev
+- 🐛 **遇到問題**：[提交 Issue](https://github.com/s123104/claude-code/issues)
+- 💡 **功能建議**：[參與 Discussions](https://github.com/s123104/claude-code/discussions)
+- 🤝 **貢獻代碼**：[Fork 專案](https://github.com/s123104/claude-code/fork)
+- 📧 **商務合作**：claude-code@community.dev
 
 ---
 
-*最後更新：2025-07-15T14:16:31+08:00 | 語言：繁體中文 | 專案維護者：s123104*
+_最後更新：2025-07-15T14:16:31+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
-**🔖 書籤建議**：將本專案 [README.md](https://github.com/s123104/claude-code-zh-tw) 加入書籤，隨時查閱最新資訊！
+**🔖 書籤建議**：將本專案 [README.md](https://github.com/s123104/claude-code) 加入書籤，隨時查閱最新資訊！
