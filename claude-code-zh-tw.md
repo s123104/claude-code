@@ -118,7 +118,7 @@ claude --version
 # 檢查 Claude Code 是否正確安裝
 claude --help
 
-# 設定 API Key
+# 設定 API Key（多種方式）
 export ANTHROPIC_API_KEY=your_api_key_here
 
 # 測試基本功能
@@ -175,6 +175,171 @@ git clone https://github.com/RchGrav/claudebox
 cd claudebox
 docker build -t claude-code .
 docker run -it claude-code
+```
+
+---
+
+## 🔐 認證與連線設定
+
+### 🌐 HTTP 網頁認證（推薦）
+
+**方式 1：Anthropic Console 登入**
+```bash
+# 首次使用建議透過網頁認證
+claude  # 會自動開啟瀏覽器登入頁面
+
+# 或手動前往
+# https://console.anthropic.com/login
+```
+
+**適用場景：**
+- 個人開發者首次使用
+- 需要完整功能存取
+- 支援 OAuth 2.0 認證流程
+
+### 🔑 API Token 認證
+
+**方式 2：環境變數設定**
+```bash
+# 設定 API Key 環境變數
+export ANTHROPIC_API_KEY="sk-ant-apiXX-XXXXXXX"
+
+# 永久保存至 shell 配置
+echo 'export ANTHROPIC_API_KEY="sk-ant-apiXX-XXXXXXX"' >> ~/.bashrc
+source ~/.bashrc
+
+# 測試連線
+claude -p "Hello, Claude Code!"
+```
+
+**方式 3：配置檔案設定**
+```bash
+# 在家目錄創建 .claude.json 配置檔
+cat > ~/.claude.json << 'EOF'
+{
+  "primaryApiKey": "sk-ant-apiXX-XXXXXXX",
+  "hasCompletedOnboarding": true
+}
+EOF
+
+# 設定權限
+chmod 600 ~/.claude.json
+```
+
+**方式 4：指令行參數**
+```bash
+# 直接透過參數傳遞（不推薦用於生產環境）
+claude --api-key "sk-ant-apiXX-XXXXXXX" "your prompt here"
+```
+
+### 🏢 企業級認證設定
+
+**OAuth 2.0 認證配置：**
+```bash
+# 設定 OAuth 應用程式
+claude config set auth.type oauth
+claude config set auth.client_id your_client_id
+claude config set auth.client_secret your_client_secret
+claude config set auth.redirect_uri http://localhost:3000/callback
+```
+
+**企業 API 端點設定：**
+```bash
+# 設定企業 API 端點
+claude config set api.endpoint https://api.your-company.com/v1
+claude config set api.version 2024-07-15
+```
+
+### 🔍 認證狀態檢查
+
+**檢查目前認證狀態：**
+```bash
+# 檢查認證狀態
+claude auth status
+
+# 檢查 API 配置
+claude config list
+
+# 測試 API 連線
+claude doctor
+```
+
+**常見認證問題排解：**
+```bash
+# 清除認證快取
+claude auth logout
+claude auth clear-cache
+
+# 重新認證
+claude auth login
+
+# 檢查網路連線
+curl -I https://api.anthropic.com/v1/health
+```
+
+### 🛡️ 安全最佳實踐
+
+**API Key 安全管理：**
+```bash
+# 檢查 API Key 有效性
+claude auth verify
+
+# 設定 API Key 權限範圍
+claude config set auth.scopes "read,write,admin"
+
+# 啟用 API Key 輪換
+claude config set auth.rotation_enabled true
+```
+
+**環境隔離：**
+```bash
+# 開發環境
+export ANTHROPIC_API_KEY_DEV="sk-ant-dev-XXXXXXX"
+
+# 生產環境
+export ANTHROPIC_API_KEY_PROD="sk-ant-prod-XXXXXXX"
+
+# 使用不同環境
+claude --env dev "test message"
+claude --env prod "production message"
+```
+
+### 📊 認證方式比較
+
+| 認證方式 | 適用場景 | 安全性 | 設定複雜度 | 推薦指數 |
+|---------|----------|--------|------------|----------|
+| **HTTP 網頁認證** | 個人開發、首次使用 | 高 | 低 | ⭐⭐⭐⭐⭐ |
+| **環境變數 API Key** | 自動化腳本、CI/CD | 中 | 中 | ⭐⭐⭐⭐ |
+| **配置檔案** | 本地開發環境 | 中 | 低 | ⭐⭐⭐ |
+| **指令行參數** | 臨時測試 | 低 | 極低 | ⭐⭐ |
+| **OAuth 2.0** | 企業級部署 | 極高 | 高 | ⭐⭐⭐⭐⭐ |
+
+### 🎯 快速認證設定
+
+**新手推薦流程：**
+```bash
+# 1. 首次使用 HTTP 網頁認證
+claude
+
+# 2. 取得 API Key 後設定環境變數
+export ANTHROPIC_API_KEY="your_api_key"
+
+# 3. 測試連線
+claude -p "測試連線成功"
+```
+
+**進階用戶設定：**
+```bash
+# 1. 創建配置檔案
+claude config init
+
+# 2. 設定多重認證
+claude config set auth.primary_method oauth
+claude config set auth.fallback_method api_key
+
+# 3. 啟用安全功能
+claude config set security.enable_2fa true
+claude config set security.session_timeout 3600
 ```
 
 ---

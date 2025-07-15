@@ -24,7 +24,8 @@
       "Bash(chmod:*)",
       "Bash(echo $PATH)",
       "Bash(gh:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }
