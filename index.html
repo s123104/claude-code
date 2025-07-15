@@ -291,15 +291,24 @@
             class="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <button
+              onclick="window.open('#installation', '_self')"
               class="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-xl hover:shadow-2xl"
             >
               <i class="fas fa-download mr-2"></i>
               立即開始使用
             </button>
             <button
+              onclick="window.open('wsl_claude_code_setup.sh', '_blank')"
               class="border border-neutral-600 hover:border-neutral-500 text-neutral-300 hover:text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
             >
-              <i class="fab fa-github mr-2"></i>
+              <i class="fab fa-windows mr-2"></i>
+              WSL 安裝腳本
+            </button>
+            <button
+              onclick="window.open('#docs-index', '_self')"
+              class="border border-neutral-600 hover:border-neutral-500 text-neutral-300 hover:text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+            >
+              <i class="fas fa-book mr-2"></i>
               查看文檔
             </button>
           </div>
@@ -473,7 +482,7 @@
               <i class="fas fa-laptop-code mr-3 text-primary-400"></i>
               系統需求
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="glass-effect rounded-xl p-6">
                 <h4 class="text-lg font-semibold mb-4 text-primary-400">
                   作業系統
@@ -484,20 +493,30 @@
                     <i class="fab fa-ubuntu mr-2"></i>Ubuntu 20.04+ / Debian 10+
                   </li>
                   <li>
-                    <i class="fab fa-windows mr-2"></i>WSL (Windows Subsystem
-                    for Linux)
+                    <i class="fab fa-windows mr-2"></i>WSL 2 (Windows 10 Build 19041+)
                   </li>
                 </ul>
               </div>
               <div class="glass-effect rounded-xl p-6">
                 <h4 class="text-lg font-semibold mb-4 text-primary-400">
-                  硬體與軟體
+                  硬體需求
                 </h4>
                 <ul class="space-y-2 text-neutral-300">
                   <li><i class="fas fa-memory mr-2"></i>至少 4GB RAM</li>
-                  <li><i class="fab fa-node-js mr-2"></i>Node.js 18+</li>
-                  <li><i class="fab fa-git-alt mr-2"></i>git 2.23+ (選用)</li>
+                  <li><i class="fas fa-hdd mr-2"></i>至少 1GB 可用空間</li>
+                  <li><i class="fas fa-microchip mr-2"></i>支援 VT-x/AMD-V 的 CPU</li>
                   <li><i class="fas fa-wifi mr-2"></i>網路連線</li>
+                </ul>
+              </div>
+              <div class="glass-effect rounded-xl p-6">
+                <h4 class="text-lg font-semibold mb-4 text-primary-400">
+                  軟體相依性
+                </h4>
+                <ul class="space-y-2 text-neutral-300">
+                  <li><i class="fab fa-node-js mr-2"></i>Node.js 18 LTS</li>
+                  <li><i class="fab fa-git-alt mr-2"></i>Git 2.23+</li>
+                  <li><i class="fas fa-terminal mr-2"></i>curl, build-essential</li>
+                  <li><i class="fas fa-search mr-2"></i>ripgrep (選用)</li>
                 </ul>
               </div>
             </div>
@@ -511,7 +530,7 @@
             </h3>
 
             <div class="space-y-6">
-              <!-- Step 1 -->
+              <!-- Step 1: WSL 快速安裝 -->
               <div class="flex items-start space-x-4">
                 <div
                   class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
@@ -520,17 +539,35 @@
                 </div>
                 <div class="flex-1">
                   <h4 class="text-lg font-semibold mb-2 text-white">
-                    安裝 Claude Code
+                    WSL 用戶一鍵安裝
                   </h4>
-                  <div class="code-block rounded-lg p-4">
-                    <code class="text-green-400 font-mono"
-                      >npm install -g @anthropic-ai/claude-code</code
-                    >
+                  <div class="code-block rounded-lg p-4 space-y-2">
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >curl -fsSL https://raw.githubusercontent.com/your-repo/wsl_claude_code_setup.sh | bash</code
+                      >
+                    </div>
+                    <div class="text-neutral-400 text-sm mt-2">
+                      或下載腳本後執行：
+                    </div>
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >wget https://raw.githubusercontent.com/your-repo/wsl_claude_code_setup.sh</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >chmod +x wsl_claude_code_setup.sh && ./wsl_claude_code_setup.sh</code
+                      >
+                    </div>
                   </div>
+                  <p class="text-neutral-300 mt-2">
+                    腳本會自動檢測環境並安裝所有必要元件
+                  </p>
                 </div>
               </div>
 
-              <!-- Step 2 -->
+              <!-- Step 2: 手動安裝 -->
               <div class="flex items-start space-x-4">
                 <div
                   class="w-8 h-8 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
@@ -539,25 +576,34 @@
                 </div>
                 <div class="flex-1">
                   <h4 class="text-lg font-semibold mb-2 text-white">
-                    啟動並驗證
+                    手動安裝（其他平台）
                   </h4>
                   <div class="code-block rounded-lg p-4 space-y-2">
+                    <div class="text-neutral-400 text-sm">安裝 Node.js 18 LTS：</div>
                     <div>
                       <code class="text-green-400 font-mono"
-                        >cd your-project-directory</code
+                        >curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</code
                       >
                     </div>
                     <div>
-                      <code class="text-green-400 font-mono">claude</code>
+                      <code class="text-green-400 font-mono"
+                        >nvm install 18 && nvm use 18</code
+                      >
+                    </div>
+                    <div class="text-neutral-400 text-sm mt-2">安裝 Claude Code：</div>
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >npm install -g @anthropic-ai/claude-code</code
+                      >
                     </div>
                   </div>
                   <p class="text-neutral-300 mt-2">
-                    首次啟動會引導您完成驗證設定
+                    適用於 macOS、Ubuntu 等非 WSL 環境
                   </p>
                 </div>
               </div>
 
-              <!-- Step 3 -->
+              <!-- Step 3: 驗證安裝 -->
               <div class="flex items-start space-x-4">
                 <div
                   class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
@@ -566,9 +612,23 @@
                 </div>
                 <div class="flex-1">
                   <h4 class="text-lg font-semibold mb-2 text-white">
-                    開始使用
+                    驗證安裝並開始使用
                   </h4>
                   <div class="code-block rounded-lg p-4 space-y-2">
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >claude --version</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-green-400 font-mono"
+                        >cd your-project-directory</code
+                      >
+                    </div>
+                    <div>
+                      <code class="text-green-400 font-mono">claude</code>
+                    </div>
+                    <div class="text-neutral-400 text-sm mt-2">開始對話：</div>
                     <div>
                       <code class="text-primary-400 font-mono"
                         >> what does this project do?</code
@@ -579,12 +639,10 @@
                         >> add a hello world function</code
                       >
                     </div>
-                    <div>
-                      <code class="text-primary-400 font-mono"
-                        >> commit my changes</code
-                      >
-                    </div>
                   </div>
+                  <p class="text-neutral-300 mt-2">
+                    首次啟動會引導您完成 API 金鑰設定
+                  </p>
                 </div>
               </div>
             </div>
@@ -601,13 +659,13 @@
           📚 文件導覽
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- 依 README.md 文件清單產生卡片 -->
+          <!-- 依據實際文件結構更新 -->
           <a
             href="docs/cursor-claude-master-guide-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
             <h3 class="text-xl font-bold text-primary-400 mb-2">
-              綜合代理主控手冊
+              <i class="fas fa-book mr-2"></i>綜合代理主控手冊
             </h3>
             <p class="text-neutral-200 text-sm mb-2">
               全域旗標索引、需求解析、執行流程、錯誤處理、文件索引
@@ -619,78 +677,84 @@
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
             <h3 class="text-xl font-bold text-secondary-400 mb-2">
-              社群最佳實踐
+              <i class="fas fa-users mr-2"></i>社群最佳實踐
             </h3>
             <p class="text-neutral-200 text-sm mb-2">
               Workflow、Hooks、Slash-Commands、MCP 整合
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
             href="docs/superclaude-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
-            <h3 class="text-xl font-bold text-purple-400 mb-2">高階旗標系統</h3>
+            <h3 class="text-xl font-bold text-purple-400 mb-2">
+              <i class="fas fa-flag mr-2"></i>高階旗標系統
+            </h3>
             <p class="text-neutral-200 text-sm mb-2">
               Persona、進階指令、全流程自動化
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
             href="docs/claude-code-guide-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
-            <h3 class="text-xl font-bold text-green-400 mb-2">基礎 API 指南</h3>
+            <h3 class="text-xl font-bold text-green-400 mb-2">
+              <i class="fas fa-code mr-2"></i>基礎 API 指南
+            </h3>
             <p class="text-neutral-200 text-sm mb-2">
               CLI、MCP、常用指令、疑難排解
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
             href="docs/claude-code-usage-monitor-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
             <h3 class="text-xl font-bold text-yellow-400 mb-2">
-              用量監控與安全
+              <i class="fas fa-chart-line mr-2"></i>用量監控與安全
             </h3>
             <p class="text-neutral-200 text-sm mb-2">
               即時監控、配額、Web Dashboard、常見問題
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
             href="docs/claudecodeui-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
             <h3 class="text-xl font-bold text-pink-400 mb-2">
-              Web UI 與視覺化
+              <i class="fas fa-desktop mr-2"></i>Web UI 與視覺化
             </h3>
             <p class="text-neutral-200 text-sm mb-2">
               PWA、遠端管理、CLI 整合、最佳實踐
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
             href="docs/bplustree3-zh-tw.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
-            <h3 class="text-xl font-bold text-cyan-400 mb-2">效能優化策略</h3>
+            <h3 class="text-xl font-bold text-cyan-400 mb-2">
+              <i class="fas fa-rocket mr-2"></i>效能優化策略
+            </h3>
             <p class="text-neutral-200 text-sm mb-2">
               B+Tree 快取、資料結構、效能建議
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
           <a
-            href="claude-code-zh-tw.md"
+            href="docs/README.md"
             class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
             <h3 class="text-xl font-bold text-orange-400 mb-2">
-              Claude Code 詳細說明
+              <i class="fas fa-list mr-2"></i>文件索引
             </h3>
             <p class="text-neutral-200 text-sm mb-2">
-              產品概覽、安裝、CLI、API、最佳實踐
+              文件導覽、快速參考、分類索引
             </p>
-            <span class="text-xs text-neutral-400">2025-07-14</span>
+            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
         </div>
       </div>
@@ -871,12 +935,11 @@
               安裝與啟動問題
             </h3>
             <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
-              <li>Node.js 版本需 18+，建議用 LTS</li>
-              <li>WSL 請用 Linux npm/node，勿用 Windows 版</li>
-              <li>
-                pip/pipx/uv 安裝 claude-monitor，PATH 問題請加 ~/.local/bin
-              </li>
-              <li>首次啟動需完成驗證，支援多平台</li>
+              <li>Node.js 版本需 18 LTS，建議使用 nvm 管理</li>
+              <li>WSL 環境需 Windows 10 Build 19041+ 且啟用虛擬化</li>
+              <li>避免使用 Windows 版本的 node/npm，應在 WSL 內重新安裝</li>
+              <li>npm 全域安裝目錄設置：~/.npm-global</li>
+              <li>首次啟動需完成 API 金鑰設定</li>
             </ul>
           </div>
           <div class="glass-effect rounded-xl p-6">
@@ -894,10 +957,11 @@
               常見錯誤與排查
             </h3>
             <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
-              <li>Rate limit exceeded：升級方案或減少請求</li>
-              <li>權限錯誤：allowedTools 設定錯誤</li>
-              <li>MCP 問題：MCP 未啟動或異常，請重啟</li>
-              <li>Linux 權限：npm 前綴設家目錄，避免 sudo</li>
+              <li>npm 配置污染：使用腳本自動清理 ~/.npmrc</li>
+              <li>node/npm 路徑錯誤：確保指向 WSL 而非 Windows</li>
+              <li>虛擬化未啟用：BIOS 中開啟 VT-x/AMD-V</li>
+              <li>WSL 2 未設為預設：wsl --set-default-version 2</li>
+              <li>磁碟空間不足：至少需要 1GB 可用空間</li>
             </ul>
           </div>
           <div class="glass-effect rounded-xl p-6">
@@ -1071,9 +1135,14 @@
         <div class="mb-2">
           每次子文件更新時，首頁將自動同步，確保資訊時效與一致性。
         </div>
-        <div>
+        <div class="mb-2">
           如需回報問題、參與社群、或查詢最新功能，請參閱各文件內的
           GitHub、官方文檔與社群連結。
+        </div>
+        <div class="mt-4 text-center">
+          <span class="text-neutral-500">最後更新：2025-07-15</span>
+          <span class="mx-2 text-neutral-600">|</span>
+          <span class="text-neutral-500">文件版本：最新</span>
         </div>
       </div>
     </section>
