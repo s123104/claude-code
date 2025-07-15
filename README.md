@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="img/logo.png" alt="Claude Code Logo" width="128" height="128" />
+  <img src="img/logo.png" alt="Claude Code Logo" width="200" height="160" />
   
   # Claude Code 中文文件整合專案
   
