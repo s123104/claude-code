@@ -15,7 +15,16 @@
       "mcp__filesystem__list_directory",
       "Bash(git config:*)",
       "Bash(git push:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(snap install:*)",
+      "Bash(mkdir:*)",
+      "Bash(tar:*)",
+      "Bash(find:*)",
+      "Bash(cp:*)",
+      "Bash(chmod:*)",
+      "Bash(echo $PATH)",
+      "Bash(gh:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
