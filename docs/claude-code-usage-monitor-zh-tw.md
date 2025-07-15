@@ -1,10 +1,11 @@
 # Claude Code Usage Monitor 中文說明書
 
-> 資料來源：
+> **資料來源：**
 >
 > - [GitHub 專案](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)
-> - [Context7 文檔](/maciek-roboblog/claude-code-usage-monitor)
-> - 文件整理時間：2025-07-14
+> - [PyPI 套件頁面](https://pypi.org/project/claude-monitor/)
+> - [Docker Hub](https://hub.docker.com/r/maciek/claude-usage-monitor)
+> - **文件整理時間：2025-07-15T14:16:31+08:00**
 
 ---
 
@@ -24,6 +25,22 @@
 ## 1. 產品簡介
 
 Claude Code Usage Monitor 是一套即時監控 Claude Code 令牌（token）用量、預測與警示的開源工具，支援 CLI、Web Dashboard、Docker 部署，並具備多種自訂方案、時區、重置時刻與主題設定。
+
+### 1.1 核心功能
+
+- **即時用量追蹤**：監控 Claude Code API 呼叫次數和 token 消耗
+- **多方案支援**：Pro、Max5、Max20、Custom 等訂閱方案自動偵測
+- **智能預測**：基於使用模式預測每日/每月用量趨勢
+- **彈性警示**：可設定用量閾值和通知機制
+- **多重介面**：CLI、Web Dashboard、RESTful API
+- **跨平台支援**：Linux、macOS、Windows（WSL）
+
+### 1.2 使用場景
+
+- **個人開發者**：追蹤個人 Claude Code 使用量，避免超出限額
+- **團隊管理**：監控團隊整體用量，進行成本控制
+- **企業環境**：整合到 CI/CD 流程，實現自動化監控
+- **研究機構**：分析 AI 工具使用模式，優化工作流程
 
 ---
 
@@ -149,17 +166,99 @@ python claude_monitor.py
 
 ## 6. Docker/Web Dashboard
 
-- 啟動 Web Dashboard：
-  ```bash
-  docker run -p 8080:8080 maciek/claude-usage-monitor --web-mode
-  ```
-- 主要功能：
-  - 即時用量視覺化、歷史圖表、Session 時間軸、REST API、行動裝置支援
-- Docker 進階：
-  ```bash
-  docker run -e PLAN=max5 -e RESET_HOUR=9 maciek/claude-usage-monitor
-  docker run -v ~/.claude_monitor:/data maciek/claude-usage-monitor
-  ```
+### 6.1 Web Dashboard 啟動
+
+```bash
+# 基本啟動
+docker run -p 8080:8080 maciek/claude-usage-monitor --web-mode
+
+# 自訂連接埠
+docker run -p 3000:8080 maciek/claude-usage-monitor --web-mode
+
+# 背景執行
+docker run -d -p 8080:8080 --name claude-monitor maciek/claude-usage-monitor --web-mode
+```
+
+### 6.2 主要功能
+
+#### 視覺化面板
+- **即時用量儀表板**：顯示當前 token 使用量和剩餘額度
+- **歷史趨勢圖表**：日、週、月用量變化曲線
+- **Session 時間軸**：詳細的對話記錄和用量分布
+- **方案比較圖**：不同訂閱方案的使用效率分析
+
+#### 互動功能
+- **REST API 端點**：`/api/usage`、`/api/stats`、`/api/alerts`
+- **行動裝置支援**：響應式設計，支援手機和平板訪問
+- **即時更新**：WebSocket 連接，無需手動刷新
+- **匯出功能**：CSV、JSON 格式資料下載
+
+### 6.3 Docker 進階配置
+
+#### 環境變數設定
+```bash
+# 方案與時區設定
+docker run -e PLAN=max5 -e RESET_HOUR=9 -e TIMEZONE=Asia/Taipei maciek/claude-usage-monitor
+
+# 資料持久化
+docker run -v ~/.claude_monitor:/data -p 8080:8080 maciek/claude-usage-monitor --web-mode
+
+# 完整配置範例
+docker run -d \
+  --name claude-monitor \
+  -p 8080:8080 \
+  -e PLAN=pro \
+  -e RESET_HOUR=0 \
+  -e TIMEZONE=UTC \
+  -e ALERT_THRESHOLD=80 \
+  -v ~/.claude_monitor:/data \
+  maciek/claude-usage-monitor --web-mode
+```
+
+#### Docker Compose 範例
+```yaml
+version: '3.8'
+services:
+  claude-monitor:
+    image: maciek/claude-usage-monitor
+    container_name: claude-monitor
+    ports:
+      - "8080:8080"
+    environment:
+      - PLAN=pro
+      - RESET_HOUR=0
+      - TIMEZONE=Asia/Taipei
+      - ALERT_THRESHOLD=85
+    volumes:
+      - ./data:/data
+    command: --web-mode
+    restart: unless-stopped
+```
+
+### 6.4 API 端點說明
+
+| 端點 | 方法 | 功能 | 回應格式 |
+|------|------|------|----------|
+| `/api/usage` | GET | 當前用量資訊 | JSON |
+| `/api/usage/history` | GET | 歷史用量記錄 | JSON |
+| `/api/stats` | GET | 統計資訊 | JSON |
+| `/api/alerts` | GET | 警示設定 | JSON |
+| `/api/alerts` | POST | 更新警示 | JSON |
+| `/api/export` | GET | 匯出資料 | CSV/JSON |
+
+#### API 使用範例
+```bash
+# 取得當前用量
+curl http://localhost:8080/api/usage
+
+# 取得統計資訊
+curl http://localhost:8080/api/stats
+
+# 設定警示閾值
+curl -X POST http://localhost:8080/api/alerts \
+  -H "Content-Type: application/json" \
+  -d '{"threshold": 85, "email": "admin@example.com"}'
+```
 
 ---
 

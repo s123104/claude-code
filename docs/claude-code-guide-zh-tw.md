@@ -1,6 +1,13 @@
 # Claude Code Guide 中文全解（繁體中文版）
 
-> 本文件彙整自 [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)、官方文檔、CLAUDE.md 及 Context7 技術文檔，涵蓋所有指令、旗標、MCP、最佳實踐與疑難排解。資料來源皆標註於各節，取得時間：2025-07-14T11:51:25+08:00。
+> **本文件彙整自：**
+> 
+> - [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) 社群指南
+> - [Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+> - [Claude Code CLI 參考](https://docs.anthropic.com/en/docs/claude-code/cli-reference)
+> - [MCP 協議官方規範](https://docs.anthropic.com/en/docs/claude-code/mcp)
+> - [Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
+> - **文件整理時間：2025-07-15T14:16:31+08:00**
 
 ---
 
@@ -195,34 +202,293 @@ claude --version
 
 ## 8. 進階功能與最佳實踐
 
-### 8.1 進階功能
+### 8.1 進階功能深度解析
 
-- **多目錄分析**：
-  ```bash
-  claude --add-dir ../frontend ../backend ../shared
-  claude "分析整體架構"
-  ```
-- **MCP 多代理協作**：
-  - `claude mcp` 進入多代理協作模式
-  - 支援自訂工具、記憶體、思考鏈
-- **思考鏈（Chain of Thought）**：
-  - Claude 會於 <thinking> 標籤內先分析再執行工具
-  - 可於 API 請求啟用 extended thinking
+#### 多目錄整合分析
+```bash
+# 跨專案分析
+claude --add-dir ../frontend ../backend ../shared
+claude "分析微服務架構的整體一致性"
 
-### 8.2 最佳實踐
+# 分層架構分析
+claude --add-dir ./src ./tests ./docs
+claude "檢查程式碼、測試、文檔的一致性"
 
-- **安全**：
-  - 預設僅開啟 View 權限
-  - 機密資訊用環境變數
-  - 避免於生產環境使用 `--dangerously-skip-permissions`
-- **效能**：
-  - 大型專案分目錄分析
-  - 適當設定 `--output-format`、`--timeout`
-- **團隊協作**：
-  - 建立團隊模板（如 ~/.claude/templates/team-frontend.json）
-  - 統一審查標準與自動化流程
+# 依賴關係追蹤
+claude --add-dir ../packages/*
+claude "分析 monorepo 中的依賴關係和循環依賴"
+```
 
-> 來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)｜[官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+#### MCP 多代理協作進階應用
+```bash
+# 啟動多代理模式
+claude mcp
+
+# 配置專門代理
+claude mcp add code-reviewer /path/to/review-agent
+claude mcp add security-scanner /path/to/security-agent
+claude mcp add performance-analyzer /path/to/perf-agent
+
+# 協作式程式碼審查
+claude "請 code-reviewer 和 security-scanner 同時檢查 auth.js"
+```
+
+#### Extended Thinking 深度分析
+```bash
+# 啟用深度思考模式
+claude --thinking-budget 10000 "設計一個可擴展的微服務架構"
+
+# API 層級的深度思考
+curl -H "anthropic-beta: extended-thinking-2024-12-10" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "model": "claude-3-5-sonnet-20241022",
+       "thinking": {"budget_tokens": 20000},
+       "messages": [{"role": "user", "content": "分析這個複雜系統的架構"}]
+     }' \
+     https://api.anthropic.com/v1/messages
+```
+
+### 8.2 企業級最佳實踐
+
+#### 安全性強化策略
+```json
+// ~/.claude/security-policy.json
+{
+  "defaultTools": ["View", "Read"],
+  "restrictedPaths": [
+    "/.env*",
+    "/secrets/",
+    "/**/private/**"
+  ],
+  "allowedDomains": [
+    "github.com",
+    "docs.company.com"
+  ],
+  "auditLogging": true,
+  "requireConfirmation": [
+    "Edit",
+    "Bash",
+    "Write"
+  ]
+}
+```
+
+#### 團隊模板標準化
+```json
+// ~/.claude/templates/team-frontend.json
+{
+  "name": "前端團隊標準配置",
+  "allowedTools": ["View", "Edit", "Bash"],
+  "hooks": {
+    "preEdit": ["prettier --check", "eslint --quiet"],
+    "postEdit": ["npm test -- --related"]
+  },
+  "slashCommands": [
+    "/component-review",
+    "/accessibility-check",
+    "/performance-audit"
+  ],
+  "mcpServers": [
+    "design-system",
+    "component-library"
+  ]
+}
+```
+
+#### 效能優化配置
+```bash
+# 大型專案優化設定
+export CLAUDE_CACHE_SIZE=1000
+export CLAUDE_PARALLEL_ANALYSIS=4
+export CLAUDE_MEMORY_LIMIT=8192
+
+# 分段處理策略
+claude --max-files-per-analysis 50 --timeout 300
+```
+
+### 8.3 工作流程自動化
+
+#### CI/CD 整合範例
+```yaml
+# .github/workflows/claude-review.yml
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Claude Code
+      run: |
+        npm install -g @anthropic-ai/claude-code
+        echo "${{ secrets.ANTHROPIC_API_KEY }}" > ~/.claude/api-key
+    
+    - name: Run Claude Review
+      run: |
+        claude --output-format json \
+               --allowedTools "View" \
+               "Review the changes in this PR for security, performance, and best practices" \
+               > review-results.json
+    
+    - name: Post Review Comments
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const results = JSON.parse(fs.readFileSync('review-results.json', 'utf8'));
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## Claude Code 自動審查結果\n\n${results.summary}`
+          });
+```
+
+#### 開發環境自動化
+```bash
+# dev-setup.sh
+#!/bin/bash
+
+# 初始化 Claude Code 開發環境
+claude /init
+
+# 設定專案特定配置
+claude config set allowedTools '["View", "Edit", "Bash"]'
+claude config set outputFormat "json"
+
+# 安裝必要的 MCP 伺服器
+claude mcp add github-integration github-mcp-server
+claude mcp add database-tools postgres-mcp-server
+
+# 建立開發專用的斜線命令
+mkdir -p .claude/commands
+cat > .claude/commands/dev-review.md << 'EOF'
+# dev-review
+
+快速開發環境程式碼審查
+
+## Examples
+/dev-review src/
+EOF
+
+echo "Claude Code 開發環境設定完成！"
+```
+
+### 8.4 監控與維護
+
+#### 效能監控配置
+```javascript
+// claude-monitor.js
+const ClaudeMonitor = {
+  trackUsage: () => {
+    // 追蹤 API 使用量
+    const usage = JSON.parse(
+      execSync('claude config get usage').toString()
+    );
+    
+    console.log(`API 使用量: ${usage.tokens}/月`);
+    console.log(`剩餘額度: ${usage.remaining}`);
+    
+    if (usage.remaining < 1000) {
+      console.warn('⚠️  API 額度即將用盡！');
+    }
+  },
+  
+  healthCheck: () => {
+    // 系統健康檢查
+    execSync('claude /doctor');
+  },
+  
+  cleanupSessions: () => {
+    // 清理舊的 session
+    execSync('claude /compact');
+  }
+};
+
+// 定期執行監控
+setInterval(ClaudeMonitor.trackUsage, 3600000); // 每小時
+setInterval(ClaudeMonitor.healthCheck, 86400000); // 每日
+```
+
+#### 錯誤追蹤與診斷
+```bash
+# 詳細錯誤診斷
+claude --verbose --debug "分析這個錯誤" 2>error.log
+
+# MCP 連接診斷
+claude --mcp-debug mcp status
+
+# 記憶體和緩存診斷
+claude /doctor --detailed
+
+# 匯出診斷報告
+claude /bug --include-logs --include-config
+```
+
+### 8.5 高階整合模式
+
+#### 語義搜尋整合
+```python
+# semantic-search.py
+import subprocess
+import json
+
+def semantic_code_search(query, project_path):
+    """結合 Claude Code 進行語義程式碼搜尋"""
+    
+    # 使用 Claude 分析搜尋意圖
+    result = subprocess.run([
+        'claude', '--output-format', 'json',
+        f'在 {project_path} 中搜尋與「{query}」相關的程式碼'
+    ], capture_output=True, text=True)
+    
+    search_results = json.loads(result.stdout)
+    
+    # 進一步分析和排序結果
+    analysis = subprocess.run([
+        'claude', '--output-format', 'json',
+        f'分析這些搜尋結果的相關性：{search_results}'
+    ], capture_output=True, text=True)
+    
+    return json.loads(analysis.stdout)
+```
+
+#### 架構分析自動化
+```bash
+# architecture-analyzer.sh
+#!/bin/bash
+
+echo "🏗️  開始架構分析..."
+
+# 分析整體架構
+claude --add-dir src tests docs \
+       --output-format json \
+       "分析專案架構並提供改進建議" > architecture-report.json
+
+# 依賴關係分析
+claude "分析 package.json 和 imports，找出潛在的依賴問題" > dependencies-report.md
+
+# 安全性掃描
+claude --allowedTools "View" \
+       "掃描程式碼中的潛在安全問題" > security-report.md
+
+# 效能分析
+claude "分析程式碼中的效能瓶頸和優化機會" > performance-report.md
+
+echo "✅ 架構分析完成！查看生成的報告文件。"
+```
+
+> 來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) | [官方文檔](https://docs.anthropic.com/en/docs/claude-code) | 企業級實踐案例
 
 ---
 

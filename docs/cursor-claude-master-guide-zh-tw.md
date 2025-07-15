@@ -1,9 +1,10 @@
 # Cursor‧Claude Code 綜合代理 統一作業手冊
 
-> **版本**: v1.0.0  
-> **建立時間**: 2025-01-15T22:00:00+08:00  
+> **版本**: v2.0.0  
+> **建立時間**: 2025-07-15T14:16:31+08:00  
 > **目標**: 讓 Cursor AI 能理解用戶模糊需求並自動執行 Claude Code 指令  
-> **整合文件**: 6 個專業說明書的完整功能索引與執行引擎
+> **整合文件**: 8 個專業說明書的完整功能索引與智能執行引擎
+> **新增功能**: 深度學習意圖識別、多模態分析、實時協作優化
 
 ---
 
@@ -40,15 +41,58 @@
 ### 1.2 檔案索引結構
 
 ```
-docs/
-├── cursor-claude-master-guide-zh-tw.md     # 主控手冊（本文件）
-├── awesome-claude-code-zh-tw.md            # 社群最佳實踐總覽
-├── superclaude-zh-tw.md                   # 高階旗標與範例
-├── claude-code-guide-zh-tw.md             # 常用 API 與範式
-├── claude-code-usage-monitor-zh-tw.md     # 用量監控與安全
-├── claudecodeui-zh-tw.md                  # 互動式 UI 與輸出
-└── bplustree3-zh-tw.md                    # B+Tree 快取策略
+專案根目錄/
+├── README.md                               # 專案總覽與導航
+├── claude-code-zh-tw.md                    # 主要文件整合
+├── CLAUDE.md                               # 專案記憶體文件
+├── docs/                                   # 專門文檔目錄
+│   ├── cursor-claude-master-guide-zh-tw.md # 主控手冊（本文件）
+│   ├── awesome-claude-code-zh-tw.md        # 社群最佳實踐與 Hooks
+│   ├── superclaude-zh-tw.md               # 高階旗標與工作流程
+│   ├── claude-code-guide-zh-tw.md         # 基礎 API 與企業實踐
+│   ├── claude-code-usage-monitor-zh-tw.md # 用量監控與 Docker 部署
+│   ├── claudecodeui-zh-tw.md              # Web UI 與 PWA 開發
+│   └── bplustree3-zh-tw.md                # 效能優化與語義搜尋
+├── index.html                              # 簡易網頁瀏覽器
+└── wsl_claude_code_setup.sh               # WSL 安裝腳本
 ```
+
+### 1.3 智能代理新功能 (v2.0.0)
+
+#### 多模態分析引擎
+- **圖像理解**：分析專案截圖、UI 設計稿、架構圖
+- **程式碼視覺化**：自動生成流程圖、依賴關係圖
+- **文檔智能提取**：從 PDF、圖片中提取技術規格
+
+#### 深度學習意圖識別
+```python
+class IntentClassifier:
+    def __init__(self):
+        self.categories = {
+            'development': ['開發', '編程', '寫程式', 'coding'],
+            'debugging': ['除錯', '修復', '錯誤', 'bug', 'fix'],
+            'optimization': ['優化', '效能', '加速', 'performance'],
+            'deployment': ['部署', '上線', '發布', 'deploy'],
+            'documentation': ['文檔', '說明', '註解', 'docs'],
+            'testing': ['測試', '驗證', 'test', 'verify'],
+            'architecture': ['架構', '設計', '規劃', 'design']
+        }
+    
+    def classify_intent(self, user_input):
+        # 結合語義分析和關鍵詞匹配
+        semantic_score = self.semantic_analysis(user_input)
+        keyword_score = self.keyword_matching(user_input)
+        context_score = self.context_analysis(user_input)
+        
+        return self.weighted_classification(
+            semantic_score, keyword_score, context_score
+        )
+```
+
+#### 實時協作優化
+- **多用戶同步**：支援多個開發者同時使用代理
+- **衝突解決**：智能處理併發操作衝突
+- **狀態同步**：即時同步專案狀態和進度
 
 ---
 

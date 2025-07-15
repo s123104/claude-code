@@ -1,708 +1,507 @@
-# Claude Code 詳細介紹與使用方法說明書
+# Claude Code 中文文件整合專案
 
-> **資料來源：** [Anthropic Claude Code 官方文件](https://docs.anthropic.com/zh-TW/docs/claude-code/overview)  
-> **文件整理時間：** 2025-07-14T11:51:25+08:00
-
----
-
-## 目錄
-
-- [1. 產品概覽](#1-產品概覽)
-- [2. 安裝與系統需求](#2-安裝與系統需求)
-  - [2.1 設定與系統需求](#21-設定與系統需求)
-- [3. 快速入門](#3-快速入門)
-  - [3.1 快速入門](#31-快速入門)
-- [4. CLI 指令與斜線命令](#4-cli-指令與斜線命令)
-  - [4.1 CLI 指令與斜線命令](#41-cli-指令與斜線命令)
-  - [4.2 MCP 伺服器管理指令（2025 最新）](#42-mcp-伺服器管理指令2025-最新)
-- [5. 常見工作流程範例](#5-常見工作流程範例)
-  - [5.1 常見工作流程範例](#51-常見工作流程範例)
-- [6. MCP（模型上下文協議）整合](#6-mcp模型上下文協議整合)
-  - [6.1 MCP（模型上下文協議）整合](#61-mcp模型上下文協議整合)
-- [7. 設定與自訂（Hooks）](#7-設定與自訂hooks)
-  - [7.1 設定與自訂（Hooks、配置）](#71-設定與自訂hooks配置)
-- [8. 安全性設計與最佳實踐](#8-安全性設計與最佳實踐)
-- [9. 疑難排解與常見問題](#9-疑難排解與常見問題)
-- [10. 版本更新與資源連結](#10-版本更新與資源連結)
-- [11. 最新 Claude Code API 實作與進階用法（2025 最新）](#11-最新-claude-code-api-實作與進階用法2025-最新)
-- [12. 進階細節與 API 實例](#12-進階細節與-api-實例)
+> **完整的 Claude Code 與 Cursor AI 整合說明書集合**  
+> 最後更新時間：2025-07-15T14:09:32+08:00  
+> 文件語言：繁體中文  
+> 版本：v2.0.0 - 包含官方最新指令與完整旗標參考
 
 ---
 
-## 1. 產品概覽
+## 📋 目錄
 
-Claude Code 是一款終端機 AI 代理程式設計工具，能理解您的程式碼庫，並以自然語言協助您更快開發。其特色包括：
-
-- 直接整合開發環境，無需額外伺服器或複雜設定
-- 支援檔案編輯、錯誤修復、測試執行、程式碼檢查、Git 操作、網路搜尋等
-- 強調安全性與隱私，所有操作皆需明確授權
-- 支援企業級整合（Amazon Bedrock、Google Vertex AI 等）
+- [📋 目錄](#-目錄)
+- [🎯 專案簡介](#-專案簡介)
+- [📚 文件清單與功能索引](#-文件清單與功能索引)
+  - [🎯 主要文件](#-主要文件)
+  - [🔧 功能專門文件](#-功能專門文件)
+- [💻 安裝步驟](#-安裝步驟)
+  - [🔧 基本環境需求](#-基本環境需求)
+  - [📦 推薦安裝方式](#-推薦安裝方式)
+  - [🖥️ 各平台安裝指引](#️-各平台安裝指引)
+- [🚀 快速開始指引](#-快速開始指引)
+  - [初次使用者](#初次使用者)
+  - [依使用場景快速導航](#依使用場景快速導航)
+  - [依角色推薦](#依角色推薦)
+- [⭐ 主要功能特色](#-主要功能特色)
+  - [🤖 AI 輔助開發](#-ai-輔助開發)
+  - [🔧 進階功能](#-進階功能)
+  - [📊 監控與管理](#-監控與管理)
+  - [🖥️ 使用者介面](#️-使用者介面)
+- [📖 CLI 指令完整參考](#-cli-指令完整參考)
+  - [基本指令](#基本指令)
+  - [進階旗標與選項](#進階旗標與選項)
+  - [MCP 管理指令](#mcp-管理指令)
+  - [斜線命令系統](#斜線命令系統)
+- [🎯 常用旗標快查](#-常用旗標快查)
+- [📖 文件內容導覽](#-文件內容導覽)
+  - [📚 文件總覽 (README.md)](#-文件總覽-readmemd)
+  - [🎯 綜合代理主控手冊 (cursor-claude-master-guide-zh-tw.md)](#-綜合代理主控手冊-cursor-claude-master-guide-zh-twmd)
+  - [📖 基礎 API 指南 (claude-code-guide-zh-tw.md)](#-基礎-api-指南-claude-code-guide-zh-twmd)
+  - [⭐ 社群最佳實踐 (awesome-claude-code-zh-tw.md)](#-社群最佳實踐-awesome-claude-code-zh-twmd)
+  - [📊 用量監控與安全 (claude-code-usage-monitor-zh-tw.md)](#-用量監控與安全-claude-code-usage-monitor-zh-twmd)
+  - [🖥️ Web UI 與視覺化 (claudecodeui-zh-tw.md)](#️-web-ui-與視覺化-claudecodeui-zh-twmd)
+  - [⚡ 效能優化策略 (bplustree3-zh-tw.md)](#-效能優化策略-bplustree3-zh-twmd)
+  - [🔧 高階旗標系統 (superclaude-zh-tw.md)](#-高階旗標系統-superclaude-zh-twmd)
+- [❓ 常見問題與疑難排解](#-常見問題與疑難排解)
+- [🌟 社群資源與延伸閱讀](#-社群資源與延伸閱讀)
 
 ---
 
-## 2. 安裝與系統需求
+## 🎯 專案簡介
 
-### 系統需求
+本專案是一個完整的 **Claude Code 中文文件整合庫**，收錄了 Claude Code 與 Cursor AI 的全方位使用指南。涵蓋從基礎安裝到進階功能、從日常開發到生產部署、從個人使用到團隊協作的完整流程。
 
-- 作業系統：macOS 10.15+、Ubuntu 20.04+/Debian 10+，或 WSL（Windows Subsystem for Linux）
-- 硬體：至少 4GB RAM
-- 軟體：Node.js 18+、git 2.23+（選用）、GitHub/GitLab CLI（選用）
-- 網路：需連網以驗證與 AI 處理
+### 專案特色
 
-### 安裝步驟
+- **🌐 全繁體中文化**：所有文件均為繁體中文，符合華語使用者習慣
+- **📋 系統化整理**：8 個專門文件涵蓋不同使用場景和功能領域
+- **🎯 場景導向**：根據用戶類型（初學者、開發者、架構師、團隊領導）提供差異化指引
+- **⚡ 實戰導向**：包含大量實用範例、最佳實踐和疑難排解方案
+- **🔄 持續更新**：跟隨 Claude Code 版本更新，確保內容時效性
+- **📱 完整指令參考**：整合官方最新 CLI 選項、旗標、MCP 命令等
+
+### 適用對象
+
+- **AI 輔助開發初學者**：想要開始使用 Claude Code 進行程式開發
+- **專業開發者**：希望提升開發效率，整合 AI 工具到工作流程
+- **架構師**：需要了解 Claude Code 的架構設計和效能優化
+- **團隊領導**：計畫在團隊中導入 Claude Code，需要監控和管理功能
+- **DevOps 工程師**：負責 Claude Code 的部署、監控和維運
+
+---
+
+## 📚 文件清單與功能索引
+
+### 🎯 主要文件
+
+| 文件名稱 | 核心功能 | 適用對象 | 快速連結 |
+|----------|----------|----------|----------|
+| **[cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md)** | 綜合代理主控手冊 | 所有用戶 | **必讀** |
+
+### 🔧 功能專門文件
+
+| 文件名稱 | 主要內容 | 關鍵旗標 | 使用場景 |
+|----------|----------|----------|----------|
+| [awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐 | `--hooks` `--workflow` | 專案初始化、團隊協作 |
+| [superclaude-zh-tw.md](docs/superclaude-zh-tw.md) | 高階旗標系統 | `--persona` `--advanced` | 複雜任務自動化 |
+| [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) | 基礎 API 指南 | `--api` `--mcp` `--session` | 日常開發、基礎操作 |
+| [claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 用量監控與安全 | `--monitor` `--limit` `--audit` | 生產環境、成本控制 |
+| [claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard` | 圖形介面、遠端管理 |
+| [bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) | 效能優化策略 | `--cache` `--optimize` `--profile` | 大型專案、效能調優 |
+
+---
+
+## 💻 安裝步驟
+
+### 🔧 基本環境需求
+
+- **Node.js 18+**（建議使用 LTS 版本）
+- **作業系統支援**：macOS、Linux、WSL/Windows
+- **推薦環境**：純 Ubuntu WSL 環境，避免 Windows 路徑汙染
+
+### 📦 推薦安裝方式
+
+**NPM 官方安裝（推薦）：**
 
 ```bash
+# 全域安裝 Claude Code
+npm install -g @anthropic-ai/claude-code
+
+# 驗證安裝
+which claude
+claude --version
+```
+
+**驗證安裝成功：**
+
+```bash
+# 檢查 Claude Code 是否正確安裝
+claude --help
+
+# 設定 API Key
+export ANTHROPIC_API_KEY=your_api_key_here
+
+# 測試基本功能
+claude "Hello, Claude Code!"
+```
+
+### 🖥️ 各平台安裝指引
+
+#### macOS
+
+```bash
+# 使用 Homebrew 安裝 Node.js
+brew install node
+
+# 安裝 Claude Code
 npm install -g @anthropic-ai/claude-code
 ```
 
-### 啟動與驗證
+#### Linux (Ubuntu/Debian)
 
 ```bash
-cd your-project-directory
-claude
+# 更新套件管理器
+sudo apt update
+
+# 安裝 Node.js 和 npm
+sudo apt install -y nodejs npm
+
+# 安裝 Claude Code
+npm install -g @anthropic-ai/claude-code
 ```
 
-首次啟動會引導您完成驗證，可選擇 Anthropic Console、Claude App（Pro/Max）、或企業平台（Bedrock/Vertex AI）。
-
----
-
-### 2.1 設定與系統需求
-
-> 來源：[設定 Claude Code](https://docs.anthropic.com/zh-TW/docs/claude-code/setup)
-
-- 支援作業系統：macOS 10.15+、Ubuntu 20.04+/Debian 10+、WSL（Windows）
-- 最低硬體需求：4GB RAM
-- 需安裝 Node.js 18+、git 2.23+（選用）、GitHub/GitLab CLI（選用）
-- 需網路連線進行驗證與 AI 處理
-- 安裝指令：
-  ```bash
-  npm install -g @anthropic-ai/claude-code
-  ```
-- 啟動：
-  ```bash
-  claude
-  ```
-- 支援 Bash、Zsh、Fish shell，Vim 模式、主題、通知等終端最佳化
-- WSL/Windows 安裝疑難排解詳見官方指引
-
----
-
-## 3. 快速入門
-
-1. 在專案目錄啟動 Claude Code：
-   ```bash
-   cd /path/to/your/project
-   claude
-   ```
-2. 提問專案相關問題：
-   ```
-   > what does this project do?
-   > where is the main entry point?
-   > explain the folder structure
-   ```
-3. 進行程式碼修改：
-   ```
-   > add a hello world function to the main file
-   ```
-   Claude 會尋找檔案、顯示建議、請求批准後才會編輯。
-4. Git 操作：
-   ```
-   > what files have I changed?
-   > commit my changes with a descriptive message
-   > create a new branch called feature/quickstart
-   > show me the last 5 commits
-   > help me resolve merge conflicts
-   ```
-5. 錯誤修復與功能新增：
-   ```
-   > add input validation to the user registration form
-   > there's a bug where users can submit empty forms - fix it
-   ```
-6. 其他常見工作流程：重構、測試、文檔、代碼審查等。
-
----
-
-### 3.1 快速入門
-
-> 來源：[快速入門](https://docs.anthropic.com/zh-TW/docs/claude-code/quickstart)
-
-- 啟動專案：
-  ```bash
-  cd /path/to/your/project
-  claude
-  ```
-- 互動式 REPL 提示：
-  - 例：`> what does this project do?`
-  - 例：`> add a hello world function to the main file`
-- Git 整合：
-  - 例：`> commit my changes with a descriptive message`
-  - 例：`> help me resolve merge conflicts`
-- 常見任務：
-  - 需求拆解、重構、測試、文件產生、審查、PR 建立
-- 基本命令速查：
-  | 命令 | 功能 | 範例 |
-  |---|---|---|
-  | claude | 啟動互動模式 | claude |
-  | claude "task" | 一次性任務 | claude "fix the build error" |
-  | claude -p "query" | 查詢後退出 | claude -p "explain this function" |
-  | /clear | 清除對話歷史 | > /clear |
-  | /help | 顯示可用命令 | > /help |
-  | exit/Ctrl+C | 離開 | > exit |
-
----
-
-## 4. CLI 指令與斜線命令
-
-### 常用 CLI 指令
-
-| 指令              | 功能             | 範例                              |
-| ----------------- | ---------------- | --------------------------------- |
-| claude            | 啟動互動模式     | claude                            |
-| claude "task"     | 一次性任務       | claude "fix the build error"      |
-| claude -p "query" | 一次性查詢後退出 | claude -p "explain this function" |
-| claude -c         | 繼續最近對話     | claude -c                         |
-| claude -r         | 恢復舊對話       | claude -r                         |
-| claude commit     | 建立 Git 提交    | claude commit                     |
-| /clear            | 清除對話歷史     | > /clear                          |
-| /help             | 顯示可用命令     | > /help                           |
-| exit/Ctrl+C       | 離開             | > exit                            |
-
-### 斜線命令（/command）
-
-- 內建命令如 /add-dir、/bug、/clear、/config、/doctor、/init、/login、/logout、/mcp、/memory、/model、/permissions、/review、/status、/vim 等
-- 支援自訂命令（.claude/commands/ 或 ~/.claude/commands/ 下建立 .md 檔案）
-- 支援參數、Bash 命令、檔案參考、命名空間
-- MCP 斜線命令自動發現與動態參數
-
----
-
-### 4.1 CLI 指令與斜線命令
-
-> 來源：[CLI 參考](https://docs.anthropic.com/zh-TW/docs/claude-code/cli-reference)、[斜線命令](https://docs.anthropic.com/zh-TW/docs/claude-code/slash-commands)
-
-- 主要 CLI 指令：
-  - `claude` 啟動 REPL
-  - `claude "query"` 啟動並執行查詢
-  - `claude -p "query"` 非互動模式查詢
-  - `claude -c` 繼續最近對話
-  - `claude update` 更新版本
-  - `claude mcp` MCP 伺服器管理
-- 重要標誌：
-  - `--add-dir`、`--allowedTools`、`--output-format`、`--model`、`--resume` 等
-- 內建斜線命令：
-  - `/add-dir`、`/bug`、`/clear`、`/compact`、`/config`、`/cost`、`/doctor`、`/help`、`/init`、`/login`、`/logout`、`/mcp`、`/memory`、`/model`、`/permissions`、`/pr_comments`、`/review`、`/status`、`/terminal-setup`、`/vim`
-- 支援自訂斜線命令（Markdown 檔案定義，支援參數、Bash、檔案參考等）
-
----
-
-### 4.2 MCP 伺服器管理指令（2025 最新）
-
-> 來源：[MCP 官方文件](https://docs.anthropic.com/zh-TW/docs/claude-code/mcp)
-
-#### 主要指令與範例
-
-| 指令                                         | 功能                           | 範例                                                                                                                                         |
-| -------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| claude mcp add <name> <command> [args...]    | 新增本地 stdio MCP 伺服器      | claude mcp add my-server -e API_KEY=123 -- /path/to/server arg1 arg2                                                                         |
-| claude mcp add --transport sse <name> <url>  | 新增 SSE MCP 伺服器            | claude mcp add --transport sse sse-server https://example.com/sse-endpoint                                                                   |
-| claude mcp add --transport http <name> <url> | 新增 HTTP MCP 伺服器           | claude mcp add --transport http http-server https://example.com/mcp                                                                          |
-| claude mcp add-json <name> '<json>'          | 以 JSON 設定新增 MCP           | claude mcp add-json weather-api '{"type":"stdio","command":"/path/to/weather-cli","args":["--api-key","abc123"],"env":{"CACHE_DIR":"/tmp"}}' |
-| claude mcp add-from-claude-desktop           | 匯入 Claude Desktop MCP        | claude mcp add-from-claude-desktop                                                                                                           |
-| claude mcp list                              | 列出所有 MCP 伺服器            | claude mcp list                                                                                                                              |
-| claude mcp get <name>                        | 查詢 MCP 詳細資訊              | claude mcp get my-server                                                                                                                     |
-| claude mcp remove <name>                     | 移除 MCP 伺服器                | claude mcp remove my-server                                                                                                                  |
-| claude mcp serve                             | 將 Claude Code 作為 MCP 伺服器 | claude mcp serve                                                                                                                             |
-| claude mcp reset-project-choices             | 重設專案範圍 MCP 批准          | claude mcp reset-project-choices                                                                                                             |
-
-#### 範圍與進階旗標
-
-- `-s`/`--scope`：指定範圍（local/預設、project、user）
-- `-e`/`--env`：設定環境變數（如 -e KEY=value）
-- `MCP_TIMEOUT`：設定 MCP 啟動逾時（如 MCP_TIMEOUT=10000 claude ...）
-
-#### 範圍說明
-
-- **local**（預設）：僅當前專案可用
-- **project**：專案共用（.mcp.json）
-- **user**：全域用戶可用
-
-#### 進階用法
-
-- 新增本地範圍 MCP：
-  ```bash
-  claude mcp add my-private-server /path/to/server
-  claude mcp add my-private-server -s local /path/to/server
-  ```
-- 新增專案範圍 MCP：
-  ```bash
-  claude mcp add shared-server -s project /path/to/server
-  ```
-- 新增使用者範圍 MCP：
-  ```bash
-  claude mcp add my-user-server -s user /path/to/server
-  ```
-- 以 JSON 設定新增 MCP：
-  ```bash
-  claude mcp add-json weather-api '{"type":"stdio","command":"/path/to/weather-cli","args":["--api-key","abc123"],"env":{"CACHE_DIR":"/tmp"}}'
-  claude mcp get weather-api
-  ```
-- 匯入 Claude Desktop MCP：
-  ```bash
-  claude mcp add-from-claude-desktop
-  claude mcp list
-  ```
-- 啟動 Claude Code 為 MCP 伺服器：
-  ```bash
-  claude mcp serve
-  ```
-
-#### 遠端驗證與 OAuth
-
-- 新增需驗證的 SSE/HTTP MCP：
-  ```bash
-  claude mcp add --transport sse github-server https://api.github.com/mcp
-  ```
-- 互動驗證：
-  ```
-  /mcp
-  ```
-- 完成 OAuth 流程後即可連線
-
-#### Postgres MCP 範例
+#### Arch Linux
 
 ```bash
-claude mcp add postgres-server /path/to/postgres-mcp-server --connection-string "postgresql://user:pass@localhost:5432/mydb"
+# 使用 AUR 套件管理器
+yay -S claude-code
+# 或
+paru -S claude-code
 ```
 
-#### MCP 資源參考與斜線命令
+#### Windows/WSL
 
-- 於 prompt 輸入 `@` 可自動補全所有 MCP 資源
-- 參考格式：`@server:protocol://resource/path`
-  - 例：`@github:issue://123`、`@docs:file://api/authentication`
-- 多資源參考：
-  - 例：`Compare @postgres:schema://users with @docs:file://database/user-model`
-- MCP 斜線命令自動發現：
-  - `/mcp__github__list_prs`
-  - `/mcp__jira__create_issue "Bug in login flow" high`
-
----
-
-> **本區塊依據 2025-07-14 官方 MCP 文件整理，完整支援所有最新指令、範圍、資源與自動化。**
-
----
-
-## 5. 常見工作流程範例
-
-- **理解新程式碼庫**：
-  - > give me an overview of this codebase
-  - > explain the main architecture patterns used here
-- **尋找相關程式碼**：
-  - > find the files that handle user authentication
-  - > how do these authentication files work together?
-- **錯誤修復與重構**：
-  - > I'm seeing an error when I run npm test
-  - > suggest a few ways to fix the @ts-ignore in user.ts
-  - > refactor utils.js to use ES2024 features while maintaining the same behavior
-- **測試與覆蓋**：
-  - > find functions in NotificationsService.swift that are not covered by tests
-  - > add tests for the notification service
-- **建立 PR**：
-  - > summarize the changes I've made to the authentication module
-  - > create a pr
-- **文件與圖像分析**：
-  - > find functions without proper JSDoc comments in the auth module
-  - > add JSDoc comments to the undocumented functions in auth.js
-  - > What does this image show?
-- **進階推理與架構規劃**：
-  - > I need to implement a new authentication system using OAuth2 for our API. Think deeply about the best approach for implementing this in our codebase.
-
----
-
-### 5.1 常見工作流程範例
-
-> 來源：[常見工作流程](https://docs.anthropic.com/zh-TW/docs/claude-code/common-workflows)
-
-- 快速理解新程式碼庫、架構、資料模型
-- 搜尋與分析特定功能、流程、錯誤
-- 高效修復錯誤、重構、測試、文件產生
-- 建立與優化 PR、文件、測試覆蓋
-- 圖片分析、結構化輸出、延伸思考（Interleaved Thinking）
-- 多 worktree 並行、Unix 工具整合、管道輸入/輸出、格式控制
-- 自訂與團隊共用斜線命令
-
----
-
-## 6. MCP（模型上下文協議）整合
-
-MCP 是一個開放協議，讓 Claude Code 能存取外部工具與資料來源。
-
-- 支援本地、SSE、HTTP 等多種伺服器型態
-- 可設定不同範圍（本地、專案、使用者）
-- 支援 OAuth 2.0 驗證、Postgres MCP、JSON 設定、從 Desktop 匯入
-- 可將 Claude Code 本身作為 MCP 伺服器
-- MCP 資源可用 @server:protocol://resource/path 參考
-- MCP 提示可變成斜線命令
-
----
-
-### 6.1 MCP（模型上下文協議）整合
-
-> 來源：[MCP](https://docs.anthropic.com/zh-TW/docs/claude-code/mcp)
-
-- 支援 MCP Stdio/SSE/HTTP 伺服器，跨專案、團隊、用戶範圍
-- 連接第三方工具、資料庫（如 Postgres）、API
-- MCP 伺服器管理指令：`claude mcp add/list/get/remove`
-- 支援 OAuth 2.0 驗證、JSON 設定、從 Desktop 匯入
-- MCP 提示可轉為斜線命令，支援參數與多資源參考
-
----
-
-## 7. 設定與自訂（Hooks）
-
-- 支援 PreToolUse、PostToolUse、Notification、Stop、SubagentStop 等事件
-- 可針對特定工具、MCP 工具、檔案模式等設置 shell 命令
-- 支援 JSON 輸出進階控制
-- 設定檔案位置：~/.claude/settings.json、.claude/settings.json、.claude/settings.local.json
-- 常見應用：自動格式化、通知、記錄、權限自訂等
-- 安全注意：Hooks 會以完整使用者權限執行，請謹慎設計
-
----
-
-### 7.1 設定與自訂（Hooks、配置）
-
-> 來源：[Hooks](https://docs.anthropic.com/zh-TW/docs/claude-code/hooks)、[配置](https://docs.anthropic.com/zh-TW/docs/claude-code/configuration)
-
-- 支援 PreToolUse、PostToolUse、Notification、Stop、SubagentStop 等事件
-- 可自訂 shell 指令於生命週期各階段自動執行
-- 典型應用：自動格式化、通知、權限控管、審查、記錄
-- 設定檔位置：`~/.claude/settings.json`、`.claude/settings.json`、`.claude/settings.local.json`
-- JSON 結構範例與安全建議詳見官方
-
----
-
-## 8. 安全性設計與最佳實踐
-
-- 嚴格的權限架構，所有敏感操作需明確批准
-- 只能存取啟動目錄及子目錄，無法向上存取
-- 內建多層防護（命令封鎖、網路請求批准、上下文隔離、信任驗證等）
-- 使用者需檢查所有建議更改與命令
-- 建議敏感專案使用專案特定權限、開發容器、定期審核權限
-- 支援企業管理政策與 OpenTelemetry 監控
-- 發現安全問題請透過官方管道回報
-
----
-
-## 9. 疑難排解與常見問題
-
-- Linux 權限問題：建議將 npm 前綴設為家目錄，避免 sudo
-- WSL 安裝問題：需使用 Linux npm/node，勿用 Windows 版本
-- 自動更新失敗：檢查 npm 權限與 DISABLE_AUTOUPDATER 變數
-- 驗證問題：/logout 後重新登入，或刪除 ~/.config/claude-code/auth.json
-- 高資源消耗：定期 /compact，關閉重啟，忽略大型目錄
-- JetBrains 終端機 ESC 鍵衝突：調整 IDE 快捷鍵
-- 其他問題：/bug 回報、/doctor 健康檢查、查閱官方支援
-
----
-
-## 10. 版本更新與資源連結
-
-- [官方概覽](https://docs.anthropic.com/zh-TW/docs/claude-code/overview)
-- [快速入門](https://docs.anthropic.com/zh-TW/docs/claude-code/quickstart)
-- [設定說明](https://docs.anthropic.com/zh-TW/docs/claude-code/setup)
-- [CLI 參考](https://docs.anthropic.com/zh-TW/docs/claude-code/cli-reference)
-- [常見工作流程](https://docs.anthropic.com/zh-TW/docs/claude-code/common-workflows)
-- [MCP 協議](https://docs.anthropic.com/zh-TW/docs/claude-code/mcp)
-- [Hooks 設定](https://docs.anthropic.com/zh-TW/docs/claude-code/hooks)
-- [斜線命令](https://docs.anthropic.com/zh-TW/docs/claude-code/slash-commands)
-- [安全性](https://docs.anthropic.com/zh-TW/docs/claude-code/security)
-- [疑難排解](https://docs.anthropic.com/zh-TW/docs/claude-code/troubleshooting)
-- [Release Notes](https://docs.anthropic.com/zh-TW/docs/claude-code/release-notes)
-
----
-
-## 11. 最新 Claude Code API 實作與進階用法（2025 最新）
-
-> **資料來源：** [Anthropic Claude Code 官方文件](https://docs.anthropic.com/en/docs/claude-code/overview)  
-> **Context7 技術文檔**：[context7/docs_anthropic_com-en-docs-claude-code-overview]
-
-### 11.1 Python SDK 基本訊息傳送
-
-```python
-import anthropic
-
-client = anthropic.Anthropic(api_key="my_api_key")
-message = client.messages.create(
-    model="claude-opus-4-20250514",
-    max_tokens=1024,
-    messages=[{"role": "user", "content": "Hello, Claude"}]
-)
-print(message.content)
+```bash
+# 在 WSL Ubuntu 環境中執行
+sudo apt update && sudo apt install -y nodejs npm
+npm install -g @anthropic-ai/claude-code
 ```
 
-### 11.2 Messages API 工具整合（Tool Use）
+#### Docker 容器化部署
 
-```shell
-curl https://api.anthropic.com/v1/messages \
-  -H "content-type: application/json" \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -d '{
-    "model": "claude-opus-4-20250514",
-    "max_tokens": 1024,
-    "tools": [
-      {
-        "name": "get_weather",
-        "description": "Get the current weather in a given location",
-        "input_schema": {
-          "type": "object",
-          "properties": {
-            "location": {"type": "string", "description": "The city and state, e.g. San Francisco, CA"}
-          },
-          "required": ["location"]
-        }
-      }
-    ],
-    "messages": [
-      {"role": "user", "content": "What is the weather like in San Francisco?"}
-    ]
-  }'
-```
-
-### 11.3 Interleaved Thinking（交錯思考）進階推理
-
-```python
-import anthropic
-
-client = anthropic.Anthropic()
-
-calculator_tool = {
-    "name": "calculator",
-    "description": "Perform mathematical calculations",
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "expression": {"type": "string", "description": "Mathematical expression to evaluate"}
-        },
-        "required": ["expression"]
-    }
-}
-
-database_tool = {
-    "name": "database_query",
-    "description": "Query product database",
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "query": {"type": "string", "description": "SQL query to execute"}
-        },
-        "required": ["query"]
-    }
-}
-
-response = client.messages.create(
-    model="claude-sonnet-4-20250514",
-    max_tokens=16000,
-    thinking={"type": "enabled", "budget_tokens": 10000},
-    tools=[calculator_tool, database_tool],
-    extra_headers={"anthropic-beta": "interleaved-thinking-2025-05-14"},
-    messages=[{"role": "user", "content": "What's the total revenue if we sold 150 units of product A at $50 each, and how does this compare to our average monthly revenue from the database?"}]
-)
-# 處理 response.content 以獲得 thinking/tool_use/text 區塊
-```
-
-### 11.4 多輪對話與 JSON 輸出格式
-
-```json
-[
-  { "role": "user", "content": "Hello there." },
-  { "role": "assistant", "content": "Hi, I'm Claude. How can I help you?" },
-  { "role": "user", "content": "Can you explain LLMs in plain English?" }
-]
-```
-
-### 11.5 模型選擇與功能比較（2025 最新）
-
-| 模型       | API 名稱                   | 最大輸出 | 支援多語 | 支援 Vision | Extended Thinking | 訓練截止 |
-| ---------- | -------------------------- | -------- | -------- | ----------- | ----------------- | -------- |
-| Opus 4     | claude-opus-4-20250514     | 32,000   | 是       | 是          | 是                | 2025/3   |
-| Sonnet 4   | claude-sonnet-4-20250514   | 64,000   | 是       | 是          | 是                | 2025/3   |
-| Sonnet 3.7 | claude-3-7-sonnet-20250219 | 64,000   | 是       | 是          | 是                | 2024/11  |
-| Haiku 3.5  | claude-3-5-haiku-20241022  | 8,192    | 是       | 是          | 否                | 2024/7   |
-
-> 詳細比較與完整 API 參數請參考 [官方模型比較表](https://docs.anthropic.com/en/docs/claude-code/overview/en/docs/legacy-model-guide)
-
-### 11.6 內容審查與結構化輸出
-
-```python
-unsafe_category_definitions = {
-    'Child Exploitation': 'Content that depicts child nudity or that enables, encourages, excuses, or depicts the sexual abuse of children.',
-    ...
-}
-
-def moderate_message_with_definitions(message, unsafe_category_definitions):
-    # ...（詳見 context7 文件）
-    response = client.messages.create(
-        model="claude-3-haiku-20240307",
-        max_tokens=200,
-        temperature=0,
-        messages=[{"role": "user", "content": assessment_prompt}]
-    )
-    assessment = json.loads(response.content[0].text)
-    return assessment['violation'], assessment.get('categories', []), assessment.get('explanation')
+```bash
+# 參考 claudebox 專案
+git clone https://github.com/RchGrav/claudebox
+cd claudebox
+docker build -t claude-code .
+docker run -it claude-code
 ```
 
 ---
 
-> **Context7 來源：** `/context7/docs_anthropic_com-en-docs-claude-code-overview`  
-> **官方 API 文件與更多範例**：[https://docs.anthropic.com/en/docs/claude-code/overview](https://docs.anthropic.com/en/docs/claude-code/overview)
+## 🚀 快速開始指引
+
+### 初次使用者
+
+1. **閱讀主控手冊**：從 [cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md) 開始，了解整體架構
+2. **學習基礎操作**：參考 [claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) 掌握基本指令
+3. **探索進階功能**：根據需求查閱其他專門文件
+
+### 依使用場景快速導航
+
+```yaml
+專案建立: awesome-claude-code-zh-tw.md + superclaude-zh-tw.md
+程式碼修復: claude-code-guide-zh-tw.md + awesome-claude-code-zh-tw.md
+生產部署: claude-code-usage-monitor-zh-tw.md + claudecodeui-zh-tw.md
+效能優化: bplustree3-zh-tw.md + claude-code-usage-monitor-zh-tw.md
+團隊協作: awesome-claude-code-zh-tw.md + claudecodeui-zh-tw.md
+```
+
+### 依角色推薦
+
+- **初學者**：guide → awesome → ui
+- **開發者**：guide → superclaude → monitor
+- **團隊領導**：monitor → awesome → ui
+- **架構師**：bplustree → guide → superclaude
 
 ---
 
-## 12. 進階細節與 API 實例
+## ⭐ 主要功能特色
 
-> 來源：[官方 API 文件](https://docs.anthropic.com/zh-TW/docs/claude-code/overview)、[SDK/工具整合](https://docs.anthropic.com/zh-TW/docs/claude-code/reference)
+### 🤖 AI 輔助開發
 
-### 12.1 Python SDK 基本用法
+- **自然語言指令**：使用自然語言與 Claude Code 互動
+- **智能程式碼生成**：根據需求自動生成程式碼
+- **錯誤自動修復**：自動偵測並修復程式碼問題
+- **文件自動產生**：根據程式碼自動生成文件
 
-```python
-import anthropic
+### 🔧 進階功能
 
-client = anthropic.Anthropic(api_key="your_api_key")
-message = client.messages.create(
-    model="claude-opus-4-20250514",
-    max_tokens=1024,
-    messages=[{"role": "user", "content": "Hello, Claude"}]
-)
-print(message.content)
-```
+- **MCP 多代理協作**：支援多個 AI 代理同時協作
+- **專案記憶體管理**：透過 CLAUDE.md 管理專案記憶
+- **自訂 Hooks**：在開發流程中整合自訂腳本
+- **Slash Commands**：快速執行常用指令
 
-- 用途：自動化對話、程式化批次任務、結合自訂工具鏈。
-- 參數：`model` 可選最新模型，`max_tokens` 控制回應長度。
+### 📊 監控與管理
 
-### 12.2 Messages API 工具整合（Tool Use）
+- **用量監控**：即時監控 API 使用量和成本
+- **安全控制**：權限管理和安全掃描
+- **效能分析**：程式碼效能分析和優化建議
+- **稽核日誌**：完整的操作記錄和追蹤
 
-```shell
-curl https://api.anthropic.com/v1/messages \
-  -H "content-type: application/json" \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -d '{
-    "model": "claude-opus-4-20250514",
-    "max_tokens": 1024,
-    "messages": [
-      {"role": "user", "content": "請幫我摘要這段程式碼..."}
-    ],
-    "tools": [
-      {"name": "web_search", "description": "搜尋網路最新技術文件"}
-    ]
-  }'
-```
+### 🖥️ 使用者介面
 
-- 支援功能：自動摘要、程式碼審查、網路搜尋、結構化輸出等。
-
-### 12.3 交錯思考（Interleaved Thinking）
-
-```shell
-> Think step by step about how to refactor the authentication module for async/await.
-```
-
-- 效果：Claude 會自動分段思考、產生多層次建議，適合架構設計、除錯、規劃。
-
-### 12.4 JSON 輸出與結構化回應
-
-```shell
-> summarize this code and output as JSON with fields: filename, summary, issues
-```
-
-- 搭配：`--output-format json` 標誌，或於 prompt 明確要求。
-
-### 12.5 多模型選擇與比較
-
-| 模型       | API 名稱                   | 最大輸出 | 支援多語 | 支援 Vision | Extended Thinking | 訓練截止 |
-| ---------- | -------------------------- | -------- | -------- | ----------- | ----------------- | -------- |
-| Opus 4     | claude-opus-4-20250514     | 32,000   | 是       | 是          | 是                | 2025/3   |
-| Sonnet 4   | claude-sonnet-4-20250514   | 64,000   | 是       | 是          | 是                | 2025/3   |
-| Sonnet 3.7 | claude-3-7-sonnet-20250219 | 64,000   | 是       | 是          | 是                | 2024/11  |
-| Haiku 3.5  | claude-3-5-haiku-20241022  | 8,192    | 是       | 是          | 否                | 2024/7   |
-
-- 切換方式：CLI `--model` 標誌或 API 參數
-- 應用建議：大型重構/分析用 Opus，日常開發用 Sonnet，快速回饋用 Haiku
-
-### 12.6 進階自動化與腳本範例
-
-**自動化批次審查所有 PR：**
-
-```shell
-for pr in $(gh pr list --json number -q '.[].number'); do
-  claude -p "review pull request #$pr for security and code quality"
-done
-```
-
-**結合 Unix 工具進行批次分析：**
-
-```shell
-cat error.log | claude -p "請分析這份錯誤日誌並給出修正建議" --output-format json
-```
-
-### 12.7 MCP 工具與資料庫查詢
-
-**連接 Postgres MCP 伺服器：**
-
-```shell
-claude mcp add postgres-server /path/to/postgres-mcp-server --connection-string "postgresql://user:pass@localhost:5432/mydb"
-```
-
-**查詢資料庫：**
-
-```shell
-> describe the schema of our users table
-```
-
-### 12.8 斜線命令自動化範例
-
-**建立專案自訂指令：**
-
-```shell
-mkdir -p .claude/commands
-echo "請審查 @src/utils/helpers.js 的安全性" > .claude/commands/security-review.md
-```
-
-**使用：**
-
-```
-/project:security-review
-```
-
-### 12.9 內容審查與安全性
-
-- Claude 會自動檢查命令、程式碼、網路請求的安全性
-- 敏感操作需明確授權，支援權限白名單與審計
-- 建議於生產環境啟用 OpenTelemetry 監控
-
-### 12.10 參考資源
-
-- [Claude Code 官方 API 文件](https://docs.anthropic.com/zh-TW/docs/claude-code/overview)
-- [SDK/CLI 參考](https://docs.anthropic.com/zh-TW/docs/claude-code/cli-reference)
-- [MCP 整合](https://docs.anthropic.com/zh-TW/docs/claude-code/mcp)
-- [安全性最佳實踐](https://docs.anthropic.com/zh-TW/docs/claude-code/security)
+- **CLI 介面**：強大的命令列介面
+- **Web UI**：直觀的網頁管理介面
+- **PWA 支援**：可安裝到桌面和行動裝置
+- **IDE 整合**：支援 VSCode、Cursor 等編輯器
 
 ---
 
-## 目錄（重新整理）
+## 📖 CLI 指令完整參考
 
-1. 產品概覽
-2. 安裝與系統需求
-3. 快速入門
-4. CLI 指令與斜線命令
-5. 常見工作流程範例
-6. MCP（模型上下文協議）整合
-7. 設定與自訂（Hooks）
-8. 安全性設計與最佳實踐
-9. 疑難排解與常見問題
-10. 版本更新與資源連結
-11. 最新 Claude Code API 實作與進階用法（2025 最新）
-12. 進階細節與 API 實例
+### 基本指令
+
+| 指令 | 功能 | 範例 | 說明 |
+|------|------|------|------|
+| `claude` | 啟動互動 REPL | `claude` | 進入交互式對話模式 |
+| `claude "query"` | 直接執行查詢 | `claude "分析這個專案"` | 執行單次查詢後退出 |
+| `claude -p "query"` | 非互動查詢 | `claude -p "解釋這個函數"` | 查詢後立即退出 |
+| `claude -c` | 繼續最近對話 | `claude -c` | 恢復上次對話狀態 |
+| `claude update` | 更新版本 | `claude update` | 升級到最新版本 |
+| `claude mcp` | MCP 管理 | `claude mcp list` | 管理 MCP 伺服器 |
+
+### 進階旗標與選項
+
+| 旗標 | 功能 | 範例 | 適用場景 |
+|------|------|------|----------|
+| `--model` | 指定模型 | `--model claude-opus-4` | 選擇特定 AI 模型 |
+| `--verbose` | 詳細輸出 | `claude --verbose` | 除錯和詳細記錄 |
+| `--output-format` | 輸出格式 | `--output-format json` | 結構化輸出 |
+| `--allowedTools` | 允許工具 | `--allowedTools "Edit,View"` | 安全控制 |
+| `--timeout` | 逾時設定 | `--timeout 60` | 設定命令逾時 |
+| `--stream` | 串流輸出 | `--stream` | 大型輸出加速 |
+| `--add-dir` | 添加目錄 | `--add-dir ../shared` | 擴展專案範圍 |
+
+### MCP 管理指令
+
+| 指令 | 功能 | 範例 | 說明 |
+|------|------|------|------|
+| `claude mcp add` | 新增 MCP 伺服器 | `claude mcp add weather /path/to/server` | 添加本地 stdio 伺服器 |
+| `claude mcp add --transport sse` | 新增 SSE 伺服器 | `claude mcp add --transport sse api https://api.example.com` | 添加遠端 SSE 伺服器 |
+| `claude mcp add --transport http` | 新增 HTTP 伺服器 | `claude mcp add --transport http rest https://api.example.com` | 添加 HTTP API 伺服器 |
+| `claude mcp list` | 列出伺服器 | `claude mcp list` | 查看所有已配置的伺服器 |
+| `claude mcp get` | 查看伺服器詳情 | `claude mcp get weather` | 檢視特定伺服器配置 |
+| `claude mcp remove` | 移除伺服器 | `claude mcp remove weather` | 刪除指定伺服器 |
+| `claude mcp serve` | 啟動伺服器模式 | `claude mcp serve` | 將 Claude Code 作為 MCP 伺服器 |
+
+### 斜線命令系統
+
+| 命令 | 功能 | 範例 | 用途 |
+|------|------|------|------|
+| `/help` | 顯示幫助 | `/help` | 查看可用命令 |
+| `/clear` | 清除歷史 | `/clear` | 重置對話狀態 |
+| `/memory` | 記憶體管理 | `/memory view` | 管理專案記憶 |
+| `/config` | 配置管理 | `/config list` | 查看和修改設定 |
+| `/doctor` | 健康檢查 | `/doctor` | 診斷系統狀態 |
+| `/init` | 初始化專案 | `/init` | 創建 CLAUDE.md |
+| `/mcp` | MCP 管理 | `/mcp` | 互動式 MCP 管理 |
+| `/review` | 程式碼審查 | `/review src/` | 審查指定目錄 |
 
 ---
 
-> **本說明書所有內容均依據 Anthropic Claude Code 官方文件（2025-07-14）彙整，並標註各章節來源網址。**
+## 🎯 常用旗標快查
+
+| 動作 | 推薦旗標組合 | 參考文件 | 使用範例 |
+|------|-------------|----------|----------|
+| 建立專案 | `--create --template --mcp` | superclaude + guide | `claude --create --template=react --mcp` |
+| 修復錯誤 | `--scan --fix --lint --test` | awesome + monitor | `claude "修復所有錯誤" --scan --fix` |
+| 部署上線 | `--build --deploy --monitor` | guide + ui | `claude "部署到生產" --build --deploy` |
+| 效能調優 | `--profile --optimize --cache` | bplustree + monitor | `claude "優化效能" --profile --optimize` |
+| 安全檢查 | `--security --audit --scan` | monitor + awesome | `claude "安全掃描" --security --audit` |
+| 程式碼審查 | `--review --verbose --format=json` | guide + awesome | `claude /review --verbose --output-format json` |
+
+---
+
+## 📖 文件內容導覽
+
+### 📚 文件總覽 (README.md)
+
+**主要內容：**
+- 完整的文件索引和分類
+- 快速導航和使用建議
+- 按角色和任務的推薦閱讀順序
+
+**重點章節：**
+- 文件清單與功能對應
+- 常用旗標快速查詢
+- 文件更新機制說明
+
+### 🎯 綜合代理主控手冊 (cursor-claude-master-guide-zh-tw.md)
+
+**主要內容：**
+- 模糊需求解析引擎
+- 統一旗標索引系統
+- Sequential-Thinking 執行流程
+- 安全控制與監控機制
+
+**重點章節：**
+- 核心架構與角色定義
+- 自動化指令映射表
+- 錯誤處理與修復流程
+- 實戰範例與使用場景
+
+### 📖 基礎 API 指南 (claude-code-guide-zh-tw.md)
+
+**主要內容：**
+- Claude Code 產品概覽
+- 安裝與系統需求
+- 核心指令與旗標
+- CLAUDE.md 與記憶體管理
+
+**重點章節：**
+- 快速入門指南
+- Session/Config/MCP 指令
+- 自動化與腳本整合
+- 疑難排解與常見問題
+
+### ⭐ 社群最佳實踐 (awesome-claude-code-zh-tw.md)
+
+**主要內容：**
+- Workflow & Knowledge Guides
+- Tooling & IDE 整合
+- Hooks 實例與最佳實踐
+- Slash-Commands 精選
+
+**重點章節：**
+- CLAUDE.md 實戰範例
+- MCP 整合與自動化
+- 社群貢獻與參與
+- 官方文檔與延伸閱讀
+
+### 📊 用量監控與安全 (claude-code-usage-monitor-zh-tw.md)
+
+**主要內容：**
+- 產品簡介與特色
+- 多種安裝方式詳解
+- 啟動與基本用法
+- 進階設定與參數
+
+**重點章節：**
+- Docker/Web Dashboard
+- 常見問題與除錯
+- 開發、測試與貢獻
+- ML/未來規劃
+
+### 🖥️ Web UI 與視覺化 (claudecodeui-zh-tw.md)
+
+**主要內容：**
+- 產品概覽與特色
+- 安裝與環境設置
+- 啟動與開發模式
+- PWA 圖示與資源生成
+
+**重點章節：**
+- CLI 與 Claude Code 整合
+- 開發流程與常用指令
+- 最佳實踐與疑難排解
+- Service Worker 整合
+
+### ⚡ 效能優化策略 (bplustree3-zh-tw.md)
+
+**主要內容：**
+- 設計理念與資料結構
+- 核心 API 與用法
+- 範例程式碼
+- 常見操作與進階技巧
+
+**重點章節：**
+- 最佳實踐與效能建議
+- 疑難排解與常見問題
+- 應用場景與實作範例
+- 社群資源與延伸閱讀
+
+### 🔧 高階旗標系統 (superclaude-zh-tw.md)
+
+**主要內容：**
+- 安裝與啟動
+- 指令分類與旗標
+- 代表性 Workflow 範例
+- MCP、Persona、旗標整合
+
+**重點章節：**
+- 專案結構與自訂
+- 社群貢獻與參與
+- 最佳實踐與使用建議
+- 常見問題與延伸閱讀
+
+---
+
+## ❓ 常見問題與疑難排解
+
+### 🔑 API Key 相關問題
+
+**問題**：缺少 ANTHROPIC_API_KEY  
+**解決**：設定環境變數 `export ANTHROPIC_API_KEY=your_api_key_here`
+
+**問題**：Rate limit exceeded  
+**解決**：升級方案或減少請求頻率
+
+### 🔧 安裝與設定問題
+
+**問題**：Node.js 版本過舊  
+**解決**：升級 Node.js 至 18+ 版本
+
+**問題**：權限錯誤  
+**解決**：設定 `claude config set allowedTools '["Edit","View","Bash"]'`
+
+### 🤖 MCP 相關問題
+
+**問題**：MCP 服務異常  
+**解決**：執行 `claude mcp restart --all`
+
+**問題**：MCP 無法啟動  
+**解決**：檢查 MCP 配置並重新安裝
+
+### 🔍 診斷與健康檢查
+
+```bash
+# 健康檢查指令
+claude --version          # 檢查版本
+claude --help            # 顯示幫助
+claude config list       # 查看配置
+claude /doctor           # 診斷模式
+
+# 除錯模式
+claude --verbose         # 詳細輸出
+claude --mcp-debug       # MCP 除錯
+```
+
+---
+
+## 🌟 社群資源與延伸閱讀
+
+### 📚 官方資源
+
+- [Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+- [GitHub 官方倉庫](https://github.com/anthropic/claude-code)
+- [API 參考文檔](https://docs.anthropic.com/en/docs/claude-code/api/overview)
+
+### 🌐 社群專案
+
+- [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) - 社群指南
+- [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) - 精選資源
+- [NomenAK/SuperClaude](https://github.com/NomenAK/SuperClaude) - 高階配置框架
+- [siteboon/claudecodeui](https://github.com/siteboon/claudecodeui) - Web UI 界面
+
+### 🔧 監控與工具
+
+- [Maciek-roboblog/Claude-Code-Usage-Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor) - 用量監控
+- [RchGrav/claudebox](https://github.com/RchGrav/claudebox) - Docker 容器化
+
+### 🎯 特殊用途
+
+- [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) - 效能優化資料結構
+
+---
+
+## 💡 使用建議
+
+1. **建議將 `cursor-claude-master-guide-zh-tw.md` 設為書籤**，它包含所有其他文件的精華整合與快速查詢功能
+2. **根據你的角色選擇閱讀順序**：初學者從基礎開始，專家直接查看進階功能
+3. **保持文件更新**：定期檢查官方倉庫和社群資源的最新版本
+4. **實踐導向**：邊閱讀邊實作，將理論知識轉化為實際技能
+5. **善用指令參考**：本文件提供完整的 CLI 選項和旗標說明，可快速查找所需功能
+
+---
+
+**📝 文件維護說明**
+
+- **版本更新**：當任一子文件更新時，需同步更新本索引
+- **內容完整性**：確保所有重要功能都有對應的文件說明
+- **使用者體驗**：持續優化導航結構和內容組織
+- **指令同步**：定期檢查官方文檔更新，保持指令參考的最新性
+
+---
+
+*最後更新：2025-07-15 | 語言：繁體中文 | 專案維護者：Claude Code 中文社群*

@@ -170,6 +170,26 @@ docker build -t claude-code .
 docker run -it claude-code
 ```
 
+### 🐧 WSL 環境一鍵安裝
+
+本專案提供完整的 WSL 環境自動化安裝腳本：
+
+```bash
+# 下載並執行安裝腳本
+wget https://raw.githubusercontent.com/your-repo/claude-code-zh-tw/main/wsl_claude_code_setup.sh
+chmod +x wsl_claude_code_setup.sh
+./wsl_claude_code_setup.sh
+```
+
+**腳本功能特色：**
+
+- ✅ **智能環境偵測**：自動識別 Windows 與 WSL 環境
+- ✅ **虛擬化檢查**：檢查 Hyper-V、WSL 2、虛擬化狀態
+- ✅ **依賴管理**：自動安裝 Node.js、npm、必要工具
+- ✅ **路徑修復**：自動修復 .npmrc 污染和 Windows 路徑汙染
+- ✅ **全域配置**：設定 npm 全域安裝目錄和環境變數
+- ✅ **常見問題診斷**：自動檢測並解決常見安裝問題
+
 ---
 
 ## 🚀 快速開始指引
@@ -434,12 +454,136 @@ claude --mcp-debug       # MCP 除錯
 
 ---
 
-**📝 文件維護說明**
+## 🛠️ 技術棧
 
-- **版本更新**：當任一子文件更新時，需同步更新本索引
-- **內容完整性**：確保所有重要功能都有對應的文件說明
-- **使用者體驗**：持續優化導航結構和內容組織
+### 核心技術
+
+- **AI 引擎**: Anthropic Claude 3.5 Sonnet
+- **程式語言**: TypeScript / JavaScript
+- **執行環境**: Node.js 18+
+- **協議支援**: MCP (Model Context Protocol)
+- **容器化**: Docker & Docker Compose
+
+### 支援平台
+
+- **作業系統**: macOS, Linux, Windows (WSL)
+- **開發環境**: VSCode, Cursor, IntelliJ IDEA
+- **CI/CD**: GitHub Actions, GitLab CI
+- **部署平台**: Docker, Kubernetes, Cloud Functions
+
+### 整合生態
+
+- **前端框架**: React, Vue.js, Angular, Next.js
+- **後端框架**: Express, FastAPI, Spring Boot
+- **資料庫**: PostgreSQL, MongoDB, Redis
+- **監控工具**: Prometheus, Grafana, ElasticSearch
 
 ---
 
-*最後更新：2025-01-15 | 語言：繁體中文 | 專案維護者：Claude Code 中文社群*
+## 🤝 貢獻指南
+
+### 如何參與
+
+1. **Fork 專案**到您的 GitHub 帳戶
+2. **建立分支** (`git checkout -b feature/amazing-feature`)
+3. **提交變更** (`git commit -m 'Add amazing feature'`)
+4. **推送分支** (`git push origin feature/amazing-feature`)
+5. **發起 Pull Request**
+
+### 貢獻類型
+
+- 🐛 **Bug 修復**：修復文件錯誤或功能問題
+- 📝 **文件更新**：改善說明文件或新增範例
+- 🌟 **新功能**：新增實用的腳本或工具
+- 🎨 **介面改善**：優化使用者體驗
+- 🔧 **效能優化**：提升系統效能或穩定性
+
+### 社群規範
+
+- 遵循 [GitHub Community Guidelines](https://docs.github.com/en/github/site-policy/github-community-guidelines)
+- 使用繁體中文撰寫文件和註解
+- 確保程式碼品質和測試覆蓋率
+- 尊重所有貢獻者的意見和建議
+
+---
+
+## 📄 授權條款
+
+本專案採用 [MIT License](LICENSE) 授權條款
+
+```
+MIT License
+
+Copyright (c) 2025 Claude Code 中文社群
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 🙏 致謝
+
+感謝以下專案和社群的貢獻：
+
+- [Anthropic](https://anthropic.com) - 提供強大的 Claude AI 模型
+- [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) - 社群指南基礎
+- [NomenAK/SuperClaude](https://github.com/NomenAK/SuperClaude) - 高階配置框架
+- [siteboon/claudecodeui](https://github.com/siteboon/claudecodeui) - Web UI 介面
+- [RchGrav/claudebox](https://github.com/RchGrav/claudebox) - Docker 容器化
+- [Maciek-roboblog/Claude-Code-Usage-Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor) - 用量監控
+- [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) - 效能優化資料結構
+
+### 特別感謝
+
+- **開發者社群**：提供寶貴的使用回饋和改進建議
+- **文件貢獻者**：協助完善中文化文件和範例
+- **測試用戶**：協助驗證功能穩定性和可用性
+
+---
+
+## 📞 聯絡我們
+
+- **GitHub Issues**: [提交問題和建議](https://github.com/your-repo/claude-code-zh-tw/issues)
+- **GitHub Discussions**: [參與社群討論](https://github.com/your-repo/claude-code-zh-tw/discussions)
+- **官方文檔**: [Anthropic Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+
+---
+
+## 🔄 更新紀錄
+
+### v2.0.0 (2025-07-15)
+- 新增智能代理系統 (多模態分析、意圖識別、協作優化)
+- 完整重構文件結構，提升使用者體驗
+- 新增 WSL 環境自動化安裝腳本
+- 強化企業級功能 (監控、安全、效能)
+- 支援 PWA 和現代 Web UI
+
+### v1.0.0 (2025-01-15)
+- 初始版本發布
+- 完整的 8 個專業文件
+- 基礎 Claude Code 功能整合
+- 社群最佳實踐收錄
+
+---
+
+**🌟 如果這個專案對您有幫助，請給我們一個 Star ⭐**
+
+---
+
+*最後更新：2025-07-15T14:16:31+08:00 | 語言：繁體中文 | 專案維護者：Claude Code 中文社群*

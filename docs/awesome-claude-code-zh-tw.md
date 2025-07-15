@@ -1,10 +1,12 @@
 # Awesome Claude Code 中文精選資源總覽
 
-> 資料來源：
+> **資料來源：**
 >
 > - [GitHub 專案](https://github.com/hesreallyhim/awesome-claude-code)
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
-> - 文件整理時間：2025-07-14
+> - [官方斜線命令文檔](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
+> - [官方 Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
+> - **文件整理時間：2025-07-15T14:16:31+08:00**
 
 ---
 
@@ -65,24 +67,214 @@ Awesome Claude Code 是一份由社群協作維護的精選清單，收錄 Claud
 
 ---
 
-## 5. Hooks 實例
+## 5. Hooks 實例與最佳實踐
 
-- **claude-code-hooks-sdk**（PHP）、**claude-hooks**（TypeScript）
-- **Linting/Testing/Notification**（Go）
-- **官方 hooks API**：可於 agent lifecycle 任意階段觸發自訂腳本
-- **最佳實踐**：結構化 JSON 輸出、型別安全、錯誤處理
+### 5.1 官方 Hooks 系統架構
+
+- **事件觸發點**：
+  - `PreToolUse`：工具調用前執行
+  - `PostToolUse`：工具完成後執行  
+  - `Notification`：需要用戶輸入或權限時觸發
+  - `Stop`：主代理完成回應時執行
+
+### 5.2 Hook 配置範例
+
+```json
+{
+  "hooks": {
+    "preToolUse": [
+      {
+        "name": "format-code",
+        "command": ["prettier", "--write", "{file}"],
+        "tools": ["Edit"],
+        "filePatterns": ["*.js", "*.ts", "*.tsx"]
+      }
+    ],
+    "postToolUse": [
+      {
+        "name": "run-tests",
+        "command": ["npm", "test"],
+        "tools": ["Edit"]
+      }
+    ],
+    "notification": [
+      {
+        "name": "slack-notify",
+        "command": ["curl", "-X", "POST", "slack-webhook-url"],
+        "types": ["permission"]
+      }
+    ]
+  }
+}
+```
+
+### 5.3 社群 Hook 實作
+
+- **claude-code-hooks-sdk**（PHP）：企業級 Hook 管理
+- **claude-hooks**（TypeScript）：前端專案自動化
+- **Linting/Testing/Notification**（Go）：高效能工具鏈整合
+
+### 5.4 最佳實踐
+
+- **結構化 JSON 輸出**：支援複雜的條件判斷和控制流程
+- **型別安全**：TypeScript Hook 提供完整的型別檢查
+- **錯誤處理**：透過 exit codes 和 stderr 回傳狀態
+- **安全性**：Hook 以完整用戶權限執行，需謹慎設計
+
+### 5.5 進階 Hook 範例
+
+```bash
+# 自動代碼格式化 Hook
+#!/bin/bash
+if [[ "$CLAUDE_TOOL" == "Edit" && "$CLAUDE_FILE" =~ \.(js|ts|tsx)$ ]]; then
+    prettier --write "$CLAUDE_FILE"
+    eslint --fix "$CLAUDE_FILE"
+fi
+
+# 自動測試執行 Hook  
+#!/bin/bash
+if [[ "$CLAUDE_TOOL" == "Edit" ]]; then
+    npm run test:affected
+    exit $?
+fi
+```
 
 ---
 
-## 6. Slash-Commands 精選
+## 6. Slash-Commands 精選與完整指南
 
-- **Git/PR/Issue**：/commit、/create-pr、/fix-issue、/pr-review、/update-branch-name
-- **測試/分析/優化**：/check、/clean、/code_analysis、/optimize、/tdd
-- **Context/Priming**：/context-prime、/prime、/rsi
-- **文件/Changelog**：/add-to-changelog、/create-docs、/update-docs
-- **CI/部署**：/release、/run-ci
-- **專案管理**：/create-command、/todo、/create-jtbd、/create-prd
-- **Misc**：/act（React a11y）、/five（五問法）、/mermaid（ER 圖）、/use-stepper
+### 6.1 內建斜線命令（官方）
+
+| 命令分類 | 命令 | 功能說明 | 使用範例 |
+|----------|------|----------|----------|
+| **基礎控制** | `/help` | 顯示可用命令幫助 | `/help` |
+| | `/clear` | 清除對話歷史 | `/clear` |
+| | `/model` | 選擇或切換 AI 模型 | `/model claude-opus-4` |
+| **專案管理** | `/review` | 請求程式碼審查 | `/review src/` |
+| | `/init` | 初始化專案記憶體 | `/init` |
+| | `/memory` | 管理專案記憶體 | `/memory view` |
+| **配置管理** | `/config` | 查看/修改配置 | `/config list` |
+| | `/permissions` | 管理工具權限 | `/permissions` |
+| **診斷工具** | `/doctor` | 系統健康檢查 | `/doctor` |
+| | `/status` | 查看系統狀態 | `/status` |
+| **MCP 管理** | `/mcp` | 互動式 MCP 管理 | `/mcp` |
+
+### 6.2 社群精選斜線命令
+
+#### Git 與版本控制
+- `/commit` - 智能提交訊息生成
+- `/create-pr` - 自動建立 Pull Request
+- `/fix-issue` - 針對 Issue 進行修復
+- `/pr-review` - Pull Request 深度審查
+- `/update-branch-name` - 分支名稱標準化
+
+#### 測試與程式碼品質
+- `/check` - 全面程式碼檢查
+- `/clean` - 程式碼清理和重構
+- `/code_analysis` - 深度程式碼分析
+- `/optimize` - 效能優化建議
+- `/tdd` - 測試驅動開發輔助
+
+#### 專案脈絡與文件
+- `/context-prime` - 專案脈絡建立
+- `/prime` - 快速脈絡載入
+- `/rsi` - 重複性壓力傷害預防提醒
+- `/add-to-changelog` - 自動更新變更日誌
+- `/create-docs` - 文件自動生成
+- `/update-docs` - 文件同步更新
+
+#### CI/CD 與部署
+- `/release` - 發布版本管理
+- `/run-ci` - CI 流程觸發
+
+#### 專案管理工具
+- `/create-command` - 自訂命令建立
+- `/todo` - 任務管理
+- `/create-jtbd` - Jobs-to-be-Done 分析
+- `/create-prd` - 產品需求文件生成
+
+#### 專業工具
+- `/act` - React 無障礙性檢查
+- `/five` - 五個為什麼分析法
+- `/mermaid` - 自動生成 ER 圖和流程圖
+- `/use-stepper` - 步驟式流程設計
+
+### 6.3 自訂斜線命令建立
+
+#### 基本語法
+```markdown
+# 命令名稱
+
+命令描述與用途說明
+
+## Flags
+- --flag1: 旗標說明
+
+## Examples
+/command --flag1 value
+```
+
+#### 進階範例：專案特定命令
+```markdown
+# security-audit
+
+對專案進行全面安全審計，包括依賴檢查、程式碼掃描和配置驗證
+
+## Flags
+- --deep: 執行深度掃描
+- --fix: 自動修復發現的問題
+- --report: 生成詳細報告
+
+## Examples
+/security-audit --deep --report
+/security-audit --fix
+```
+
+### 6.4 MCP 動態斜線命令
+
+MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<prompt-name>`
+
+#### 常見 MCP 命令範例
+```bash
+# GitHub 整合
+/mcp__github__list_prs
+/mcp__github__create_issue "Bug 報告" "high"
+
+# 資料庫操作
+/mcp__postgres__query "SELECT * FROM users"
+/mcp__postgres__schema "users"
+
+# API 文檔
+/mcp__docs__search "authentication"
+/mcp__docs__reference "api/users"
+```
+
+### 6.5 最佳實踐
+
+#### 命令組織結構
+```
+.claude/commands/
+├── git/
+│   ├── smart-commit.md
+│   └── pr-template.md
+├── testing/
+│   ├── coverage-report.md
+│   └── e2e-suite.md
+└── shared/
+    ├── project-init.md
+    └── docs-sync.md
+```
+
+#### 命令命名規範
+- 使用短橫線分隔：`create-component` 而非 `createComponent`
+- 動詞在前：`check-security` 而非 `security-check`
+- 保持簡潔：`deploy` 而非 `deploy-application`
+
+#### 參數設計原則
+- 提供合理預設值
+- 支援布林旗標：`--fix`、`--verbose`
+- 允許多重選項：`--include src tests docs`
+- 驗證必要參數
 
 ---
 

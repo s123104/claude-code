@@ -8,7 +8,10 @@
       "Bash(mv:*)",
       "Bash(done)",
       "Bash(ls:*)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

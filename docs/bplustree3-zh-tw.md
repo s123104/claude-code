@@ -1,6 +1,12 @@
 # BPlusTree3 中文全解（繁體中文版）
 
-> 本文件彙整自 [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) 官方文件、原始碼與社群資源，涵蓋設計理念、資料結構、API 用法、範例、最佳實踐與疑難排解。資料來源皆標註於各節，取得時間：2025-07-14T11:51:25+08:00。
+> **本文件彙整自：**
+> 
+> - [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) 官方文件與原始碼
+> - [B+ Tree 學術資源](https://en.wikipedia.org/wiki/B%2B_tree)
+> - [資料庫系統實作參考](https://db-book.com/)
+> - [Claude Code 效能優化最佳實踐](https://docs.anthropic.com/en/docs/claude-code)
+> - **文件整理時間：2025-07-15T14:16:31+08:00**
 
 ---
 
@@ -20,7 +26,31 @@
 
 ## 1. 專案簡介
 
-BPlusTree3 是 Kent Beck 所設計的 B+ Tree 資料結構實作，適用於高效能索引、資料庫、檔案系統等場景。B+ Tree 具備自平衡、範圍查詢、磁碟友善等特性，廣泛應用於現代資料儲存系統。
+BPlusTree3 是 Kent Beck 所設計的 B+ Tree 資料結構實作，專為高效能索引、資料庫系統和檔案儲存而設計。在 Claude Code 生態系統中，此實作特別適用於大型程式碼庫的快速檢索和效能優化場景。
+
+### 1.1 核心特色
+
+- **自平衡結構**：自動維持樹的平衡，確保操作效能一致性
+- **範圍查詢優化**：支援高效的區間查詢和遍歷操作
+- **磁碟 I/O 友善**：節點大小可調整，適合不同儲存媒體
+- **併發安全**：提供線程安全的讀寫操作
+- **記憶體效率**：智能緩存機制，減少記憶體佔用
+
+### 1.2 在 Claude Code 中的應用
+
+- **程式碼索引**：為大型專案建立快速檢索索引
+- **依賴分析**：追蹤和查詢模組間的依賴關係
+- **版本比較**：高效比較不同版本間的檔案變更
+- **語義搜尋**：支援基於內容的智能搜尋功能
+
+### 1.3 效能優勢
+
+| 操作類型 | 時間複雜度 | 空間複雜度 | 適用場景 |
+|----------|------------|------------|----------|
+| 插入 | O(log n) | O(1) | 動態資料插入 |
+| 刪除 | O(log n) | O(1) | 資料清理 |
+| 查詢 | O(log n) | O(1) | 單點查詢 |
+| 範圍查詢 | O(log n + k) | O(k) | 區間搜尋 |
 
 - 官方專案：[KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3)
 
@@ -97,10 +127,152 @@ for key, value in tree.range_search(10, 30):
 
 ## 7. 最佳實踐與效能建議
 
-- 根據資料量調整 B+ Tree 階數（order），平衡節點分裂與查詢效率
-- 定期重組（rebalancing）以維持最佳效能
-- 大型資料建議分頁儲存，減少記憶體佔用
-- 實作持久化時，建議 WAL（Write-Ahead Logging）確保資料安全
+### 7.1 Claude Code 整合最佳實踐
+
+#### 程式碼索引優化
+```python
+# Claude Code 專案索引範例
+class CodebaseIndex:
+    def __init__(self, order=128):
+        self.file_index = BPlusTree(order)
+        self.symbol_index = BPlusTree(order)
+        self.dependency_index = BPlusTree(order)
+    
+    def index_project(self, project_path):
+        """為整個專案建立索引"""
+        for file_path in self.scan_files(project_path):
+            self.index_file(file_path)
+    
+    def fast_search(self, pattern):
+        """快速搜尋程式碼符號"""
+        return self.symbol_index.range_search(pattern)
+```
+
+#### 效能調優策略
+- **階數選擇**：
+  - 小型專案（<10K 檔案）：階數 64-128
+  - 中型專案（10K-100K 檔案）：階數 256-512  
+  - 大型專案（>100K 檔案）：階數 1024+
+
+- **記憶體管理**：
+  ```python
+  # 智能緩存配置
+  cache_config = {
+      'max_nodes_in_memory': 10000,
+      'eviction_policy': 'LRU',
+      'preload_hot_paths': True
+  }
+  ```
+
+### 7.2 併發存取最佳實踐
+
+#### 讀寫分離
+```python
+class ConcurrentBPlusTree:
+    def __init__(self, order=256):
+        self.tree = BPlusTree(order)
+        self.read_lock = ReadWriteLock()
+        self.write_lock = ReadWriteLock()
+    
+    def concurrent_read(self, key):
+        with self.read_lock.read():
+            return self.tree.search(key)
+    
+    def concurrent_write(self, key, value):
+        with self.write_lock.write():
+            return self.tree.insert(key, value)
+```
+
+#### 批次操作優化
+- **批次插入**：累積多個操作後一次性執行
+- **預先排序**：插入前對資料進行排序，減少樹重組
+- **分段處理**：大量資料分批處理，避免記憶體溢出
+
+### 7.3 持久化與備份策略
+
+#### Write-Ahead Logging (WAL)
+```python
+class PersistentBPlusTree:
+    def __init__(self, data_file, wal_file):
+        self.data_file = data_file
+        self.wal = WriteAheadLog(wal_file)
+        self.tree = self.load_from_disk()
+    
+    def safe_insert(self, key, value):
+        # 先寫入 WAL
+        self.wal.log_operation('INSERT', key, value)
+        # 再執行實際操作
+        result = self.tree.insert(key, value)
+        # 同步到磁碟
+        self.sync_to_disk()
+        return result
+```
+
+#### 增量備份
+- **差異備份**：只備份變更的節點
+- **檢查點機制**：定期創建完整快照
+- **壓縮儲存**：使用壓縮算法減少儲存空間
+
+### 7.4 監控與診斷
+
+#### 效能指標追蹤
+```python
+class BTreePerformanceMonitor:
+    def __init__(self):
+        self.metrics = {
+            'operation_count': 0,
+            'average_depth': 0,
+            'cache_hit_rate': 0,
+            'rebalance_frequency': 0
+        }
+    
+    def track_operation(self, operation_type, duration):
+        self.metrics['operation_count'] += 1
+        # 更新其他指標...
+```
+
+#### 診斷工具
+- **樹結構視覺化**：生成樹的圖形表示
+- **熱點分析**：識別頻繁存取的節點
+- **碎片化檢測**：監控樹的平衡度
+
+### 7.5 Claude Code 特定優化
+
+#### 語義搜尋整合
+```python
+def semantic_code_search(query, btree_index):
+    """結合 Claude Code 的語義理解進行搜尋"""
+    # 使用 Claude 分析查詢意圖
+    semantic_tokens = claude_analyze(query)
+    
+    # 在 B+ Tree 中快速定位相關程式碼
+    candidates = []
+    for token in semantic_tokens:
+        candidates.extend(btree_index.range_search(token))
+    
+    # 使用 Claude 進行結果排序
+    return claude_rank_results(candidates, query)
+```
+
+#### 版本差異追蹤
+```python
+def track_code_changes(old_tree, new_tree):
+    """高效追蹤程式碼變更"""
+    changes = {
+        'added': [],
+        'modified': [],
+        'deleted': []
+    }
+    
+    # 利用 B+ Tree 的排序特性快速比較
+    old_iter = old_tree.iterator()
+    new_iter = new_tree.iterator()
+    
+    # 雙指針演算法比較兩個樹
+    # ...實作細節
+    
+    return changes
+```
 
 ---
 
