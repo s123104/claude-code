@@ -14,6 +14,7 @@
   - [3.1 快速入門](#31-快速入門)
 - [4. CLI 指令與斜線命令](#4-cli-指令與斜線命令)
   - [4.1 CLI 指令與斜線命令](#41-cli-指令與斜線命令)
+  - [4.2 MCP 伺服器管理指令（2025 最新）](#42-mcp-伺服器管理指令2025-最新)
 - [5. 常見工作流程範例](#5-常見工作流程範例)
   - [5.1 常見工作流程範例](#51-常見工作流程範例)
 - [6. MCP（模型上下文協議）整合](#6-mcp模型上下文協議整合)
@@ -191,6 +192,102 @@ claude
 - 內建斜線命令：
   - `/add-dir`、`/bug`、`/clear`、`/compact`、`/config`、`/cost`、`/doctor`、`/help`、`/init`、`/login`、`/logout`、`/mcp`、`/memory`、`/model`、`/permissions`、`/pr_comments`、`/review`、`/status`、`/terminal-setup`、`/vim`
 - 支援自訂斜線命令（Markdown 檔案定義，支援參數、Bash、檔案參考等）
+
+---
+
+### 4.2 MCP 伺服器管理指令（2025 最新）
+
+> 來源：[MCP 官方文件](https://docs.anthropic.com/zh-TW/docs/claude-code/mcp)
+
+#### 主要指令與範例
+
+| 指令                                         | 功能                           | 範例                                                                                                                                         |
+| -------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| claude mcp add <name> <command> [args...]    | 新增本地 stdio MCP 伺服器      | claude mcp add my-server -e API_KEY=123 -- /path/to/server arg1 arg2                                                                         |
+| claude mcp add --transport sse <name> <url>  | 新增 SSE MCP 伺服器            | claude mcp add --transport sse sse-server https://example.com/sse-endpoint                                                                   |
+| claude mcp add --transport http <name> <url> | 新增 HTTP MCP 伺服器           | claude mcp add --transport http http-server https://example.com/mcp                                                                          |
+| claude mcp add-json <name> '<json>'          | 以 JSON 設定新增 MCP           | claude mcp add-json weather-api '{"type":"stdio","command":"/path/to/weather-cli","args":["--api-key","abc123"],"env":{"CACHE_DIR":"/tmp"}}' |
+| claude mcp add-from-claude-desktop           | 匯入 Claude Desktop MCP        | claude mcp add-from-claude-desktop                                                                                                           |
+| claude mcp list                              | 列出所有 MCP 伺服器            | claude mcp list                                                                                                                              |
+| claude mcp get <name>                        | 查詢 MCP 詳細資訊              | claude mcp get my-server                                                                                                                     |
+| claude mcp remove <name>                     | 移除 MCP 伺服器                | claude mcp remove my-server                                                                                                                  |
+| claude mcp serve                             | 將 Claude Code 作為 MCP 伺服器 | claude mcp serve                                                                                                                             |
+| claude mcp reset-project-choices             | 重設專案範圍 MCP 批准          | claude mcp reset-project-choices                                                                                                             |
+
+#### 範圍與進階旗標
+
+- `-s`/`--scope`：指定範圍（local/預設、project、user）
+- `-e`/`--env`：設定環境變數（如 -e KEY=value）
+- `MCP_TIMEOUT`：設定 MCP 啟動逾時（如 MCP_TIMEOUT=10000 claude ...）
+
+#### 範圍說明
+
+- **local**（預設）：僅當前專案可用
+- **project**：專案共用（.mcp.json）
+- **user**：全域用戶可用
+
+#### 進階用法
+
+- 新增本地範圍 MCP：
+  ```bash
+  claude mcp add my-private-server /path/to/server
+  claude mcp add my-private-server -s local /path/to/server
+  ```
+- 新增專案範圍 MCP：
+  ```bash
+  claude mcp add shared-server -s project /path/to/server
+  ```
+- 新增使用者範圍 MCP：
+  ```bash
+  claude mcp add my-user-server -s user /path/to/server
+  ```
+- 以 JSON 設定新增 MCP：
+  ```bash
+  claude mcp add-json weather-api '{"type":"stdio","command":"/path/to/weather-cli","args":["--api-key","abc123"],"env":{"CACHE_DIR":"/tmp"}}'
+  claude mcp get weather-api
+  ```
+- 匯入 Claude Desktop MCP：
+  ```bash
+  claude mcp add-from-claude-desktop
+  claude mcp list
+  ```
+- 啟動 Claude Code 為 MCP 伺服器：
+  ```bash
+  claude mcp serve
+  ```
+
+#### 遠端驗證與 OAuth
+
+- 新增需驗證的 SSE/HTTP MCP：
+  ```bash
+  claude mcp add --transport sse github-server https://api.github.com/mcp
+  ```
+- 互動驗證：
+  ```
+  /mcp
+  ```
+- 完成 OAuth 流程後即可連線
+
+#### Postgres MCP 範例
+
+```bash
+claude mcp add postgres-server /path/to/postgres-mcp-server --connection-string "postgresql://user:pass@localhost:5432/mydb"
+```
+
+#### MCP 資源參考與斜線命令
+
+- 於 prompt 輸入 `@` 可自動補全所有 MCP 資源
+- 參考格式：`@server:protocol://resource/path`
+  - 例：`@github:issue://123`、`@docs:file://api/authentication`
+- 多資源參考：
+  - 例：`Compare @postgres:schema://users with @docs:file://database/user-model`
+- MCP 斜線命令自動發現：
+  - `/mcp__github__list_prs`
+  - `/mcp__jira__create_issue "Bug in login flow" high`
+
+---
+
+> **本區塊依據 2025-07-14 官方 MCP 文件整理，完整支援所有最新指令、範圍、資源與自動化。**
 
 ---
 
