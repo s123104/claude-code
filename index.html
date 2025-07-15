@@ -593,276 +593,487 @@
       </div>
     </section>
 
-    <!-- Workflows 工作流程區 -->
-    <section id="workflows" class="py-20 px-4 sm:px-6 lg:px-8">
+    <!-- 1. Hero/簡介區（原有區塊，標題改為「Cursor‧Claude Code 綜合代理」） -->
+    <!-- 2. 文件導覽區（新增於 Hero 下方） -->
+    <section id="docs-index" class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-900">
       <div class="container mx-auto">
-        <div class="text-center mb-16 observe-fade">
-          <h2
-            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          📚 文件導覽
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- 依 README.md 文件清單產生卡片 -->
+          <a
+            href="docs/cursor-claude-master-guide-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
           >
-            常見工作流程
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            Claude Code
-            可以協助您處理各種開發任務，從程式碼理解到部署上線，全程智慧支援。
-          </p>
+            <h3 class="text-xl font-bold text-primary-400 mb-2">
+              綜合代理主控手冊
+            </h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              全域旗標索引、需求解析、執行流程、錯誤處理、文件索引
+            </p>
+            <span class="text-xs text-neutral-400">必讀｜2025-01-15</span>
+          </a>
+          <a
+            href="docs/awesome-claude-code-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-secondary-400 mb-2">
+              社群最佳實踐
+            </h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              Workflow、Hooks、Slash-Commands、MCP 整合
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="docs/superclaude-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-purple-400 mb-2">高階旗標系統</h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              Persona、進階指令、全流程自動化
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="docs/claude-code-guide-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-green-400 mb-2">基礎 API 指南</h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              CLI、MCP、常用指令、疑難排解
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="docs/claude-code-usage-monitor-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-yellow-400 mb-2">
+              用量監控與安全
+            </h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              即時監控、配額、Web Dashboard、常見問題
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="docs/claudecodeui-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-pink-400 mb-2">
+              Web UI 與視覺化
+            </h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              PWA、遠端管理、CLI 整合、最佳實踐
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="docs/bplustree3-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-cyan-400 mb-2">效能優化策略</h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              B+Tree 快取、資料結構、效能建議
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
+          <a
+            href="claude-code-zh-tw.md"
+            class="glass-effect rounded-xl p-6 block hover:scale-105 transition"
+          >
+            <h3 class="text-xl font-bold text-orange-400 mb-2">
+              Claude Code 詳細說明
+            </h3>
+            <p class="text-neutral-200 text-sm mb-2">
+              產品概覽、安裝、CLI、API、最佳實踐
+            </p>
+            <span class="text-xs text-neutral-400">2025-07-14</span>
+          </a>
         </div>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <!-- 程式碼理解與分析 -->
-          <div class="observe-fade">
-            <div class="glass-effect rounded-2xl p-8">
-              <div class="flex items-center mb-6">
-                <div
-                  class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4"
-                >
-                  <i class="fas fa-search text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white">程式碼理解與分析</h3>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
-              >
-                <div class="text-green-400">
-                  > give me an overview of this codebase
-                </div>
-                <div class="text-neutral-300">
-                  📁 Analyzing project structure...
-                </div>
-                <div class="text-neutral-300">
-                  ✓ Found React app with Express backend
-                </div>
-                <div class="text-green-400">
-                  > explain the authentication flow
-                </div>
-                <div class="text-neutral-300">
-                  🔐 JWT-based auth with OAuth integration
-                </div>
-              </div>
-              <p class="text-neutral-300 leading-relaxed">
-                快速理解新專案架構，分析程式碼模式，找出關鍵檔案與功能流程。
-              </p>
+    <!-- 3. 旗標/指令速查區（依 README.md、主控手冊、superclaude、guide 整合） -->
+    <section
+      id="flags-quickref"
+      class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-950"
+    >
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          🚩 旗標/指令速查
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm text-neutral-200">
+            <thead>
+              <tr class="bg-neutral-800">
+                <th class="px-4 py-2">動作</th>
+                <th class="px-4 py-2">推薦旗標組合</th>
+                <th class="px-4 py-2">參考文件</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">建立專案</td>
+                <td class="px-4 py-2">
+                  <code>--create --template --mcp</code>
+                </td>
+                <td class="px-4 py-2">superclaude + guide</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">修復錯誤</td>
+                <td class="px-4 py-2">
+                  <code>--scan --fix --lint --test</code>
+                </td>
+                <td class="px-4 py-2">awesome + monitor</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">部署上線</td>
+                <td class="px-4 py-2">
+                  <code>--build --deploy --monitor</code>
+                </td>
+                <td class="px-4 py-2">guide + ui</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">效能調優</td>
+                <td class="px-4 py-2">
+                  <code>--profile --optimize --cache</code>
+                </td>
+                <td class="px-4 py-2">bplustree + monitor</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">安全檢查</td>
+                <td class="px-4 py-2">
+                  <code>--security --audit --scan</code>
+                </td>
+                <td class="px-4 py-2">monitor + awesome</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-8 text-neutral-400 text-xs text-center">
+          旗標組合與指令範例依據
+          <b>cursor-claude-master-guide-zh-tw.md</b
+          >、<b>README.md</b>、<b>superclaude-zh-tw.md</b>、<b
+            >claude-code-guide-zh-tw.md</b
+          >
+          彙整，更多請參閱各文件。
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 工作流程/範例區（依主控手冊、guide、superclaude） -->
+    <section
+      id="workflows-examples"
+      class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-900"
+    >
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          🛠️ 工作流程與實戰範例
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-xl font-bold text-primary-400 mb-2">
+              Sequential-Thinking 標準流程
+            </h3>
+            <ol class="list-decimal list-inside text-neutral-200 text-sm mb-2">
+              <li>需求分析：解析輸入、識別意圖、抽取技術需求、風險評估</li>
+              <li>計畫拆解：任務分解、依賴分析、旗標組合、執行順序規劃</li>
+              <li>逐步執行：前置檢查、指令執行、即時監控、錯誤處理</li>
+              <li>結果彙整：格式化輸出、後續建議、效能報告、學習記錄</li>
+            </ol>
+            <div
+              class="code-block rounded-lg p-4 text-xs font-mono bg-neutral-800"
+            >
+              <span class="text-neutral-300"># 典型指令範例</span><br />
+              claude-code --create --template=nextjs --mcp<br />
+              claude-code --scan --fix --lint --test<br />
+              claude-code --build --deploy --monitor --security --format=json
+            </div>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：cursor-claude-master-guide-zh-tw.md
             </div>
           </div>
-
-          <!-- 錯誤修復與重構 -->
-          <div class="observe-fade">
-            <div class="glass-effect rounded-2xl p-8">
-              <div class="flex items-center mb-6">
-                <div
-                  class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mr-4"
-                >
-                  <i class="fas fa-wrench text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white">錯誤修復與重構</h3>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
-              >
-                <div class="text-green-400">
-                  > I'm seeing an error when I run npm test
-                </div>
-                <div class="text-red-400">
-                  ❌ TypeError: Cannot read property 'name'
-                </div>
-                <div class="text-neutral-300">
-                  🔍 Found null check missing in user.js:23
-                </div>
-                <div class="text-green-400">
-                  ✓ Fixed with optional chaining operator
-                </div>
-              </div>
-              <p class="text-neutral-300 leading-relaxed">
-                智慧診斷程式錯誤，提供修復建議，並協助重構程式碼以提升品質。
-              </p>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-xl font-bold text-secondary-400 mb-2">
+              MCP 多代理協作與自動化
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>
+                連接外部工具、資料庫、API，支援 OAuth 2.0、Postgres、JSON 設定
+              </li>
+              <li>可將 Claude Code 作為 MCP 伺服器，支援多種協議</li>
+              <li>自訂斜線命令、管道整合、批次自動化</li>
+            </ul>
+            <div
+              class="code-block rounded-lg p-4 text-xs font-mono bg-neutral-800"
+            >
+              claude mcp add postgres-server /path/to/postgres-mcp-server
+              --connection-string "postgresql://user:pass@localhost:5432/mydb"
+            </div>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：claude-code-guide-zh-tw.md
             </div>
           </div>
-
-          <!-- Git 操作與 PR 管理 -->
-          <div class="observe-fade">
-            <div class="glass-effect rounded-2xl p-8">
-              <div class="flex items-center mb-6">
-                <div
-                  class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4"
-                >
-                  <i class="fab fa-git-alt text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white">
-                  Git 操作與 PR 管理
-                </h3>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
-              >
-                <div class="text-green-400">> what files have I changed?</div>
-                <div class="text-yellow-400">
-                  📝 Modified: src/auth.js, tests/auth.test.js
-                </div>
-                <div class="text-green-400">
-                  > commit with descriptive message
-                </div>
-                <div class="text-neutral-300">
-                  ✓ feat(auth): add password validation with tests
-                </div>
-                <div class="text-green-400">> create a pr</div>
-              </div>
-              <p class="text-neutral-300 leading-relaxed">
-                自動生成有意義的 commit 訊息，協助處理合併衝突，並建立詳細的 PR
-                描述。
-              </p>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-xl font-bold text-green-400 mb-2">
+              錯誤修復與自動診斷
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>自動修復語法、相依、部署、效能等常見錯誤</li>
+              <li>失敗時提供手動排查與建議</li>
+            </ul>
+            <div
+              class="code-block rounded-lg p-4 text-xs font-mono bg-neutral-800"
+            >
+              claude-code --scan --verbose<br />
+              claude-code --fix --auto<br />
+              claude-code --test --coverage<br />
+              claude-code --security --audit
+            </div>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：cursor-claude-master-guide-zh-tw.md
             </div>
           </div>
-
-          <!-- 測試與文檔生成 -->
-          <div class="observe-fade">
-            <div class="glass-effect rounded-2xl p-8">
-              <div class="flex items-center mb-6">
-                <div
-                  class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-4"
-                >
-                  <i class="fas fa-file-alt text-white text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white">測試與文檔生成</h3>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 mb-4 font-mono text-sm space-y-2"
-              >
-                <div class="text-green-400">
-                  > add tests for the notification service
-                </div>
-                <div class="text-neutral-300">
-                  🧪 Generated comprehensive test suite
-                </div>
-                <div class="text-green-400">
-                  > add JSDoc comments to auth module
-                </div>
-                <div class="text-neutral-300">
-                  📚 Updated documentation with examples
-                </div>
-              </div>
-              <p class="text-neutral-300 leading-relaxed">
-                自動生成測試案例，增加程式碼覆蓋率，並建立清晰的 API 文檔。
-              </p>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-xl font-bold text-pink-400 mb-2">
+              Web UI 與遠端管理
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>支援 PWA、行動裝置、Web Dashboard</li>
+              <li>即時用量監控、Session 管理、REST API</li>
+            </ul>
+            <div
+              class="code-block rounded-lg p-4 text-xs font-mono bg-neutral-800"
+            >
+              claude-monitor --web-mode<br />
+              docker run -p 8080:8080 maciek/claude-usage-monitor --web-mode
+            </div>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：claude-code-usage-monitor-zh-tw.md、claudecodeui-zh-tw.md
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MCP Integration 區 -->
+    <!-- 5. 常見問題/疑難排解區（依 guide、usage-monitor、superclaude） -->
+    <section id="faq" class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-950">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          ❓ 常見問題與疑難排解
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-400 mb-2">
+              安裝與啟動問題
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>Node.js 版本需 18+，建議用 LTS</li>
+              <li>WSL 請用 Linux npm/node，勿用 Windows 版</li>
+              <li>
+                pip/pipx/uv 安裝 claude-monitor，PATH 問題請加 ~/.local/bin
+              </li>
+              <li>首次啟動需完成驗證，支援多平台</li>
+            </ul>
+          </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-secondary-400 mb-2">
+              權限與安全問題
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>所有敏感操作需明確批准，建議啟用 OpenTelemetry 監控</li>
+              <li>預設僅開啟 View 權限，機密資訊用環境變數</li>
+              <li>避免於生產環境使用 --dangerously-skip-permissions</li>
+            </ul>
+          </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-green-400 mb-2">
+              常見錯誤與排查
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>Rate limit exceeded：升級方案或減少請求</li>
+              <li>權限錯誤：allowedTools 設定錯誤</li>
+              <li>MCP 問題：MCP 未啟動或異常，請重啟</li>
+              <li>Linux 權限：npm 前綴設家目錄，避免 sudo</li>
+            </ul>
+          </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-pink-400 mb-2">效能與最佳實踐</h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>
+                大型專案建議分目錄分析，適當設定 --output-format、--timeout
+              </li>
+              <li>自動化批次審查、管道整合、結構化輸出</li>
+              <li>定期 /compact，忽略大型目錄可降資源消耗</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 text-neutral-400 text-xs text-center">
+          詳細疑難排解請參閱
+          <b>claude-code-guide-zh-tw.md</b
+          >、<b>claude-code-usage-monitor-zh-tw.md</b>、<b>superclaude-zh-tw.md</b>。
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 文件索引/快速查詢區（依 README.md、主控手冊） -->
     <section
-      id="mcp"
-      class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-neutral-900 to-neutral-950"
+      id="docs-quicksearch"
+      class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-900"
     >
       <div class="container mx-auto">
-        <div class="text-center mb-16 observe-fade">
-          <h2
-            class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white"
-          >
-            MCP 模型上下文協議
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            透過 MCP 協議連接外部工具與資料來源，讓 Claude Code 的能力無限擴展。
-          </p>
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          🔎 文件索引與快速查詢
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm text-neutral-200">
+            <thead>
+              <tr class="bg-neutral-800">
+                <th class="px-4 py-2">文件名稱</th>
+                <th class="px-4 py-2">核心功能</th>
+                <th class="px-4 py-2">主要旗標</th>
+                <th class="px-4 py-2">適用場景</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">awesome-claude-code-zh-tw.md</td>
+                <td class="px-4 py-2">社群最佳實踐, Hooks, 工作流程範本</td>
+                <td class="px-4 py-2">--hooks, --workflow, --template</td>
+                <td class="px-4 py-2">專案初始化, 團隊協作, 標準化流程</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">superclaude-zh-tw.md</td>
+                <td class="px-4 py-2">高階旗標系統, Personas, 命令參考</td>
+                <td class="px-4 py-2">--persona, --advanced, --combine</td>
+                <td class="px-4 py-2">複雜任務自動化, 角色導向開發</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">claude-code-guide-zh-tw.md</td>
+                <td class="px-4 py-2">基礎 API, 常用指令, MCP 整合</td>
+                <td class="px-4 py-2">--api, --mcp, --session, --config</td>
+                <td class="px-4 py-2">日常開發, 基礎操作, 多代理協作</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">claude-code-usage-monitor-zh-tw.md</td>
+                <td class="px-4 py-2">用量監控, 安全控制, 配額管理</td>
+                <td class="px-4 py-2">
+                  --monitor, --limit, --security, --audit
+                </td>
+                <td class="px-4 py-2">生產環境, 團隊管理, 成本控制</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">claudecodeui-zh-tw.md</td>
+                <td class="px-4 py-2">Web UI, PWA, 遠端管理, 視覺化輸出</td>
+                <td class="px-4 py-2">--ui, --pwa, --dashboard, --remote</td>
+                <td class="px-4 py-2">圖形介面操作, 行動裝置管理</td>
+              </tr>
+              <tr class="border-b border-neutral-800">
+                <td class="px-4 py-2">bplustree3-zh-tw.md</td>
+                <td class="px-4 py-2">B+Tree 快取, 資料結構, 效能優化</td>
+                <td class="px-4 py-2">
+                  --cache, --optimize, --profile, --index
+                </td>
+                <td class="px-4 py-2">大型專案, 效能調優, 資料處理</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <div class="mt-8 text-neutral-400 text-xs text-center">
+          文件索引依據 <b>README.md</b>、<b
+            >cursor-claude-master-guide-zh-tw.md</b
+          >
+          彙整，更多請參閱各文件。
+        </div>
+      </div>
+    </section>
 
-        <div class="max-w-6xl mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            <!-- MCP 特色 1 -->
-            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              >
-                <i class="fas fa-database text-white text-2xl"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 text-white">資料庫整合</h3>
-              <p class="text-neutral-300">
-                連接 PostgreSQL、MongoDB 等資料庫，直接查詢與操作資料。
-              </p>
-            </div>
-
-            <!-- MCP 特色 2 -->
-            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              >
-                <i class="fas fa-cloud text-white text-2xl"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 text-white">雲端服務</h3>
-              <p class="text-neutral-300">
-                整合 AWS、Azure、GCP 等雲端平台 API 與服務。
-              </p>
-            </div>
-
-            <!-- MCP 特色 3 -->
-            <div class="observe-fade glass-effect rounded-xl p-6 text-center">
-              <div
-                class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              >
-                <i class="fas fa-tools text-white text-2xl"></i>
-              </div>
-              <h3 class="text-xl font-bold mb-3 text-white">開發工具</h3>
-              <p class="text-neutral-300">
-                連接 JIRA、Slack、Docker 等開發團隊常用工具。
-              </p>
-            </div>
-          </div>
-
-          <!-- MCP 設定範例 -->
-          <div class="observe-fade">
-            <h3 class="text-2xl font-bold mb-6 text-white text-center">
-              MCP 設定範例
+    <!-- 7. 特色亮點/最佳實踐區（依 awesome、bplustree、superclaude、guide） -->
+    <section
+      id="highlights-bestpractices"
+      class="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-950"
+    >
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-white text-center">
+          🌟 特色亮點與最佳實踐
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-400 mb-2">
+              社群精選 Workflow
             </h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div>
-                <h4 class="text-lg font-semibold mb-4 text-primary-400">
-                  新增 Postgres MCP 伺服器
-                </h4>
-                <div
-                  class="code-block rounded-lg p-4 font-mono text-sm space-y-2"
-                >
-                  <div class="text-green-400">
-                    $ claude mcp add postgres-server \
-                  </div>
-                  <div class="text-green-400">
-                    /path/to/postgres-mcp-server \
-                  </div>
-                  <div class="text-green-400">--connection-string \</div>
-                  <div class="text-green-400">
-                    "postgresql://user:pass@localhost:5432/db"
-                  </div>
-                  <div class="text-neutral-300">
-                    ✓ Postgres MCP server added successfully
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 class="text-lg font-semibold mb-4 text-secondary-400">
-                  使用 MCP 資源
-                </h4>
-                <div
-                  class="code-block rounded-lg p-4 font-mono text-sm space-y-2"
-                >
-                  <div class="text-green-400">
-                    > describe the schema of users table
-                  </div>
-                  <div class="text-neutral-300">
-                    🔍 Querying database schema...
-                  </div>
-                  <div class="text-neutral-300">
-                    📊 Users table has: id, email, created_at
-                  </div>
-                  <div class="text-green-400">
-                    > show me recent user registrations
-                  </div>
-                  <div class="text-neutral-300">
-                    📈 Found 23 new users this week
-                  </div>
-                </div>
-              </div>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>一鍵專案啟動、Context Priming、SDLC 全流程</li>
+              <li>用量監控 CLI、Code Flow、Webhook、Swarm 協作</li>
+              <li>超過 80 條 Slash-Commands 精選</li>
+            </ul>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：awesome-claude-code-zh-tw.md
             </div>
           </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-secondary-400 mb-2">
+              效能優化與快取策略
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>B+Tree 快取、分頁儲存、WAL 實作</li>
+              <li>定期重組、批次插入、葉節點鏈結遍歷</li>
+            </ul>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：bplustree3-zh-tw.md
+            </div>
+          </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-green-400 mb-2">
+              安全監控與用量管理
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>即時用量監控、配額、Web Dashboard、ML 預測</li>
+              <li>多用戶/團隊、通知整合、外掛系統</li>
+            </ul>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：claude-code-usage-monitor-zh-tw.md
+            </div>
+          </div>
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-pink-400 mb-2">
+              高階旗標與 Persona
+            </h3>
+            <ul class="list-disc list-inside text-neutral-200 text-sm mb-2">
+              <li>
+                Persona-architect、Persona-qa、Persona-performance 等專家模式
+              </li>
+              <li>--think-hard、--ultrathink 深度分析</li>
+            </ul>
+            <div class="text-xs text-neutral-400 mt-2">
+              來源：superclaude-zh-tw.md
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. 文件維護說明與社群連結（頁尾前） -->
+    <section
+      id="docs-maintain"
+      class="py-8 px-4 sm:px-6 lg:px-8 bg-neutral-900"
+    >
+      <div class="container mx-auto text-center text-neutral-400 text-xs">
+        <div class="mb-2">
+          本首頁內容依據 <b>cursor-claude-master-guide-zh-tw.md</b>、<b
+            >README.md</b
+          >
+          及各子文件自動整合，所有旗標、指令、範例、最佳實踐皆標註來源與整理時間。
+        </div>
+        <div class="mb-2">
+          每次子文件更新時，首頁將自動同步，確保資訊時效與一致性。
+        </div>
+        <div>
+          如需回報問題、參與社群、或查詢最新功能，請參閱各文件內的
+          GitHub、官方文檔與社群連結。
         </div>
       </div>
     </section>
