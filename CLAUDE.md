@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection of Chinese language documentation for Claude Code and Cursor AI integration. The repository (GitHub: s123104/claude-code-zh-tw) contains 8 specialized documents covering different aspects of Claude Code usage, from basic installation to advanced features, with a focus on Traditional Chinese localization.
+This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection of Chinese language documentation for Claude Code and Cursor AI integration. The repository (GitHub: s123104/claude-code) contains 8 specialized documents covering different aspects of Claude Code usage, from basic installation to advanced features, with a focus on Traditional Chinese localization.
 
 ## Repository Structure
 
@@ -189,7 +189,7 @@ This repository serves as a comprehensive Chinese language resource for:
 - **DevOps 工程師**: DevOps engineers handling monitoring and deployment
 
 ### Key Repository Information
-- **GitHub Repository**: s123104/claude-code-zh-tw
+- **GitHub Repository**: s123104/claude-code
 - **Current Version**: v2.0.0
 - **Last Update**: 2025-07-15T14:16:31+08:00
 - **Language**: Traditional Chinese (繁體中文)
