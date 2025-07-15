@@ -186,15 +186,36 @@ docker build -t claude-code .
 docker run -it claude-code
 ```
 
-### 🐧 WSL 環境一鍵安裝
+### 🪟 Windows 用戶快速安裝（推薦）
 
-本專案提供完整的 WSL 環境自動化安裝腳本，支援從 Windows 到 WSL 的完整部署流程：
+**Windows 用戶可以使用我們的一鍵安裝腳本：**
+
+```batch
+:: 方式一：下載並執行批次檔（最簡單）
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat
+setup.bat
+
+:: 方式二：PowerShell 腳本（功能完整）
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1
+powershell -ExecutionPolicy Bypass -File setup.ps1
+```
+
+**功能特色：**
+- 🔍 **智能環境偵測**：自動檢查 Windows 版本、虛擬化支援
+- 🔧 **一鍵 WSL2 安裝**：自動安裝 WSL2、Ubuntu、必要工具
+- 🛠️ **自動修復**：修復常見的 Node.js 路徑衝突、WSL 配置問題
+- 🚀 **完整驗證**：確保所有組件正常運作
+- 📋 **詳細日誌**：提供完整的安裝日誌和錯誤診斷
+
+### 🐧 WSL/Linux 環境安裝
+
+**如果您已經在 WSL 或 Linux 環境中，可以直接使用：**
 
 ```bash
 # 下載並執行安裝腳本
-wget https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh
-chmod +x wsl_claude_code_setup.sh
-./wsl_claude_code_setup.sh
+wget https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+chmod +x start.sh
+./start.sh
 ```
 
 #### 🛠️ 腳本功能特色
@@ -238,12 +259,12 @@ chmod +x wsl_claude_code_setup.sh
 
 ```bash
 # 方式一：直接執行
-curl -sSL https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
 
 # 方式二：本地執行
 git clone https://github.com/s123104/claude-code.git
 cd claude-code
-./wsl_claude_code_setup.sh
+./start.sh
 
 # 執行後檢查
 claude --version

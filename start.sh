@@ -1,6 +1,38 @@
 #!/bin/bash
 set -e
 
+# ========== Claude Code 自動化安裝與啟動腳本 ==========
+# 版本: 3.0.0
+# 支援: Windows WSL2 + Linux 環境自動偵測與安裝
+# 作者: Claude Code 中文社群
+# 更新: 2025-07-15
+
+# 首先檢查作業系統環境
+detect_os() {
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ -n "$WINDIR" ]]; then
+        echo "❌ 偵測到 Windows 環境，此腳本需要在 WSL 環境中執行"
+        echo "請先安裝 WSL2 並使用以下 PowerShell 腳本："
+        echo "  1. 以管理員身份開啟 PowerShell"
+        echo "  2. 執行: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
+        echo "  3. 執行: .\\setup.ps1"
+        echo ""
+        echo "或手動安裝 WSL2："
+        echo "  wsl --install"
+        exit 1
+    fi
+    
+    if ! grep -qi microsoft /proc/version 2>/dev/null; then
+        echo "⚠️ 未偵測到 WSL 環境，將以純 Linux 模式執行"
+        export LINUX_MODE=true
+    else
+        echo "✅ WSL 環境偵測成功，開始安裝程序"
+        export WSL_MODE=true
+    fi
+}
+
+# 偵測作業系統
+detect_os
+
 # ========== 錯誤處理與日誌系統 ==========
 LOG_FILE="/tmp/claude_setup_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1

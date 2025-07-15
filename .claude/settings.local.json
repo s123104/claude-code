@@ -25,7 +25,12 @@
       "Bash(echo $PATH)",
       "Bash(gh:*)",
       "Bash(rm:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(git commit:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:gist.github.com)"
     ],
     "deny": []
   }

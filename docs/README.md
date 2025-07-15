@@ -93,9 +93,9 @@
 
 ```bash
 # 下載並執行安裝腳本
-wget https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh
-chmod +x wsl_claude_code_setup.sh
-./wsl_claude_code_setup.sh
+wget https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+chmod +x start.sh
+./start.sh
 ```
 
 ### 自動化檢查項目
