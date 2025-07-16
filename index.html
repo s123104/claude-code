@@ -3,1500 +3,870 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Claude Code - AI 驅動的終端開發助手</title>
-
-    <!-- Tailwind CSS 官方 CDN（自動取得最新版本，來源：https://tailwindcss.com/docs/installation） -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome 官方 CDN（來源：https://fontawesome.com/） -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-
-    <!-- Google Fonts 官方 CDN（來源：https://fonts.google.com/） -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Tailwind 自訂配置 -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                50: "#f0f9ff",
-                100: "#e0f2fe",
-                200: "#bae6fd",
-                300: "#7dd3fc",
-                400: "#38bdf8",
-                500: "#0ea5e9",
-                600: "#0284c7",
-                700: "#0369a1",
-                800: "#075985",
-                900: "#0c4a6e",
-                950: "#082f49",
-              },
-              secondary: {
-                50: "#fdf4ff",
-                100: "#fae8ff",
-                200: "#f5d0fe",
-                300: "#f0abfc",
-                400: "#e879f9",
-                500: "#d946ef",
-                600: "#c026d3",
-                700: "#a21caf",
-                800: "#86198f",
-                900: "#701a75",
-                950: "#4a044e",
-              },
-              neutral: {
-                50: "#fafafa",
-                100: "#f5f5f5",
-                200: "#e5e5e5",
-                300: "#d4d4d4",
-                400: "#a3a3a3",
-                500: "#737373",
-                600: "#525252",
-                700: "#404040",
-                800: "#262626",
-                900: "#171717",
-                950: "#0a0a0a",
-              },
-              accent: {
-                50: "#f0fdf4",
-                100: "#dcfce7",
-                200: "#bbf7d0",
-                300: "#86efac",
-                400: "#4ade80",
-                500: "#22c55e",
-                600: "#16a34a",
-                700: "#15803d",
-                800: "#166534",
-                900: "#14532d",
-                950: "#052e16",
-              },
-            },
-            fontFamily: {
-              sans: ["Inter", "Noto Sans TC", "system-ui", "sans-serif"],
-              mono: ["JetBrains Mono", "monospace"],
-            },
-            spacing: {
-              4.5: "1.125rem",
-              5.5: "1.375rem",
-              18: "4.5rem",
-              22: "5.5rem",
-              28: "7rem",
-              36: "9rem",
-              72: "18rem",
-              84: "21rem",
-              96: "24rem",
-            },
-            animation: {
-              "fade-in": "fadeIn 0.6s ease-out",
-              "slide-up": "slideUp 0.8s ease-out",
-              "slide-down": "slideDown 0.8s ease-out",
-              "slide-left": "slideLeft 0.8s ease-out",
-              "slide-right": "slideRight 0.8s ease-out",
-              float: "float 6s ease-in-out infinite",
-              "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-              "terminal-cursor": "terminalCursor 1s infinite",
-              "bounce-slow": "bounce 2s infinite",
-              "spin-slow": "spin 3s linear infinite",
-              gradient: "gradient 3s ease infinite",
-              typing:
-                "typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite",
-              wave: "wave 2s linear infinite",
-              glow: "glow 2s ease-in-out infinite alternate",
-            },
-            keyframes: {
-              fadeIn: {
-                "0%": { opacity: "0" },
-                "100%": { opacity: "1" },
-              },
-              slideUp: {
-                "0%": { opacity: "0", transform: "translateY(30px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              slideDown: {
-                "0%": { opacity: "0", transform: "translateY(-30px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-              slideLeft: {
-                "0%": { opacity: "0", transform: "translateX(30px)" },
-                "100%": { opacity: "1", transform: "translateX(0)" },
-              },
-              slideRight: {
-                "0%": { opacity: "0", transform: "translateX(-30px)" },
-                "100%": { opacity: "1", transform: "translateX(0)" },
-              },
-              float: {
-                "0%, 100%": { transform: "translateY(0px)" },
-                "50%": { transform: "translateY(-10px)" },
-              },
-              terminalCursor: {
-                "0%, 50%": { opacity: "1" },
-                "51%, 100%": { opacity: "0" },
-              },
-              gradient: {
-                "0%, 100%": { "background-position": "0% 50%" },
-                "50%": { "background-position": "100% 50%" },
-              },
-              typing: {
-                "0%": { width: "0" },
-                "100%": { width: "100%" },
-              },
-              wave: {
-                "0%, 100%": { transform: "rotate(0deg)" },
-                "25%": { transform: "rotate(20deg)" },
-                "75%": { transform: "rotate(-20deg)" },
-              },
-              glow: {
-                "0%": { "box-shadow": "0 0 20px rgba(6, 182, 212, 0.3)" },
-                "100%": { "box-shadow": "0 0 40px rgba(6, 182, 212, 0.6)" },
-              },
-            },
-          },
-        },
-      };
-    </script>
-
+    <title>Claude Code 自動化安裝工具 v3.5.0</title>
     <style>
-      /* 自訂樣式，補強 Tailwind 功能 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: "Inter", "Noto Sans TC", system-ui, sans-serif;
-        background: linear-gradient(
-          135deg,
-          #0a0a0a 0%,
-          #171717 25%,
-          #262626 50%,
-          #171717 75%,
-          #0a0a0a 100%
-        );
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
       }
 
-      /* 玻璃形態效果 */
-      .glass-effect {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
       }
 
-      /* 程式碼區塊樣式 */
-      .code-block {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      header {
+        text-align: center;
+        margin-bottom: 50px;
+        color: white;
       }
 
-      /* 終端機效果 */
-      .terminal-line::after {
-        content: "█";
-        animation: terminalCursor 1s infinite;
-        color: #06b6d4;
+      .version-badge {
+        background: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
       }
 
-      /* 隱藏彩蛋按鈕 */
-      .easter-egg-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 4px;
-        height: 4px;
-        opacity: 0;
-        z-index: 1000;
-        transition: all 0.3s ease;
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 30px;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .nav-tabs {
+        display: flex;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .nav-tab {
+        flex: 1;
+        padding: 15px 20px;
+        text-align: center;
         cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        background: none;
+        font-size: 16px;
+        font-weight: 500;
       }
 
-      .easter-egg-btn:hover {
-        opacity: 0.3;
-        transform: scale(10);
+      .nav-tab:hover {
+        background: #e9ecef;
       }
 
-      /* 滑順捲動 */
-      html {
-        scroll-behavior: smooth;
+      .nav-tab.active {
+        background: #007bff;
+        color: white;
       }
 
-      /* 漸層文字效果 */
-      .gradient-text {
-        background: linear-gradient(135deg, #06b6d4, #8b5cf6, #06b6d4);
-        background-size: 200% 200%;
-        animation: gradient 3s ease infinite;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      .tab-content {
+        padding: 30px;
+        display: none;
       }
 
-      /* 表格樣式 */
-      .table-container {
-        text-align: center;
+      .tab-content.active {
+        display: block;
       }
 
-      .table-container td,
-      .table-container th {
-        text-align: left;
-        vertical-align: middle;
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
       }
 
-      .table-container th {
-        text-align: center;
+      .feature-card {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        border-left: 4px solid #007bff;
+        transition: transform 0.3s ease;
       }
 
-      /* 響應式表格 */
-      @media (max-width: 768px) {
-        .table-responsive {
-          overflow-x: auto;
-        }
-
-        .table-responsive table {
-          min-width: 600px;
-        }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       }
 
-      /* 自訂捲動條 */
-      ::-webkit-scrollbar {
-        width: 8px;
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
       }
 
-      ::-webkit-scrollbar-track {
-        background: #1f2937;
+      .code-block {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        margin: 20px 0;
+        overflow-x: auto;
+        position: relative;
       }
 
-      ::-webkit-scrollbar-thumb {
-        background: #06b6d4;
+      .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 5px 10px;
         border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
       }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: #0891b2;
+      .copy-btn:hover {
+        background: #45a049;
       }
 
-      /* 載入動畫 */
-      .loading-overlay {
-        position: fixed;
-        top: 0;
+      .installation-option {
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 25px;
+        margin: 20px 0;
+        transition: all 0.3s ease;
+      }
+
+      .installation-option:hover {
+        border-color: #007bff;
+        transform: translateY(-2px);
+      }
+
+      .installation-option.recommended {
+        border-color: #28a745;
+        background: #f8fff9;
+      }
+
+      .installation-option h3 {
+        color: #007bff;
+        margin-bottom: 15px;
+      }
+
+      .installation-option.recommended h3 {
+        color: #28a745;
+      }
+
+      .badge {
+        background: #007bff;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+
+      .badge.success {
+        background: #28a745;
+      }
+
+      .badge.warning {
+        background: #ffc107;
+        color: #212529;
+      }
+
+      .platform-support {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .platform-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .platform-item.supported {
+        border-color: #28a745;
+        background: #f8fff9;
+      }
+
+      .platform-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .changelog {
+        background: #f8f9fa;
+        border-left: 4px solid #17a2b8;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .changelog h4 {
+        color: #17a2b8;
+        margin-bottom: 10px;
+      }
+
+      .changelog-item {
+        margin: 8px 0;
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .changelog-item::before {
+        content: "✓";
+        position: absolute;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        color: #28a745;
+        font-weight: bold;
+      }
+
+      .troubleshooting {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .troubleshooting h4 {
+        color: #856404;
+        margin-bottom: 10px;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 50px;
+        color: white;
+        opacity: 0.8;
+      }
+
+      .quick-links {
         display: flex;
         justify-content: center;
-        align-items: center;
-        z-index: 9999;
+        gap: 20px;
+        margin: 30px 0;
+        flex-wrap: wrap;
       }
 
-      .loading-spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid #333;
-        border-top: 5px solid #06b6d4;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
+      .quick-link {
+        background: #007bff;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
       }
 
-      /* 觀察者動畫初始狀態 */
-      .observe-fade {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      .quick-link:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       }
 
-      .observe-fade.in-view {
-        opacity: 1;
-        transform: translateY(0);
+      .quick-link.primary {
+        background: #28a745;
       }
 
-      /* 特殊動畫效果 */
-      @keyframes confetti-fall {
-        to {
-          transform: translateY(100vh) rotate(720deg);
-          opacity: 0;
+      .quick-link.primary:hover {
+        background: #1e7e34;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2rem;
         }
+
+        .nav-tabs {
+          flex-direction: column;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .quick-links {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      .highlight {
+        background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+        padding: 2px 6px;
+        border-radius: 4px;
       }
     </style>
   </head>
-
-  <body class="min-h-screen text-white relative overflow-x-hidden">
-    <!-- 載入動畫 -->
-    <div id="loading-overlay" class="loading-overlay">
-      <div class="loading-spinner"></div>
-    </div>
-
-    <!-- Header Navigation -->
-    <header
-      class="glass-effect fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-    >
-      <nav
-        class="container mx-auto px-4 py-4 flex items-center justify-between"
-      >
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-          <img
-            src="img/logo.png"
-            alt="Claude Code Logo"
-            class="w-10 h-10 sm:w-12 sm:h-12 animate-float"
-          />
-          <span class="text-xl sm:text-2xl font-bold gradient-text"
-            >Claude Code</span
-          >
-        </div>
-
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-8">
-          <a
-            href="#features"
-            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >功能特色</a
-          >
-          <a
-            href="#installation"
-            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >快速安裝</a
-          >
-          <a
-            href="#docs-index"
-            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >文檔導覽</a
-          >
-          <a
-            href="#workflows-examples"
-            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >工作流程</a
-          >
-          <a
-            href="#faq"
-            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >常見問題</a
-          >
-        </div>
-
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="md:hidden text-white text-2xl">
-          <i class="fas fa-bars"></i>
-        </button>
-      </nav>
-
-      <!-- Mobile Menu -->
-      <div
-        id="mobile-menu"
-        class="md:hidden bg-neutral-900 bg-opacity-95 backdrop-blur-md hidden"
-      >
-        <div class="px-4 py-4 space-y-4">
-          <a
-            href="#features"
-            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >功能特色</a
-          >
-          <a
-            href="#installation"
-            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >快速安裝</a
-          >
-          <a
-            href="#docs-index"
-            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >文檔導覽</a
-          >
-          <a
-            href="#workflows-examples"
-            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >工作流程</a
-          >
-          <a
-            href="#faq"
-            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
-            >常見問題</a
-          >
-        </div>
-      </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="pt-28 pb-20 px-4 container mx-auto">
-      <div class="text-center space-y-8">
-        <!-- 主標題 -->
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold animate-slide-up">
-          <span class="gradient-text">Claude Code</span>
-        </h1>
-
-        <!-- 副標題 -->
-        <p
-          class="text-xl md:text-2xl text-neutral-300 animate-slide-up max-w-4xl mx-auto leading-relaxed"
-        >
-          AI 驅動的終端開發助手，讓您的編程工作流程更加智能化與高效
+  <body>
+    <div class="container">
+      <header>
+        <div class="version-badge">v3.5.0 最新版本</div>
+        <h1>🚀 Claude Code 自動化安裝工具</h1>
+        <p class="subtitle">
+          智能檢測 • 一鍵安裝 • 跨平台支援 •
+          <span class="highlight">Bash 版本升級</span> •
+          <span class="highlight">ShellCheck 零警告</span>
         </p>
 
-        <!-- 終端機模擬效果 -->
-        <div
-          class="code-block rounded-lg p-6 max-w-3xl mx-auto animate-slide-up font-mono text-sm md:text-base"
-        >
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-          </div>
-          <div class="space-y-2">
-            <div class="text-primary-400">
-              $ npm install -g @anthropic-ai/claude-code
-            </div>
-            <div class="text-neutral-400">✓ 安裝成功</div>
-            <div class="text-primary-400">
-              $ claude "幫我分析這個專案的架構"
-            </div>
-            <div class="text-accent-400 terminal-line">正在分析專案結構...</div>
-          </div>
+        <div class="quick-links">
+          <a href="#" class="quick-link primary" onclick="showTab('install')"
+            >🎯 立即安裝</a
+          >
+          <a href="#" class="quick-link" onclick="showTab('features')"
+            >✨ 功能特色</a
+          >
+          <a href="#" class="quick-link" onclick="showTab('platforms')"
+            >🖥️ 支援平台</a
+          >
+          <a href="#" class="quick-link" onclick="showTab('troubleshooting')"
+            >🔧 故障排除</a
+          >
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div class="nav-tabs">
+          <button class="nav-tab active" onclick="showTab('install')">
+            🎯 快速安裝
+          </button>
+          <button class="nav-tab" onclick="showTab('features')">
+            ✨ 功能特色
+          </button>
+          <button class="nav-tab" onclick="showTab('platforms')">
+            🖥️ 支援平台
+          </button>
+          <button class="nav-tab" onclick="showTab('changelog')">
+            📋 更新日誌
+          </button>
+          <button class="nav-tab" onclick="showTab('troubleshooting')">
+            🔧 故障排除
+          </button>
         </div>
 
-        <!-- CTA 按鈕 -->
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up"
-        >
-          <a
-            href="#installation"
-            class="bg-primary-600 hover:bg-primary-700 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-          >
-            <i class="fas fa-download mr-2"></i>
-            立即開始
-          </a>
-          <a
-            href="https://github.com/s123104/claude-code"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="border-2 border-primary-600 hover:bg-primary-600 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105"
-          >
-            <i class="fab fa-github mr-2"></i>
-            GitHub 專案
-          </a>
-          <!-- WSL 安裝腳本連結（官方最新版） -->
-          <a
-            href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="border-2 border-secondary-600 hover:bg-secondary-600 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105"
-          >
-            <i class="fab fa-linux mr-2"></i>
-            一鍵安裝腳本
-          </a>
-        </div>
-      </div>
-    </section>
+        <!-- 快速安裝頁面 -->
+        <div class="tab-content active" id="install">
+          <h2>🎯 快速安裝指南</h2>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 px-4">
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            功能特色
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            Claude Code 提供全方位的 AI 輔助開發體驗，從代碼分析到自動化部署
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Feature 1 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-primary-400 text-4xl mb-4">
-              <i class="fas fa-brain"></i>
-            </div>
-            <h3 class="text-xl font-semibold mb-4">智能程式碼理解</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              利用 Claude 的強大 AI
-              能力，自動分析代碼結構、提供改進建議、檢測潛在問題
+          <div class="installation-option recommended">
+            <h3>⚡ 快速模式 <span class="badge success">推薦</span></h3>
+            <p><strong>適合：</strong>CI/CD 流水線、自動化部署、快速設定</p>
+            <p>
+              <strong>特色：</strong>無需人工介入、自動升級 Bash、預設更新
+              Claude Code
             </p>
+
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              curl -fsSL
+              https://raw.githubusercontent.com/your-org/claude-code/main/start.sh
+              | bash -s -- --fast
+            </div>
           </div>
 
-          <!-- Feature 2 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-secondary-400 text-4xl mb-4">
-              <i class="fas fa-terminal"></i>
+          <div class="installation-option">
+            <h3>🔧 一般模式</h3>
+            <p><strong>適合：</strong>開發環境、首次安裝、自訂配置</p>
+            <p><strong>特色：</strong>互動式選擇、詳細說明、可自訂選項</p>
+
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              curl -fsSL
+              https://raw.githubusercontent.com/your-org/claude-code/main/start.sh
+              | bash
             </div>
-            <h3 class="text-xl font-semibold mb-4">終端機整合</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              直接在終端機中使用自然語言指令，無需離開開發環境即可獲得 AI 協助
-            </p>
           </div>
 
-          <!-- Feature 3 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-accent-400 text-4xl mb-4">
-              <i class="fas fa-code"></i>
+          <div class="installation-option">
+            <h3>📦 本地安裝</h3>
+            <p><strong>適合：</strong>需要檢視程式碼、自訂修改、離線環境</p>
+
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              git clone https://github.com/your-org/claude-code.git cd
+              claude-code chmod +x start.sh ./start.sh --fast
             </div>
-            <h3 class="text-xl font-semibold mb-4">代碼生成</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              根據需求自動生成高品質代碼，支持多種編程語言和框架
-            </p>
           </div>
 
-          <!-- Feature 4 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-primary-400 text-4xl mb-4">
-              <i class="fas fa-bug"></i>
-            </div>
-            <h3 class="text-xl font-semibold mb-4">智能調試</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              自動識別和修復代碼中的錯誤，提供詳細的調試建議和解決方案
-            </p>
-          </div>
-
-          <!-- Feature 5 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-secondary-400 text-4xl mb-4">
-              <i class="fas fa-chart-line"></i>
-            </div>
-            <h3 class="text-xl font-semibold mb-4">效能監控</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              實時監控應用程式效能，提供優化建議和資源使用分析
-            </p>
-          </div>
-
-          <!-- Feature 6 -->
-          <div
-            class="glass-effect rounded-xl p-8 transform hover:scale-105 transition-all duration-300 hover:shadow-xl observe-fade"
-          >
-            <div class="text-accent-400 text-4xl mb-4">
-              <i class="fas fa-users"></i>
-            </div>
-            <h3 class="text-xl font-semibold mb-4">團隊協作</h3>
-            <p class="text-neutral-300 leading-relaxed">
-              支援多人協作開發，統一代碼風格和最佳實踐，提升團隊效率
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Installation Section -->
-    <section
-      id="installation"
-      class="py-20 px-4 bg-gradient-to-b from-neutral-900 to-neutral-800"
-    >
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            快速安裝
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            完整支援 Linux/WSL 和 macOS 一鍵安裝腳本（start.sh），Windows
-            自動安裝腳本維修中，敬請期待！
-          </p>
-          <p class="text-sm text-neutral-400 mt-2 max-w-2xl mx-auto">
-            支援 Linux、WSL、macOS，Windows 請稍後，將於修復後開放
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Windows Installation (Disabled) -->
-          <div class="glass-effect rounded-xl p-8 observe-fade opacity-60">
-            <div class="flex items-center mb-6">
-              <i class="fab fa-windows text-primary-400 text-3xl mr-4"></i>
-              <h3 class="text-2xl font-semibold">Windows 用戶</h3>
-            </div>
-            <div class="space-y-4">
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm bg-neutral-800 text-neutral-500"
-              >
-                <div class="text-neutral-400 mb-2">
-                  # Windows 一鍵安裝腳本維修中，敬請期待！
-                </div>
-                <div class="text-neutral-500">
-                  setup.bat / setup.ps1 / start.bat
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <button
-                  class="bg-primary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
+          <h3>🖥️ Windows 用戶特別說明</h3>
+          <div class="troubleshooting">
+            <h4>📋 安裝步驟</h4>
+            <ol>
+              <li>以<strong>管理員身份</strong>開啟 PowerShell</li>
+              <li>
+                執行：<code
+                  >Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope
+                  CurrentUser</code
                 >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 setup.bat
-                </button>
-                <button
-                  class="bg-secondary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 setup.ps1
-                </button>
-                <button
-                  class="bg-accent-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 start.bat
-                </button>
-              </div>
-              <div class="text-xs text-neutral-400 mt-2">
-                Windows 自動安裝腳本維修中，修復後將重新開放下載與一鍵安裝。
-              </div>
-            </div>
-          </div>
-
-          <!-- Linux/WSL Installation -->
-          <div class="glass-effect rounded-xl p-8 observe-fade">
-            <div class="flex items-center mb-6">
-              <i class="fab fa-linux text-accent-400 text-3xl mr-4"></i>
-              <h3 class="text-2xl font-semibold">Linux/WSL 用戶</h3>
-            </div>
-            <div class="space-y-4">
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
-                <div class="text-accent-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
-                </div>
-              </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 或下載後執行</div>
-                <div class="text-accent-400">
-                  curl -O
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  && chmod +x start.sh && ./start.sh
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 start.sh
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- macOS Installation -->
-          <div class="glass-effect rounded-xl p-8 observe-fade">
-            <div class="flex items-center mb-6">
-              <i class="fab fa-apple text-secondary-400 text-3xl mr-4"></i>
-              <h3 class="text-2xl font-semibold">macOS 用戶</h3>
-            </div>
-            <div class="space-y-4">
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
-                <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
-                </div>
-              </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 快速模式（跳過互動提示）</div>
-                <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash -s -- --fast
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 start.sh
-                </a>
-              </div>
-              <div class="text-xs text-neutral-400 mt-2">
-                ✅ 完整支援 macOS 15.5+ 和 zsh 環境，智能檢測並修復 npm/nvm 衝突
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 更新最後更新時間戳記 -->
-        <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-07-16T20:03:06+08:00 | 支援 Linux/WSL 和 macOS 一鍵安裝
-        </div>
-
-        <!-- Installation Features -->
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="text-center observe-fade">
-            <div class="text-primary-400 text-3xl mb-3">
-              <i class="fas fa-magic"></i>
-            </div>
-            <h4 class="font-semibold mb-2">一鍵全環境安裝</h4>
-            <p class="text-sm text-neutral-400">
-              WSL2、Node.js、CLI 全自動安裝
-            </p>
-          </div>
-          <div class="text-center observe-fade">
-            <div class="text-secondary-400 text-3xl mb-3">
-              <i class="fas fa-tools"></i>
-            </div>
-            <h4 class="font-semibold mb-2">智能問題修復</h4>
-            <p class="text-sm text-neutral-400">npm 污染清理、路徑衝突修復</p>
-          </div>
-          <div class="text-center observe-fade">
-            <div class="text-accent-400 text-3xl mb-3">
-              <i class="fas fa-network-wired"></i>
-            </div>
-            <h4 class="font-semibold mb-2">網路連線優化</h4>
-            <p class="text-sm text-neutral-400">DNS 檢測、GitHub 連線測試</p>
-          </div>
-          <div class="text-center observe-fade">
-            <div class="text-primary-400 text-3xl mb-3">
-              <i class="fas fa-clipboard-check"></i>
-            </div>
-            <h4 class="font-semibold mb-2">完整驗證測試</h4>
-            <p class="text-sm text-neutral-400">確保所有組件正常運作</p>
-          </div>
-        </div>
-
-        <!-- 添加統一安裝說明 -->
-        <div class="mt-16 glass-effect rounded-xl p-8 observe-fade">
-          <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold gradient-text mb-4">
-              <i class="fas fa-rocket mr-2"></i>統一安裝流程說明
-            </h3>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="text-center">
-              <div class="text-primary-400 text-2xl mb-3">
-                <i class="fab fa-windows"></i>
-              </div>
-              <h4 class="font-semibold mb-2">Windows 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 setup.bat 全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI
-                安裝
-              </p>
-            </div>
-            <div class="text-center">
-              <div class="text-accent-400 text-2xl mb-3">
-                <i class="fab fa-linux"></i>
-              </div>
-              <h4 class="font-semibold mb-2">Linux/WSL 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 start.sh 自動完成所有依賴與 CLI 安裝，支援智能修復
-              </p>
-            </div>
-            <div class="text-center">
-              <div class="text-secondary-400 text-2xl mb-3">
-                <i class="fab fa-apple"></i>
-              </div>
-              <h4 class="font-semibold mb-2">macOS 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 start.sh 一鍵安裝，完整支援 macOS 15.5+ 和 zsh 環境
-              </p>
-            </div>
-          </div>
-          <div class="mt-8 text-center">
-            <p class="text-sm text-neutral-400">
-              <i class="fas fa-info-circle mr-2"></i>
-              所有腳本均可重複執行，遇到問題可直接重新執行修復
-            </p>
-            <p class="text-xs text-neutral-500 mt-2">
-              詳細日誌：/tmp/claude_setup_*.log（Linux/WSL）或 PowerShell
-              輸出（Windows）
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Documentation Index Section -->
-    <section id="docs-index" class="py-20 px-4">
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            文檔導覽
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            完整的中文文檔，涵蓋從基礎安裝到進階功能的所有內容
-          </p>
-          <p class="text-sm text-neutral-400 mt-2">最後更新：2025-07-15</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- 依據實際文件結構更新 -->
-          <a
-            href="docs/cursor-claude-master-guide-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-primary-400 mb-2">
-              <i class="fas fa-book mr-2"></i>綜合代理主控手冊
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              全域旗標索引、需求解析、執行流程、錯誤處理、文件索引
-            </p>
-            <span class="text-xs text-neutral-400">必讀｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/awesome-claude-code-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-secondary-400 mb-2">
-              <i class="fas fa-users mr-2"></i>社群最佳實踐
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              Workflow、Hooks、Slash-Commands、MCP 整合
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/superclaude-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-purple-400 mb-2">
-              <i class="fas fa-flag mr-2"></i>高階旗標系統
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              Persona、進階指令、全流程自動化
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/claude-code-guide-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-green-400 mb-2">
-              <i class="fas fa-code mr-2"></i>基礎 API 指南
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              CLI、MCP、常用指令、疑難排解
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/claude-code-usage-monitor-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-yellow-400 mb-2">
-              <i class="fas fa-chart-line mr-2"></i>用量監控與安全
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              即時監控、配額、Web Dashboard、常見問題
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/claudecodeui-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-pink-400 mb-2">
-              <i class="fas fa-desktop mr-2"></i>Web UI 與視覺化
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              PWA、遠端管理、CLI 整合、最佳實踐
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/bplustree3-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-cyan-400 mb-2">
-              <i class="fas fa-rocket mr-2"></i>效能優化策略
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              B+Tree 快取、資料結構、效能建議
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-
-          <a
-            href="docs/README.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-6 block hover:scale-105 transition observe-fade"
-          >
-            <h3 class="text-xl font-bold text-orange-400 mb-2">
-              <i class="fas fa-list mr-2"></i>文件索引
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              文件導覽、快速參考、分類索引
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Flags Quick Reference Section -->
-    <section
-      id="flags-quickref"
-      class="py-20 px-4 bg-gradient-to-b from-neutral-800 to-neutral-900"
-    >
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            旗標/指令速查
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            常用旗標組合與指令範例，快速上手各種開發場景
-          </p>
-        </div>
-
-        <!-- Documentation Table -->
-        <div
-          class="glass-effect rounded-xl p-6 overflow-x-auto table-responsive"
-        >
-          <div class="table-container">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-neutral-700">
-                  <th class="py-4 px-6 font-semibold text-primary-400">動作</th>
-                  <th class="py-4 px-6 font-semibold text-primary-400">
-                    推薦旗標組合
-                  </th>
-                  <th class="py-4 px-6 font-semibold text-primary-400">
-                    參考文件
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">建立專案</td>
-                  <td class="py-4 px-6">
-                    <code class="text-primary-400"
-                      >--create --template --mcp</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">superclaude + guide</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">修復錯誤</td>
-                  <td class="py-4 px-6">
-                    <code class="text-secondary-400"
-                      >--scan --fix --lint --test</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">awesome + monitor</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">部署上線</td>
-                  <td class="py-4 px-6">
-                    <code class="text-accent-400"
-                      >--build --deploy --monitor</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">guide + ui</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">效能調優</td>
-                  <td class="py-4 px-6">
-                    <code class="text-purple-400"
-                      >--profile --optimize --cache</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">bplustree + monitor</td>
-                </tr>
-                <tr class="hover:bg-neutral-800 transition-colors duration-200">
-                  <td class="py-4 px-6 font-semibold text-white">安全檢查</td>
-                  <td class="py-4 px-6">
-                    <code class="text-red-400">--security --audit --scan</code>
-                  </td>
-                  <td class="py-4 px-6">monitor + awesome</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Workflows Examples Section -->
-    <section id="workflows-examples" class="py-20 px-4">
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            工作流程與實戰範例
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            實際開發場景中的最佳實踐和工作流程範例
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-xl font-bold text-primary-400 mb-4">
-              <i class="fas fa-brain mr-2"></i>Sequential-Thinking 標準流程
-            </h3>
-            <ol
-              class="list-decimal list-inside text-neutral-200 text-sm mb-4 space-y-2"
-            >
-              <li>需求分析：解析輸入、識別意圖、抽取技術需求、風險評估</li>
-              <li>計畫拆解：任務分解、依賴分析、旗標組合、執行順序規劃</li>
-              <li>逐步執行：前置檢查、指令執行、即時監控、錯誤處理</li>
-              <li>結果彙整：格式化輸出、後續建議、效能報告、學習記錄</li>
+              </li>
+              <li>執行：<code>wsl --install</code></li>
+              <li>重新啟動電腦</li>
+              <li>進入 WSL 環境後執行安裝指令</li>
             </ol>
-            <div class="code-block rounded-lg p-4 text-xs font-mono">
-              <div class="text-neutral-300"># 典型指令範例</div>
-              <div class="text-primary-400">
-                claude-code --create --template=nextjs --mcp
-              </div>
-              <div class="text-secondary-400">
-                claude-code --scan --fix --lint --test
-              </div>
-              <div class="text-accent-400">
-                claude-code --build --deploy --monitor --security
-              </div>
+          </div>
+
+          <h3>✅ 安裝後驗證</h3>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">複製</button>
+            # 重新載入 shell 配置 source ~/.bashrc # 或 ~/.zshrc # 驗證安裝
+            claude --version node --version npm --version
+          </div>
+        </div>
+
+        <!-- 功能特色頁面 -->
+        <div class="tab-content" id="features">
+          <h2>✨ 功能特色</h2>
+
+          <div class="changelog">
+            <h4>🔥 v3.5.0 重大更新</h4>
+            <div class="changelog-item">🔧 Bash 版本檢測與自動升級</div>
+            <div class="changelog-item">⚡ 快速模式，跳過所有互動提示</div>
+            <div class="changelog-item">
+              🎯 Claude Code 自動更新（快速模式預設）
+            </div>
+            <div class="changelog-item">
+              ✅ ShellCheck 零警告，符合 2025 最佳實踐
+            </div>
+            <div class="changelog-item">
+              🌍 多 Shell 支援（Bash、Zsh、Fish）
             </div>
           </div>
 
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-xl font-bold text-secondary-400 mb-4">
-              <i class="fas fa-plug mr-2"></i>MCP 多代理協作與自動化
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm mb-4 space-y-2"
-            >
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🔍</div>
+              <h3>智能檢測與修復</h3>
+              <ul>
+                <li>自動檢測 Bash 版本並升級</li>
+                <li>環境污染清理（PATH、npm 配置）</li>
+                <li>權限問題智能修復</li>
+                <li>NVM 與 npm 衝突解決</li>
+              </ul>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>自動化安裝</h3>
+              <ul>
+                <li>Node.js 22.14.0 LTS 自動安裝</li>
+                <li>npm 全域目錄智能配置</li>
+                <li>Claude Code CLI 最新版安裝</li>
+                <li>2025 年安全最佳實踐配置</li>
+              </ul>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🌐</div>
+              <h3>跨平台支援</h3>
+              <ul>
+                <li>Windows WSL2 自動安裝配置</li>
+                <li>Linux 主流發行版全支援</li>
+                <li>macOS（Intel + Apple Silicon）</li>
+                <li>多 Shell 環境智能適配</li>
+              </ul>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🎮</div>
+              <h3>使用者體驗</h3>
+              <ul>
+                <li>即時進度條與時間統計</li>
+                <li>彩色終端輸出介面</li>
+                <li>詳細日誌記錄追蹤</li>
+                <li>友善的互動式提示</li>
+              </ul>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🚀</div>
+              <h3>效能優化</h3>
+              <ul>
+                <li>網路容錯下載機制</li>
+                <li>快速模式省時 60%</li>
+                <li>並行安裝提升效率</li>
+                <li>智能快取避免重複下載</li>
+              </ul>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🔒</div>
+              <h3>安全性保障</h3>
+              <ul>
+                <li>避免 sudo npm 安裝風險</li>
+                <li>安全的 ~/.npm-global 配置</li>
+                <li>嚴格的權限檢查機制</li>
+                <li>Context7 最佳實踐整合</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 支援平台頁面 -->
+        <div class="tab-content" id="platforms">
+          <h2>🖥️ 支援平台</h2>
+
+          <h3>作業系統支援</h3>
+          <div class="platform-support">
+            <div class="platform-item supported">
+              <h4>🖥️ Windows</h4>
+              <p><strong>版本：</strong>10/11 (Build 19041+)</p>
+              <p><strong>方式：</strong>透過 WSL2</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>🐧 Ubuntu</h4>
+              <p><strong>版本：</strong>18.04 LTS+</p>
+              <p><strong>推薦：</strong>22.04 LTS</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>🍎 macOS</h4>
+              <p><strong>版本：</strong>10.15+</p>
+              <p><strong>架構：</strong>Intel + Apple Silicon</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>📦 Debian</h4>
+              <p><strong>版本：</strong>10+</p>
+              <p><strong>包管理：</strong>apt</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>🎩 CentOS/RHEL</h4>
+              <p><strong>版本：</strong>7+</p>
+              <p><strong>包管理：</strong>yum/dnf</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>⚡ Arch Linux</h4>
+              <p><strong>版本：</strong>Rolling</p>
+              <p><strong>包管理：</strong>pacman</p>
+              <span class="badge success">完整支援</span>
+            </div>
+          </div>
+
+          <h3>Shell 環境支援</h3>
+          <div class="platform-support">
+            <div class="platform-item supported">
+              <h4>🐚 Bash</h4>
+              <p><strong>版本：</strong>4.0+（自動升級）</p>
+              <p><strong>配置：</strong>.bashrc / .bash_profile</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>⚡ Zsh</h4>
+              <p><strong>版本：</strong>5.0+</p>
+              <p><strong>配置：</strong>.zshrc</p>
+              <span class="badge success">完整支援</span>
+            </div>
+
+            <div class="platform-item supported">
+              <h4>🐟 Fish</h4>
+              <p><strong>版本：</strong>3.0+</p>
+              <p><strong>配置：</strong>config.fish</p>
+              <span class="badge success">完整支援</span>
+            </div>
+          </div>
+
+          <h3>系統需求</h3>
+          <div class="troubleshooting">
+            <h4>最低需求</h4>
+            <ul>
+              <li><strong>記憶體：</strong>1GB 可用記憶體</li>
+              <li><strong>磁碟：</strong>1GB 可用空間</li>
+              <li><strong>網路：</strong>穩定的網際網路連線</li>
               <li>
-                連接外部工具、資料庫、API，支援 OAuth 2.0、Postgres、JSON 設定
+                <strong>權限：</strong>sudo
+                權限（Linux/macOS）或管理員權限（Windows）
               </li>
-              <li>可將 Claude Code 作為 MCP 伺服器，支援多種協議</li>
-              <li>自訂斜線命令、管道整合、批次自動化</li>
             </ul>
-            <div class="code-block rounded-lg p-4 text-xs font-mono">
-              <div class="text-neutral-300"># MCP 整合範例</div>
-              <div class="text-secondary-400">
-                claude mcp add postgres-server
-              </div>
-              <div class="text-accent-400">
-                claude mcp add --connection-string "postgresql://..."
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-xl font-bold text-green-400 mb-4">
-              <i class="fas fa-bug mr-2"></i>錯誤修復與自動診斷
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm mb-4 space-y-2"
-            >
-              <li>自動修復語法、相依、部署、效能等常見錯誤</li>
-              <li>失敗時提供手動排查與建議</li>
-              <li>支援多種測試框架和 CI/CD 整合</li>
-            </ul>
-            <div class="code-block rounded-lg p-4 text-xs font-mono">
-              <div class="text-neutral-300"># 錯誤修復範例</div>
-              <div class="text-green-400">claude-code --scan --verbose</div>
-              <div class="text-accent-400">claude-code --fix --auto</div>
-              <div class="text-primary-400">claude-code --test --coverage</div>
-            </div>
-          </div>
-
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-xl font-bold text-pink-400 mb-4">
-              <i class="fas fa-desktop mr-2"></i>Web UI 與遠端管理
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm mb-4 space-y-2"
-            >
-              <li>支援 PWA、行動裝置、Web Dashboard</li>
-              <li>即時用量監控、Session 管理、REST API</li>
-              <li>團隊協作和權限管理</li>
-            </ul>
-            <div class="code-block rounded-lg p-4 text-xs font-mono">
-              <div class="text-neutral-300"># Web UI 範例</div>
-              <div class="text-pink-400">claude-monitor --web-mode</div>
-              <div class="text-purple-400">
-                docker run -p 8080:8080 claude-usage-monitor
-              </div>
-            </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- FAQ Section -->
-    <section
-      id="faq"
-      class="py-20 px-4 bg-gradient-to-b from-neutral-900 to-neutral-800"
-    >
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            常見問題與疑難排解
-          </h2>
-          <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            解決安裝、使用、和最佳化過程中的常見問題
-          </p>
+        <!-- 更新日誌頁面 -->
+        <div class="tab-content" id="changelog">
+          <h2>📋 更新日誌</h2>
+
+          <div class="changelog">
+            <h4>🔥 v3.5.0 (2025-01-16) - 最新版本</h4>
+            <div class="changelog-item">新增 Bash 版本檢測與自動升級功能</div>
+            <div class="changelog-item">新增快速模式，支援 --fast 參數</div>
+            <div class="changelog-item">
+              快速模式中 Claude Code 自動更新為預設選項
+            </div>
+            <div class="changelog-item">
+              達成 ShellCheck 零警告，符合 2025 最佳實踐
+            </div>
+            <div class="changelog-item">
+              改進多 Shell 支援（Bash、Zsh、Fish）
+            </div>
+            <div class="changelog-item">優化 macOS Homebrew bash 升級流程</div>
+            <div class="changelog-item">增強跨平台 sed 命令兼容性</div>
+            <div class="changelog-item">新增智能 Shell 配置文件檢測</div>
+          </div>
+
+          <div class="changelog">
+            <h4>⚡ v3.4.0 (2025-01-15)</h4>
+            <div class="changelog-item">整合 Context7 最佳實踐文檔</div>
+            <div class="changelog-item">新增網路容錯下載機制</div>
+            <div class="changelog-item">優化 Windows WSL2 檢測與修復</div>
+            <div class="changelog-item">改進函數重複清理機制</div>
+            <div class="changelog-item">增強錯誤處理與恢復機制</div>
+          </div>
+
+          <div class="changelog">
+            <h4>🛠️ v3.3.0 (2025-01-14)</h4>
+            <div class="changelog-item">新增智能檢測與互動式修復系統</div>
+            <div class="changelog-item">改進 npm 權限問題自動修復</div>
+            <div class="changelog-item">新增 y/N 互動式提示功能</div>
+            <div class="changelog-item">優化系統環境污染清理</div>
+          </div>
+
+          <div class="changelog">
+            <h4>🔧 v3.2.0 (2025-01-13)</h4>
+            <div class="changelog-item">新增 NVM 與 npm 衝突檢測</div>
+            <div class="changelog-item">改進跨平台 sed 指令兼容性</div>
+            <div class="changelog-item">優化 Claude Code CLI 安裝流程</div>
+          </div>
+
+          <div class="changelog">
+            <h4>🎯 v3.1.0 (2025-01-12)</h4>
+            <div class="changelog-item">新增進度條顯示與時間統計</div>
+            <div class="changelog-item">改進彩色終端輸出介面</div>
+            <div class="changelog-item">增強日誌記錄與錯誤追蹤</div>
+          </div>
+
+          <div class="changelog">
+            <h4>🚀 v3.0.0 (2025-01-11)</h4>
+            <div class="changelog-item">重大架構重構，提升穩定性</div>
+            <div class="changelog-item">新增跨平台支援（Windows WSL2）</div>
+            <div class="changelog-item">整合 Node.js 22.14.0 LTS</div>
+            <div class="changelog-item">新增安全最佳實踐配置</div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-lg font-bold text-primary-400 mb-4">
-              <i class="fas fa-download mr-2"></i>安裝與啟動問題
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm space-y-2"
-            >
-              <li>Node.js 版本需 18 LTS，建議使用 nvm 管理</li>
-              <li>WSL 環境需 Windows 10 Build 19041+ 且啟用虛擬化</li>
-              <li>避免使用 Windows 版本的 node/npm，應在 WSL 內重新安裝</li>
-              <li>npm 全域安裝目錄設置：~/.npm-global</li>
-              <li>首次啟動需完成 API 金鑰設定</li>
-            </ul>
+        <!-- 故障排除頁面 -->
+        <div class="tab-content" id="troubleshooting">
+          <h2>🔧 故障排除</h2>
+
+          <h3>🆘 常見問題與解決方案</h3>
+
+          <div class="troubleshooting">
+            <h4>❌ Bash 版本過舊</h4>
+            <p><strong>問題：</strong>腳本提示 bash 版本低於 4.0</p>
+            <p>
+              <strong>解決：</strong>腳本會自動檢測並提示升級，也可手動執行：
+            </p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              # macOS 用戶 brew install bash echo "$(brew --prefix)/bin/bash" |
+              sudo tee -a /etc/shells chsh -s "$(brew --prefix)/bin/bash" #
+              Linux 用戶 sudo apt update && sudo apt install -y bash #
+              Ubuntu/Debian sudo yum update bash # CentOS/RHEL
+            </div>
           </div>
 
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-lg font-bold text-secondary-400 mb-4">
-              <i class="fas fa-shield-alt mr-2"></i>權限與安全問題
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm space-y-2"
-            >
-              <li>所有敏感操作需明確批准，建議啟用 OpenTelemetry 監控</li>
-              <li>預設僅開啟 View 權限，機密資訊用環境變數</li>
-              <li>避免於生產環境使用 --dangerously-skip-permissions</li>
-              <li>定期更新 Claude Code 以獲得最新安全修復</li>
-            </ul>
+          <div class="troubleshooting">
+            <h4>❌ npm 權限錯誤</h4>
+            <p><strong>問題：</strong>npm 安裝時出現 EACCES 錯誤</p>
+            <p><strong>解決：</strong>腳本會自動檢測並修復，或手動執行：</p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              # 自動修復（推薦） ./start.sh --fast # 手動修復 mkdir -p
+              ~/.npm-global npm config set prefix '~/.npm-global' echo 'export
+              PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc source ~/.bashrc
+            </div>
           </div>
 
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-lg font-bold text-green-400 mb-4">
-              <i class="fas fa-wrench mr-2"></i>常見錯誤與排查
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm space-y-2"
-            >
-              <li>npm 配置污染：使用腳本自動清理 ~/.npmrc</li>
-              <li>node/npm 路徑錯誤：確保指向 WSL 而非 Windows</li>
-              <li>虛擬化未啟用：BIOS 中開啟 VT-x/AMD-V</li>
-              <li>WSL 2 未設為預設：wsl --set-default-version 2</li>
-              <li>磁碟空間不足：至少需要 1GB 可用空間</li>
-            </ul>
-          </div>
-
-          <div class="glass-effect rounded-xl p-6 observe-fade">
-            <h3 class="text-lg font-bold text-pink-400 mb-4">
-              <i class="fas fa-rocket mr-2"></i>效能與最佳實踐
-            </h3>
-            <ul
-              class="list-disc list-inside text-neutral-200 text-sm space-y-2"
-            >
+          <div class="troubleshooting">
+            <h4>❌ Windows WSL 安裝失敗</h4>
+            <p><strong>解決步驟：</strong></p>
+            <ol>
+              <li><strong>檢查 Windows 版本：</strong>需要 Build 19041+</li>
+              <li><strong>啟用虛擬化：</strong>進入 BIOS 啟用 VT-x/AMD-V</li>
               <li>
-                大型專案建議分目錄分析，適當設定 --output-format、--timeout
+                <strong>管理員權限：</strong>確保以管理員身份執行 PowerShell
               </li>
-              <li>自動化批次審查、管道整合、結構化輸出</li>
-              <li>定期 /compact，忽略大型目錄可降資源消耗</li>
-              <li>使用 --cache 選項加速重複操作</li>
-            </ul>
+              <li><strong>重新安裝：</strong></li>
+            </ol>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              wsl --unregister Ubuntu wsl --install -d Ubuntu-24.04
+            </div>
+          </div>
+
+          <div class="troubleshooting">
+            <h4>❌ Claude Code 無法執行</h4>
+            <p><strong>問題：</strong>安裝後 claude 指令找不到</p>
+            <p><strong>解決：</strong></p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              # 檢查 PATH 設定 echo $PATH | grep -o '[^:]*npm[^:]*' # 重新安裝
+              npm uninstall -g @anthropic-ai/claude-code npm install -g
+              @anthropic-ai/claude-code # 手動添加到 PATH export
+              PATH="$HOME/.npm-global/bin:$PATH"
+            </div>
+          </div>
+
+          <h3>🔍 進階故障排除</h3>
+
+          <div class="troubleshooting">
+            <h4>📋 完整日誌分析</h4>
+            <p>每次執行都會產生詳細日誌，可用於問題分析：</p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              # 查看最新日誌 ls -la /tmp/claude_setup_*.log | tail -1 #
+              分析常見錯誤 grep -E "(ERROR|WARN)" /tmp/claude_setup_*.log #
+              檢查網路問題 grep -E "(download|curl|wget)"
+              /tmp/claude_setup_*.log
+            </div>
+          </div>
+
+          <div class="troubleshooting">
+            <h4>🧹 完全重置安裝</h4>
+            <p>如果遇到無法解決的問題，可以完全重置：</p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">複製</button>
+              # 清理 npm 配置 rm -f ~/.npmrc npm config edit #
+              刪除所有內容並儲存 # 清理 NVM 安裝 rm -rf ~/.nvm # 重新執行安裝
+              ./start.sh --fast
+            </div>
+          </div>
+
+          <h3>📞 取得更多協助</h3>
+          <p>如果問題仍未解決，請提供以下資訊：</p>
+
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">複製</button>
+            # 系統資訊 uname -a echo $SHELL echo $PATH # 錯誤日誌 cat
+            /tmp/claude_setup_*.log | tail -50 # 環境狀態 which node npm claude
+            node --version npm --version
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-neutral-900 py-12 px-4">
-      <div class="container mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="flex items-center space-x-3 mb-4 md:mb-0">
-            <img src="img/logo.png" alt="Claude Code Logo" class="w-8 h-8" />
-            <span class="text-xl font-bold gradient-text">Claude Code</span>
-          </div>
-          <div class="flex items-center space-x-6">
-            <a
-              href="https://github.com/s123104/claude-code"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
-            >
-              <i class="fab fa-github text-xl"></i>
-            </a>
-            <a
-              href="https://docs.anthropic.com/en/docs/claude-code"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
-            >
-              <i class="fas fa-book text-xl"></i>
-            </a>
-            <span class="text-sm text-neutral-400"
-              >© 2025 Claude Code 中文社群</span
-            >
-          </div>
-        </div>
-        <div class="mt-8 pt-8 border-t border-neutral-800 text-center">
-          <p class="text-sm text-neutral-400">
-            最後更新：2025-07-16T19:34:22+08:00 | 版本：v3.0.0 |
-            <a
-              href="https://github.com/s123104/claude-code/blob/master/LICENSE"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary-400 hover:text-primary-300 transition-colors duration-200"
-              >MIT License</a
-            >
-          </p>
-          <p class="text-xs text-neutral-500 mt-2">
-            本網站整合了 cursor-claude-master-guide-zh-tw.md、README.md
-            及各子文件內容，<br />
-            確保資訊時效性與一致性。如有問題請至 GitHub 回報。
-          </p>
-        </div>
-      </div>
-    </footer>
+      <footer class="footer">
+        <p>© 2025 Claude Code 中文社群 | Made with ❤️</p>
+        <p>如果這個專案對你有幫助，請給我們一個 ⭐ Star！</p>
+      </footer>
+    </div>
 
-    <!-- 隱藏彩蛋按鈕 -->
-    <div
-      class="easter-egg-btn bg-primary-500 rounded-full"
-      id="easter-egg"
-    ></div>
-
-    <!-- JavaScript 功能 -->
     <script>
-      // 移動端選單功能
-      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-      const mobileMenu = document.getElementById("mobile-menu");
-
-      mobileMenuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-        const icon = mobileMenuBtn.querySelector("i");
-        icon.classList.toggle("fa-bars");
-        icon.classList.toggle("fa-times");
-      });
-
-      // 捲動進場動畫
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            observer.unobserve(entry.target);
-          }
+      function showTab(tabName) {
+        // 隱藏所有標籤頁內容
+        const tabContents = document.querySelectorAll(".tab-content");
+        tabContents.forEach((content) => {
+          content.classList.remove("active");
         });
-      }, observerOptions);
 
-      // 觀察所有需要動畫的元素
-      document.querySelectorAll(".observe-fade").forEach((el) => {
-        observer.observe(el);
-      });
+        // 移除所有導覽標籤的 active 類別
+        const navTabs = document.querySelectorAll(".nav-tab");
+        navTabs.forEach((tab) => {
+          tab.classList.remove("active");
+        });
 
-      // 平滑捲動
+        // 顯示選中的標籤頁內容
+        document.getElementById(tabName).classList.add("active");
+
+        // 添加對應導覽標籤的 active 類別
+        event.target.classList.add("active");
+      }
+
+      function copyCode(button) {
+        const codeBlock = button.parentElement;
+        const code = codeBlock.textContent.replace("複製", "").trim();
+
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            button.textContent = "已複製!";
+            button.style.background = "#28a745";
+
+            setTimeout(() => {
+              button.textContent = "複製";
+              button.style.background = "#4CAF50";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("複製失敗:", err);
+            button.textContent = "複製失敗";
+            button.style.background = "#dc3545";
+
+            setTimeout(() => {
+              button.textContent = "複製";
+              button.style.background = "#4CAF50";
+            }, 2000);
+          });
+      }
+
+      // 平滑滾動到錨點
       document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
           e.preventDefault();
-          const targetId = this.getAttribute("href").substring(1);
-          const targetElement = document.getElementById(targetId);
-
-          if (targetElement) {
-            targetElement.scrollIntoView({
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
               behavior: "smooth",
               block: "start",
             });
-
-            // 關閉行動版選單
-            mobileMenu.classList.add("hidden");
-            const icon = mobileMenuBtn.querySelector("i");
-            icon.classList.add("fa-bars");
-            icon.classList.remove("fa-times");
           }
         });
       });
 
-      // 頁面載入完成後隱藏載入動畫
-      window.addEventListener("load", () => {
-        const loadingOverlay = document.getElementById("loading-overlay");
-        setTimeout(() => {
-          loadingOverlay.style.opacity = "0";
-          setTimeout(() => {
-            loadingOverlay.style.display = "none";
-          }, 300);
-        }, 500);
+      // 動態載入最新版本資訊
+      document.addEventListener("DOMContentLoaded", function () {
+        // 可以在這裡添加動態載入最新版本號的邏輯
+        console.log("Claude Code 自動化安裝工具 v3.5.0 已載入");
       });
-
-      // 彩蛋功能
-      const easterEgg = document.getElementById("easter-egg");
-      let clickCount = 0;
-
-      easterEgg.addEventListener("click", () => {
-        clickCount++;
-
-        if (clickCount === 1) {
-          showEasterEggMessage("🎉 您找到了隱藏彩蛋！");
-        } else if (clickCount === 3) {
-          showEasterEggMessage("🚀 Claude Code 讓開發更有趣！");
-        } else if (clickCount === 5) {
-          showEasterEggMessage('💡 試試在終端機輸入 "claude --help"');
-        } else if (clickCount === 10) {
-          showEasterEggMessage("🎊 您是真正的探索者！感謝使用 Claude Code！");
-          confettiEffect();
-        }
-      });
-
-      function showEasterEggMessage(message) {
-        const messageDiv = document.createElement("div");
-        messageDiv.className =
-          "fixed top-20 right-4 bg-primary-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-down";
-        messageDiv.textContent = message;
-
-        document.body.appendChild(messageDiv);
-
-        setTimeout(() => {
-          messageDiv.style.opacity = "0";
-          setTimeout(() => {
-            if (document.body.contains(messageDiv)) {
-              document.body.removeChild(messageDiv);
-            }
-          }, 300);
-        }, 3000);
-      }
-
-      function confettiEffect() {
-        // 簡單的彩帶效果
-        for (let i = 0; i < 50; i++) {
-          const confetti = document.createElement("div");
-          confetti.className =
-            "fixed w-2 h-2 bg-primary-400 rounded-full animate-bounce";
-          confetti.style.left = Math.random() * 100 + "%";
-          confetti.style.top = "-10px";
-          confetti.style.animationDelay = Math.random() * 2 + "s";
-          confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
-
-          document.body.appendChild(confetti);
-
-          setTimeout(() => {
-            if (document.body.contains(confetti)) {
-              document.body.removeChild(confetti);
-            }
-          }, 5000);
-        }
-      }
-
-      // 標題動畫效果
-      const heroTitle = document.querySelector("h1");
-      if (heroTitle) {
-        heroTitle.addEventListener("mouseenter", () => {
-          heroTitle.classList.add("animate-pulse");
-        });
-
-        heroTitle.addEventListener("mouseleave", () => {
-          heroTitle.classList.remove("animate-pulse");
-        });
-      }
-
-      // 終端機打字效果
-      const terminalLine = document.querySelector(".terminal-line");
-      if (terminalLine) {
-        const text = terminalLine.textContent;
-        terminalLine.textContent = "";
-
-        let i = 0;
-        const typeWriter = () => {
-          if (i < text.length) {
-            terminalLine.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, 100);
-          }
-        };
-
-        setTimeout(typeWriter, 2000);
-      }
-
-      // 複製代碼功能
-      document.querySelectorAll(".code-block").forEach((block) => {
-        block.addEventListener("click", () => {
-          const code = block.textContent;
-          navigator.clipboard.writeText(code).then(() => {
-            showEasterEggMessage("📋 代碼已複製到剪貼板！");
-          });
-        });
-      });
-
-      // 頁面可見性檢測
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          document.title = "回來繼續使用 Claude Code 吧！";
-        } else {
-          document.title = "Claude Code - AI 驅動的終端開發助手";
-        }
-      });
-
-      // 鍵盤快速鍵
-      document.addEventListener("keydown", (e) => {
-        // Ctrl/Cmd + K 快速搜索
-        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-          e.preventDefault();
-          showEasterEggMessage("🔍 快速搜索功能正在開發中...");
-        }
-
-        // Ctrl/Cmd + / 顯示快速鍵幫助
-        if ((e.ctrlKey || e.metaKey) && e.key === "/") {
-          e.preventDefault();
-          showEasterEggMessage("⌨️ 快速鍵：Ctrl+K 搜索，Ctrl+/ 幫助");
-        }
-
-        // Escape 關閉選單
-        if (e.key === "Escape") {
-          mobileMenu.classList.add("hidden");
-          const icon = mobileMenuBtn.querySelector("i");
-          icon.classList.add("fa-bars");
-          icon.classList.remove("fa-times");
-        }
-      });
-
-      // 效能監控
-      if ("performance" in window) {
-        window.addEventListener("load", () => {
-          const timing = performance.timing;
-          const loadTime = timing.loadEventEnd - timing.navigationStart;
-
-          if (loadTime > 3000) {
-            console.log("⚠️ 頁面載入時間較長，建議優化");
-          }
-        });
-      }
-
-      console.log("🎉 Claude Code 展示頁面已載入完成！");
-      console.log("💡 技術特點：Mobile-first RWD、Tailwind CSS、微互動設計");
-      console.log("🎯 設計重點：WCAG AA 對比度、語意化 HTML、效能最佳化");
-      console.log("🚀 互動功能：Intersection Observer、CSS 動畫、隱藏彩蛋");
     </script>
   </body>
 </html>
