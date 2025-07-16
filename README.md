@@ -86,8 +86,8 @@ claude --version
 ```bash
 # 使用 Docker 容器
 docker run -it --rm -v $(pwd):/workspace node:18-alpine sh -c "
-  npm install -g @anthropic-ai/claude-code && 
-  cd /workspace && 
+  npm install -g @anthropic-ai/claude-code &&
+  cd /workspace &&
   claude --help
 "
 ```
@@ -287,6 +287,7 @@ start.bat
 ```
 
 **v3.0.0 新功能：**
+
 - 🔍 **智能環境檢測**：自動識別 Windows 10/11、WSL2 狀態、虛擬化支援
 - 🛠️ **自動問題修復**：npm 路徑污染清理、WSL2 配置修復、網路連線診斷
 - 🌐 **網路優化**：DNS 解析檢查、GitHub 連線測試、下載加速
@@ -294,8 +295,9 @@ start.bat
 - 🔧 **Windows 11 支援**：TPM 2.0 檢測、進階安全功能整合
 
 **安裝腳本特色：**
+
 - 🔍 **智能環境偵測**：自動檢查 Windows 版本、虛擬化支援
-- 🔧 **一鍵 WSL2 安裝**：自動安裝 WSL2、Ubuntu、必要工具  
+- 🔧 **一鍵 WSL2 安裝**：自動安裝 WSL2、Ubuntu、必要工具
 - 🛠️ **自動修復**：修復常見的 Node.js 路徑衝突、WSL 配置問題
 - 🚀 **完整驗證**：確保所有組件正常運作
 - 📋 **詳細日誌**：提供完整的安裝日誌和錯誤診斷
@@ -403,6 +405,7 @@ Git: git version 2.34.1
 ### 🌐 HTTP 網頁認證（推薦）
 
 **首次使用建議方式：**
+
 ```bash
 # 直接執行 claude，會自動開啟瀏覽器進行認證
 claude
@@ -412,6 +415,7 @@ claude
 ```
 
 **適用場景：**
+
 - ✅ 個人開發者首次使用
 - ✅ 需要完整功能存取
 - ✅ 支援 OAuth 2.0 安全認證
@@ -420,6 +424,7 @@ claude
 ### 🔑 API Token 認證
 
 **方式 1：環境變數設定**
+
 ```bash
 # 設定 API Key 環境變數
 export ANTHROPIC_API_KEY="sk-ant-apiXX-XXXXXXX"
@@ -433,6 +438,7 @@ claude -p "Hello, Claude Code!"
 ```
 
 **方式 2：配置檔案設定**
+
 ```bash
 # 在家目錄創建 .claude.json 配置檔
 cat > ~/.claude.json << 'EOF'
@@ -447,6 +453,7 @@ chmod 600 ~/.claude.json
 ```
 
 **方式 3：指令行參數**
+
 ```bash
 # 直接透過參數傳遞（適合臨時測試）
 claude --api-key "sk-ant-apiXX-XXXXXXX" "your prompt here"
@@ -455,6 +462,7 @@ claude --api-key "sk-ant-apiXX-XXXXXXX" "your prompt here"
 ### 🏢 企業級認證設定
 
 **OAuth 2.0 企業認證：**
+
 ```bash
 # 設定 OAuth 應用程式
 claude config set auth.type oauth
@@ -464,6 +472,7 @@ claude config set auth.redirect_uri http://localhost:3000/callback
 ```
 
 **企業 API 端點設定：**
+
 ```bash
 # 設定企業 API 端點
 claude config set api.endpoint https://api.your-company.com/v1
@@ -473,6 +482,7 @@ claude config set api.version 2024-07-15
 ### 🔍 認證狀態檢查
 
 **檢查目前認證狀態：**
+
 ```bash
 # 檢查認證狀態
 claude auth status
@@ -485,6 +495,7 @@ claude doctor
 ```
 
 **常見認證問題排解：**
+
 ```bash
 # 清除認證快取
 claude auth logout
@@ -499,17 +510,18 @@ curl -I https://api.anthropic.com/v1/health
 
 ### 📊 認證方式比較
 
-| 認證方式 | 適用場景 | 安全性 | 設定複雜度 | 推薦指數 |
-|---------|----------|--------|------------|----------|
-| **HTTP 網頁認證** | 個人開發、首次使用 | 高 | 低 | ⭐⭐⭐⭐⭐ |
-| **環境變數 API Key** | 自動化腳本、CI/CD | 中 | 中 | ⭐⭐⭐⭐ |
-| **配置檔案** | 本地開發環境 | 中 | 低 | ⭐⭐⭐ |
-| **指令行參數** | 臨時測試 | 低 | 極低 | ⭐⭐ |
-| **OAuth 2.0** | 企業級部署 | 極高 | 高 | ⭐⭐⭐⭐⭐ |
+| 認證方式             | 適用場景           | 安全性 | 設定複雜度 | 推薦指數   |
+| -------------------- | ------------------ | ------ | ---------- | ---------- |
+| **HTTP 網頁認證**    | 個人開發、首次使用 | 高     | 低         | ⭐⭐⭐⭐⭐ |
+| **環境變數 API Key** | 自動化腳本、CI/CD  | 中     | 中         | ⭐⭐⭐⭐   |
+| **配置檔案**         | 本地開發環境       | 中     | 低         | ⭐⭐⭐     |
+| **指令行參數**       | 臨時測試           | 低     | 極低       | ⭐⭐       |
+| **OAuth 2.0**        | 企業級部署         | 極高   | 高         | ⭐⭐⭐⭐⭐ |
 
 ### 🎯 快速認證設定
 
 **新手推薦流程：**
+
 ```bash
 # 1. 首次使用 HTTP 網頁認證
 claude
@@ -522,6 +534,7 @@ claude -p "測試連線成功"
 ```
 
 **進階用戶設定：**
+
 ```bash
 # 1. 創建配置檔案
 claude config init
@@ -1192,3 +1205,18 @@ _最後更新：2025-07-15T14:16:31+08:00 | 語言：繁體中文 | 專案維護
 ---
 
 **🔖 書籤建議**：將本專案 [README.md](https://github.com/s123104/claude-code) 加入書籤，隨時查閱最新資訊！
+
+<!-- SuperClaude 子模組與最佳實踐說明（自動產生區塊） -->
+
+> **本專案整合 [SuperClaude](./SuperClaude) 智能開發框架，請注意：**
+>
+> - **授權條款**：本專案與 SuperClaude 均採用 MIT License，詳見 [LICENSE](./LICENSE)
+> - **貢獻規範**：請參閱 [CONTRIBUTING.md](./CONTRIBUTING.md)，與 SuperClaude 保持一致
+> - **子模組同步**：如需獲取/更新 SuperClaude，請於 clone 後執行：
+>   ```bash
+>   git submodule update --init --recursive
+>   ```
+>   或依照安裝腳本自動同步
+> - **最佳實踐**：fork/clone 本專案時，請務必同步 SuperClaude 以確保功能完整
+
+---
