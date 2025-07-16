@@ -554,8 +554,8 @@ install_nodejs_fresh() {
     if ! nvm install "$NODE_TARGET_VERSION"; then
         log_warn "Node.js $NODE_TARGET_VERSION 安裝失敗，嘗試安裝備用版本 $NODE_FALLBACK_VERSION"
         if ! nvm install "$NODE_FALLBACK_VERSION"; then
-            error_exit "Node.js 安裝失敗（主要和備用版本都失敗）"
-        fi
+                error_exit "Node.js 安裝失敗（主要和備用版本都失敗）"
+            fi
         NODE_TARGET_VERSION=$NODE_FALLBACK_VERSION
     fi
     
