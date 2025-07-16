@@ -62,7 +62,11 @@
       "Bash(sed:*)",
       "Bash(for script in *.sh)",
       "Bash(do echo -n \"$script: \")",
-      "Bash(shellcheck:*)"
+      "Bash(shellcheck:*)",
+      "Bash(./test_start.sh:*)",
+      "Bash(./test_network.sh:*)",
+      "Bash(./test_system.sh:*)",
+      "Bash(./test_config.sh:*)"
     ],
     "deny": []
   }
