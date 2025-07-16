@@ -12,7 +12,7 @@
   [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
   [![WSL](https://img.shields.io/badge/WSL-Auto%20Setup-orange.svg)](wsl_claude_code_setup.sh)
   
-  > 最後更新時間：2025-07-15T18:30:00+08:00  
+  > 最後更新時間：2025-07-16T20:03:06+08:00  
   > 文件語言：繁體中文  
   > 專案維護者：s123104
 </div>
@@ -43,7 +43,7 @@
 
 ## ⚡ 快速開始 (5 分鐘內完成安裝)
 
-### 🐧 Linux/WSL 用戶（目前唯一支援）
+### 🐧 Linux/WSL 用戶
 
 **自動安裝腳本 - 智能環境檢測與修復**
 
@@ -55,13 +55,31 @@ curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
 ```
 
+### 🍎 macOS 用戶
+
+**完整支援 macOS + zsh 環境**
+
+```bash
+# 一鍵安裝 (推薦)
+curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
+
+# 快速模式（跳過互動提示）
+curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
+
+# 或下載後執行
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
+```
+
+**腳本特色**：
+- ✅ 完整支援 macOS 15.5+ 和 zsh 環境
+- ✅ 智能檢測多重 Node.js 安裝並自動修復
+- ✅ 自動清理 npm 配置衝突和 nvm 相容性問題
+- ✅ 整合 Context7 最佳實踐優化
+- ✅ 支援快速模式，跳過互動提示
+
 ### 🖥️ Windows 用戶
 
 > ⚠️ Windows 一鍵安裝腳本維修中，敬請期待！
-
-### 🍎 macOS 用戶
-
-> ⚠️ macOS 一鍵安裝腳本維修中，敬請期待！
 
 ---
 

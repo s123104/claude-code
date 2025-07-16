@@ -594,11 +594,11 @@
             快速安裝
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            目前僅支援 Linux/WSL 一鍵安裝腳本（start.sh），Windows
+            完整支援 Linux/WSL 和 macOS 一鍵安裝腳本（start.sh），Windows
             自動安裝腳本維修中，敬請期待！
           </p>
           <p class="text-sm text-neutral-400 mt-2 max-w-2xl mx-auto">
-            支援 Linux、WSL，Windows/MacOS 請稍後，將於修復後開放
+            支援 Linux、WSL、macOS，Windows 請稍後，將於修復後開放
           </p>
         </div>
 
@@ -685,10 +685,50 @@
               </div>
             </div>
           </div>
+
+          <!-- macOS Installation -->
+          <div class="glass-effect rounded-xl p-8 observe-fade">
+            <div class="flex items-center mb-6">
+              <i class="fab fa-apple text-secondary-400 text-3xl mr-4"></i>
+              <h3 class="text-2xl font-semibold">macOS 用戶</h3>
+            </div>
+            <div class="space-y-4">
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
+                <div class="text-secondary-400">
+                  curl -fsSL
+                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+                  | bash
+                </div>
+              </div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 快速模式（跳過互動提示）</div>
+                <div class="text-secondary-400">
+                  curl -fsSL
+                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+                  | bash -s -- --fast
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <a
+                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                >
+                  <i class="fas fa-download mr-2"></i>
+                  下載 start.sh
+                </a>
+              </div>
+              <div class="text-xs text-neutral-400 mt-2">
+                ✅ 完整支援 macOS 15.5+ 和 zsh 環境，智能檢測並修復 npm/nvm 衝突
+              </div>
+            </div>
+          </div>
         </div>
         <!-- 更新最後更新時間戳記 -->
         <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-07-16T20:03:06+08:00 | 僅支援 Linux/WSL 一鍵安裝
+          最後更新：2025-07-16T20:03:06+08:00 | 支援 Linux/WSL 和 macOS 一鍵安裝
         </div>
 
         <!-- Installation Features -->
@@ -758,7 +798,7 @@
               </div>
               <h4 class="font-semibold mb-2">macOS 用戶</h4>
               <p class="text-sm text-neutral-300">
-                使用 Homebrew 安裝 Node.js，然後 npm 全域安裝 Claude Code
+                執行 start.sh 一鍵安裝，完整支援 macOS 15.5+ 和 zsh 環境
               </p>
             </div>
           </div>

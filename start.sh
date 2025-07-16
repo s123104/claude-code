@@ -6,7 +6,7 @@ set -e
 # 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
 # 新增: 智能檢測、安全跳過、現有安裝保護、Context7 最佳實踐
 # 作者: Claude Code 中文社群
-# 更新: 2025-01-14
+# 更新: 2025-07-16
 
 # ========== 配置參數 ==========
 SCRIPT_VERSION="3.3.0"
@@ -63,9 +63,358 @@ info() {
     log_info "$1"
 }
 
+# ========== 智能檢測與互動式修復系統 ==========
+
+# 互動式提示函數
+interactive_prompt() {
+    local message="$1"
+    local default_answer="${2:-N}"
+    local answer
+    
+    echo -e "${YELLOW}[PROMPT]${NC} $message"
+    read -p "Continue? (y/N): " -n 1 -r answer
+    echo
+    
+    if [[ -z "$answer" ]]; then
+        answer="$default_answer"
+    fi
+    
+    case "$answer" in
+        [Yy]* ) return 0 ;;
+        * ) return 1 ;;
+    esac
+}
+
+# 檢測 npm 權限問題
+check_npm_permissions() {
+    log_info "檢測 npm 權限問題..."
+    
+    local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    local npm_cache=$(npm config get cache 2>/dev/null || echo "")
+    local has_permission_issues=false
+    
+    # 檢查 npm prefix 權限
+    if [[ -n "$npm_prefix" && -d "$npm_prefix" ]]; then
+        if [[ ! -w "$npm_prefix" ]]; then
+            log_warn "npm 全域安裝目錄無寫入權限：$npm_prefix"
+            has_permission_issues=true
+        fi
+    fi
+    
+    # 檢查 npm cache 權限
+    if [[ -n "$npm_cache" && -d "$npm_cache" ]]; then
+        if [[ ! -w "$npm_cache" ]]; then
+            log_warn "npm 快取目錄無寫入權限：$npm_cache"
+            has_permission_issues=true
+        fi
+    fi
+    
+    # 檢查是否有 root 擁有的 npm 目錄
+    if [[ -d "/usr/local/lib/node_modules" ]]; then
+        local owner=$(stat -c %U "/usr/local/lib/node_modules" 2>/dev/null || stat -f %Su "/usr/local/lib/node_modules" 2>/dev/null || echo "unknown")
+        if [[ "$owner" == "root" ]]; then
+            log_warn "偵測到 root 擁有的 npm 目錄：/usr/local/lib/node_modules"
+            has_permission_issues=true
+        fi
+    fi
+    
+    if [[ "$has_permission_issues" == "true" ]]; then
+        log_error "偵測到 npm 權限問題"
+        if interactive_prompt "是否要修正 npm 權限問題？建議使用安全的 ~/.npm-global 目錄"; then
+            fix_npm_permissions_safe
+        else
+            log_warn "跳過 npm 權限修正，可能影響後續安裝"
+        fi
+    else
+        log_success "npm 權限檢查通過"
+    fi
+}
+
+# 安全修正 npm 權限（使用 ~/.npm-global）
+fix_npm_permissions_safe() {
+    log_info "使用安全方式修正 npm 權限..."
+    
+    # 建立 ~/.npm-global 目錄
+    local npm_global_dir="$HOME/.npm-global"
+    mkdir -p "$npm_global_dir"
+    
+    # 備份現有 .npmrc
+    if [[ -f "$HOME/.npmrc" ]]; then
+        cp "$HOME/.npmrc" "$HOME/.npmrc.backup.$(date +%Y%m%d_%H%M%S)"
+        log_info "已備份現有 .npmrc 配置"
+    fi
+    
+    # 清理衝突設定
+    npm config delete prefix 2>/dev/null || true
+    npm config delete globalconfig 2>/dev/null || true
+    
+    # 設定新的 npm prefix
+    npm config set prefix "$npm_global_dir"
+    npm config set audit false
+    npm config set fund false
+    npm config set update-notifier false
+    npm config set strict-ssl true
+    
+    # 更新 PATH
+    local shell_config="$SHELL_CONFIG"
+    if [[ -n "$shell_config" ]] && ! grep -q "$npm_global_dir/bin" "$shell_config" 2>/dev/null; then
+        echo "export PATH=\$HOME/.npm-global/bin:\$PATH" >> "$shell_config"
+        log_info "已將 ~/.npm-global/bin 加入 PATH"
+    fi
+    
+    # 重新載入 PATH
+    export PATH="$npm_global_dir/bin:$PATH"
+    
+    log_success "npm 權限修正完成（使用安全的 ~/.npm-global）"
+}
+
+# 檢測 nvm 與 npm 衝突
+check_nvm_npm_conflicts() {
+    log_info "檢測 nvm 與 npm 衝突..."
+    
+    local has_conflicts=false
+    local node_path=$(which node 2>/dev/null || echo "")
+    local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    
+    # 檢查是否使用 nvm 但 npm prefix 設定不當
+    if [[ "$node_path" == *".nvm"* ]]; then
+        if [[ -n "$npm_prefix" && "$npm_prefix" != *".nvm"* && "$npm_prefix" != *".npm-global"* ]]; then
+            log_warn "偵測到 nvm 與 npm prefix 衝突"
+            log_warn "Node.js 路徑：$node_path"
+            log_warn "npm prefix：$npm_prefix"
+            has_conflicts=true
+        fi
+    fi
+    
+    # 檢查 .npmrc 中的衝突設定
+    if [[ -f "$HOME/.npmrc" ]]; then
+        if grep -q "globalconfig" "$HOME/.npmrc" 2>/dev/null; then
+            log_warn "偵測到 .npmrc 中的 globalconfig 設定與 nvm 衝突"
+            has_conflicts=true
+        fi
+    fi
+    
+    if [[ "$has_conflicts" == "true" ]]; then
+        log_error "偵測到 nvm 與 npm 衝突"
+        if interactive_prompt "是否要修正 nvm 與 npm 衝突？"; then
+            fix_nvm_npm_conflicts
+        else
+            log_warn "跳過衝突修正，可能影響 Node.js 版本管理"
+        fi
+    else
+        log_success "nvm 與 npm 相容性檢查通過"
+    fi
+}
+
+# 修正 nvm 與 npm 衝突
+fix_nvm_npm_conflicts() {
+    log_info "修正 nvm 與 npm 衝突..."
+    
+    # 如果使用 nvm，清理 npm prefix 設定
+    if command -v nvm &>/dev/null; then
+        local current_node_version=$(nvm current 2>/dev/null || echo "system")
+        if [[ "$current_node_version" != "system" ]]; then
+            log_info "偵測到 nvm 環境，清理 npm prefix 設定"
+            npm config delete prefix 2>/dev/null || true
+            npm config delete globalconfig 2>/dev/null || true
+        fi
+    fi
+    
+    # 清理 .npmrc 中的衝突設定 - macOS 兼容版本
+    if [[ -f "$HOME/.npmrc" ]]; then
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' '/globalconfig/d; /prefix.*\/usr\/local/d' "$HOME/.npmrc" 2>/dev/null || true
+        else
+            sed -i '/globalconfig/d; /prefix.*\/usr\/local/d' "$HOME/.npmrc" 2>/dev/null || true
+        fi
+    fi
+    
+    log_success "nvm 與 npm 衝突修正完成"
+}
+
+# 檢測 claude code CLI 狀態
+check_claude_cli_status() {
+    log_info "檢測 claude code CLI 狀態..."
+    
+    local claude_path=$(which claude 2>/dev/null || echo "")
+    local claude_version=""
+    local needs_install=false
+    local needs_update=false
+    
+    if [[ -z "$claude_path" ]]; then
+        log_warn "claude code CLI 未安裝"
+        needs_install=true
+    else
+        claude_version=$(claude --version 2>/dev/null | head -1 || echo "unknown")
+        log_info "claude code CLI 路徑：$claude_path"
+        log_info "claude code CLI 版本：$claude_version"
+        
+        # 檢查是否需要更新（這裡可以加入版本比較邏輯）
+        if [[ "$claude_version" == *"1.0.5"* ]]; then
+            log_warn "claude code CLI 版本較舊，建議更新"
+            needs_update=true
+        fi
+    fi
+    
+    if [[ "$needs_install" == "true" ]]; then
+        if interactive_prompt "是否要安裝 claude code CLI？"; then
+            install_claude_code_fresh
+        else
+            log_warn "跳過 claude code CLI 安裝"
+        fi
+    elif [[ "$needs_update" == "true" ]]; then
+        if interactive_prompt "是否要更新 claude code CLI？"; then
+            install_claude_code_fresh
+        else
+            log_warn "跳過 claude code CLI 更新"
+        fi
+    else
+        log_success "claude code CLI 狀態正常"
+    fi
+}
+
+# 檢測系統環境污染
+check_system_environment() {
+    log_info "檢測系統環境污染..."
+    
+    local has_pollution=false
+    
+    # 檢查 PATH 中的 Windows 路徑（WSL 環境）
+    if [[ -n "$WSL_MODE" ]]; then
+        if echo "$PATH" | grep -q "/mnt/c/"; then
+            log_warn "偵測到 PATH 中的 Windows 路徑污染"
+            has_pollution=true
+        fi
+    fi
+    
+    # 檢查多個 Node.js 安裝（去重複）
+    local node_paths=($(which -a node 2>/dev/null | sort -u))
+    if [[ ${#node_paths[@]} -gt 1 ]]; then
+        log_warn "偵測到多個 Node.js 安裝："
+        for path in "${node_paths[@]}"; do
+            echo "  - $path"
+        done
+        has_pollution=true
+    fi
+    
+    # 檢查多個 npm 安裝（去重複）
+    local npm_paths=($(which -a npm 2>/dev/null | sort -u))
+    if [[ ${#npm_paths[@]} -gt 1 ]]; then
+        log_warn "偵測到多個 npm 安裝："
+        for path in "${npm_paths[@]}"; do
+            echo "  - $path"
+        done
+        has_pollution=true
+    fi
+    
+    if [[ "$has_pollution" == "true" ]]; then
+        log_error "偵測到系統環境污染"
+        if interactive_prompt "是否要清理系統環境污染？"; then
+            clean_system_environment
+        else
+            log_warn "跳過環境清理，可能影響系統穩定性"
+        fi
+    else
+        log_success "系統環境檢查通過"
+    fi
+}
+
+# 清理系統環境污染
+clean_system_environment() {
+    log_info "清理系統環境污染..."
+    
+    # 清理 PATH 中的 Windows 路徑（WSL 環境）
+    if [[ -n "$WSL_MODE" ]]; then
+        if echo "$PATH" | grep -q "/mnt/c/"; then
+            log_info "清理 PATH 中的 Windows 路徑"
+            export PATH=$(echo "$PATH" | tr ':' '\n' | grep -v "/mnt/c/" | tr '\n' ':' | sed 's/:$//')
+            
+            # 更新 shell 配置
+            if [[ -n "$SHELL_CONFIG" ]] && grep -q "/mnt/c/" "$SHELL_CONFIG" 2>/dev/null; then
+                # 使用兼容的 sed 語法
+                if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+                    sed -i '' '/\/mnt\/c\//d' "$SHELL_CONFIG"
+                else
+                    sed -i '/\/mnt\/c\//d' "$SHELL_CONFIG"
+                fi
+                log_info "已從 $SHELL_CONFIG 移除 Windows 路徑"
+            fi
+        fi
+    fi
+    
+    log_success "系統環境清理完成"
+}
+
+# 安全設定最佳實踐
+apply_security_best_practices() {
+    log_info "套用安全設定最佳實踐..."
+    
+    # npm 安全設定
+    npm config set audit true
+    npm config set fund false
+    npm config set update-notifier false
+    npm config set strict-ssl true
+    npm config set audit-level moderate
+    
+    # 檢查 .npmrc 權限
+    if [[ -f "$HOME/.npmrc" ]]; then
+        chmod 600 "$HOME/.npmrc"
+    fi
+    
+    # 移除已棄用的 cache-min 設定，使用 prefer-offline 替代
+    npm config delete cache-min 2>/dev/null || true
+    
+    log_success "安全設定最佳實踐已套用"
+}
+
+# 主要檢測與修復流程
+main_diagnostic_and_repair() {
+    log_info "=== 開始智能檢測與修復流程 ==="
+    
+    # 系統環境檢測
+    check_system_environment
+    
+    # npm 權限檢測
+    check_npm_permissions
+    
+    # nvm 與 npm 衝突檢測
+    check_nvm_npm_conflicts
+    
+    # claude code CLI 狀態檢測
+    check_claude_cli_status
+    
+    # 套用安全最佳實踐
+    if interactive_prompt "是否要套用 npm 安全設定最佳實踐？"; then
+        apply_security_best_practices
+    fi
+    
+    log_success "智能檢測與修復流程完成"
+}
+
 # 首先檢查作業系統環境
 detect_os() {
     log_info "正在偵測作業系統環境..."
+    
+    # 檢查 macOS 環境
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        SYSTEM_TYPE="macos"
+        log_success "偵測到 macOS 環境"
+        export MACOS_MODE=true
+        
+        # 檢查 macOS 版本
+        local macos_version=$(sw_vers -productVersion 2>/dev/null || echo "unknown")
+        log_info "macOS 版本：$macos_version"
+        
+        # 檢查 Homebrew
+        if command -v brew &>/dev/null; then
+            local brew_version=$(brew --version | head -1)
+            log_info "Homebrew 版本：$brew_version"
+        else
+            log_warn "Homebrew 未安裝，建議安裝以獲得最佳體驗"
+        fi
+        
+        return 0
+    fi
     
     # 檢查是否在 Windows 原生環境執行
     if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ -n "$WINDIR" ]]; then
@@ -81,24 +430,7 @@ detect_os() {
     fi
     
     # 檢查是否在 WSL 環境
-    if ! grep -qi microsoft /proc/version 2>/dev/null; then
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            SYSTEM_TYPE="macos"
-            log_success "偵測到 macOS 環境"
-        else
-            SYSTEM_TYPE="linux"
-            log_warn "未偵測到 WSL 環境，將以純 Linux 模式執行"
-        fi
-        export LINUX_MODE=true
-        
-        # 檢查 Linux 發行版
-        if [[ -f /etc/os-release ]]; then
-            source /etc/os-release
-            log_info "Linux 發行版: $NAME $VERSION"
-        else
-            log_warn "無法識別 Linux 發行版，可能會遇到相容性問題"
-        fi
-    else
+    if [[ -f /proc/version ]] && grep -qi microsoft /proc/version 2>/dev/null; then
         SYSTEM_TYPE="wsl"
         log_success "WSL 環境偵測成功，開始安裝程序"
         export WSL_MODE=true
@@ -107,6 +439,18 @@ detect_os() {
         local wsl_version=$(wsl.exe --version 2>/dev/null | head -1)
         if [[ -n "$wsl_version" ]]; then
             log_info "WSL 版本: $wsl_version"
+        fi
+    else
+        SYSTEM_TYPE="linux"
+        log_warn "未偵測到 WSL 環境，將以純 Linux 模式執行"
+        export LINUX_MODE=true
+        
+        # 檢查 Linux 發行版
+        if [[ -f /etc/os-release ]]; then
+            source /etc/os-release
+            log_info "Linux 發行版: $NAME $VERSION"
+        else
+            log_warn "無法識別 Linux 發行版，可能會遇到相容性問題"
         fi
     fi
     
@@ -118,13 +462,150 @@ detect_os() {
     SHELL_TYPE=$(basename "$SHELL")
     log_info "Shell 類型: $SHELL_TYPE"
     
-    # 設定 Shell 配置文件
-    if [[ "$SHELL_TYPE" == "zsh" ]]; then
-        SHELL_CONFIG="$HOME/.zshrc"
-    else
-        SHELL_CONFIG="$HOME/.bashrc"
+    # 智能檢測 Shell 配置文件（基於最佳實踐）
+    detect_shell_config() {
+        local detected_shell=""
+        local config_file=""
+        
+        # 1. 檢測當前運行的 shell
+        if [[ -n "$ZSH_VERSION" ]]; then
+            detected_shell="zsh"
+        elif [[ -n "$BASH_VERSION" ]]; then
+            detected_shell="bash"
+        elif [[ -n "$FISH_VERSION" ]]; then
+            detected_shell="fish"
+        else
+            # 回退到 $SHELL 變數
+            detected_shell=$(basename "$SHELL" 2>/dev/null || echo "bash")
+        fi
+        
+        # 2. 根據 shell 類型設定配置文件優先順序
+        case "$detected_shell" in
+            zsh)
+                # zsh 配置文件優先順序（macOS 13+ 預設使用 zsh）
+                if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+                    # macOS zsh 優先使用 .zshrc
+                    for config in "$HOME/.zshrc" "$HOME/.zprofile" "$HOME/.zshenv"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.zshrc}"
+                else
+                    # Linux zsh 配置
+                    for config in "$HOME/.zshrc" "$HOME/.zprofile" "$HOME/.profile"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.zshrc}"
+                fi
+                ;;
+            bash)
+                # bash 配置文件優先順序（考慮 macOS 特殊情況）
+                if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+                    # macOS bash 預設使用 .bash_profile 作為 login shell
+                    for config in "$HOME/.bash_profile" "$HOME/.bashrc" "$HOME/.profile"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.bash_profile}"
+                else
+                    # Linux 等其他系統使用 .bashrc
+                    for config in "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.profile"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.bashrc}"
+                fi
+                ;;
+            fish)
+                # fish 配置文件
+                config_file="$HOME/.config/fish/config.fish"
+                # 確保 fish 配置目錄存在
+                mkdir -p "$(dirname "$config_file")" 2>/dev/null || true
+                ;;
+            *)
+                # 其他 shell 或未知 shell，使用通用配置
+                if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+                    # macOS 預設嘗試 .zshrc（因為 macOS 13+ 預設使用 zsh）
+                    for config in "$HOME/.zshrc" "$HOME/.bash_profile" "$HOME/.profile"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.zshrc}"
+                else
+                    # Linux 等其他系統
+                    for config in "$HOME/.profile" "$HOME/.bashrc" "$HOME/.zshrc"; do
+                        if [[ -f "$config" ]]; then
+                            config_file="$config"
+                            break
+                        fi
+                    done
+                    config_file="${config_file:-$HOME/.profile}"
+                fi
+                ;;
+        esac
+        
+        # 輸出結果：shell_type|config_file
+        echo "$detected_shell|$config_file"
+    }
+    
+    # 執行檢測並解析結果
+    shell_detection_result=$(detect_shell_config)
+    DETECTED_SHELL=$(echo "$shell_detection_result" | cut -d'|' -f1)
+    SHELL_CONFIG=$(echo "$shell_detection_result" | cut -d'|' -f2)
+    
+    # 驗證和創建配置文件
+    validate_shell_config() {
+        local config_file="$1"
+        local config_dir=$(dirname "$config_file")
+        
+        # 確保配置目錄存在
+        if [[ ! -d "$config_dir" ]]; then
+            mkdir -p "$config_dir" || {
+                log_warn "無法創建配置目錄：$config_dir"
+                return 1
+            }
+        fi
+        
+        # 如果配置文件不存在，創建它
+        if [[ ! -f "$config_file" ]]; then
+            touch "$config_file" || {
+                log_warn "無法創建配置文件：$config_file"
+                return 1
+            }
+            log_info "已創建配置文件：$config_file"
+        fi
+        
+        # 檢查配置文件是否可寫
+        if [[ ! -w "$config_file" ]]; then
+            log_warn "配置文件無寫入權限：$config_file"
+            return 1
+        fi
+        
+        return 0
+    }
+    
+    # 驗證配置文件
+    if ! validate_shell_config "$SHELL_CONFIG"; then
+        log_warn "配置文件驗證失敗，使用回退方案"
+        # 回退到 .profile 作為通用配置
+        SHELL_CONFIG="$HOME/.profile"
+        validate_shell_config "$SHELL_CONFIG" || {
+            error_exit "無法設定任何可用的 shell 配置文件"
+        }
     fi
     
+    log_info "檢測到的 Shell: $DETECTED_SHELL"
     log_info "Shell 配置文件：$SHELL_CONFIG"
     
     # 檢查是否為 root 用戶
@@ -353,15 +834,34 @@ check_disk_space() {
 install_system_dependencies() {
     log_info "更新系統與安裝必要工具..."
     
-    # 更新軟體包列表
-    if ! sudo apt update; then
-        error_exit "無法更新軟體包列表"
-    fi
-    
-    # 安裝必要工具
-    local packages="curl git build-essential python3 python3-pip ripgrep ca-certificates gnupg lsb-release"
-    if ! sudo apt install -y $packages; then
-        error_exit "無法安裝必要工具"
+    if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+        # macOS 使用 Homebrew 安裝依賴
+        if ! command -v brew &>/dev/null; then
+            log_info "安裝 Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        
+        # 更新 Homebrew 並安裝必要工具
+        brew update
+        brew install curl git ripgrep
+        
+        # 確保 Xcode Command Line Tools 已安裝
+        if ! xcode-select -p &>/dev/null; then
+            log_info "安裝 Xcode Command Line Tools..."
+            xcode-select --install
+        fi
+        
+    else
+        # Linux/WSL 使用 apt 安裝依賴
+        if ! sudo apt update; then
+            error_exit "無法更新軟體包列表"
+        fi
+        
+        # 安裝必要工具
+        local packages="curl git build-essential python3 python3-pip ripgrep ca-certificates gnupg lsb-release"
+        if ! sudo apt install -y $packages; then
+            error_exit "無法安裝必要工具"
+        fi
     fi
     
     log_success "系統依賴安裝完成"
@@ -383,16 +883,24 @@ fix_npm_config() {
             backup_created=true
         fi
         
-        # 移除有問題的配置（與 nvm 不兼容）
+        # 移除有問題的配置（與 nvm 不兼容）- macOS 兼容版本
         if grep -q "prefix" "$npmrc_file" 2>/dev/null; then
             log_warn "偵測到 ~/.npmrc prefix 設置，與 nvm 不兼容，將自動移除..."
-            sed -i '/prefix/d' "$npmrc_file"
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                sed -i '' '/prefix/d' "$npmrc_file"
+            else
+                sed -i '/prefix/d' "$npmrc_file"
+            fi
             cleanup_needed=true
         fi
         
         if grep -q "globalconfig" "$npmrc_file" 2>/dev/null; then
             log_warn "偵測到 ~/.npmrc globalconfig 設置，與 nvm 不兼容，將自動移除..."
-            sed -i '/globalconfig/d' "$npmrc_file"
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                sed -i '' '/globalconfig/d' "$npmrc_file"
+            else
+                sed -i '/globalconfig/d' "$npmrc_file"
+            fi
             cleanup_needed=true
         fi
         
@@ -418,14 +926,32 @@ fix_npm_config() {
     # 智能檢查全域 npm 配置中的 prefix 設置
     if command -v npm &>/dev/null; then
         local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+        local npm_globalconfig=$(npm config get globalconfig 2>/dev/null || echo "")
+        
         if [[ -n "$npm_prefix" && "$npm_prefix" != *".nvm"* ]]; then
             log_warn "偵測到全域 npm prefix 配置與 nvm 衝突（$npm_prefix）"
             log_info "正在清理全域 npm prefix 配置..."
             npm config delete prefix 2>/dev/null || true
             log_success "全域 npm prefix 配置已清理"
-        else
-            log_success "npm prefix 配置檢查通過"
         fi
+        
+        if [[ -n "$npm_globalconfig" ]]; then
+            log_warn "偵測到全域 npm globalconfig 配置與 nvm 衝突（$npm_globalconfig）"
+            log_info "正在清理全域 npm globalconfig 配置..."
+            npm config delete globalconfig 2>/dev/null || true
+            log_success "全域 npm globalconfig 配置已清理"
+        fi
+        
+        # 針對 macOS 檢查 .npmrc 中的 prefix 設定
+        if [[ "$SYSTEM_TYPE" == "macos" && -f "$HOME/.npmrc" ]]; then
+            if grep -q "prefix=" "$HOME/.npmrc" 2>/dev/null; then
+                log_warn "偵測到 ~/.npmrc 中的 prefix 設定，將自動清理"
+                sed -i '' '/prefix=/d' "$HOME/.npmrc"
+                log_success "已清理 ~/.npmrc 中的 prefix 設定"
+            fi
+        fi
+        
+        log_success "npm 配置檢查通過"
     fi
 }
 
@@ -491,14 +1017,26 @@ install_nvm_fresh() {
 configure_nvm_profile() {
     log_info "配置 NVM 最佳實踐到 shell profile..."
     
-    # 創建 .zshrc 如果不存在（macOS Catalina+ 需要）
-    if [[ ! -f "$SHELL_CONFIG" ]]; then
-        touch "$SHELL_CONFIG"
-        log_info "已創建 Shell 配置文件：$SHELL_CONFIG"
-    fi
+    # 配置文件已在 validate_shell_config 函數中驗證和創建
     
-    # 2025 最佳實踐配置
-    local nvm_config='
+    # 根據不同 shell 類型生成對應的配置
+    local nvm_config=""
+    case "$DETECTED_SHELL" in
+        fish)
+            # Fish shell 使用不同的語法
+            nvm_config='
+# NVM Configuration (2025 Best Practices)
+if test -d "$HOME/.nvm"
+    set -x NVM_DIR "$HOME/.nvm"
+    # This loads nvm
+    if test -s "$NVM_DIR/nvm.sh"
+        bass source "$NVM_DIR/nvm.sh"
+    end
+end'
+            ;;
+        *)
+            # Bash/Zsh 兼容語法
+            nvm_config='
 # NVM Configuration (2025 Best Practices)
 if [ -d "$HOME/.nvm" ]; then
     export NVM_DIR="$HOME/.nvm"
@@ -507,15 +1045,28 @@ if [ -d "$HOME/.nvm" ]; then
     # This loads nvm bash_completion
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 fi'
+            ;;
+    esac
     
     # 檢查是否已配置
     if ! grep -q 'NVM Configuration' "$SHELL_CONFIG" 2>/dev/null; then
         # 移除舊的配置
-        if grep -q 'nvm.sh' "$SHELL_CONFIG" 2>/dev/null; then
+        if grep -q 'nvm.sh\|NVM_DIR' "$SHELL_CONFIG" 2>/dev/null; then
             log_warn "發現舊的 nvm 配置，將更新為最佳實踐版本"
-            sed -i '/export NVM_DIR/d' "$SHELL_CONFIG"
-            sed -i '/nvm\.sh/d' "$SHELL_CONFIG"
-            sed -i '/bash_completion/d' "$SHELL_CONFIG"
+            # 使用兼容的 sed 語法
+            if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+                sed -i '' '/export NVM_DIR/d' "$SHELL_CONFIG"
+                sed -i '' '/nvm\.sh/d' "$SHELL_CONFIG"
+                sed -i '' '/bash_completion/d' "$SHELL_CONFIG"
+                sed -i '' '/set -x NVM_DIR/d' "$SHELL_CONFIG"
+                sed -i '' '/bass source/d' "$SHELL_CONFIG"
+            else
+                sed -i '/export NVM_DIR/d' "$SHELL_CONFIG"
+                sed -i '/nvm\.sh/d' "$SHELL_CONFIG"
+                sed -i '/bash_completion/d' "$SHELL_CONFIG"
+                sed -i '/set -x NVM_DIR/d' "$SHELL_CONFIG"
+                sed -i '/bass source/d' "$SHELL_CONFIG"
+            fi
         fi
         
         echo "$nvm_config" >> "$SHELL_CONFIG"
@@ -569,7 +1120,20 @@ switch_to_target_version() {
         log_success "當前已使用 Node.js $NODE_TARGET_VERSION"
     else
         log_info "切換到 Node.js $NODE_TARGET_VERSION..."
-        nvm use "$NODE_TARGET_VERSION"
+        
+        # 清理可能的 npm 配置衝突
+        if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+            # 在 macOS 上使用 --delete-prefix 標誌
+            if nvm use --delete-prefix "$NODE_TARGET_VERSION" 2>/dev/null; then
+                log_info "已清理 npm prefix 並切換到 Node.js $NODE_TARGET_VERSION"
+            else
+                # 如果失敗，嘗試不使用 --delete-prefix
+                nvm use "$NODE_TARGET_VERSION"
+            fi
+        else
+            nvm use "$NODE_TARGET_VERSION"
+        fi
+        
         nvm alias default "$NODE_TARGET_VERSION"
         log_success "已切換到 Node.js $NODE_TARGET_VERSION"
     fi
@@ -640,6 +1204,11 @@ configure_npm_global() {
         npm config set strict-ssl true 2>/dev/null || true
         npm config set audit-level high 2>/dev/null || true
         
+        # 針對 macOS 設定特定優化
+        if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+            npm config set os darwin 2>/dev/null || true
+        fi
+        
         log_success "npm 配置優化完成（nvm 模式）"
         return 0
     fi
@@ -663,7 +1232,14 @@ configure_npm_global() {
     
     # 設定 npm 安全和效能配置（根據 Context7 最佳實踐）
     npm config set prefix "$global_dir"
-    npm config set os linux
+    
+    # 根據系統類型設定 npm 配置
+    if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+        npm config set os darwin
+    else
+        npm config set os linux
+    fi
+    
     npm config set fund false
     npm config set audit false
     npm config set update-notifier false
@@ -671,7 +1247,7 @@ configure_npm_global() {
     npm config set audit-level high
     
     # 更新 PATH
-    if ! grep -q "$global_dir/bin" "$SHELL_CONFIG"; then
+    if [[ -n "$SHELL_CONFIG" ]] && ! grep -q "$global_dir/bin" "$SHELL_CONFIG"; then
         echo "export PATH=\$HOME/.npm-global/bin:\$PATH" >> "$SHELL_CONFIG"
         log_info "已將 $global_dir/bin 添加到 PATH"
     fi
@@ -799,9 +1375,7 @@ final_system_check() {
 }
 
 # ========== Windows 端偵測（僅於 Windows PowerShell 管理員下有效） ==========
-if grep -qi microsoft /proc/version; then
-  log_success "已在 WSL 環境內，進行 Linux 端安裝"
-else
+if [[ "$SYSTEM_TYPE" == "wsl" ]] && ! grep -qi microsoft /proc/version 2>/dev/null; then
   log_info "Windows 環境偵測，開始 WSL 2 安裝程序"
   
   # 檢查管理員權限
@@ -820,15 +1394,236 @@ else
   exit 0
 fi
 
-# ========== Linux/WSL 端自動化安裝與修復 ==========
-log_info "開始 Linux/WSL 端自動化安裝與修復程序"
+# ========== Linux/WSL/macOS 端自動化安裝與修復 ==========
+log_info "開始自動化安裝與修復程序（$SYSTEM_TYPE 環境）"
 
-# 主安裝流程函數
+# ========== 效能優化與使用者體驗改進 ==========
+
+# 進度條顯示函數
+show_progress() {
+    local current=$1
+    local total=$2
+    local message="$3"
+    local width=50
+    local percentage=$((current * 100 / total))
+    local filled=$((current * width / total))
+    local empty=$((width - filled))
+    
+    printf "\r${CYAN}[PROGRESS]${NC} $message "
+    printf "${GREEN}["
+    printf "%*s" $filled | tr ' ' '='
+    printf "%*s" $empty | tr ' ' '-'
+    printf "]${NC} %d%%" $percentage
+    
+    if [[ $current -eq $total ]]; then
+        echo
+    fi
+}
+
+# 時間統計函數
+start_timer() {
+    START_TIME=$(date +%s)
+}
+
+end_timer() {
+    local end_time=$(date +%s)
+    local duration=$((end_time - START_TIME))
+    local minutes=$((duration / 60))
+    local seconds=$((duration % 60))
+    
+    if [[ $minutes -gt 0 ]]; then
+        log_info "執行時間：${minutes}分${seconds}秒"
+    else
+        log_info "執行時間：${seconds}秒"
+    fi
+}
+
+# 快速模式檢查
+check_fast_mode() {
+    if [[ "$1" == "--fast" || "$1" == "-f" ]]; then
+        export FAST_MODE=true
+        log_info "啟用快速模式，將跳過非必要檢查"
+    fi
+}
+
+# 優化的互動式提示函數
+interactive_prompt() {
+    local message="$1"
+    local default_answer="${2:-N}"
+    local answer
+    
+    # 快速模式下自動選擇預設答案
+    if [[ "$FAST_MODE" == "true" ]]; then
+        log_info "快速模式：自動選擇 $default_answer"
+        if [[ "$default_answer" == "Y" || "$default_answer" == "y" ]]; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+    
+    echo -e "${YELLOW}[PROMPT]${NC} $message"
+    echo -e "${BLUE}提示：快速模式可使用 --fast 參數跳過互動${NC}"
+    read -p "Continue? (y/N): " -n 1 -r answer
+    echo
+    
+    if [[ -z "$answer" ]]; then
+        answer="$default_answer"
+    fi
+    
+    case "$answer" in
+        [Yy]* ) return 0 ;;
+        * ) return 1 ;;
+    esac
+}
+
+# 優化的檢測函數（加入進度顯示）
+check_system_environment() {
+    log_info "檢測系統環境污染..."
+    show_progress 1 4 "檢查 PATH 污染"
+    
+    local has_pollution=false
+    
+    # 檢查 PATH 中的 Windows 路徑（WSL 環境）
+    if [[ -n "$WSL_MODE" ]]; then
+        if echo "$PATH" | grep -q "/mnt/c/"; then
+            log_warn "偵測到 PATH 中的 Windows 路徑污染"
+            has_pollution=true
+        fi
+    fi
+    
+    show_progress 2 4 "檢查 Node.js 安裝"
+    
+    # 檢查多個 Node.js 安裝（去重複）
+    local node_paths=($(which -a node 2>/dev/null | sort -u))
+    if [[ ${#node_paths[@]} -gt 1 ]]; then
+        log_warn "偵測到多個 Node.js 安裝："
+        for path in "${node_paths[@]}"; do
+            echo "  - $path"
+        done
+        has_pollution=true
+    fi
+    
+    show_progress 3 4 "檢查 npm 安裝"
+    
+    # 檢查多個 npm 安裝（去重複）
+    local npm_paths=($(which -a npm 2>/dev/null | sort -u))
+    if [[ ${#npm_paths[@]} -gt 1 ]]; then
+        log_warn "偵測到多個 npm 安裝："
+        for path in "${npm_paths[@]}"; do
+            echo "  - $path"
+        done
+        has_pollution=true
+    fi
+    
+    show_progress 4 4 "完成環境檢測"
+    
+    if [[ "$has_pollution" == "true" ]]; then
+        log_error "偵測到系統環境污染"
+        if interactive_prompt "是否要清理系統環境污染？"; then
+            clean_system_environment
+        else
+            log_warn "跳過環境清理，可能影響系統穩定性"
+        fi
+    else
+        log_success "系統環境檢查通過"
+    fi
+}
+
+# 優化的主要檢測與修復流程
+main_diagnostic_and_repair() {
+    log_info "=== 開始智能檢測與修復流程 ==="
+    start_timer
+    
+    local total_steps=5
+    local current_step=0
+    
+    # 系統環境檢測
+    ((current_step++))
+    echo -e "${CYAN}[步驟 $current_step/$total_steps]${NC} 系統環境檢測"
+    check_system_environment
+    
+    # npm 權限檢測
+    ((current_step++))
+    echo -e "${CYAN}[步驟 $current_step/$total_steps]${NC} npm 權限檢測"
+    check_npm_permissions
+    
+    # nvm 與 npm 衝突檢測
+    ((current_step++))
+    echo -e "${CYAN}[步驟 $current_step/$total_steps]${NC} nvm 與 npm 衝突檢測"
+    check_nvm_npm_conflicts
+    
+    # claude code CLI 狀態檢測
+    ((current_step++))
+    echo -e "${CYAN}[步驟 $current_step/$total_steps]${NC} claude code CLI 狀態檢測"
+    check_claude_cli_status
+    
+    # 套用安全最佳實踐
+    ((current_step++))
+    echo -e "${CYAN}[步驟 $current_step/$total_steps]${NC} 安全設定最佳實踐"
+    if interactive_prompt "是否要套用 npm 安全設定最佳實踐？" "Y"; then
+        apply_security_best_practices
+    fi
+    
+    end_timer
+    log_success "智能檢測與修復流程完成"
+}
+
+# 加入暫停功能
+pause_if_needed() {
+    if [[ "$FAST_MODE" != "true" ]]; then
+        echo -e "${BLUE}按任意鍵繼續...${NC}"
+        read -n 1 -s
+    fi
+}
+
+# 優化錯誤處理
+handle_error() {
+    local exit_code=$1
+    local command="$2"
+    local line_number="$3"
+    
+    log_error "指令執行失敗：$command（第 $line_number 行，退出碼：$exit_code）"
+    
+    if [[ "$FAST_MODE" != "true" ]]; then
+        if interactive_prompt "是否要繼續執行？"; then
+            return 0
+        else
+            log_error "使用者選擇中止執行"
+            exit $exit_code
+        fi
+    else
+        log_warn "快速模式：自動繼續執行"
+        return 0
+    fi
+}
+
+# 設定錯誤處理
+set -E
+trap 'handle_error $? "$BASH_COMMAND" $LINENO' ERR
+
+# 優化的彩色輸出
+print_header() {
+    local title="$1"
+    local width=60
+    local padding=$(((width - ${#title}) / 2))
+    
+    echo -e "${CYAN}$(printf '=%.0s' $(seq 1 $width))${NC}"
+    echo -e "${CYAN}$(printf ' %.0s' $(seq 1 $padding))${YELLOW}$title${CYAN}$(printf ' %.0s' $(seq 1 $padding))${NC}"
+    echo -e "${CYAN}$(printf '=%.0s' $(seq 1 $width))${NC}"
+}
+
+# 優化的主安裝流程函數
 main_installation() {
-    echo "=========================================="
-    echo "  Claude Code 自動安裝工具 v$SCRIPT_VERSION"
-    echo "  整合 Context7 最佳實踐優化"
-    echo "=========================================="
+    # 檢查快速模式
+    check_fast_mode "$1"
+    
+    print_header "Claude Code 自動安裝工具 v$SCRIPT_VERSION"
+    echo -e "${GREEN}整合 Context7 最佳實踐優化${NC}"
+    echo -e "${GREEN}智能檢測與互動式修復${NC}"
+    if [[ "$FAST_MODE" == "true" ]]; then
+        echo -e "${YELLOW}🚀 快速模式已啟用${NC}"
+    fi
     echo
     
     log_info "=== 開始 Claude Code 安裝流程 ==="
@@ -836,11 +1631,22 @@ main_installation() {
     # 偵測作業系統環境
     detect_os
     
-    # 系統檢查階段
-    check_dependencies
-    check_disk_space
-    check_network_connectivity
-    check_system_resources
+    log_info "開始自動化安裝與修復程序（$SYSTEM_TYPE 環境）"
+    
+    # 智能檢測與修復
+    main_diagnostic_and_repair
+    
+    # 如果是快速模式，跳過某些非必要檢查
+    if [[ "$FAST_MODE" != "true" ]]; then
+        pause_if_needed
+        # 系統檢查階段
+        check_dependencies
+        check_disk_space
+        check_network_connectivity
+        check_system_resources
+    else
+        log_info "快速模式：跳過詳細系統檢查"
+    fi
     
     # 基本系統安裝
     install_system_dependencies
@@ -861,12 +1667,13 @@ main_installation() {
     # 最終檢查
     final_system_check
     
+    print_header "安裝完成"
     log_success "Claude Code 安裝流程完成！"
 }
 
 # 執行主安裝流程
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main_installation
+    main_installation "$@"
     
     echo
     log_info "=== 後續步驟 ==="
@@ -877,6 +1684,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     log_info "=== 說明文件 ==="
     echo "  • README.md - 完整使用指南"
     echo "  • docs/ - 詳細文件目錄"
+    echo ""
+    log_info "=== 快速模式 ==="
+    echo "  • 使用 ./start.sh --fast 啟用快速模式"
+    echo "  • 快速模式會跳過互動提示和非必要檢查"
     echo ""
     log_info "🔧 如遇問題，請檢查日誌：$LOG_FILE"
 fi
