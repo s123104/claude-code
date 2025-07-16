@@ -1448,10 +1448,16 @@ end_timer() {
 
 # 快速模式檢查
 check_fast_mode() {
-    if [[ "$1" == "--fast" || "$1" == "-f" ]]; then
-        export FAST_MODE=true
-        log_info "啟用快速模式，將跳過非必要檢查"
-    fi
+    # 可接受 0..N 引數，掃描是否包含 --fast 或 -f，以避免在 set -u (nounset) 下展開未定義位置參數
+    local arg
+    for arg in "$@"; do
+        if [[ "$arg" == "--fast" || "$arg" == "-f" ]]; then
+            export FAST_MODE=true
+            log_info "啟用快速模式，將跳過非必要檢查"
+            return 0
+        fi
+    done
+    return 1
 }
 
 # 優化的互動式提示函數
@@ -1586,19 +1592,21 @@ pause_if_needed() {
 }
 
 # 優化錯誤處理
+# 更防炸、避免未定義參數、且避開與 shell built-in `command` 混淆
 handle_error() {
-    local exit_code=$1
-    local command="$2"
-    local line_number="$3"
-    
-    log_error "指令執行失敗：$command（第 $line_number 行，退出碼：$exit_code）"
-    
+    # 使用具預設值的參數展開，避免在 set -u (nounset) 下爆炸
+    local exit_code="${1:-1}"
+    local failed_cmd="${2:-<unknown>}"
+    local line_number="${3:-?}"
+
+    log_error "指令執行失敗：${failed_cmd}（第 ${line_number} 行，退出碼：${exit_code}）"
+
     if [[ "${FAST_MODE:-}" != "true" ]]; then
         if interactive_prompt "是否要繼續執行？"; then
             return 0
         else
             log_error "使用者選擇中止執行"
-            exit $exit_code
+            exit "${exit_code}"
         fi
     else
         log_warn "快速模式：自動繼續執行"
@@ -1608,7 +1616,7 @@ handle_error() {
 
 # 設定錯誤處理
 set -E
-trap 'handle_error $? "$BASH_COMMAND" $LINENO' ERR
+trap 'handle_error "$?" "${BASH_COMMAND:-<unknown>}" "${LINENO:-0}"' ERR
 
 # 優化的彩色輸出
 print_header() {
@@ -1624,7 +1632,7 @@ print_header() {
 # 優化的主安裝流程函數
 main_installation() {
     # 檢查快速模式
-    check_fast_mode "$1"
+    check_fast_mode "$@"
     
     print_header "Claude Code 自動安裝工具 v$SCRIPT_VERSION"
     echo -e "${GREEN}整合 Context7 最佳實踐優化${NC}"
