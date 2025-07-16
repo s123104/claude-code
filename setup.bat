@@ -3,14 +3,14 @@ chcp 65001 > nul
 setlocal enabledelayedexpansion
 
 :: Claude Code Windows 快速安裝腳本
-:: 版本: 3.0.0
+:: 版本: 3.0.1
 :: 支援: Windows 10/11 + WSL2 自動安裝
 :: 作者: Claude Code 中文社群
-:: 更新: 2025-07-15
+:: 更新: 2025-07-16T19:46:34+08:00
 
 echo.
 echo ========================================================================
-echo   Claude Code Windows 快速安裝工具 v3.0
+echo   Claude Code Windows 快速安裝工具 v3.0.1
 echo ========================================================================
 echo.
 
@@ -96,7 +96,7 @@ echo 正在啟動完整安裝程序...
 echo.
 
 :: 啟動 PowerShell 腳本進行完整安裝
-powershell -File "%~dp0setup.ps1"
+powershell -ExecutionPolicy Bypass -File "%~dp0setup.ps1"
 set ps_result=%errorLevel%
 
 if %ps_result% equ 0 (

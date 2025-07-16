@@ -1,8 +1,8 @@
 # Claude Code Windows 自動化安裝腳本
-# 版本: 3.0.0
+# 版本: 3.0.1
 # 支援: Windows 10/11 + WSL2 + Docker 自動安裝與修復
 # 作者: Claude Code 中文社群
-# 更新: 2025-07-15
+# 更新: 2025-07-16T19:46:34+08:00
 
 param(
     [switch]$Force,
@@ -11,14 +11,16 @@ param(
     [switch]$Verbose
 )
 
-# 設定嚴格模式
+# 設定編碼和嚴格模式
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['*:Encoding'] = 'utf8'
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 # 管理員權限檢查
 if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Host "❌ 需要管理員權限。正在重新啟動為管理員..." -ForegroundColor Red
-    $arguments = "-File `"$PSCommandPath`""
+    $arguments = "-ExecutionPolicy Bypass -File `"$PSCommandPath`""
     if ($Force) { $arguments += " -Force" }
     if ($Language -ne "auto") { $arguments += " -Language $Language" }
     if ($SkipDocker) { $arguments += " -SkipDocker" }
@@ -42,7 +44,7 @@ $currentLang = if ($Language -eq "auto") {
 # 多語言訊息
 $Messages = @{
     "zh-TW" = @{
-        Title = "Claude Code Windows 自動化安裝工具 v3.0"
+        Title = "Claude Code Windows 自動化安裝工具 v3.0.1"
         CheckingEnv = "正在檢測系統環境..."
         SystemInfo = "系統資訊"
         InstallingComponent = "正在安裝"
@@ -75,7 +77,7 @@ $Messages = @{
         FinalVerification = "最終驗證..."
     }
     "en" = @{
-        Title = "Claude Code Windows Auto-Installation Tool v3.0"
+        Title = "Claude Code Windows Auto-Installation Tool v3.0.1"
         CheckingEnv = "Checking system environment..."
         SystemInfo = "System Information"
         InstallingComponent = "Installing"
@@ -169,11 +171,15 @@ function Test-WindowsVersion {
         Write-ColorMessage "偵測到 Windows 11，檢查進階功能..." "Blue" "🔵"
         
         # 檢查 TPM 2.0 (Windows 11 需求)
-        $tpm = Get-CimInstance -ClassName Win32_Tpm -ErrorAction SilentlyContinue
-        if ($tpm) {
-            Write-ColorMessage "TPM 2.0 可用" "Green" "✅"
-        } else {
-            Write-ColorMessage "TPM 2.0 不可用" "Yellow" "⚠️"
+        try {
+            $tpm = Get-CimInstance -ClassName Win32_Tpm -ErrorAction SilentlyContinue
+            if ($tpm -and $tpm.IsEnabled_InitialValue -eq $true) {
+                Write-ColorMessage "TPM 2.0 已啟用" "Green" "✅"
+            } else {
+                Write-ColorMessage "TPM 2.0 未啟用或不可用" "Yellow" "⚠️"
+            }
+        } catch {
+            Write-ColorMessage "無法檢查 TPM 狀態" "Yellow" "⚠️"
         }
     }
     
@@ -217,16 +223,18 @@ function Install-WithWinget {
             "--id", $PackageId, 
             "--silent", 
             "--accept-package-agreements", 
-            "--accept-source-agreements"
+            "--accept-source-agreements",
+            "--force"
         ) + $AdditionalArgs
         
-        & winget @args
+        $result = & winget @args 2>&1
         
-        if ($LASTEXITCODE -eq 0) {
+        if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq -1978335189) {
             Write-ColorMessage "$($msg.InstallSuccess): $Name" "Green" "✅"
             return $true
         } else {
             Write-ColorMessage "$($msg.InstallFailed): $Name (Exit Code: $LASTEXITCODE)" "Red" "❌"
+            Write-ColorMessage "錯誤詳情: $result" "Yellow" "⚠️"
             return $false
         }
     } catch {
@@ -274,8 +282,13 @@ function Install-WSLKernel {
     $wslUpdatePath = "$env:TEMP\wsl_update_x64.msi"
     
     try {
+        # 使用 TLS 1.2 進行下載
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest -Uri $wslUpdateUrl -OutFile $wslUpdatePath -UseBasicParsing
-        Start-Process msiexec.exe -ArgumentList "/i `"$wslUpdatePath`" /quiet /norestart" -Wait
+        
+        $installArgs = @("/i", "`"$wslUpdatePath`"", "/quiet", "/norestart")
+        Start-Process "msiexec.exe" -ArgumentList $installArgs -Wait -NoNewWindow
+        
         Remove-Item $wslUpdatePath -Force -ErrorAction SilentlyContinue
         
         Write-ColorMessage "WSL2 核心更新完成" "Green" "✅"
@@ -291,7 +304,7 @@ function Fix-WSL2Issues {
     
     # 停止 WSL
     try {
-        wsl --shutdown | Out-Null
+        & wsl --shutdown 2>$null
         Start-Sleep -Seconds 3
     } catch {
         # 忽略錯誤
@@ -303,7 +316,7 @@ function Fix-WSL2Issues {
     $problematicDistros = @("docker-desktop", "docker-desktop-data")
     foreach ($distro in $problematicDistros) {
         try {
-            wsl --unregister $distro 2>$null
+            & wsl --unregister $distro 2>$null
             Write-ColorMessage "清理分發版: $distro" "Green" "✅"
         } catch {
             # 忽略錯誤，可能原本就不存在
@@ -325,8 +338,9 @@ function Fix-WSL2Issues {
     $services = @("HvHost", "vmcompute", "LxssManager")
     foreach ($service in $services) {
         try {
-            if (Get-Service $service -ErrorAction SilentlyContinue) {
-                Restart-Service $service -Force
+            $serviceObj = Get-Service $service -ErrorAction SilentlyContinue
+            if ($serviceObj) {
+                Restart-Service $service -Force -ErrorAction SilentlyContinue
                 Write-ColorMessage "重新啟動服務: $service" "Green" "✅"
             }
         } catch {
@@ -336,7 +350,7 @@ function Fix-WSL2Issues {
     
     # 設定 WSL2 為預設版本
     try {
-        wsl --set-default-version 2 | Out-Null
+        & wsl --set-default-version 2 2>$null
         Write-ColorMessage "設定 WSL2 為預設版本" "Green" "✅"
     } catch {
         Write-ColorMessage "無法設定 WSL2 為預設版本" "Yellow" "⚠️"
@@ -350,7 +364,7 @@ function Install-UbuntuDistribution {
     
     # 檢查是否已有 Ubuntu 分發版
     try {
-        $installedDistros = wsl --list --quiet 2>$null
+        $installedDistros = & wsl --list --quiet 2>$null
         if ($installedDistros -and ($installedDistros -join " ") -match "Ubuntu") {
             Write-ColorMessage "Ubuntu 分發版已安裝" "Green" "✅"
             return $true
@@ -362,21 +376,21 @@ function Install-UbuntuDistribution {
     # 嘗試安裝 Ubuntu
     try {
         # 優先嘗試 Ubuntu 24.04
-        $result = wsl --install -d Ubuntu-24.04 2>$null
+        $result = & wsl --install -d Ubuntu-24.04 2>$null
         if ($LASTEXITCODE -eq 0) {
             Write-ColorMessage "Ubuntu 24.04 LTS 安裝成功" "Green" "✅"
             return $true
         }
         
         # 備選 Ubuntu 22.04
-        $result = wsl --install -d Ubuntu-22.04 2>$null
+        $result = & wsl --install -d Ubuntu-22.04 2>$null
         if ($LASTEXITCODE -eq 0) {
             Write-ColorMessage "Ubuntu 22.04 LTS 安裝成功" "Green" "✅"
             return $true
         }
         
         # 備選 Ubuntu (預設)
-        $result = wsl --install -d Ubuntu 2>$null
+        $result = & wsl --install -d Ubuntu 2>$null
         if ($LASTEXITCODE -eq 0) {
             Write-ColorMessage "Ubuntu 安裝成功" "Green" "✅"
             return $true
@@ -396,7 +410,7 @@ function Test-WSLFunctionality {
     
     try {
         # 測試 WSL 是否可以執行
-        $result = wsl -- echo "WSL Test OK" 2>$null
+        $result = & wsl -- echo "WSL Test OK" 2>$null
         if ($result -eq "WSL Test OK") {
             Write-ColorMessage "WSL2 功能測試通過" "Green" "✅"
             return $true
@@ -415,7 +429,7 @@ function Test-NetworkConnectivity {
     
     # 檢查基本網路連線
     try {
-        $ping = Test-Connection -ComputerName "8.8.8.8" -Count 1 -Quiet
+        $ping = Test-Connection -ComputerName "8.8.8.8" -Count 1 -Quiet -ErrorAction SilentlyContinue
         if (-not $ping) {
             Write-ColorMessage "無法連線到網際網路，請檢查網路設定" "Red" "❌"
             return $false
@@ -475,7 +489,7 @@ function Create-LauncherScript {
 chcp 65001 > nul
 echo.
 echo ========================================
-echo   Claude Code 啟動器 v3.0
+echo   Claude Code 啟動器 v3.0.1
 echo ========================================
 echo.
 
@@ -518,7 +532,9 @@ pause
 "@
     
     try {
-        $launcherContent | Out-File -FilePath $launcherPath -Encoding UTF8
+        # 使用 UTF-8 BOM 編碼保存文件
+        $utf8Bom = New-Object System.Text.UTF8Encoding $true
+        [System.IO.File]::WriteAllText($launcherPath, $launcherContent, $utf8Bom)
         Write-ColorMessage "啟動器創建成功: start.bat" "Green" "✅"
         return $true
     } catch {

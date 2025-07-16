@@ -3,13 +3,13 @@ chcp 65001 > nul
 setlocal enabledelayedexpansion
 
 :: Claude Code 啟動器
-:: 版本: 3.0.0
+:: 版本: 3.0.1
 :: 作者: Claude Code 中文社群
-:: 更新: 2025-07-15
+:: 更新: 2025-07-16T19:46:34+08:00
 
 echo.
 echo ========================================
-echo   Claude Code 啟動器 v3.0
+echo   Claude Code 啟動器 v3.0.1
 echo ========================================
 echo.
 
