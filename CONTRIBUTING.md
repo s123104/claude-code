@@ -1,6 +1,8 @@
-# 貢獻規範（本專案與 SuperClaude 一致）
+# 貢獻規範（本專案 claude-code 2025 版）
 
-> 本專案貢獻規範與 SuperClaude Framework 保持一致，請參閱下方詳細說明。
+> 本專案（s123104/claude-code）採用 MIT 授權，並整合 SuperClaude Framework。所有貢獻需同時遵循本專案與 SuperClaude 的規範，詳見下方說明。
+
+---
 
 # Contributing to SuperClaude Framework
 
