@@ -1,4 +1,4 @@
-# SuperClaude 中文專業說明書
+# SuperClaude v3.0 中文專業說明書
 
 > **資料來源：**
 >
@@ -6,7 +6,8 @@
 > - [SuperClaude 官方文檔](https://superclaude.dev/)
 > - [Claude Code 高階配置指南](https://docs.anthropic.com/en/docs/claude-code)
 > - [MCP 多代理協作協議](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-07-15T14:16:31+08:00**
+> - **文件整理時間：2025-01-14T15:30:00+08:00**
+> - **版本：v3.0.0（初始發布版本）**
 
 ---
 
@@ -14,6 +15,7 @@
 
 - [1. 專案簡介](#1-專案簡介)
 - [2. 安裝與啟動](#2-安裝與啟動)
+- [2.1 v2 升級 v3 遷移指引](#21-v2-升級-v3-遷移指引)
 - [3. 指令分類與旗標](#3-指令分類與旗標)
 - [4. 代表性 Workflow 與範例](#4-代表性-workflow-與範例)
 - [5. MCP、Persona、旗標與最佳實踐](#5-mcppersona旗標與最佳實踐)
@@ -25,46 +27,224 @@
 
 ## 1. 專案簡介
 
-SuperClaude 是一套強化 Claude Code 的配置框架，結合專業 slash-commands、AI Persona、MCP 多代理協議、旗標控制與現代開發方法論，支援全端、架構、測試、維運、文件、CI/CD、AI 驅動分析等全流程自動化。
+SuperClaude v3.0 是一套強化 Claude Code 的配置框架，結合專業 slash-commands、AI Persona、MCP 多代理協議、旗標控制與現代開發方法論，支援全端、架構、測試、維運、文件、CI/CD、AI 驅動分析等全流程自動化。
+
+### v3.0 主要特色
+
+- 🛠️ **16 個專門指令**：針對常見開發任務優化
+- 🎭 **智能 Persona 系統**：自動選擇適合的專家模式
+- 🔧 **MCP 伺服器整合**：Context7、Sequential、Magic、Playwright 等
+- 📋 **任務管理**：進度追蹤與工作流程管理
+- ⚡ **Token 優化**：支援長時間對話與複雜任務
+
+### 目前狀態
+
+✅ **運作良好的功能：**
+
+- 安裝套件（完全重寫）
+- 核心框架與 9 個文檔檔案
+- 16 個 slash 指令
+- MCP 伺服器整合
+- 統一 CLI 安裝器
+
+⚠️ **已知問題：**
+
+- 初始發布版本，可能存在錯誤
+- 某些功能可能尚未完美
+- 文檔持續改進中
+- Hooks 系統已移除（v4 將回歸）
 
 ---
 
 ## 2. 安裝與啟動
 
-- **Git 下載與安裝**：
-  ```bash
-  git clone https://github.com/NomenAK/SuperClaude.git && cd SuperClaude && ./install.sh
-  # 進階選項
-  ./install.sh --dir /opt/claude   # 自訂安裝路徑
-  ./install.sh --update            # 更新現有安裝
-  ./install.sh --dry-run --verbose # 預覽變更
-  ./install.sh --force             # 跳過確認
-  ./install.sh --log install.log   # 日誌記錄
-  ```
-- **MCP 全域安裝腳本**：
-  ```bash
-  curl -sSL https://superclaude.dev/install-mcp | bash
-  ```
-- **安裝後結構**：
-  ```
-  ~/.claude/
-    ├── CLAUDE.md, RULES.md, PERSONAS.md, MCP.md
-    ├── commands/
-    └── commands/shared/
-  ```
+SuperClaude v3.0 採用**兩步驟安裝流程**：
+
+### 步驟 1：安裝 Python 套件
+
+**方式 A：從 PyPI 安裝（推薦）**
+
+```bash
+pip install SuperClaude
+```
+
+**方式 B：從原始碼安裝**
+
+```bash
+git clone https://github.com/NomenAK/SuperClaude.git
+cd SuperClaude
+pip install .
+```
+
+**缺少 Python？** 請先安裝 Python 3.7+：
+
+```bash
+# Linux (Ubuntu/Debian)
+sudo apt update && sudo apt install python3 python3-pip
+
+# macOS
+brew install python3
+
+# Windows
+# 從 https://python.org/downloads/ 下載安裝
+```
+
+### 步驟 2：執行安裝器
+
+安裝套件後，執行 SuperClaude 安裝器來配置 Claude Code：
+
+```bash
+# 快速安裝（推薦）
+python3 SuperClaude install
+
+# 互動式選擇（選擇組件）
+python3 SuperClaude install --interactive
+
+# 最小安裝（僅核心框架）
+python3 SuperClaude install --minimal
+
+# 開發者安裝（包含所有功能）
+python3 SuperClaude install --profile developer
+
+# 查看所有選項
+python3 SuperClaude install --help
+```
+
+### 安裝後結構
+
+```
+~/.claude/
+├── *.md                    # 框架行為文檔
+├── settings.json           # 主要配置
+└── Commands/               # 指令定義
+```
+
+---
+
+## 2.1 v2 升級 v3 遷移指引
+
+### ⚠️ 重要：升級前必讀
+
+如果您正在使用 SuperClaude v2，**必須先完全移除 v2 安裝**，因為 v3 採用完全不同的架構。
+
+### 步驟 1：備份重要資料
+
+```bash
+# 備份自訂配置（如果有）
+cp -r ~/.claude/custom_configs ~/superclaude_v2_backup/
+```
+
+### 步驟 2：卸載 v2
+
+```bash
+# 如果有 v2 卸載器
+./uninstall.sh  # 如果存在
+
+# 手動清理（必要時）
+rm -rf SuperClaude/
+rm -rf ~/.claude/shared/
+rm -rf ~/.claude/commands/
+rm -f ~/.claude/CLAUDE.md
+```
+
+### 步驟 3：安裝 v3
+
+按照上述「2. 安裝與啟動」步驟進行全新安裝。
+
+### 重要指令變更對照表
+
+| v2 指令         | v3 指令            | 說明                   |
+| --------------- | ------------------ | ---------------------- |
+| `/build`        | `/sc:implement`    | **重要變更**：功能實作 |
+| `/analyze`      | `/sc:analyze`      | 程式碼分析             |
+| `/test`         | `/sc:test`         | 測試相關               |
+| `/deploy`       | `/sc:deploy`       | 部署操作               |
+| `/review`       | `/sc:analyze`      | 程式碼審查             |
+| `/improve`      | `/sc:improve`      | 程式碼改善             |
+| `/document`     | `/sc:document`     | 文檔生成               |
+| `/troubleshoot` | `/sc:troubleshoot` | 問題排除               |
+| `/explain`      | `/sc:explain`      | 程式碼解釋             |
+| `/cleanup`      | `/sc:cleanup`      | 清理操作               |
+
+### 配置遷移
+
+v3 的配置檔案位於 `~/.claude/settings.json`，大部分設定會自動初始化，無需手動遷移。
+
+### 常見升級問題
+
+**Q：為什麼 `/build` 指令不能用了？**  
+A：v3 中 `/build` 改為 `/sc:implement`。新的 `/sc:build` 僅用於編譯/打包。
+
+**Q：MCP 伺服器無法連接？**  
+A：v3 的 MCP 整合完全重寫，請重新執行安裝器。
+
+**Q：自訂指令消失了？**  
+A：v3 移除了 hooks 系統，將在 v4 回歸。
 
 ---
 
 ## 3. 指令分類與旗標
 
-- **Development**：/build、/dev-setup、/test
-- **Analysis & Improvement**：/review、/analyze、/troubleshoot、/improve、/explain
-- **Operations**：/deploy、/migrate、/scan、/estimate、/cleanup、/git
-- **Design & Workflow**：/design、/spawn、/document、/load、/task
-- **旗標（通用）**：
-  - --validate、--security、--coverage、--strict、--introspect、--plan、--dry-run、--watch、--interactive、--force、--uc/--ultracompressed
-  - MCP 控制：--c7、--seq、--magic、--pup、--all-mcp、--no-mcp、--no-c7、--no-seq、--no-magic、--no-pup
-  - 思考深度：--think、--think-hard、--ultrathink
+### 核心指令（16 個）
+
+**開發類指令**：
+
+- `/sc:implement` - 功能實作與開發
+- `/sc:build` - 編譯與打包
+- `/sc:design` - 系統設計與架構
+
+**分析類指令**：
+
+- `/sc:analyze` - 程式碼分析與審查
+- `/sc:troubleshoot` - 問題排除與除錯
+- `/sc:explain` - 程式碼解釋與說明
+
+**品質類指令**：
+
+- `/sc:improve` - 程式碼改善與優化
+- `/sc:test` - 測試相關操作
+- `/sc:cleanup` - 清理與重構
+
+**其他指令**：
+
+- `/sc:document` - 文檔生成
+- `/sc:git` - Git 操作
+- `/sc:estimate` - 工作量估算
+- `/sc:task` - 任務管理
+- `/sc:index` - 索引建立
+- `/sc:load` - 載入與配置
+- `/sc:spawn` - 專案生成
+
+### 通用旗標
+
+**基本控制**：
+
+- `--validate` - 安全檢查
+- `--security` - 安全性掃描
+- `--coverage` - 覆蓋率檢查
+- `--strict` - 嚴格模式
+- `--plan` - 預覽計劃
+- `--dry-run` - 模擬執行
+- `--interactive` - 互動模式
+- `--force` - 強制執行
+
+**MCP 控制**：
+
+- `--c7` / `--no-c7` - Context7 控制
+- `--seq` / `--no-seq` - Sequential 控制
+- `--magic` / `--no-magic` - Magic 控制
+- `--pup` / `--no-pup` - Playwright 控制
+- `--all-mcp` / `--no-mcp` - 全部 MCP 控制
+
+**思考深度**：
+
+- `--think` - 基礎思考
+- `--think-hard` - 深度思考
+- `--ultrathink` - 超深度思考
+
+**效能優化**：
+
+- `--uc` / `--ultracompressed` - Token 壓縮
 
 ---
 
@@ -73,253 +253,377 @@ SuperClaude 是一套強化 Claude Code 的配置框架，結合專業 slash-com
 ### 4.1 全端開發完整流程
 
 #### 專案初始化與架構設計
+
 ```bash
 # 初始化全端專案
-/build --fullstack --framework nextjs --database postgresql --auth supabase
+/sc:implement --fullstack --framework nextjs --database postgresql --auth supabase
 
 # 設計資料庫架構
-/design --api --ddd --persona-architect
-/generate --schema --migrations --seeds
+/sc:design --api --ddd --persona-architect
+/sc:implement --schema --migrations --seeds
 
 # 建立開發環境
-/setup --docker --dev-containers --hot-reload
+/sc:build --docker --dev-containers --hot-reload
 ```
 
 #### 測試驅動開發循環
+
 ```bash
 # TDD 開發流程
-/test --tdd --watch --coverage-threshold 90%
+/sc:test --tdd --watch --coverage-threshold 90%
 
 # 端到端測試
-/test --e2e --pup --visual-regression
+/sc:test --e2e --pup --visual-regression
 
 # 效能測試
-/test --performance --lighthouse --load-testing
+/sc:test --performance --lighthouse --load-testing
 ```
 
 ### 4.2 AI 驅動程式碼審查與優化
 
 #### 多層次程式碼審查
+
 ```bash
 # 基礎程式碼品質審查
-/review --files src/ --quality --evidence --severity high
+/sc:analyze --files src/ --quality --evidence --severity high
 
 # 安全性深度掃描
-/scan --security --owasp --deps --vulnerability-db
+/sc:analyze --security --owasp --deps --vulnerability-db
 
 # 效能分析與優化
-/analyze --performance --bottlenecks --memory-leaks
-/improve --performance --iterate --threshold 95% --auto-fix
+/sc:analyze --performance --bottlenecks --memory-leaks
+/sc:improve --performance --iterate --threshold 95% --auto-fix
 ```
 
 #### 智能重構建議
+
 ```bash
 # 程式碼重構分析
-/refactor --analyze --patterns --suggestions
+/sc:improve --analyze --patterns --suggestions
 
 # 自動化重構執行
-/refactor --execute --backup --test-after
+/sc:improve --execute --backup --test-after
 
 # 依賴優化
-/optimize --dependencies --tree-shaking --bundle-analysis
+/sc:improve --dependencies --tree-shaking --bundle-analysis
 ```
 
 ### 4.3 企業級部署與維運
 
 #### 多環境部署策略
+
 ```bash
 # 開發環境部署
-/deploy --env development --auto-deploy --notifications
+/sc:build --env development --auto-deploy --notifications
 
 # 預發布環境驗證
-/deploy --env staging --validate --smoke-tests --rollback-ready
+/sc:build --env staging --validate --smoke-tests --rollback-ready
 
 # 生產環境藍綠部署
-/deploy --env production --strategy blue-green --health-checks --monitoring
+/sc:build --env production --strategy blue-green --health-checks --monitoring
 ```
 
 #### 監控與維護自動化
+
 ```bash
 # 系統監控設定
-/monitor --setup --alerts --dashboards --log-aggregation
+/sc:implement --monitor --alerts --dashboards --log-aggregation
 
 # 自動化維護任務
-/maintain --cleanup --backups --security-updates --performance-tuning
+/sc:cleanup --maintenance --backups --security-updates --performance-tuning
 
 # 災難恢復準備
-/backup --full --incremental --disaster-recovery --test-restore
+/sc:implement --backup --full --incremental --disaster-recovery --test-restore
 ```
 
 ### 4.4 進階專案管理整合
 
 #### 敏捷開發工作流程
+
 ```bash
 # 建立用戶故事
-/story:create "As a user, I want to login with social media"
+/sc:task --create "As a user, I want to login with social media"
 
 # 任務分解與估算
-/task:create "Implement OAuth2 integration" --story-id 123 --estimate 8h
-/task:assign --developer john.doe --reviewer jane.smith
+/sc:estimate --task "Implement OAuth2 integration" --story-id 123 --hours 8
+/sc:task --assign --developer john.doe --reviewer jane.smith
 
 # 進度追蹤
-/sprint:status --burndown --velocity --blockers
-/task:update task-id "完成 Google OAuth 整合，待測試" --progress 80%
+/sc:task --status --burndown --velocity --blockers
+/sc:task --update task-id "完成 Google OAuth 整合，待測試" --progress 80%
 ```
 
 #### 自動化 CI/CD 整合
+
 ```bash
 # CI/CD 流程設定
-/cicd:setup --github-actions --docker --kubernetes
+/sc:implement --cicd --github-actions --docker --kubernetes
 
 # 自動化部署流程
-/pipeline:create --trigger pr-merge --target staging --notify slack
+/sc:build --pipeline --trigger pr-merge --target staging --notify slack
 
 # 品質門檻設定
-/quality:gate --coverage 85% --security-scan --performance-budget
+/sc:test --quality-gate --coverage 85% --security-scan --performance-budget
 ```
 
 ### 4.5 文檔與知識管理
 
 #### 智能文檔生成
+
 ```bash
 # API 文檔自動生成
-/document --api --openapi --examples --postman-collection
+/sc:document --api --openapi --examples --postman-collection
 
 # 架構文檔
-/document --architecture --c4-model --decision-records --diagrams
+/sc:document --architecture --c4-model --decision-records --diagrams
 
 # 使用者指南
-/document --user-guide --screenshots --interactive --multilingual
+/sc:document --user-guide --screenshots --interactive --multilingual
 ```
 
 #### 知識庫建立
+
 ```bash
 # 專案知識庫
-/knowledge:create --wiki --searchable --version-controlled
+/sc:document --wiki --searchable --version-controlled
 
 # 最佳實踐文檔
-/knowledge:best-practices --coding-standards --patterns --anti-patterns
+/sc:document --best-practices --coding-standards --patterns --anti-patterns
 
 # 故障排除指南
-/knowledge:troubleshooting --common-issues --solutions --escalation
-```
-
-### 4.6 高階自動化工作流程
-
-#### 智能程式碼生成
-```bash
-# 基於需求的程式碼生成
-/generate --from-requirements --pattern mvc --tests-included
-
-# 資料庫模型自動生成
-/generate --models --from-schema --relationships --validations
-
-# 前端元件庫生成
-/generate --components --design-system --storybook --a11y
-```
-
-#### 多專案管理
-```bash
-# Monorepo 管理
-/monorepo:setup --workspaces --shared-configs --build-cache
-
-# 依賴管理
-/deps:update --security --compatibility --changelog
-
-# 版本發布
-/release:create --semantic-versioning --changelog --notifications
-```
-
-### 4.7 AI 輔助學習與培訓
-
-#### 程式碼學習助手
-```bash
-# 程式碼解釋
-/explain --code src/complex-algorithm.js --depth expert --visual
-
-# 學習路徑生成
-/learn:path --topic "microservices" --level intermediate --hands-on
-
-# 程式碼審查學習
-/learn:review --examples --patterns --common-mistakes
-```
-
-#### 團隊培訓工具
-```bash
-# 培訓計畫建立
-/training:plan --team frontend --skills react,typescript --duration 4weeks
-
-# 進度追蹤
-/training:progress --individual --team --certifications
-
-# 知識測試
-/training:quiz --topic security --difficulty intermediate --feedback detailed
+/sc:document --troubleshooting --common-issues --solutions --escalation
 ```
 
 ---
 
 ## 5. MCP、Persona、旗標與最佳實踐
 
-- **MCP 多代理**：Context7、Sequential、Magic、Puppeteer 等可組合啟用/停用
-- **Persona 專家模式**：
-  - --persona-architect（架構）、--persona-frontend、--persona-backend、--persona-analyzer、--persona-security、--persona-mentor、--persona-refactorer、--persona-performance、--persona-qa
-- **旗標控制**：
-  - --validate（安全檢查）、--coverage（覆蓋率）、--introspect（自省分析）、--plan（預覽）、--dry-run（模擬）、--uc（壓縮 token）、--think-hard（深度分析）
-- **最佳實踐**：
-  - 結合 MCP/Persona/旗標，針對不同階段與需求自訂最適化流程
-  - 以 /build、/analyze、/test、/deploy、/scan、/improve 等指令串接全流程
+### MCP 多代理系統
+
+**可用的 MCP 伺服器**：
+
+- **Context7** - 官方函式庫文檔與模式
+- **Sequential** - 複雜多步驟思考
+- **Magic** - 現代 UI 元件生成
+- **Playwright** - 瀏覽器自動化與測試
+
+**MCP 控制旗標**：
+
+```bash
+# 啟用特定 MCP
+/sc:analyze --c7 --seq
+
+# 停用特定 MCP
+/sc:implement --no-magic --no-pup
+
+# 全部啟用/停用
+/sc:build --all-mcp
+/sc:test --no-mcp
+```
+
+### Persona 專家模式
+
+**可用的 Persona**：
+
+- 🏗️ **architect** - 系統設計與架構
+- 🎨 **frontend** - UI/UX 與無障礙性
+- ⚙️ **backend** - API 與基礎設施
+- 🔍 **analyzer** - 除錯與分析
+- 🛡️ **security** - 安全性與漏洞
+- ✍️ **scribe** - 文檔與寫作
+- 🧪 **tester** - 測試與品質保證
+- ⚡ **optimizer** - 效能優化
+- 🔧 **devops** - 部署與維運
+- 🎓 **mentor** - 學習與指導
+- 🔄 **refactorer** - 重構與改善
+
+**Persona 自動觸發**：
+
+```bash
+# 系統會根據指令內容自動選擇合適的 Persona
+/sc:design --api          # 自動觸發 architect
+/sc:analyze --security    # 自動觸發 security
+/sc:test --coverage       # 自動觸發 tester
+```
+
+### 最佳實踐
+
+**指令組合策略**：
+
+```bash
+# 完整開發流程
+/sc:design --think-hard --persona-architect
+/sc:implement --validate --coverage --c7
+/sc:test --comprehensive --pup --think
+/sc:analyze --security --strict --seq
+/sc:improve --performance --auto-fix
+```
+
+**Token 優化**：
+
+```bash
+# 長時間對話使用壓縮
+/sc:analyze --uc --think-hard
+
+# 複雜任務分解
+/sc:task --break-down --estimate
+```
 
 ---
 
 ## 6. 專案結構與自訂
 
-- **核心設定**：CLAUDE.md、RULES.md、PERSONAS.md、MCP.md
-- **指令定義**：.claude/commands/（YAML/Markdown）
-- **自訂指令格式**：
-  ```markdown
-  # Command Name
+### v3.0 專案結構
 
-  Description & purpose
+```
+SuperClaude/
+├── setup.py               # PyPI 安裝檔案
+├── SuperClaude/           # 框架檔案
+│   ├── Core/              # 行為文檔 (COMMANDS.md, FLAGS.md, etc.)
+│   ├── Commands/          # 16 個 slash 指令定義
+│   └── Settings/          # 配置檔案
+├── setup/                 # 安裝系統
+└── profiles/              # 安裝設定檔 (quick, minimal, developer)
+```
 
-  ## Flags
+### 安裝後結構
 
-  - --flag1: 說明
+```
+~/.claude/
+├── settings.json          # 主要配置
+├── CLAUDE.md             # 核心行為
+├── RULES.md              # 規則定義
+├── PERSONAS.md           # Persona 系統
+├── MCP.md                # MCP 配置
+├── COMMANDS.md           # 指令說明
+├── FLAGS.md              # 旗標定義
+├── MODES.md              # 模式控制
+├── ORCHESTRATOR.md       # 編排邏輯
+└── PRINCIPLES.md         # 核心原則
+```
 
-  ## Examples
+### 自訂配置
 
-  /command --flag1
-  ```
-- **專案結構**：
-  ```
-  SuperClaude/
-    ├── CLAUDE.md, RULES.md, PERSONAS.md, MCP.md
-    ├── .claude/commands/
-    ├── .claude/commands/shared/
-    ├── install.sh
-    └── README.md
-  ```
+編輯 `~/.claude/settings.json` 來自訂 SuperClaude：
+
+```json
+{
+  "version": "3.0.0",
+  "mcp_servers": {
+    "context7": true,
+    "sequential": true,
+    "magic": false,
+    "playwright": true
+  },
+  "default_personas": ["architect", "security"],
+  "token_optimization": true,
+  "verbose_logging": false
+}
+```
 
 ---
 
 ## 7. 社群貢獻與參與
 
-- **貢獻方式**：Fork/PR、slash-command 投稿、CLAUDE.md/Persona/MCP 設計
-- **分支管理**：git checkout -b feature/your-feature-name
-- **DCO 簽署**：git commit -s -m "Your commit message"
-- **建議遵循**：CONTRIBUTING.md、RULES.md、PERSONAS.md
+### 貢獻方式
+
+**歡迎的貢獻類型**：
+
+- 🐛 **錯誤回報** - 告訴我們什麼地方有問題
+- 📝 **文檔改善** - 幫助我們解釋得更清楚
+- 🧪 **測試** - 不同環境的測試覆蓋
+- 💡 **想法** - 新功能或改善建議
+
+### 開發流程
+
+```bash
+# Fork 專案
+git clone https://github.com/your-username/SuperClaude.git
+cd SuperClaude
+
+# 建立功能分支
+git checkout -b feature/your-feature-name
+
+# 開發與測試
+pip install -e .
+python3 SuperClaude install --profile developer
+
+# 提交變更
+git commit -s -m "feat: 您的提交訊息"
+git push origin feature/your-feature-name
+```
+
+### DCO 簽署
+
+所有提交必須包含 Developer Certificate of Origin (DCO) 簽署：
+
+```bash
+git commit -s -m "您的提交訊息"
+```
 
 ---
 
 ## 8. 常見問題與延伸閱讀
 
-- **安裝驗證**：/load、/analyze --code --think
-- **token 優化**：--uc/--ultracompressed
-- **MCP 啟用/停用**：--all-mcp、--no-mcp、--c7、--no-c7
-- **常見指令查詢**：README.md、COMMANDS.md
-- **官方資源**：
-  - [SuperClaude GitHub](https://github.com/NomenAK/SuperClaude)
-  - [Context7 文檔](/nomenak/superclaude)
+### 常見問題
+
+**Q：為什麼 hooks 系統被移除了？**  
+A：v2 的 hooks 系統過於複雜且容易出錯。我們正在為 v4 重新設計。
+
+**Q：這個版本穩定嗎？**  
+A：基本功能運作良好，但作為初始發布版本，預期會有一些粗糙的地方。
+
+**Q：支援其他 AI 助手嗎？**  
+A：目前僅支援 Claude Code，但 v4 將有更廣泛的相容性。
+
+### 安裝驗證
+
+```bash
+# 驗證安裝
+/sc:load --verify
+
+# 系統分析
+/sc:analyze --system --think
+
+# 測試所有功能
+/sc:test --comprehensive --all-mcp
+```
+
+### Token 優化技巧
+
+```bash
+# 使用壓縮模式
+/sc:analyze --uc --think-hard
+
+# 分解複雜任務
+/sc:task --break-down --estimate
+
+# 使用特定 Persona
+/sc:implement --persona-backend --focused
+```
+
+### 官方資源
+
+- [SuperClaude GitHub](https://github.com/NomenAK/SuperClaude)
+- [使用者指南](Docs/superclaude-user-guide.md)
+- [指令指南](Docs/commands-guide.md)
+- [旗標指南](Docs/flags-guide.md)
+- [Persona 指南](Docs/personas-guide.md)
+- [安裝指南](Docs/installation-guide.md)
+
+### v4 預覽
+
+**計劃中的功能**：
+
+- **Hooks 系統** - 事件驅動功能（重新設計）
+- **MCP 套件** - 更多外部工具整合
+- **效能改善** - 更快速、更少錯誤
+- **更多 Persona** - 額外的領域專家
+- **跨 CLI 支援** - 支援其他 AI 程式設計助手
 
 ---
 
-> 本文件僅為社群整理，詳細內容與最新資源請參閱官方 GitHub 與文檔。
+> **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/NomenAK/SuperClaude) 與相關文檔。
+>
+> **版本資訊**：SuperClaude v3.0.0 - 初始發布版本  
+> **最後更新**：2025-01-14T15:30:00+08:00
