@@ -594,79 +594,57 @@
             快速安裝
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            一鍵安裝全環境，自動處理 WSL2、Node.js、Claude Code CLI 等所有依賴
+            目前僅支援 Linux/WSL 一鍵安裝腳本（start.sh），Windows
+            自動安裝腳本維修中，敬請期待！
           </p>
           <p class="text-sm text-neutral-400 mt-2 max-w-2xl mx-auto">
-            支援 Windows、Linux、macOS 全平台，智能環境檢測與自動修復
+            支援 Linux、WSL，Windows/MacOS 請稍後，將於修復後開放
           </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Windows Installation -->
-          <div class="glass-effect rounded-xl p-8 observe-fade">
+          <!-- Windows Installation (Disabled) -->
+          <div class="glass-effect rounded-xl p-8 observe-fade opacity-60">
             <div class="flex items-center mb-6">
               <i class="fab fa-windows text-primary-400 text-3xl mr-4"></i>
               <h3 class="text-2xl font-semibold">Windows 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
+              <div
+                class="code-block rounded-lg p-4 font-mono text-sm bg-neutral-800 text-neutral-500"
+              >
                 <div class="text-neutral-400 mb-2">
-                  # 方式一：批次檔 (最簡單)
+                  # Windows 一鍵安裝腳本維修中，敬請期待！
                 </div>
-                <div class="text-primary-400">
-                  curl -O
-                  https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat
-                  && setup.bat
-                </div>
-              </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2">
-                  # 方式二：PowerShell (功能完整)
-                </div>
-                <div class="text-primary-400">
-                  curl -O
-                  https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1
-                  && powershell -ExecutionPolicy Bypass -File setup.ps1
-                </div>
-              </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2">
-                  # 方式三：直接啟動 (已有 WSL)
-                </div>
-                <div class="text-primary-400">
-                  curl -O
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.bat
-                  && start.bat
+                <div class="text-neutral-500">
+                  setup.bat / setup.ps1 / start.bat
                 </div>
               </div>
               <div class="flex flex-wrap gap-2">
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                <button
+                  class="bg-primary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
+                  disabled
                 >
                   <i class="fas fa-download mr-2"></i>
                   下載 setup.bat
-                </a>
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                </button>
+                <button
+                  class="bg-secondary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
+                  disabled
                 >
                   <i class="fas fa-download mr-2"></i>
                   下載 setup.ps1
-                </a>
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.bat"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                </button>
+                <button
+                  class="bg-accent-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
+                  disabled
                 >
                   <i class="fas fa-download mr-2"></i>
                   下載 start.bat
-                </a>
+                </button>
+              </div>
+              <div class="text-xs text-neutral-400 mt-2">
+                Windows 自動安裝腳本維修中，修復後將重新開放下載與一鍵安裝。
               </div>
             </div>
           </div>
@@ -707,6 +685,10 @@
               </div>
             </div>
           </div>
+        </div>
+        <!-- 更新最後更新時間戳記 -->
+        <div class="mt-8 text-center text-xs text-neutral-400">
+          最後更新：2025-07-16T20:03:06+08:00 | 僅支援 Linux/WSL 一鍵安裝
         </div>
 
         <!-- Installation Features -->

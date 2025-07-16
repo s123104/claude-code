@@ -43,22 +43,7 @@
 
 ## ⚡ 快速開始 (5 分鐘內完成安裝)
 
-### 🖥️ Windows 用戶 (推薦)
-
-**一鍵安裝腳本 - 自動檢測環境並安裝 WSL2 + Claude Code**
-
-```batch
-# 方式一：批次檔 (最簡單)
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat && setup.bat
-
-# 方式二：PowerShell (功能完整)
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1 && powershell -ExecutionPolicy Bypass -File setup.ps1
-
-# 方式三：直接啟動 (如果已有 WSL)
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.bat && start.bat
-```
-
-### 🐧 Linux/WSL 用戶
+### 🐧 Linux/WSL 用戶（目前唯一支援）
 
 **自動安裝腳本 - 智能環境檢測與修復**
 
@@ -70,55 +55,15 @@ curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
 ```
 
+### 🖥️ Windows 用戶
+
+> ⚠️ Windows 一鍵安裝腳本維修中，敬請期待！
+
 ### 🍎 macOS 用戶
 
-```bash
-# 使用 Homebrew 安裝
-brew install node
-npm install -g @anthropic-ai/claude-code
+> ⚠️ macOS 一鍵安裝腳本維修中，敬請期待！
 
-# 驗證安裝
-claude --version
-```
-
-### 🐳 Docker 用戶
-
-```bash
-# 使用 Docker 容器
-docker run -it --rm -v $(pwd):/workspace node:18-alpine sh -c "
-  npm install -g @anthropic-ai/claude-code &&
-  cd /workspace &&
-  claude --help
-"
-```
-
-### 🔑 快速認證設定
-
-```bash
-# 設定 API Key
-export ANTHROPIC_API_KEY=your_api_key_here
-
-# 或使用網頁認證 (推薦)
-claude auth login
-
-# 測試連線
-claude "Hello, Claude Code!"
-```
-
-### 🚀 立即開始使用
-
-```bash
-# 進入您的專案目錄
-cd your-project
-
-# 開始使用 Claude Code
-claude "幫我分析這個專案的架構"
-
-# 或查看完整功能
-claude --help
-```
-
-> 💡 **提示**: 使用腳本安裝會自動處理環境檢測、依賴修復、網路問題和路徑配置等常見問題！
+_最後更新：2025-07-16T20:03:06+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
