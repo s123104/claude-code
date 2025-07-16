@@ -476,13 +476,13 @@
           </a>
           <!-- WSL 安裝腳本連結（官方最新版） -->
           <a
-            href="https://raw.githubusercontent.com/s123104/claude-code/master/wsl_claude_code_setup.sh"
+            href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
             target="_blank"
             rel="noopener noreferrer"
             class="border-2 border-secondary-600 hover:bg-secondary-600 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105"
           >
-            <i class="fab fa-windows mr-2"></i>
-            WSL 安裝腳本
+            <i class="fab fa-linux mr-2"></i>
+            一鍵安裝腳本
           </a>
         </div>
       </div>
@@ -594,7 +594,10 @@
             快速安裝
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            5 分鐘內完成安裝，自動處理環境配置和依賴管理
+            一鍵安裝全環境，自動處理 WSL2、Node.js、Claude Code CLI 等所有依賴
+          </p>
+          <p class="text-sm text-neutral-400 mt-2 max-w-2xl mx-auto">
+            支援 Windows、Linux、macOS 全平台，智能環境檢測與自動修復
           </p>
         </div>
 
@@ -626,6 +629,16 @@
                   && powershell -ExecutionPolicy Bypass -File setup.ps1
                 </div>
               </div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2">
+                  # 方式三：直接啟動 (已有 WSL)
+                </div>
+                <div class="text-primary-400">
+                  curl -O
+                  https://raw.githubusercontent.com/s123104/claude-code/master/start.bat
+                  && start.bat
+                </div>
+              </div>
               <div class="flex flex-wrap gap-2">
                 <a
                   href="https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat"
@@ -644,6 +657,15 @@
                 >
                   <i class="fas fa-download mr-2"></i>
                   下載 setup.ps1
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.bat"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                >
+                  <i class="fas fa-download mr-2"></i>
+                  下載 start.bat
                 </a>
               </div>
             </div>
@@ -689,7 +711,7 @@
                   class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  WSL 專用腳本
+                  精簡版腳本（備用）
                 </a>
               </div>
             </div>
@@ -702,29 +724,80 @@
             <div class="text-primary-400 text-3xl mb-3">
               <i class="fas fa-magic"></i>
             </div>
-            <h4 class="font-semibold mb-2">自動環境檢測</h4>
-            <p class="text-sm text-neutral-400">智能識別系統環境並自動配置</p>
+            <h4 class="font-semibold mb-2">一鍵全環境安裝</h4>
+            <p class="text-sm text-neutral-400">
+              WSL2、Node.js、CLI 全自動安裝
+            </p>
           </div>
           <div class="text-center observe-fade">
             <div class="text-secondary-400 text-3xl mb-3">
               <i class="fas fa-tools"></i>
             </div>
-            <h4 class="font-semibold mb-2">問題自動修復</h4>
-            <p class="text-sm text-neutral-400">自動解決常見的配置問題</p>
+            <h4 class="font-semibold mb-2">智能問題修復</h4>
+            <p class="text-sm text-neutral-400">npm 污染清理、路徑衝突修復</p>
           </div>
           <div class="text-center observe-fade">
             <div class="text-accent-400 text-3xl mb-3">
               <i class="fas fa-network-wired"></i>
             </div>
-            <h4 class="font-semibold mb-2">網路優化</h4>
-            <p class="text-sm text-neutral-400">DNS 優化和下載加速</p>
+            <h4 class="font-semibold mb-2">網路連線優化</h4>
+            <p class="text-sm text-neutral-400">DNS 檢測、GitHub 連線測試</p>
           </div>
           <div class="text-center observe-fade">
             <div class="text-primary-400 text-3xl mb-3">
               <i class="fas fa-clipboard-check"></i>
             </div>
-            <h4 class="font-semibold mb-2">完整驗證</h4>
+            <h4 class="font-semibold mb-2">完整驗證測試</h4>
             <p class="text-sm text-neutral-400">確保所有組件正常運作</p>
+          </div>
+        </div>
+
+        <!-- 添加統一安裝說明 -->
+        <div class="mt-16 glass-effect rounded-xl p-8 observe-fade">
+          <div class="text-center mb-6">
+            <h3 class="text-2xl font-bold gradient-text mb-4">
+              <i class="fas fa-rocket mr-2"></i>統一安裝流程說明
+            </h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="text-primary-400 text-2xl mb-3">
+                <i class="fab fa-windows"></i>
+              </div>
+              <h4 class="font-semibold mb-2">Windows 用戶</h4>
+              <p class="text-sm text-neutral-300">
+                執行 setup.bat 全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI
+                安裝
+              </p>
+            </div>
+            <div class="text-center">
+              <div class="text-accent-400 text-2xl mb-3">
+                <i class="fab fa-linux"></i>
+              </div>
+              <h4 class="font-semibold mb-2">Linux/WSL 用戶</h4>
+              <p class="text-sm text-neutral-300">
+                執行 start.sh 自動完成所有依賴與 CLI 安裝，支援智能修復
+              </p>
+            </div>
+            <div class="text-center">
+              <div class="text-secondary-400 text-2xl mb-3">
+                <i class="fab fa-apple"></i>
+              </div>
+              <h4 class="font-semibold mb-2">macOS 用戶</h4>
+              <p class="text-sm text-neutral-300">
+                使用 Homebrew 安裝 Node.js，然後 npm 全域安裝 Claude Code
+              </p>
+            </div>
+          </div>
+          <div class="mt-8 text-center">
+            <p class="text-sm text-neutral-400">
+              <i class="fas fa-info-circle mr-2"></i>
+              所有腳本均可重複執行，遇到問題可直接重新執行修復
+            </p>
+            <p class="text-xs text-neutral-500 mt-2">
+              詳細日誌：/tmp/claude_setup_*.log（Linux/WSL）或 PowerShell
+              輸出（Windows）
+            </p>
           </div>
         </div>
       </div>
@@ -1175,7 +1248,7 @@
         </div>
         <div class="mt-8 pt-8 border-t border-neutral-800 text-center">
           <p class="text-sm text-neutral-400">
-            最後更新：2025-07-15T18:30:00+08:00 | 版本：v3.0.0 |
+            最後更新：2025-07-16T19:34:22+08:00 | 版本：v3.0.0 |
             <a
               href="https://github.com/s123104/claude-code/blob/master/LICENSE"
               target="_blank"
