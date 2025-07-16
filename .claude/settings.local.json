@@ -61,7 +61,8 @@
       "Bash(dos2unix:*)",
       "Bash(sed:*)",
       "Bash(for script in *.sh)",
-      "Bash(do echo -n \"$script: \")"
+      "Bash(do echo -n \"$script: \")",
+      "Bash(shellcheck:*)"
     ],
     "deny": []
   }
