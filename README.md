@@ -63,6 +63,34 @@ curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh &&
 
 > ⚠️ macOS 一鍵安裝腳本維修中，敬請期待！
 
+---
+
+### 🔑 快速認證設定
+
+```bash
+# 設定 API Key
+export ANTHROPIC_API_KEY=your_api_key_here
+
+# 或使用網頁認證（推薦）
+claude auth login
+
+# 測試連線
+claude "Hello, Claude Code!"
+```
+
+### 🚀 立即開始使用
+
+```bash
+# 進入您的專案目錄
+cd your-project
+
+# 開始使用 Claude Code
+claude "幫我分析這個專案的架構"
+
+# 查看完整功能
+claude --help
+```
+
 _最後更新：2025-07-16T20:03:06+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
