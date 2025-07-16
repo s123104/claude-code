@@ -264,7 +264,7 @@ clean_system_environment() {
     log_info "清理系統環境污染..."
     
     # 清理 PATH 中的 Windows 路徑（WSL 環境）
-    if [[ -n "$WSL_MODE" ]]; then
+    if [[ -n "${WSL_MODE:-}" ]]; then
         if echo "$PATH" | grep -q "/mnt/c/"; then
             log_info "清理 PATH 中的 Windows 路徑"
             export PATH=$(echo "$PATH" | tr ':' '\n' | grep -v "/mnt/c/" | tr '\n' ':' | sed 's/:$//')
@@ -821,7 +821,7 @@ check_disk_space() {
     log_info "臨時目錄空間：$tmp_space"
     
     # 檢查 WSL 磁碟使用量（如果在 WSL 環境）
-    if [[ -n "$WSL_MODE" ]]; then
+    if [[ -n "${WSL_MODE:-}" ]]; then
         local wsl_usage=$(df -h /mnt/c | awk 'NR==2 {print $5}' | tr -d '%')
         if [[ $wsl_usage -gt 90 ]]; then
             log_warn "Windows C: 磁碟使用率 ${wsl_usage}%，可能影響 WSL 效能"
@@ -1384,7 +1384,7 @@ final_system_check() {
 
 # ========== Windows 端偵測（僅於 Windows PowerShell 管理員下有效） ==========
 # 修正邏輯：檢查是否在 Windows 原生環境且非 WSL
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || -n "$WINDIR" ]] && [[ -z "$WSL_DISTRO_NAME" ]]; then
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || -n "${WINDIR:-}" ]] && [[ -z "${WSL_DISTRO_NAME:-}" ]]; then
   log_info "Windows 原生環境偵測，開始 WSL 2 安裝程序"
   
   # 檢查管理員權限
@@ -1404,7 +1404,6 @@ if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || -n "$WINDIR" ]] && [[ -z "$
 fi
 
 # ========== Linux/WSL/macOS 端自動化安裝與修復 ==========
-log_info "開始自動化安裝與修復程序（$SYSTEM_TYPE 環境）"
 
 # ========== 效能優化與使用者體驗改進 ==========
 
@@ -1462,7 +1461,7 @@ interactive_prompt() {
     local answer
     
     # 快速模式下自動選擇預設答案
-    if [[ "$FAST_MODE" == "true" ]]; then
+    if [[ "${FAST_MODE:-}" == "true" ]]; then
         log_info "快速模式：自動選擇 $default_answer"
         if [[ "$default_answer" == "Y" || "$default_answer" == "y" ]]; then
             return 0
@@ -1494,7 +1493,7 @@ check_system_environment() {
     local has_pollution=false
     
     # 檢查 PATH 中的 Windows 路徑（WSL 環境）
-    if [[ -n "$WSL_MODE" ]]; then
+    if [[ -n "${WSL_MODE:-}" ]]; then
         if echo "$PATH" | grep -q "/mnt/c/"; then
             log_warn "偵測到 PATH 中的 Windows 路徑污染"
             has_pollution=true
@@ -1580,7 +1579,7 @@ main_diagnostic_and_repair() {
 
 # 加入暫停功能
 pause_if_needed() {
-    if [[ "$FAST_MODE" != "true" ]]; then
+    if [[ "${FAST_MODE:-}" != "true" ]]; then
         echo -e "${BLUE}按任意鍵繼續...${NC}"
         read -n 1 -s
     fi
@@ -1594,7 +1593,7 @@ handle_error() {
     
     log_error "指令執行失敗：$command（第 $line_number 行，退出碼：$exit_code）"
     
-    if [[ "$FAST_MODE" != "true" ]]; then
+    if [[ "${FAST_MODE:-}" != "true" ]]; then
         if interactive_prompt "是否要繼續執行？"; then
             return 0
         else
@@ -1630,7 +1629,7 @@ main_installation() {
     print_header "Claude Code 自動安裝工具 v$SCRIPT_VERSION"
     echo -e "${GREEN}整合 Context7 最佳實踐優化${NC}"
     echo -e "${GREEN}智能檢測與互動式修復${NC}"
-    if [[ "$FAST_MODE" == "true" ]]; then
+    if [[ "${FAST_MODE:-}" == "true" ]]; then
         echo -e "${YELLOW}🚀 快速模式已啟用${NC}"
     fi
     echo
@@ -1640,13 +1639,13 @@ main_installation() {
     # 偵測作業系統環境
     detect_os
     
-    log_info "開始自動化安裝與修復程序（$SYSTEM_TYPE 環境）"
+    log_info "開始自動化安裝與修復程序（${SYSTEM_TYPE:-未知} 環境）"
     
     # 智能檢測與修復
     main_diagnostic_and_repair
     
     # 如果是快速模式，跳過某些非必要檢查
-    if [[ "$FAST_MODE" != "true" ]]; then
+    if [[ "${FAST_MODE:-}" != "true" ]]; then
         pause_if_needed
         # 系統檢查階段
         check_dependencies
