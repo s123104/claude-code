@@ -15,7 +15,7 @@ NVM_VERSION="v0.40.3"            # 最新穩定版本
 NODE_TARGET_VERSION="22.14.0"    # LTS Jod 最新版本
 NODE_FALLBACK_VERSION="18.20.8"  # LTS Hydrogen 備用版本
 CLAUDE_PACKAGE="@anthropic-ai/claude-code"
-CONTEXT7_PACKAGE="@upstash/context7-mcp"  # Context7 MCP 服務器
+# CONTEXT7_PACKAGE="@upstash/context7-mcp"  # Context7 MCP 服務器 (預留未來使用)
 
 # ========== 日誌和顏色系統 ==========
 LOG_FILE="/tmp/claude_setup_$(date +%Y%m%d_%H%M%S).log"
@@ -73,9 +73,12 @@ info() {
 check_npm_permissions() {
     log_info "檢測 npm 權限問題..."
     
-    local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
-    local npm_cache=$(npm config get cache 2>/dev/null || echo "")
+    local npm_prefix
+    local npm_cache
     local has_permission_issues=false
+    
+    npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    npm_cache=$(npm config get cache 2>/dev/null || echo "")
     
     # 檢查 npm prefix 權限
     if [[ -n "$npm_prefix" && -d "$npm_prefix" ]]; then
@@ -95,7 +98,8 @@ check_npm_permissions() {
     
     # 檢查是否有 root 擁有的 npm 目錄
     if [[ -d "/usr/local/lib/node_modules" ]]; then
-        local owner=$(stat -c %U "/usr/local/lib/node_modules" 2>/dev/null || stat -f %Su "/usr/local/lib/node_modules" 2>/dev/null || echo "unknown")
+        local owner
+        owner=$(stat -c %U "/usr/local/lib/node_modules" 2>/dev/null || stat -f %Su "/usr/local/lib/node_modules" 2>/dev/null || echo "unknown")
         if [[ "$owner" == "root" ]]; then
             log_warn "偵測到 root 擁有的 npm 目錄：/usr/local/lib/node_modules"
             has_permission_issues=true
@@ -157,8 +161,11 @@ check_nvm_npm_conflicts() {
     log_info "檢測 nvm 與 npm 衝突..."
     
     local has_conflicts=false
-    local node_path=$(which node 2>/dev/null || echo "")
-    local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    local node_path
+    local npm_prefix
+    
+    node_path=$(which node 2>/dev/null || echo "")
+    npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
     
     # 檢查是否使用 nvm 但 npm prefix 設定不當
     if [[ "$node_path" == *".nvm"* ]]; then
@@ -196,7 +203,8 @@ fix_nvm_npm_conflicts() {
     
     # 如果使用 nvm，清理 npm prefix 設定
     if command -v nvm &>/dev/null; then
-        local current_node_version=$(nvm current 2>/dev/null || echo "system")
+        local current_node_version
+        current_node_version=$(nvm current 2>/dev/null || echo "system")
         if [[ "$current_node_version" != "system" ]]; then
             log_info "偵測到 nvm 環境，清理 npm prefix 設定"
             npm config delete prefix 2>/dev/null || true
@@ -220,10 +228,12 @@ fix_nvm_npm_conflicts() {
 check_claude_cli_status() {
     log_info "檢測 claude code CLI 狀態..."
     
-    local claude_path=$(which claude 2>/dev/null || echo "")
+    local claude_path
     local claude_version=""
     local needs_install=false
     local needs_update=false
+    
+    claude_path=$(which claude 2>/dev/null || echo "")
     
     if [[ -z "$claude_path" ]]; then
         log_warn "claude code CLI 未安裝"
@@ -267,7 +277,9 @@ clean_system_environment() {
     if [[ -n "${WSL_MODE:-}" ]]; then
         if echo "$PATH" | grep -q "/mnt/c/"; then
             log_info "清理 PATH 中的 Windows 路徑"
-            export PATH=$(echo "$PATH" | tr ':' '\n' | grep -v "/mnt/c/" | tr '\n' ':' | sed 's/:$//')
+            local new_path
+            new_path=$(echo "$PATH" | tr ':' '\n' | grep -v "/mnt/c/" | tr '\n' ':' | sed 's/:$//')
+            export PATH="$new_path"
             
             # 更新 shell 配置
             if [[ -n "$SHELL_CONFIG" ]] && grep -q "/mnt/c/" "$SHELL_CONFIG" 2>/dev/null; then
@@ -342,12 +354,14 @@ detect_os() {
         export MACOS_MODE=true
         
         # 檢查 macOS 版本
-        local macos_version=$(sw_vers -productVersion 2>/dev/null || echo "unknown")
+        local macos_version
+        macos_version=$(sw_vers -productVersion 2>/dev/null || echo "unknown")
         log_info "macOS 版本：$macos_version"
         
         # 檢查 Homebrew
         if command -v brew &>/dev/null; then
-            local brew_version=$(brew --version | head -1)
+            local brew_version
+            brew_version=$(brew --version | head -1)
             log_info "Homebrew 版本：$brew_version"
         else
             log_warn "Homebrew 未安裝，建議安裝以獲得最佳體驗"
@@ -376,7 +390,8 @@ detect_os() {
         export WSL_MODE=true
         
         # 檢查 WSL 版本
-        local wsl_version=$(wsl.exe --version 2>/dev/null | head -1)
+        local wsl_version
+        wsl_version=$(wsl.exe --version 2>/dev/null | head -1)
         if [[ -n "$wsl_version" ]]; then
             log_info "WSL 版本: $wsl_version"
         fi
@@ -507,7 +522,8 @@ detect_os() {
     # 驗證和創建配置文件
     validate_shell_config() {
         local config_file="$1"
-        local config_dir=$(dirname "$config_file")
+        local config_dir
+        config_dir=$(dirname "$config_file")
         
         # 確保配置目錄存在
         if [[ ! -d "$config_dir" ]]; then
@@ -780,8 +796,11 @@ check_system_resources() {
     log_info "檢查系統資源..."
     
     # 檢查記憶體
-    local mem_total=$(free -m | awk '/^Mem:/{print $2}')
-    local mem_available=$(free -m | awk '/^Mem:/{print $7}')
+    local mem_total
+    local mem_available
+    
+    mem_total=$(free -m | awk '/^Mem:/{print $2}')
+    mem_available=$(free -m | awk '/^Mem:/{print $7}')
     
     log_info "記憶體總量：${mem_total}MB"
     log_info "可用記憶體：${mem_available}MB"
@@ -791,11 +810,13 @@ check_system_resources() {
     fi
     
     # 檢查 CPU 核心數
-    local cpu_cores=$(nproc)
+    local cpu_cores
+    cpu_cores=$(nproc)
     log_info "CPU 核心數：$cpu_cores"
     
     # 檢查 Load Average
-    local load_avg=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | tr -d ',')
+    local load_avg
+    load_avg=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | tr -d ',')
     log_info "系統負載：$load_avg"
     
     # 使用 awk 替代 bc 進行浮點數比較
@@ -806,8 +827,11 @@ check_system_resources() {
 
 # 檢查磁碟空間
 check_disk_space() {
-    local free_space=$(df -h ~ | awk 'NR==2 {print $4}')
-    local free_bytes=$(df ~ | awk 'NR==2 {print $4}')
+    local free_space
+    local free_bytes
+    
+    free_space=$(df -h ~ | awk 'NR==2 {print $4}')
+    free_bytes=$(df ~ | awk 'NR==2 {print $4}')
     
     log_info "家目錄剩餘空間：$free_space"
     
@@ -817,12 +841,14 @@ check_disk_space() {
     fi
     
     # 檢查其他重要目錄空間
-    local tmp_space=$(df -h /tmp | awk 'NR==2 {print $4}')
+    local tmp_space
+    tmp_space=$(df -h /tmp | awk 'NR==2 {print $4}')
     log_info "臨時目錄空間：$tmp_space"
     
     # 檢查 WSL 磁碟使用量（如果在 WSL 環境）
     if [[ -n "${WSL_MODE:-}" ]]; then
-        local wsl_usage=$(df -h /mnt/c | awk 'NR==2 {print $5}' | tr -d '%')
+        local wsl_usage
+        wsl_usage=$(df -h /mnt/c | awk 'NR==2 {print $5}' | tr -d '%')
         if [[ $wsl_usage -gt 90 ]]; then
             log_warn "Windows C: 磁碟使用率 ${wsl_usage}%，可能影響 WSL 效能"
         fi
@@ -869,88 +895,91 @@ install_system_dependencies() {
 # 修復 npm 配置污染
 fix_npm_config() {
     log_info "檢查 npm 配置和與 nvm 的兼容性..."
-    
+
+    # 確保所有變數都被初始化以避免 set -u 錯誤
     local npmrc_file="$HOME/.npmrc"
     local cleanup_needed=false
     local backup_created=false
-    
-    # 檢查 .npmrc 是否存在
+    local npm_prefix=""
+    local npm_globalconfig=""
+
+    # ---- Phase 1: scrub ~/.npmrc if present ---------------------------------
     if [[ -f "$npmrc_file" ]]; then
-        # 備份原始配置（僅在需要清理時）
-        if grep -q -E "(prefix|globalconfig)" "$npmrc_file" 2>/dev/null || grep -q "/mnt/c/" "$npmrc_file" 2>/dev/null; then
+        # 只在第一次需要清理時備份
+        if grep -q -E "(^prefix=|^globalconfig=)" "$npmrc_file" 2>/dev/null || grep -q "/mnt/c/" "$npmrc_file" 2>/dev/null; then
             cp "$npmrc_file" "$npmrc_file.backup.$(date +%Y%m%d_%H%M%S)" || log_warn "無法備份 .npmrc"
             backup_created=true
         fi
-        
-        # 移除有問題的配置（與 nvm 不兼容）- macOS 兼容版本
-        if grep -q "prefix" "$npmrc_file" 2>/dev/null; then
-            log_warn "偵測到 ~/.npmrc prefix 設置，與 nvm 不兼容，將自動移除..."
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' '/prefix/d' "$npmrc_file"
-            else
-                sed -i '/prefix/d' "$npmrc_file"
-            fi
-            cleanup_needed=true
-        fi
-        
-        if grep -q "globalconfig" "$npmrc_file" 2>/dev/null; then
-            log_warn "偵測到 ~/.npmrc globalconfig 設置，與 nvm 不兼容，將自動移除..."
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' '/globalconfig/d' "$npmrc_file"
-            else
-                sed -i '/globalconfig/d' "$npmrc_file"
-            fi
-            cleanup_needed=true
-        fi
-        
-        # 移除 Windows 路徑污染
-        if grep -q "/mnt/c/" "$npmrc_file" 2>/dev/null; then
-            log_warn "偵測到 Windows 路徑污染，將自動移除..."
-            grep -v "/mnt/c/" "$npmrc_file" > "$npmrc_file.tmp" && mv "$npmrc_file.tmp" "$npmrc_file"
-            cleanup_needed=true
-        fi
-        
-        if [[ "$cleanup_needed" == "true" ]]; then
-            log_success "npm 配置清理完成"
-            if [[ "$backup_created" == "true" ]]; then
-                log_info "原始配置已備份到 $npmrc_file.backup.*"
-            fi
+
+        # 移除 prefix / globalconfig / Windows 路徑污染（macOS sed 語法不同）
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' -e '/^prefix=/d' -e '/^globalconfig=/d' "$npmrc_file" 2>/dev/null || true
         else
-            log_success "npm 配置檢查通過，無需清理"
+            sed -i -e '/^prefix=/d' -e '/^globalconfig=/d' "$npmrc_file" 2>/dev/null || true
+        fi
+
+        # 過濾掉任何 /mnt/c/ 行（避免 WSL 殘留）
+        if grep -q "/mnt/c/" "$npmrc_file" 2>/dev/null; then
+            # 用暫存檔過濾，避免 sed 多平台字元問題
+            grep -v "/mnt/c/" "$npmrc_file" > "$npmrc_file.tmp" && mv "$npmrc_file.tmp" "$npmrc_file"
+        fi
+
+        cleanup_needed=true
+    fi
+
+    if [[ "$cleanup_needed" == "true" ]]; then
+        log_success "npm 配置清理完成"
+        if [[ "$backup_created" == "true" ]]; then
+            log_info "原始配置已備份到 $npmrc_file.backup.*"
         fi
     else
-        log_success "~/.npmrc 不存在，跳過檢查"
+        log_success "npm 配置檢查通過，無需清理"
     fi
-    
-    # 智能檢查全域 npm 配置中的 prefix 設置
+
+    # ---- Phase 2: inspect effective npm config (prefix / globalconfig) ------
+    # 變數已在函數開始處初始化
+
     if command -v npm &>/dev/null; then
-        local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
-        local npm_globalconfig=$(npm config get globalconfig 2>/dev/null || echo "")
-        
-        if [[ -n "$npm_prefix" && "$npm_prefix" != *".nvm"* ]]; then
-            log_warn "偵測到全域 npm prefix 配置與 nvm 衝突（$npm_prefix）"
+        # 使用 command substitution；若 npm 報錯，保留空字串
+        npm_prefix="$(npm config get prefix 2>/dev/null || true)"
+        npm_globalconfig="$(npm config get globalconfig 2>/dev/null || true)"
+
+        # 有些 npm 版本若值未設，可能回傳 'undefined' 或 'global'
+        [[ "$npm_prefix" == "undefined" ]] && npm_prefix=""
+        [[ "$npm_globalconfig" == "undefined" ]] && npm_globalconfig=""
+
+        # 檢查並清理 npm prefix 配置
+        if [[ -n "${npm_prefix}" ]] && [[ "${npm_prefix}" != *".nvm"* ]] && [[ "${npm_prefix}" != *".npm-global"* ]]; then
+            log_warn "偵測到全域 npm prefix 配置與 nvm 衝突（${npm_prefix}）"
             log_info "正在清理全域 npm prefix 配置..."
             npm config delete prefix 2>/dev/null || true
             log_success "全域 npm prefix 配置已清理"
         fi
-        
-        if [[ -n "$npm_globalconfig" ]]; then
-            log_warn "偵測到全域 npm globalconfig 配置與 nvm 衝突（$npm_globalconfig）"
+
+        # 檢查並清理 globalconfig 配置
+        if [[ -n "${npm_globalconfig}" ]]; then
+            log_warn "偵測到全域 npm globalconfig 配置與 nvm 衝突（${npm_globalconfig}）"
             log_info "正在清理全域 npm globalconfig 配置..."
             npm config delete globalconfig 2>/dev/null || true
             log_success "全域 npm globalconfig 配置已清理"
         fi
-        
-        # 針對 macOS 檢查 .npmrc 中的 prefix 設定
+
+        # macOS 額外：有些舊安裝會殘留 prefix= 行
         if [[ "$SYSTEM_TYPE" == "macos" && -f "$HOME/.npmrc" ]]; then
-            if grep -q "prefix=" "$HOME/.npmrc" 2>/dev/null; then
+            if grep -q "^prefix=" "$HOME/.npmrc" 2>/dev/null; then
                 log_warn "偵測到 ~/.npmrc 中的 prefix 設定，將自動清理"
-                sed -i '' '/prefix=/d' "$HOME/.npmrc"
+                if [[ "$OSTYPE" == "darwin"* ]]; then
+                    sed -i '' '/^prefix=/d' "$HOME/.npmrc"
+                else
+                    sed -i '/^prefix=/d' "$HOME/.npmrc"
+                fi
                 log_success "已清理 ~/.npmrc 中的 prefix 設定"
             fi
         fi
-        
+
         log_success "npm 配置檢查通過"
+    else
+        log_warn "npm 指令不存在，略過 npm 配置檢查"
     fi
 }
 
@@ -1346,8 +1375,11 @@ final_system_check() {
     fi
     
     # 驗證 Node.js 版本符合項目需求
-    local node_version=$(node -v | sed 's/v//')
-    local major_version=$(echo $node_version | cut -d. -f1)
+    local node_version
+    local major_version
+    
+    node_version=$(node -v | sed 's/v//')
+    major_version=$(echo "$node_version" | cut -d. -f1)
     
     if [[ $major_version -lt 18 ]]; then
         log_warn "Node.js 版本 $node_version 不符合項目需求（>=18.0.0）"
@@ -1356,8 +1388,11 @@ final_system_check() {
     fi
     
     # 檢查 npm 與 nvm 的兼容性
-    local npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
-    local node_path=$(which node 2>/dev/null)
+    local npm_prefix
+    local node_path
+    
+    npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    node_path=$(which node 2>/dev/null)
     
     if [[ "$node_path" == *".nvm"* ]]; then
         if [[ "$npm_prefix" == *".nvm"* ]]; then
@@ -1417,11 +1452,11 @@ show_progress() {
     local filled=$((current * width / total))
     local empty=$((width - filled))
     
-    printf "\r${CYAN}[PROGRESS]${NC} $message "
-    printf "${GREEN}["
+    printf "\r%s[PROGRESS]%s %s " "${CYAN}" "${NC}" "$message"
+    printf "%s[" "${GREEN}"
     printf "%*s" $filled | tr ' ' '='
     printf "%*s" $empty | tr ' ' '-'
-    printf "]${NC} %d%%" $percentage
+    printf "]%s %d%%" "${NC}" $percentage
     
     if [[ $current -eq $total ]]; then
         echo
@@ -1434,7 +1469,8 @@ start_timer() {
 }
 
 end_timer() {
-    local end_time=$(date +%s)
+    local end_time
+    end_time=$(date +%s)
     local duration=$((end_time - START_TIME))
     local minutes=$((duration / 60))
     local seconds=$((duration % 60))
@@ -1457,7 +1493,7 @@ check_fast_mode() {
             return 0
         fi
     done
-    return 1
+    return 0  # 修正：改為 return 0，避免在主流程中觸發 set -e
 }
 
 # 優化的互動式提示函數
@@ -1509,7 +1545,13 @@ check_system_environment() {
     show_progress 2 4 "檢查 Node.js 安裝"
     
     # 檢查多個 Node.js 安裝（去重複）
-    local node_paths=($(which -a node 2>/dev/null | sort -u))
+    local node_paths=()
+    if command -v which &>/dev/null; then
+        # 使用 while read 循環替代 mapfile 以提高兼容性
+        while IFS= read -r line; do
+            [[ -n "$line" ]] && node_paths+=("$line")
+        done < <(which -a node 2>/dev/null | sort -u)
+    fi
     if [[ ${#node_paths[@]} -gt 1 ]]; then
         log_warn "偵測到多個 Node.js 安裝："
         for path in "${node_paths[@]}"; do
@@ -1521,7 +1563,13 @@ check_system_environment() {
     show_progress 3 4 "檢查 npm 安裝"
     
     # 檢查多個 npm 安裝（去重複）
-    local npm_paths=($(which -a npm 2>/dev/null | sort -u))
+    local npm_paths=()
+    if command -v which &>/dev/null; then
+        # 使用 while read 循環替代 mapfile 以提高兼容性
+        while IFS= read -r line; do
+            [[ -n "$line" ]] && npm_paths+=("$line")
+        done < <(which -a npm 2>/dev/null | sort -u)
+    fi
     if [[ ${#npm_paths[@]} -gt 1 ]]; then
         log_warn "偵測到多個 npm 安裝："
         for path in "${npm_paths[@]}"; do
@@ -1587,7 +1635,7 @@ main_diagnostic_and_repair() {
 pause_if_needed() {
     if [[ "${FAST_MODE:-}" != "true" ]]; then
         echo -e "${BLUE}按任意鍵繼續...${NC}"
-        read -n 1 -s
+        read -r -n 1 -s
     fi
 }
 
