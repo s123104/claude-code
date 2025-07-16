@@ -1,19 +1,21 @@
 #!/bin/bash
-set -e
+# 2025 Shell 最佳實踐：嚴格模式設定
+set -euo pipefail
 
 # ========== Claude Code 自動化安裝與啟動腳本 ==========
-# 版本: 3.3.0 (整合 Context7 最佳實踐)
+# 版本: 3.4.0 (2025 最佳實踐優化版)
 # 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
-# 新增: 智能檢測、安全跳過、現有安裝保護、Context7 最佳實踐
+# 新增: 網路容錯機制、函數重複清理、Windows 檢測修復、2025 最佳實踐
 # 作者: Claude Code 中文社群
 # 更新: 2025-07-16
 
 # ========== 配置參數 ==========
-SCRIPT_VERSION="3.3.0"
-NVM_VERSION="v0.40.3"
-NODE_TARGET_VERSION="22.17.1"    # LTS Jod
-NODE_FALLBACK_VERSION="18.20.8"  # LTS Hydrogen
+SCRIPT_VERSION="3.4.0"
+NVM_VERSION="v0.40.3"            # 最新穩定版本
+NODE_TARGET_VERSION="22.14.0"    # LTS Jod 最新版本
+NODE_FALLBACK_VERSION="18.20.8"  # LTS Hydrogen 備用版本
 CLAUDE_PACKAGE="@anthropic-ai/claude-code"
+CONTEXT7_PACKAGE="@upstash/context7-mcp"  # Context7 MCP 服務器
 
 # ========== 日誌和顏色系統 ==========
 LOG_FILE="/tmp/claude_setup_$(date +%Y%m%d_%H%M%S).log"
@@ -65,25 +67,7 @@ info() {
 
 # ========== 智能檢測與互動式修復系統 ==========
 
-# 互動式提示函數
-interactive_prompt() {
-    local message="$1"
-    local default_answer="${2:-N}"
-    local answer
-    
-    echo -e "${YELLOW}[PROMPT]${NC} $message"
-    read -p "Continue? (y/N): " -n 1 -r answer
-    echo
-    
-    if [[ -z "$answer" ]]; then
-        answer="$default_answer"
-    fi
-    
-    case "$answer" in
-        [Yy]* ) return 0 ;;
-        * ) return 1 ;;
-    esac
-}
+# 互動式提示函數 - 使用優化版本（見後面定義）
 
 # 檢測 npm 權限問題
 check_npm_permissions() {
@@ -273,51 +257,7 @@ check_claude_cli_status() {
     fi
 }
 
-# 檢測系統環境污染
-check_system_environment() {
-    log_info "檢測系統環境污染..."
-    
-    local has_pollution=false
-    
-    # 檢查 PATH 中的 Windows 路徑（WSL 環境）
-    if [[ -n "$WSL_MODE" ]]; then
-        if echo "$PATH" | grep -q "/mnt/c/"; then
-            log_warn "偵測到 PATH 中的 Windows 路徑污染"
-            has_pollution=true
-        fi
-    fi
-    
-    # 檢查多個 Node.js 安裝（去重複）
-    local node_paths=($(which -a node 2>/dev/null | sort -u))
-    if [[ ${#node_paths[@]} -gt 1 ]]; then
-        log_warn "偵測到多個 Node.js 安裝："
-        for path in "${node_paths[@]}"; do
-            echo "  - $path"
-        done
-        has_pollution=true
-    fi
-    
-    # 檢查多個 npm 安裝（去重複）
-    local npm_paths=($(which -a npm 2>/dev/null | sort -u))
-    if [[ ${#npm_paths[@]} -gt 1 ]]; then
-        log_warn "偵測到多個 npm 安裝："
-        for path in "${npm_paths[@]}"; do
-            echo "  - $path"
-        done
-        has_pollution=true
-    fi
-    
-    if [[ "$has_pollution" == "true" ]]; then
-        log_error "偵測到系統環境污染"
-        if interactive_prompt "是否要清理系統環境污染？"; then
-            clean_system_environment
-        else
-            log_warn "跳過環境清理，可能影響系統穩定性"
-        fi
-    else
-        log_success "系統環境檢查通過"
-    fi
-}
+# 檢測系統環境污染 - 使用優化版本（見後面定義）
 
 # 清理系統環境污染
 clean_system_environment() {
@@ -615,11 +555,7 @@ detect_os() {
 }
 
 # 檢查指令是否存在
-check_command() {
-    if ! command -v "$1" &>/dev/null; then
-        error_exit "找不到指令：$1"
-    fi
-}
+# check_command 函數已移除 - 未在腳本中使用
 
 # 檢查 Windows 版本與 WSL 支援
 check_windows_version() {
@@ -751,27 +687,90 @@ check_dependencies() {
     log_success "系統依賴檢查完成"
 }
 
+# 網路容錯下載函數
+download_with_retry() {
+    local url="$1"
+    local output_file="$2"
+    local max_retries=3
+    local retry_delay=2
+    local timeout=30
+    
+    for ((i=1; i<=max_retries; i++)); do
+        log_info "嘗試下載 ($i/$max_retries): $url"
+        
+        if [[ -n "$output_file" ]]; then
+            # 下載到指定檔案
+            if curl -fsSL --connect-timeout "$timeout" --max-time $((timeout*2)) -o "$output_file" "$url"; then
+                log_success "下載成功: $url"
+                return 0
+            fi
+        else
+            # 輸出到標準輸出
+            if curl -fsSL --connect-timeout "$timeout" --max-time $((timeout*2)) "$url"; then
+                log_success "下載成功: $url"
+                return 0
+            fi
+        fi
+        
+        if [[ $i -lt $max_retries ]]; then
+            log_warn "下載失敗，等待 ${retry_delay} 秒後重試..."
+            sleep $retry_delay
+            retry_delay=$((retry_delay * 2))
+        fi
+    done
+    
+    log_error "下載失敗，已達最大重試次數: $url"
+    return 1
+}
+
 # 網路連線檢查
 check_network_connectivity() {
     log_info "檢查網路連線..."
     
-    # 檢查基本網路連線
-    if ! ping -c 1 8.8.8.8 >/dev/null 2>&1; then
+    # 檢查基本網路連線（多重備援）
+    local dns_servers=("8.8.8.8" "1.1.1.1" "9.9.9.9")
+    local network_available=false
+    
+    for dns in "${dns_servers[@]}"; do
+        if ping -c 1 -W 5 "$dns" >/dev/null 2>&1; then
+            network_available=true
+            break
+        fi
+    done
+    
+    if [[ "$network_available" == "false" ]]; then
         error_exit "無法連線到網際網路，請檢查網路設定"
     fi
     
-    # 檢查 DNS 解析
-    if ! nslookup raw.githubusercontent.com >/dev/null 2>&1; then
+    # 檢查 DNS 解析（多重備援）
+    local dns_targets=("raw.githubusercontent.com" "github.com" "nodejs.org")
+    local dns_working=false
+    
+    for target in "${dns_targets[@]}"; do
+        if nslookup "$target" >/dev/null 2>&1 || host "$target" >/dev/null 2>&1; then
+            dns_working=true
+            break
+        fi
+    done
+    
+    if [[ "$dns_working" == "false" ]]; then
         log_warn "DNS 解析有問題，可能影響下載速度"
     fi
     
-    # 檢查重要網站連線
+    # 檢查重要網站連線（容錯機制）
     local sites=("github.com" "npmjs.com" "nodejs.org")
+    local failed_sites=()
+    
     for site in "${sites[@]}"; do
-        if ! curl -s --connect-timeout 5 "https://$site" >/dev/null; then
-            log_warn "無法連線到 $site，可能影響安裝程序"
+        if ! curl -s --connect-timeout 10 --max-time 20 "https://$site" >/dev/null 2>&1; then
+            failed_sites+=("$site")
         fi
     done
+    
+    if [[ ${#failed_sites[@]} -gt 0 ]]; then
+        log_warn "無法連線到以下網站: ${failed_sites[*]}"
+        log_warn "這可能影響安裝程序，但腳本將繼續執行"
+    fi
     
     log_success "網路連線檢查通過"
 }
@@ -994,11 +993,20 @@ install_nvm_fresh() {
     local nvm_install_url="https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh"
     log_info "下載 NVM 安裝腳本..."
     
-    # 使用 curl 或 wget 下載
+    # 使用容錯下載機制
     if command -v curl &>/dev/null; then
-        curl -o- "$nvm_install_url" | bash
+        if download_with_retry "$nvm_install_url" | bash; then
+            log_success "NVM 安裝腳本執行成功"
+        else
+            error_exit "NVM 安裝腳本下載或執行失敗"
+        fi
     elif command -v wget &>/dev/null; then
-        wget -qO- "$nvm_install_url" | bash
+        # wget 備用方案
+        if wget -qO- "$nvm_install_url" | bash; then
+            log_success "NVM 安裝腳本執行成功"
+        else
+            error_exit "NVM 安裝腳本下載或執行失敗"
+        fi
     else
         error_exit "需要 curl 或 wget 來下載 NVM"
     fi
@@ -1375,8 +1383,9 @@ final_system_check() {
 }
 
 # ========== Windows 端偵測（僅於 Windows PowerShell 管理員下有效） ==========
-if [[ "$SYSTEM_TYPE" == "wsl" ]] && ! grep -qi microsoft /proc/version 2>/dev/null; then
-  log_info "Windows 環境偵測，開始 WSL 2 安裝程序"
+# 修正邏輯：檢查是否在 Windows 原生環境且非 WSL
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || -n "$WINDIR" ]] && [[ -z "$WSL_DISTRO_NAME" ]]; then
+  log_info "Windows 原生環境偵測，開始 WSL 2 安裝程序"
   
   # 檢查管理員權限
   if ! powershell.exe -Command "[Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent() | Select-Object -ExpandProperty IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')" 2>/dev/null | grep -q True; then
