@@ -12,7 +12,7 @@
   [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
   [![WSL](https://img.shields.io/badge/WSL-Auto%20Setup-orange.svg)](wsl_claude_code_setup.sh)
   
-  > 最後更新時間：2025-07-16T20:03:06+08:00  
+  > 最後更新時間：2025-07-17T23:45:15+08:00  
   > 文件語言：繁體中文  
   > 專案維護者：s123104
 </div>
@@ -75,7 +75,7 @@ curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 chmod +x start.sh && ./start.sh
 ```
 
-**腳本特色 v3.5.0**：
+**腳本特色 v3.5.2**：
 
 - ✅ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
 - ✅ **Bash 版本檢測升級**：自動檢測並升級 Bash 到 4.0+ 版本
@@ -84,6 +84,8 @@ chmod +x start.sh && ./start.sh
 - ✅ **ShellCheck 零警告**：通過 ShellCheck 靜態分析，符合 2025 最佳實踐
 - ✅ **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並適配
 - ✅ **Claude Code CLI 狀態檢測**：智能檢測並更新 Claude Code CLI
+- 🆕 **npm/nvm 衝突自動修復**：自動檢測並清理 .npmrc 中的 prefix/globalconfig 衝突
+- 🆕 **nvm delete-prefix 自動執行**：完整解決 macOS zsh 環境中的 nvm 配置問題
 
 ### 🖥️ Windows 用戶
 
@@ -351,6 +353,14 @@ chmod +x start.sh
 - 🎨 **彩色輸出**：使用顏色區分錯誤、警告、成功、資訊訊息
 - 🔄 **錯誤恢復**：自動重試失敗的安裝步驟
 - 📋 **詳細診斷**：提供具體的錯誤原因和解決建議
+
+**npm/nvm 衝突自動修復（v3.5.2 新增）：**
+
+- 🔍 **智能檢測**：自動檢測 `~/.npmrc` 中的 `prefix` 和 `globalconfig` 設定衝突
+- 💾 **安全備份**：修復前自動備份原始配置文件
+- ⚡ **自動執行**：執行 `nvm use --delete-prefix` 指令解決 nvm 衝突
+- 🛠️ **多重修復**：提供手動清理和替代修復方案
+- 🎯 **macOS 優化**：專門解決 macOS zsh 環境中的常見 nvm 問題
 
 **安全性與穩定性：**
 

@@ -3,14 +3,14 @@
 set -euo pipefail
 
 # ========== Claude Code 自動化安裝與啟動腳本 ==========
-# 版本: 3.5.1 (2025 最佳實踐優化版)
+# 版本: 3.5.2 (2025 最佳實踐優化版)
 # 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
-# 新增: 修復 npm prefix/globalconfig 衝突、BASH_SOURCE 管道執行問題
+# 新增: 強化 npm/nvm 衝突修復，自動執行 delete-prefix，完整解決 macOS zsh 問題
 # 作者: Claude Code 中文社群
-# 更新: 2025-07-17T23:15:30+08:00
+# 更新: 2025-07-17T23:45:15+08:00
 
 # ========== 配置參數 ==========
-SCRIPT_VERSION="3.5.1"
+SCRIPT_VERSION="3.5.2"
 # shellcheck disable=SC2034
 NVM_VERSION="v0.40.3"            # 最新穩定版本
 # shellcheck disable=SC2034
@@ -561,12 +561,14 @@ clean_npm_config_conflicts() {
     
     local npmrc_file="$HOME/.npmrc"
     local has_conflicts=false
+    local nvm_conflict_detected=false
     
     # 檢查是否存在 prefix 或 globalconfig 設定
     if [[ -f "$npmrc_file" ]]; then
         if grep -E "^(prefix|globalconfig)" "$npmrc_file" >/dev/null 2>&1; then
             log_warn "發現 ~/.npmrc 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
             has_conflicts=true
+            nvm_conflict_detected=true
             
             # 顯示衝突的設定
             log_info "衝突的設定："
@@ -590,6 +592,7 @@ clean_npm_config_conflicts() {
         log_warn "發現環境變數 NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX，這會與 nvm 衝突"
         log_info "建議在 shell 配置檔案中移除 NPM_CONFIG_PREFIX 設定"
         has_conflicts=true
+        nvm_conflict_detected=true
     fi
     
     if [[ -n "${PREFIX:-}" ]]; then
@@ -597,32 +600,79 @@ clean_npm_config_conflicts() {
         has_conflicts=true
     fi
     
-    # 如果使用 nvm，執行 delete-prefix 命令
-    if command -v nvm &>/dev/null && [[ "$has_conflicts" == "true" ]]; then
-        log_info "嘗試使用 nvm 清理 prefix 設定..."
+    # 檢測特殊的 nvm 衝突訊息情形
+    local current_node_version=""
+    if command -v node &>/dev/null; then
+        current_node_version=$(node --version 2>/dev/null | sed 's/^v//' || echo "")
+    fi
+    
+    # 如果檢測到 nvm 相關衝突或有當前 Node.js 版本
+    if [[ "$nvm_conflict_detected" == "true" ]] || [[ -n "$current_node_version" ]]; then
+        # 嘗試載入 nvm（如果存在）
+        if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
+            log_info "嘗試載入 nvm 環境..."
+            # shellcheck source=/dev/null
+            source "$HOME/.nvm/nvm.sh" 2>/dev/null || true
+        fi
         
-        # 獲取當前 Node.js 版本
-        local current_version
-        current_version=$(node --version 2>/dev/null | sed 's/^v//' || echo "")
-        
-        if [[ -n "$current_version" ]]; then
-            log_info "當前 Node.js 版本：$current_version"
+        # 如果 nvm 可用且有當前版本，執行 delete-prefix
+        if command -v nvm &>/dev/null && [[ -n "$current_node_version" ]]; then
+            log_info "嘗試使用 nvm 清理 prefix 設定..."
             
-            # 執行 nvm use --delete-prefix
-            if nvm use --delete-prefix "$current_version" --silent 2>/dev/null; then
-                log_success "已使用 nvm 清理 prefix 設定"
-            else
-                log_warn "nvm delete-prefix 失敗，但繼續安裝..."
+            # 先檢查 npm config 中的 prefix 設定
+            local npm_prefix=""
+            npm_prefix=$(npm config get prefix 2>/dev/null | grep -v "undefined" || echo "")
+            
+            if [[ -n "$npm_prefix" ]] && [[ "$npm_prefix" != *"/.npm-global" ]]; then
+                log_info "發現 npm prefix 設定：$npm_prefix"
+                
+                # 執行 nvm use --delete-prefix
+                log_info "執行 nvm use --delete-prefix v${current_node_version} --silent..."
+                if nvm use --delete-prefix "v${current_node_version}" --silent 2>/dev/null; then
+                    log_success "已使用 nvm 清理 prefix 設定"
+                else
+                    # 如果失敗，嘗試不同的方法
+                    log_warn "nvm delete-prefix 失敗，嘗試替代方法..."
+                    
+                    # 手動清理 npm prefix
+                    if npm config delete prefix 2>/dev/null; then
+                        log_info "已手動清理 npm prefix 設定"
+                    fi
+                    
+                    # 嘗試重新使用當前版本
+                    if nvm use "v${current_node_version}" --silent 2>/dev/null; then
+                        log_info "已重新設定 nvm 使用版本 v${current_node_version}"
+                    fi
+                fi
+            fi
+        elif [[ -n "$current_node_version" ]]; then
+            # 如果 nvm 不可用但有 Node.js，手動清理
+            log_info "nvm 不可用，嘗試手動清理 npm 配置..."
+            if command -v npm &>/dev/null; then
+                npm config delete prefix 2>/dev/null || true
+                npm config delete globalconfig 2>/dev/null || true
+                log_info "已嘗試手動清理 npm 配置"
             fi
         fi
     fi
     
     # 清理 npm cache 以確保沒有快取問題
     log_info "清理 npm 快取..."
-    npm cache clean --force 2>/dev/null || true
+    if command -v npm &>/dev/null; then
+        npm cache clean --force 2>/dev/null || true
+    fi
     
+    # 最終檢查與提示
     if [[ "$has_conflicts" == "false" ]]; then
         log_success "未發現 npm 配置衝突"
+    else
+        log_info "npm 配置衝突清理完成"
+        
+        # 提供額外的建議
+        log_info "建議重新載入 shell 或執行：source ${SHELL_CONFIG:-~/.zshrc}"
+        if [[ -n "$current_node_version" ]]; then
+            log_info "當前 Node.js 版本：v${current_node_version}"
+        fi
     fi
 }
 
