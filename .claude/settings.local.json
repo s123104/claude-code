@@ -69,7 +69,10 @@
       "Bash(./test_config.sh:*)",
       "Bash(./shellcheck-stable/shellcheck:*)",
       "Bash(pwsh:*)",
-      "Bash(cmd.exe:*)"
+      "Bash(cmd.exe:*)",
+      "Bash(brew install:*)",
+      "Bash(brew:*)",
+      "Bash(zsh:*)"
     ],
     "deny": []
   }
