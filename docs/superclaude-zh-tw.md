@@ -6,7 +6,7 @@
 > - [SuperClaude 官方文檔](https://superclaude.dev/)
 > - [Claude Code 高階配置指南](https://docs.anthropic.com/en/docs/claude-code)
 > - [MCP 多代理協作協議](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-01-14T15:30:00+08:00**
+> - **文件整理時間：2025-07-16T15:30:00+08:00**
 > - **版本：v3.0.0（初始發布版本）**
 
 ---

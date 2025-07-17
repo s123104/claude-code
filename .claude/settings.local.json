@@ -66,7 +66,10 @@
       "Bash(./test_start.sh:*)",
       "Bash(./test_network.sh:*)",
       "Bash(./test_system.sh:*)",
-      "Bash(./test_config.sh:*)"
+      "Bash(./test_config.sh:*)",
+      "Bash(./shellcheck-stable/shellcheck:*)",
+      "Bash(pwsh:*)",
+      "Bash(cmd.exe:*)"
     ],
     "deny": []
   }

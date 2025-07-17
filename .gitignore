@@ -56,4 +56,8 @@ wheels/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Desktop.ini 
+Desktop.ini
+
+# ShellCheck
+shellcheck-stable/
+shellcheck-*.tar.xz 

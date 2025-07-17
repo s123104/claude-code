@@ -402,7 +402,7 @@
             <div class="code-block">
               <button class="copy-btn" onclick="copyCode(this)">複製</button>
               curl -fsSL
-              https://raw.githubusercontent.com/your-org/claude-code/main/start.sh
+              https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
               | bash -s -- --fast
             </div>
           </div>
@@ -415,7 +415,7 @@
             <div class="code-block">
               <button class="copy-btn" onclick="copyCode(this)">複製</button>
               curl -fsSL
-              https://raw.githubusercontent.com/your-org/claude-code/main/start.sh
+              https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
               | bash
             </div>
           </div>
@@ -426,7 +426,7 @@
 
             <div class="code-block">
               <button class="copy-btn" onclick="copyCode(this)">複製</button>
-              git clone https://github.com/your-org/claude-code.git cd
+              git clone https://github.com/s123104/claude-code.git cd
               claude-code chmod +x start.sh ./start.sh --fast
             </div>
           </div>
@@ -489,12 +489,12 @@
 
             <div class="feature-card">
               <div class="feature-icon">⚡</div>
-              <h3>自動化安裝</h3>
+              <h3>自動化安裝 v3.5.0</h3>
               <ul>
-                <li>Node.js 22.14.0 LTS 自動安裝</li>
-                <li>npm 全域目錄智能配置</li>
-                <li>Claude Code CLI 最新版安裝</li>
-                <li>2025 年安全最佳實踐配置</li>
+                <li>Bash 版本檢測與自動升級 (4.0+)</li>
+                <li>Claude Code CLI 智能狀態檢測</li>
+                <li>快速模式支援 (--fast 參數)</li>
+                <li>ShellCheck 零警告品質保證</li>
               </ul>
             </div>
 
@@ -502,10 +502,10 @@
               <div class="feature-icon">🌐</div>
               <h3>跨平台支援</h3>
               <ul>
-                <li>Windows WSL2 自動安裝配置</li>
-                <li>Linux 主流發行版全支援</li>
-                <li>macOS（Intel + Apple Silicon）</li>
-                <li>多 Shell 環境智能適配</li>
+                <li>WSL2/Linux/macOS 環境自動適配</li>
+                <li>Homebrew 整合（macOS）</li>
+                <li>套件管理器支援（apt/yum/dnf/pacman）</li>
+                <li>嚴格模式與完整日誌系統</li>
               </ul>
             </div>
 
@@ -686,9 +686,11 @@
           </div>
 
           <div class="changelog">
-            <h4>🚀 v3.0.0 (2025-01-11)</h4>
-            <div class="changelog-item">重大架構重構，提升穩定性</div>
-            <div class="changelog-item">新增跨平台支援（Windows WSL2）</div>
+            <h4>🚀 v3.5.0 (2025-07-17)</h4>
+            <div class="changelog-item">新增 Bash 版本檢測升級功能</div>
+            <div class="changelog-item">支援快速模式 (--fast) 跳過互動提示</div>
+            <div class="changelog-item">通過 ShellCheck 零警告品質檢測</div>
+            <div class="changelog-item">優化版本比較邏輯與錯誤處理</div>
             <div class="changelog-item">整合 Node.js 22.14.0 LTS</div>
             <div class="changelog-item">新增安全最佳實踐配置</div>
           </div>
