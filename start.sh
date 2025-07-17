@@ -653,7 +653,8 @@ main_installation() {
 }
 
 # 執行主安裝流程
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+# 安全檢查：支援直接執行和管道執行
+if [[ "${BASH_SOURCE[0]:-$0}" == "${0}" ]] || [[ -z "${BASH_SOURCE[0]:-}" ]]; then
     main_installation "$@"
     
     echo
