@@ -3,14 +3,14 @@
 set -euo pipefail
 
 # ========== Claude Code 自動化安裝與啟動腳本 ==========
-# 版本: 3.5.0 (2025 最佳實踐優化版)
+# 版本: 3.5.1 (2025 最佳實踐優化版)
 # 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
-# 新增: Bash 版本檢測升級、快速模式優化、ShellCheck 0 警告
+# 新增: 修復 npm prefix/globalconfig 衝突、BASH_SOURCE 管道執行問題
 # 作者: Claude Code 中文社群
-# 更新: 2025-07-17T09:24:52+08:00
+# 更新: 2025-07-17T23:15:30+08:00
 
 # ========== 配置參數 ==========
-SCRIPT_VERSION="3.5.0"
+SCRIPT_VERSION="3.5.1"
 # shellcheck disable=SC2034
 NVM_VERSION="v0.40.3"            # 最新穩定版本
 # shellcheck disable=SC2034
@@ -555,9 +555,123 @@ check_claude_cli_status() {
     fi
 }
 
+# 清理 npm 配置衝突
+clean_npm_config_conflicts() {
+    log_info "檢查並清理 npm 配置衝突..."
+    
+    local npmrc_file="$HOME/.npmrc"
+    local has_conflicts=false
+    
+    # 檢查是否存在 prefix 或 globalconfig 設定
+    if [[ -f "$npmrc_file" ]]; then
+        if grep -E "^(prefix|globalconfig)" "$npmrc_file" >/dev/null 2>&1; then
+            log_warn "發現 ~/.npmrc 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
+            has_conflicts=true
+            
+            # 顯示衝突的設定
+            log_info "衝突的設定："
+            grep -E "^(prefix|globalconfig)" "$npmrc_file" || true
+            
+            # 備份原始檔案
+            local backup_file="${npmrc_file}.backup.$(date +%Y%m%d_%H%M%S)"
+            cp "$npmrc_file" "$backup_file"
+            log_info "已備份原始 .npmrc 到：$backup_file"
+            
+            # 移除衝突的設定
+            log_info "移除衝突的 prefix 和 globalconfig 設定..."
+            grep -vE "^(prefix|globalconfig)" "$npmrc_file" > "${npmrc_file}.tmp" && mv "${npmrc_file}.tmp" "$npmrc_file"
+            
+            log_success "已清理 ~/.npmrc 中的衝突設定"
+        fi
+    fi
+    
+    # 檢查環境變數衝突
+    if [[ -n "${NPM_CONFIG_PREFIX:-}" ]]; then
+        log_warn "發現環境變數 NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX，這會與 nvm 衝突"
+        log_info "建議在 shell 配置檔案中移除 NPM_CONFIG_PREFIX 設定"
+        has_conflicts=true
+    fi
+    
+    if [[ -n "${PREFIX:-}" ]]; then
+        log_warn "發現環境變數 PREFIX=$PREFIX，這可能與 nvm 衝突"
+        has_conflicts=true
+    fi
+    
+    # 如果使用 nvm，執行 delete-prefix 命令
+    if command -v nvm &>/dev/null && [[ "$has_conflicts" == "true" ]]; then
+        log_info "嘗試使用 nvm 清理 prefix 設定..."
+        
+        # 獲取當前 Node.js 版本
+        local current_version
+        current_version=$(node --version 2>/dev/null | sed 's/^v//' || echo "")
+        
+        if [[ -n "$current_version" ]]; then
+            log_info "當前 Node.js 版本：$current_version"
+            
+            # 執行 nvm use --delete-prefix
+            if nvm use --delete-prefix "$current_version" --silent 2>/dev/null; then
+                log_success "已使用 nvm 清理 prefix 設定"
+            else
+                log_warn "nvm delete-prefix 失敗，但繼續安裝..."
+            fi
+        fi
+    fi
+    
+    # 清理 npm cache 以確保沒有快取問題
+    log_info "清理 npm 快取..."
+    npm cache clean --force 2>/dev/null || true
+    
+    if [[ "$has_conflicts" == "false" ]]; then
+        log_success "未發現 npm 配置衝突"
+    fi
+}
+
+# 設定 npm 全域安裝目錄
+setup_npm_global_config() {
+    log_info "設定 npm 全域安裝目錄..."
+    
+    local npm_global_dir="$HOME/.npm-global"
+    
+    # 創建 npm 全域安裝目錄
+    if [[ ! -d "$npm_global_dir" ]]; then
+        mkdir -p "$npm_global_dir"
+        log_info "已創建 npm 全域安裝目錄：$npm_global_dir"
+    fi
+    
+    # 配置 npm 使用此目錄
+    npm config set prefix "$npm_global_dir" 2>/dev/null || true
+    
+    # 確保 PATH 包含 npm 全域 bin 目錄
+    local npm_bin_dir="$npm_global_dir/bin"
+    
+    if [[ ":$PATH:" != *":$npm_bin_dir:"* ]]; then
+        # 添加到當前 shell
+        export PATH="$npm_bin_dir:$PATH"
+        
+        # 添加到 shell 配置檔案
+        local shell_config="${SHELL_CONFIG:-$HOME/.zshrc}"
+        if [[ -f "$shell_config" ]]; then
+            if ! grep -q "npm-global/bin" "$shell_config" 2>/dev/null; then
+                echo "" >> "$shell_config"
+                echo "# npm 全域安裝目錄 PATH" >> "$shell_config"
+                echo "export PATH=\"\$HOME/.npm-global/bin:\$PATH\"" >> "$shell_config"
+                log_info "已將 npm 全域 bin 目錄添加到 $shell_config"
+            fi
+        fi
+    fi
+    
+    log_success "npm 全域安裝目錄設定完成"
+}
+
 # 安裝 Claude Code CLI
 install_claude_code_fresh() {
     log_info "安裝 Claude Code CLI..."
+    
+    # 清理 npm 配置衝突
+    clean_npm_config_conflicts
+    
+    # 設定 npm 全域安裝目錄
+    setup_npm_global_config
     
     # 清理舊版本（如果存在）
     if command -v claude &>/dev/null; then
@@ -565,12 +679,30 @@ install_claude_code_fresh() {
         npm uninstall -g "$CLAUDE_PACKAGE" 2>/dev/null || true
     fi
     
+    # 確保使用正確的 npm 配置
+    log_info "當前 npm 配置："
+    npm config get prefix 2>/dev/null || true
+    
     # 安裝 Claude Code
+    log_info "正在安裝 $CLAUDE_PACKAGE..."
     if ! npm install -g "$CLAUDE_PACKAGE" --force; then
         error_exit "Claude Code CLI 安裝失敗"
     fi
     
-    log_success "Claude Code CLI 安裝完成"
+    # 驗證安裝
+    local claude_path
+    claude_path=$(which claude 2>/dev/null || echo "")
+    if [[ -n "$claude_path" ]]; then
+        log_success "Claude Code CLI 安裝完成：$claude_path"
+        
+        # 顯示版本資訊
+        local claude_version
+        claude_version=$(claude --version 2>/dev/null | head -1 || echo "unknown")
+        log_info "安裝版本：$claude_version"
+    else
+        log_warn "Claude Code CLI 安裝完成，但未在 PATH 中找到"
+        log_info "請重新載入 shell 或執行：source $SHELL_CONFIG"
+    fi
 }
 
 # 快速模式檢查
