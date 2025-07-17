@@ -55,7 +55,8 @@ curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
 
 # 或下載後執行
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+chmod +x start.sh && ./start.sh
 ```
 
 ### 🍎 macOS 用戶
@@ -70,12 +71,15 @@ curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
 
 # 或下載後執行
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh && bash start.sh
+curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
+chmod +x start.sh && ./start.sh
 ```
 
 **腳本特色 v3.5.0**：
 
+- ✅ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
 - ✅ **Bash 版本檢測升級**：自動檢測並升級 Bash 到 4.0+ 版本
+- ✅ **Homebrew 版本優先**：macOS 上優先使用 Homebrew 安裝的 shell 版本
 - ✅ **快速模式優化**：支援 `--fast` 參數跳過互動提示
 - ✅ **ShellCheck 零警告**：通過 ShellCheck 靜態分析，符合 2025 最佳實踐
 - ✅ **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並適配
@@ -318,7 +322,9 @@ chmod +x start.sh
 
 **核心功能升級：**
 
-- ⚡ **Bash 版本檢測升級**：自動檢測 Bash 版本並升級至 4.0+ (macOS Homebrew / Linux 套件管理器)
+- ⚡ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
+- 🍎 **Bash 版本檢測升級**：自動檢測 Bash 版本並升級至 4.0+ (macOS Homebrew / Linux 套件管理器)
+- 🧠 **Homebrew 版本優先**：macOS 上優先使用 Homebrew 安裝的 shell 版本檢測
 - 🚀 **快速模式支援**：使用 `--fast` 參數跳過所有互動提示，自動選擇最佳選項
 - ✅ **ShellCheck 零警告**：通過 ShellCheck v0.10.0 靜態分析，符合 2025 Shell 最佳實踐
 - 🔧 **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並進行適配
@@ -333,7 +339,7 @@ chmod +x start.sh
 
 **跨平台支援：**
 
-- 🍎 **macOS 整合**：完整支援 Homebrew、zsh 環境、Apple Silicon (M1/M2)
+- 🍎 **macOS 整合**：完整支援 Homebrew、zsh 環境優先、Apple Silicon (M1/M2)
 - 🐧 **Linux 發行版**：支援 Ubuntu、Debian、CentOS、Arch Linux 等主流發行版
 - 🔧 **WSL2 優化**：針對 WSL2 環境特殊優化，避免 Windows 路徑汙染
 
