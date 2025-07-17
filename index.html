@@ -477,12 +477,11 @@
           <!-- WSL 安裝腳本連結（官方最新版） -->
           <a
             href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-            target="_blank"
-            rel="noopener noreferrer"
+            download="start.sh"
             class="border-2 border-secondary-600 hover:bg-secondary-600 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105"
           >
             <i class="fab fa-linux mr-2"></i>
-            一鍵安裝腳本
+            下載 start.sh 執行檔
           </a>
         </div>
       </div>
@@ -661,14 +660,37 @@
                   查看所有檔案
                 </a>
               </div>
-              <div class="text-xs text-neutral-400 mt-4">
-                <strong>✅ Windows 環境特色：</strong><br/>
-                • 全自動 WSL2 安裝與配置<br/>
-                • Ubuntu 20.04 LTS 預裝環境<br/>
-                • 智能系統需求檢測（TPM 2.0、VT-x/AMD-V）<br/>
-                • PowerShell 執行政策自動設定<br/>
-                • 路徑轉換與環境變數配置<br/>
-                • 完整錯誤處理與日誌記錄
+              <div class="mt-4 p-4 bg-gradient-to-r from-primary-500/10 to-primary-600/10 rounded-xl border border-primary-500/20">
+                <div class="flex items-center mb-3">
+                  <div class="w-2 h-2 bg-primary-400 rounded-full mr-3"></div>
+                  <h5 class="font-semibold text-primary-300 text-sm">環境特色</h5>
+                </div>
+                <div class="space-y-2 text-xs text-neutral-300">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>全自動 WSL2 安裝與配置</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>Ubuntu 20.04 LTS 預裝環境</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>智能系統需求檢測 (TPM 2.0, VT-x/AMD-V)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>PowerShell 執行政策自動設定</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>路徑轉換與環境變數配置</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-primary-400 flex-shrink-0"></i>
+                    <span>完整錯誤處理與日誌記錄</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -680,20 +702,16 @@
               <h3 class="text-2xl font-semibold">Linux/WSL 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
+              <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
-                <div class="text-accent-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
+                <div class="text-accent-400 whitespace-nowrap">
+                  curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
                 </div>
               </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
+              <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <div class="text-neutral-400 mb-2"># 快速模式（跳過互動提示）</div>
-                <div class="text-accent-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash -s -- --fast
+                <div class="text-accent-400 whitespace-nowrap">
+                  curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
@@ -723,13 +741,33 @@
                   查看原始碼
                 </a>
               </div>
-              <div class="text-xs text-neutral-400 mt-4">
-                <strong>✅ Linux/WSL 環境特色：</strong><br/>
-                • 自動檢測 bash 4.0+ 版本並升級（Ubuntu/Debian/CentOS/Arch）<br/>
-                • 支援 zsh 5.0+ 檢測與安裝<br/>
-                • 智能套件管理器檢測（apt/yum/dnf/pacman）<br/>
-                • WSL2 環境優化，避免 Windows 路徑汙染<br/>
-                • 完整日誌記錄：<code>/tmp/claude_setup_*.log</code>
+              <div class="mt-4 p-4 bg-gradient-to-r from-accent-500/10 to-accent-600/10 rounded-xl border border-accent-500/20">
+                <div class="flex items-center mb-3">
+                  <div class="w-2 h-2 bg-accent-400 rounded-full mr-3"></div>
+                  <h5 class="font-semibold text-accent-300 text-sm">環境特色</h5>
+                </div>
+                <div class="space-y-2 text-xs text-neutral-300">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>自動檢測 bash 4.0+ 版本並升級</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>支援 zsh 5.0+ 檢測與安裝</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>智能套件管理器檢測 (apt/yum/dnf/pacman)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>WSL2 環境優化，避免 Windows 路徑汙染</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>完整日誌記錄：<code class="bg-accent-500/20 px-2 py-1 rounded text-accent-300">/tmp/claude_setup_*.log</code></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -741,22 +779,18 @@
               <h3 class="text-2xl font-semibold">macOS 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
+              <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
-                <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
+                <div class="text-secondary-400 whitespace-nowrap">
+                  curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
                 </div>
               </div>
-              <div class="code-block rounded-lg p-4 font-mono text-sm">
+              <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <div class="text-neutral-400 mb-2">
                   # 快速模式（跳過互動提示）
                 </div>
-                <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash -s -- --fast
+                <div class="text-secondary-400 whitespace-nowrap">
+                  curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
@@ -786,15 +820,41 @@
                   查看原始碼
                 </a>
               </div>
-              <div class="text-xs text-neutral-400 mt-4">
-                <strong>✅ macOS 環境特色（v3.5.0）：</strong><br/>
-                • <strong>優先檢測 zsh 5.0+ 版本</strong>（步驟 1/3）並支援 Homebrew 升級<br/>
-                • 自動檢測 bash 4.0+ 版本（步驟 2/3）並升級<br/>
-                • <strong>Homebrew 版本優先</strong>：優先使用 Homebrew 安裝的 shell<br/>
-                • 自動建立 <code>~/.zshrc</code> 配置文件<br/>
-                • 智能檢測並修復 npm/nvm 衝突<br/>
-                • 完整支援 macOS 15.5+ 和 Apple Silicon (M1/M2)<br/>
-                • 完整日誌記錄：<code>/tmp/claude_setup_*.log</code>
+              <div class="mt-4 p-4 bg-gradient-to-r from-secondary-500/10 to-secondary-600/10 rounded-xl border border-secondary-500/20">
+                <div class="flex items-center mb-3">
+                  <div class="w-2 h-2 bg-secondary-400 rounded-full mr-3"></div>
+                  <h5 class="font-semibold text-secondary-300 text-sm">環境特色 (v3.5.0)</h5>
+                </div>
+                <div class="space-y-2 text-xs text-neutral-300">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-star text-secondary-400 flex-shrink-0"></i>
+                    <span><strong>優先檢測 zsh 5.0+ 版本</strong> (步驟 1/3)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>自動檢測 bash 4.0+ 版本 (步驟 2/3)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-star text-secondary-400 flex-shrink-0"></i>
+                    <span><strong>Homebrew 版本優先</strong>檢測機制</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>自動建立 <code class="bg-secondary-500/20 px-2 py-1 rounded text-secondary-300">~/.zshrc</code> 配置文件</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>智能檢測並修復 npm/nvm 衝突</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>完整支援 macOS 15.5+ 和 Apple Silicon (M1/M2)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>完整日誌記錄：<code class="bg-secondary-500/20 px-2 py-1 rounded text-secondary-300">/tmp/claude_setup_*.log</code></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -840,57 +900,131 @@
 
         <!-- 添加統一安裝說明 -->
         <div class="mt-16 glass-effect rounded-xl p-8 observe-fade">
-          <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold gradient-text mb-4">
-              <i class="fas fa-rocket mr-2"></i>統一安裝流程說明
+          <div class="text-center mb-8">
+            <h3 class="text-3xl font-bold gradient-text mb-4">
+              <i class="fas fa-rocket mr-3"></i>一鍵安裝流程
             </h3>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="text-center">
-              <div class="text-primary-400 text-2xl mb-3">
-                <i class="fab fa-windows"></i>
-              </div>
-              <h4 class="font-semibold mb-2">Windows 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 setup.bat 全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI 安裝<br/>
-                • 全自動 WSL2 安裝與配置<br/>
-                • Ubuntu 20.04 LTS 預裝環境<br/>
-                • 智能系統需求檢測（TPM 2.0、VT-x/AMD-V）
-              </p>
-            </div>
-            <div class="text-center">
-              <div class="text-accent-400 text-2xl mb-3">
-                <i class="fab fa-linux"></i>
-              </div>
-              <h4 class="font-semibold mb-2">Linux/WSL 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 start.sh 自動完成所有依賴與 CLI 安裝<br/>
-                • 優先檢測 bash 4.0+ 版本並升級<br/>
-                • 支援 zsh 5.0+ 檢測與安裝<br/>
-                • 智能套件管理器適配（apt/yum/dnf/pacman）
-              </p>
-            </div>
-            <div class="text-center">
-              <div class="text-secondary-400 text-2xl mb-3">
-                <i class="fab fa-apple"></i>
-              </div>
-              <h4 class="font-semibold mb-2">macOS 用戶</h4>
-              <p class="text-sm text-neutral-300">
-                執行 start.sh 一鍵安裝，完整支援 macOS 15.5+ 和 zsh 環境<br/>
-                • <strong>優先檢測 zsh 5.0+ 版本</strong>（步驟 1/3）<br/>
-                • 自動檢測 bash 4.0+ 版本（步驟 2/3）<br/>
-                • <strong>Homebrew 版本優先</strong>檢測機制
-              </p>
-            </div>
-          </div>
-          <div class="mt-8 text-center">
-            <p class="text-sm text-neutral-400">
-              <i class="fas fa-info-circle mr-2"></i>
-              所有腳本均可重複執行，遇到問題可直接重新執行修復
+            <p class="text-neutral-300 text-lg max-w-2xl mx-auto">
+              針對不同作業系統提供最佳化的安裝體驗
             </p>
-            <p class="text-xs text-neutral-500 mt-2">
-              詳細日誌：/tmp/claude_setup_*.log（Linux/WSL）或 PowerShell
-              輸出（Windows）
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Windows 安裝流程 -->
+            <div class="relative group">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl opacity-75 group-hover:opacity-100 transition duration-300 blur-sm"></div>
+              <div class="relative bg-neutral-900 rounded-2xl p-6 h-full">
+                <div class="flex items-center justify-center w-16 h-16 bg-primary-500/20 rounded-full mx-auto mb-4 group-hover:bg-primary-500/30 transition-colors duration-300">
+                  <i class="fab fa-windows text-primary-400 text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-4 text-center">Windows</h4>
+                <div class="space-y-3 text-sm text-neutral-300">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>自動 WSL2 安裝與配置</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>Ubuntu 20.04 LTS 預裝環境</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>智能系統需求檢測 (TPM 2.0)</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>PowerShell 執行政策自動設定</div>
+                  </div>
+                </div>
+                <div class="mt-6 text-center">
+                  <div class="inline-flex items-center px-4 py-2 bg-primary-500/20 rounded-full text-primary-400 text-sm font-medium">
+                    <i class="fas fa-terminal mr-2"></i>
+                    setup.bat
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Linux/WSL 安裝流程 -->
+            <div class="relative group">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-accent-500 to-accent-700 rounded-2xl opacity-75 group-hover:opacity-100 transition duration-300 blur-sm"></div>
+              <div class="relative bg-neutral-900 rounded-2xl p-6 h-full">
+                <div class="flex items-center justify-center w-16 h-16 bg-accent-500/20 rounded-full mx-auto mb-4 group-hover:bg-accent-500/30 transition-colors duration-300">
+                  <i class="fab fa-linux text-accent-400 text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-4 text-center">Linux/WSL</h4>
+                <div class="space-y-3 text-sm text-neutral-300">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-accent-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>bash 4.0+ 版本檢測與升級</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-accent-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>zsh 5.0+ 支援與安裝</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-accent-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>多套件管理器適配 (apt/yum/dnf)</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-accent-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>WSL2 環境自動優化</div>
+                  </div>
+                </div>
+                <div class="mt-6 text-center">
+                  <div class="inline-flex items-center px-4 py-2 bg-accent-500/20 rounded-full text-accent-400 text-sm font-medium">
+                    <i class="fas fa-terminal mr-2"></i>
+                    start.sh
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- macOS 安裝流程 -->
+            <div class="relative group">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-secondary-500 to-secondary-700 rounded-2xl opacity-75 group-hover:opacity-100 transition duration-300 blur-sm"></div>
+              <div class="relative bg-neutral-900 rounded-2xl p-6 h-full">
+                <div class="flex items-center justify-center w-16 h-16 bg-secondary-500/20 rounded-full mx-auto mb-4 group-hover:bg-secondary-500/30 transition-colors duration-300">
+                  <i class="fab fa-apple text-secondary-400 text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-4 text-center">macOS</h4>
+                <div class="space-y-3 text-sm text-neutral-300">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div><strong>優先檢測 zsh 5.0+</strong> 版本</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>自動檢測 bash 4.0+ 版本</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div><strong>Homebrew 版本優先</strong>檢測</div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>macOS 15.5+ 完整支援</div>
+                  </div>
+                </div>
+                <div class="mt-6 text-center">
+                  <div class="inline-flex items-center px-4 py-2 bg-secondary-500/20 rounded-full text-secondary-400 text-sm font-medium">
+                    <i class="fas fa-terminal mr-2"></i>
+                    start.sh
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 重要提示 -->
+          <div class="mt-8 text-center">
+            <div class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full border border-blue-500/30">
+              <i class="fas fa-info-circle text-blue-400 mr-3"></i>
+              <span class="text-blue-300 font-medium">所有腳本均可重複執行，遇到問題可直接重新執行修復</span>
+            </div>
+            <p class="text-xs text-neutral-500 mt-4">
+              <i class="fas fa-file-alt mr-2"></i>
+              詳細日誌：/tmp/claude_setup_*.log (Linux/WSL) 或 PowerShell 輸出 (Windows)
             </p>
           </div>
         </div>
