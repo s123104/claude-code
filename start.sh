@@ -19,6 +19,7 @@ NODE_TARGET_VERSION="22.14.0"    # LTS Jod 最新版本
 NODE_FALLBACK_VERSION="18.20.8"  # LTS Hydrogen 備用版本
 CLAUDE_PACKAGE="@anthropic-ai/claude-code"
 MIN_BASH_VERSION="4.0"           # 建議的最低 bash 版本
+MIN_ZSH_VERSION="5.0"            # 建議的最低 zsh 版本
 
 # ========== 日誌和顏色系統 ==========
 LOG_FILE="/tmp/claude_setup_$(date +%Y%m%d_%H%M%S).log"
@@ -61,10 +62,37 @@ error_exit() {
 # 檢測當前 bash 版本
 get_bash_version() {
     local version
-    if [[ -n "${BASH_VERSION:-}" ]]; then
+    # 在 macOS 上優先檢查 Homebrew 安裝的 bash 版本
+    if [[ "${SYSTEM_TYPE:-}" == "macos" ]] && command -v brew &>/dev/null; then
+        local homebrew_bash
+        homebrew_bash="$(brew --prefix)/bin/bash"
+        if [[ -x "$homebrew_bash" ]]; then
+            version=$("$homebrew_bash" --version 2>/dev/null | head -n1 | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "3.2")
+        else
+            version=$(bash --version 2>/dev/null | head -n1 | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "3.2")
+        fi
+    elif [[ -n "${BASH_VERSION:-}" ]]; then
         version="${BASH_VERSION}"
     else
         version=$(bash --version 2>/dev/null | head -n1 | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "3.2")
+    fi
+    echo "${version}"
+}
+
+# 檢測當前 zsh 版本
+get_zsh_version() {
+    local version
+    # 在 macOS 上優先檢查 Homebrew 安裝的 zsh 版本
+    if [[ "${SYSTEM_TYPE:-}" == "macos" ]] && command -v brew &>/dev/null; then
+        local homebrew_zsh
+        homebrew_zsh="$(brew --prefix)/bin/zsh"
+        if [[ -x "$homebrew_zsh" ]]; then
+            version=$("$homebrew_zsh" --version 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "4.0")
+        else
+            version=$(zsh --version 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "4.0")
+        fi
+    else
+        version=$(zsh --version 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+' | head -1 || echo "4.0")
     fi
     echo "${version}"
 }
@@ -89,6 +117,38 @@ version_compare() {
         return 0  # version1 < version2 (true, needs upgrade)
     else
         return 1  # version1 >= version2 (false, no upgrade needed)
+    fi
+}
+
+# 檢測並升級 zsh 版本
+check_and_upgrade_zsh() {
+    log_info "檢測 zsh 版本..."
+    
+    local current_version
+    current_version=$(get_zsh_version)
+    log_info "當前 zsh 版本：$current_version"
+    
+    # 比較版本
+    if version_compare "$current_version" "$MIN_ZSH_VERSION"; then
+        log_warn "zsh version is too old ($current_version < $MIN_ZSH_VERSION), upgrade recommended"
+        
+        local should_upgrade=false
+        if [[ "${FAST_MODE:-}" == "true" ]]; then
+            log_info "快速模式：自動選擇升級 zsh"
+            should_upgrade=true
+        else
+            if interactive_prompt "是否要升級到最新版本的 zsh？" "Y"; then
+                should_upgrade=true
+            fi
+        fi
+        
+        if [[ "$should_upgrade" == "true" ]]; then
+            upgrade_zsh
+        else
+            log_warn "跳過 zsh 升級，可能影響某些功能"
+        fi
+    else
+        log_success "zsh version meets requirements ($current_version >= $MIN_ZSH_VERSION)"
     fi
 }
 
@@ -124,6 +184,23 @@ check_and_upgrade_bash() {
     fi
 }
 
+# 升級 zsh
+upgrade_zsh() {
+    log_info "開始升級 zsh..."
+    
+    case "${SYSTEM_TYPE:-}" in
+        macos)
+            upgrade_zsh_macos
+            ;;
+        linux|wsl)
+            upgrade_zsh_linux
+            ;;
+        *)
+            log_warn "未知系統類型，跳過 zsh 升級"
+            ;;
+    esac
+}
+
 # 升級 bash
 upgrade_bash() {
     log_info "開始升級 bash..."
@@ -139,6 +216,44 @@ upgrade_bash() {
             log_warn "未知系統類型，跳過 bash 升級"
             ;;
     esac
+}
+
+# macOS 升級 zsh
+upgrade_zsh_macos() {
+    log_info "在 macOS 上升級 zsh..."
+    
+    # 檢查 Homebrew
+    if ! command -v brew &>/dev/null; then
+        log_info "安裝 Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || {
+            log_error "Homebrew 安裝失敗"
+            return 1
+        }
+    fi
+    
+    # 升級 zsh
+    log_info "使用 Homebrew 安裝最新版 zsh..."
+    brew install zsh || {
+        log_error "zsh 升級失敗"
+        return 1
+    }
+    
+    # 添加到 /etc/shells
+    local new_zsh_path
+    new_zsh_path="$(brew --prefix)/bin/zsh"
+    
+    if ! grep -q "$new_zsh_path" /etc/shells 2>/dev/null; then
+        log_info "將新 zsh 添加到 /etc/shells..."
+        echo "$new_zsh_path" | sudo tee -a /etc/shells >/dev/null
+    fi
+    
+    # 詢問是否更改默認 shell 到 zsh
+    if [[ "${FAST_MODE:-}" == "true" ]] || interactive_prompt "是否要將 zsh 設為默認 shell？（macOS 推薦）" "Y"; then
+        log_info "更改默認 shell 到 zsh..."
+        chsh -s "$new_zsh_path" || log_warn "更改默認 shell 失敗，請手動執行：chsh -s $new_zsh_path"
+    fi
+    
+    log_success "zsh 升級完成"
 }
 
 # macOS 升級 bash
@@ -170,13 +285,43 @@ upgrade_bash_macos() {
         echo "$new_bash_path" | sudo tee -a /etc/shells >/dev/null
     fi
     
-    # 詢問是否更改默認 shell
-    if [[ "${FAST_MODE:-}" == "true" ]] || interactive_prompt "是否要將新 bash 設為默認 shell？" "Y"; then
-        log_info "更改默認 shell 到新 bash..."
-        chsh -s "$new_bash_path" || log_warn "更改默認 shell 失敗，請手動執行：chsh -s $new_bash_path"
+    # 詢問是否更改默認 shell - 在 macOS 上推薦使用 zsh
+    if [[ "${FAST_MODE:-}" == "true" ]] || interactive_prompt "是否要將 zsh 設為默認 shell？（macOS 推薦）" "Y"; then
+        log_info "更改默認 shell 到 zsh..."
+        chsh -s /bin/zsh || log_warn "更改默認 shell 失敗，請手動執行：chsh -s /bin/zsh"
     fi
     
     log_success "bash 升級完成"
+}
+
+# Linux 升級 zsh
+upgrade_zsh_linux() {
+    log_info "在 Linux 上升級 zsh..."
+    
+    # 更新套件管理器
+    if command -v apt &>/dev/null; then
+        sudo apt update
+        sudo apt install -y zsh || {
+            log_warn "使用 apt 升級 zsh 失敗，可能已是最新版本"
+        }
+    elif command -v yum &>/dev/null; then
+        sudo yum update -y zsh || {
+            log_warn "使用 yum 升級 zsh 失敗，可能已是最新版本"
+        }
+    elif command -v dnf &>/dev/null; then
+        sudo dnf update -y zsh || {
+            log_warn "使用 dnf 升級 zsh 失敗，可能已是最新版本"
+        }
+    elif command -v pacman &>/dev/null; then
+        sudo pacman -Syu zsh --noconfirm || {
+            log_warn "使用 pacman 升級 zsh 失敗，可能已是最新版本"
+        }
+    else
+        log_warn "未找到支援的套件管理器，請手動升級 zsh"
+        return 1
+    fi
+    
+    log_success "zsh 升級完成"
 }
 
 # Linux 升級 bash
@@ -322,6 +467,11 @@ detect_os() {
     SHELL_CONFIG="$HOME/.bashrc"
     if [[ "${SYSTEM_TYPE:-}" == "macos" ]]; then
         SHELL_CONFIG="$HOME/.zshrc"
+        # 確保 zsh 配置文件存在
+        if [[ ! -f "$SHELL_CONFIG" ]]; then
+            touch "$SHELL_CONFIG"
+            log_info "建立 zsh 配置文件：$SHELL_CONFIG"
+        fi
     fi
     log_info "Shell 配置文件：$SHELL_CONFIG"
     
@@ -347,10 +497,24 @@ check_claude_cli_status() {
         log_info "claude code CLI 路徑：$claude_path"
         log_info "claude code CLI 版本：$claude_version"
         
-        # 檢查是否需要更新（這裡可以加入版本比較邏輯）
-        if [[ "$claude_version" == *"1.0.5"* ]]; then
-            log_warn "claude code CLI 版本較舊，建議更新"
-            needs_update=true
+        # 檢查是否需要更新 - 檢測最新可用版本
+        local latest_version current_version_number
+        latest_version=$(npm view "$CLAUDE_PACKAGE" version 2>/dev/null || echo "unknown")
+        
+        if [[ "$latest_version" != "unknown" ]]; then
+            current_version_number=$(echo "$claude_version" | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -1)
+            if [[ -z "$current_version_number" ]]; then
+                current_version_number="0.0.0"
+            fi
+            
+            if [[ "$current_version_number" != "$latest_version" ]]; then
+                log_warn "claude code CLI 版本較舊（當前：$current_version_number，最新：$latest_version），建議更新"
+                needs_update=true
+            else
+                log_success "claude code CLI 版本已是最新（${current_version_number}）"
+            fi
+        else
+            log_warn "無法檢測最新版本，跳過更新檢查"
         fi
     fi
     
@@ -441,7 +605,7 @@ main_installation() {
     print_header "Claude Code 自動安裝工具 v$SCRIPT_VERSION"
     echo -e "${GREEN}整合 Context7 最佳實踐優化${NC}"
     echo -e "${GREEN}智能檢測與互動式修復${NC}"
-    echo -e "${GREEN}Bash 版本檢測與升級功能${NC}"
+    echo -e "${GREEN}Zsh/Bash 版本檢測與升級功能${NC}"
     if [[ "${FAST_MODE:-}" == "true" ]]; then
         echo -e "${YELLOW}🚀 快速模式已啟用${NC}"
     fi
@@ -457,13 +621,32 @@ main_installation() {
     # 智能檢測與修復
     log_info "=== 開始智能檢測與修復流程 ==="
     
-    # Bash 版本檢測與升級
-    echo -e "${CYAN}[步驟 1/2]${NC} Bash 版本檢測與升級"
-    check_and_upgrade_bash
-    
-    # Claude Code CLI 狀態檢測
-    echo -e "${CYAN}[步驟 2/2]${NC} Claude Code CLI 狀態檢測"
-    check_claude_cli_status
+    # 在 macOS 上優先檢測 zsh，其他系統檢測 bash
+    if [[ "${SYSTEM_TYPE:-}" == "macos" ]]; then
+        # zsh 版本檢測與升級
+        echo -e "${CYAN}[步驟 1/3]${NC} Zsh 版本檢測與升級"
+        check_and_upgrade_zsh
+        
+        # Bash 版本檢測與升級
+        echo -e "${CYAN}[步驟 2/3]${NC} Bash 版本檢測與升級"
+        check_and_upgrade_bash
+        
+        # Claude Code CLI 狀態檢測
+        echo -e "${CYAN}[步驟 3/3]${NC} Claude Code CLI 狀態檢測"
+        check_claude_cli_status
+    else
+        # Bash 版本檢測與升級
+        echo -e "${CYAN}[步驟 1/3]${NC} Bash 版本檢測與升級"
+        check_and_upgrade_bash
+        
+        # zsh 版本檢測與升級
+        echo -e "${CYAN}[步驟 2/3]${NC} Zsh 版本檢測與升級"
+        check_and_upgrade_zsh
+        
+        # Claude Code CLI 狀態檢測
+        echo -e "${CYAN}[步驟 3/3]${NC} Claude Code CLI 狀態檢測"
+        check_claude_cli_status
+    fi
     
     print_header "安裝完成"
     log_success "Claude Code 安裝流程完成！"
@@ -475,7 +658,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     
     echo
     log_info "=== 後續步驟 ==="
-    echo "  1. 重新載入終端或執行: source ${SHELL_CONFIG:-~/.bashrc}"
+    echo "  1. 重新載入終端或執行: source ${SHELL_CONFIG:-~/.zshrc}"
     echo "  2. 進入專案目錄並執行: claude"
     echo "  3. 查看所有指令: claude --help"
     echo ""
