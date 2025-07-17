@@ -603,48 +603,72 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Windows Installation (Disabled) -->
-          <div class="glass-effect rounded-xl p-8 observe-fade opacity-60">
+          <!-- Windows Installation -->
+          <div class="glass-effect rounded-xl p-8 observe-fade">
             <div class="flex items-center mb-6">
               <i class="fab fa-windows text-primary-400 text-3xl mr-4"></i>
               <h3 class="text-2xl font-semibold">Windows 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm bg-neutral-800 text-neutral-500"
-              >
-                <div class="text-neutral-400 mb-2">
-                  # Windows 一鍵安裝腳本維修中，敬請期待！
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 方法一：批次檔案執行（推薦）</div>
+                <div class="text-primary-400">
+                  # 1. 下載 setup.bat 執行檔<br/>
+                  # 2. 以管理員身份執行 setup.bat
                 </div>
-                <div class="text-neutral-500">
-                  setup.bat / setup.ps1 / start.bat
+              </div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 方法二：PowerShell 腳本</div>
+                <div class="text-primary-400">
+                  # 1. 下載 setup.ps1 執行檔<br/>
+                  # 2. 以管理員身份開啟 PowerShell<br/>
+                  # 3. 執行：Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser<br/>
+                  # 4. 執行：.\setup.ps1
                 </div>
               </div>
               <div class="flex flex-wrap gap-2">
-                <button
-                  class="bg-primary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
+                <a
+                  href="https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat"
+                  download="setup.bat"
+                  class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  下載 setup.bat
-                </button>
-                <button
-                  class="bg-secondary-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
+                  下載 setup.bat 執行檔
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1"
+                  download="setup.ps1"
+                  class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  下載 setup.ps1
-                </button>
-                <button
-                  class="bg-accent-600 px-4 py-2 rounded-lg text-sm font-semibold opacity-50 cursor-not-allowed"
-                  disabled
+                  下載 setup.ps1 執行檔
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.bat"
+                  download="start.bat"
+                  class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  下載 start.bat
-                </button>
+                  下載 start.bat 執行檔
+                </a>
+                <a
+                  href="https://github.com/s123104/claude-code/tree/master"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                >
+                  <i class="fab fa-github mr-2"></i>
+                  查看所有檔案
+                </a>
               </div>
-              <div class="text-xs text-neutral-400 mt-2">
-                Windows 自動安裝腳本維修中，修復後將重新開放下載與一鍵安裝。
+              <div class="text-xs text-neutral-400 mt-4">
+                <strong>✅ Windows 環境特色：</strong><br/>
+                • 全自動 WSL2 安裝與配置<br/>
+                • Ubuntu 20.04 LTS 預裝環境<br/>
+                • 智能系統需求檢測（TPM 2.0、VT-x/AMD-V）<br/>
+                • PowerShell 執行政策自動設定<br/>
+                • 路徑轉換與環境變數配置<br/>
+                • 完整錯誤處理與日誌記錄
               </div>
             </div>
           </div>
@@ -665,23 +689,47 @@
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 或下載後執行</div>
+                <div class="text-neutral-400 mb-2"># 快速模式（跳過互動提示）</div>
                 <div class="text-accent-400">
-                  curl -O
+                  curl -fsSL
                   https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  && chmod +x start.sh && ./start.sh
+                  | bash -s -- --fast
+                </div>
+              </div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 下載後執行（推薦）</div>
+                <div class="text-accent-400">
+                  # 1. 點擊下載按鈕獲取 start.sh<br/>
+                  # 2. 在終端執行以下命令<br/>
+                  chmod +x start.sh && ./start.sh
                 </div>
               </div>
               <div class="flex flex-wrap gap-2">
                 <a
                   href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download="start.sh"
                   class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  下載 start.sh
+                  下載 start.sh 執行檔
                 </a>
+                <a
+                  href="https://github.com/s123104/claude-code/blob/master/start.sh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                >
+                  <i class="fab fa-github mr-2"></i>
+                  查看原始碼
+                </a>
+              </div>
+              <div class="text-xs text-neutral-400 mt-4">
+                <strong>✅ Linux/WSL 環境特色：</strong><br/>
+                • 自動檢測 bash 4.0+ 版本並升級（Ubuntu/Debian/CentOS/Arch）<br/>
+                • 支援 zsh 5.0+ 檢測與安裝<br/>
+                • 智能套件管理器檢測（apt/yum/dnf/pacman）<br/>
+                • WSL2 環境優化，避免 Windows 路徑汙染<br/>
+                • 完整日誌記錄：<code>/tmp/claude_setup_*.log</code>
               </div>
             </div>
           </div>
@@ -711,26 +759,49 @@
                   | bash -s -- --fast
                 </div>
               </div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 下載後執行（推薦）</div>
+                <div class="text-secondary-400">
+                  # 1. 點擊下載按鈕獲取 start.sh<br/>
+                  # 2. 在終端執行以下命令<br/>
+                  chmod +x start.sh && ./start.sh
+                </div>
+              </div>
               <div class="flex flex-wrap gap-2">
                 <a
                   href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download="start.sh"
                   class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                 >
                   <i class="fas fa-download mr-2"></i>
-                  下載 start.sh
+                  下載 start.sh 執行檔
+                </a>
+                <a
+                  href="https://github.com/s123104/claude-code/blob/master/start.sh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                >
+                  <i class="fab fa-github mr-2"></i>
+                  查看原始碼
                 </a>
               </div>
-              <div class="text-xs text-neutral-400 mt-2">
-                ✅ 完整支援 macOS 15.5+ 和 zsh 環境，智能檢測並修復 npm/nvm 衝突
+              <div class="text-xs text-neutral-400 mt-4">
+                <strong>✅ macOS 環境特色（v3.5.0）：</strong><br/>
+                • <strong>優先檢測 zsh 5.0+ 版本</strong>（步驟 1/3）並支援 Homebrew 升級<br/>
+                • 自動檢測 bash 4.0+ 版本（步驟 2/3）並升級<br/>
+                • <strong>Homebrew 版本優先</strong>：優先使用 Homebrew 安裝的 shell<br/>
+                • 自動建立 <code>~/.zshrc</code> 配置文件<br/>
+                • 智能檢測並修復 npm/nvm 衝突<br/>
+                • 完整支援 macOS 15.5+ 和 Apple Silicon (M1/M2)<br/>
+                • 完整日誌記錄：<code>/tmp/claude_setup_*.log</code>
               </div>
             </div>
           </div>
         </div>
         <!-- 更新最後更新時間戳記 -->
         <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-07-16T20:03:06+08:00 | 支援 Linux/WSL 和 macOS 一鍵安裝
+          最後更新：2025-07-17T22:30:00+08:00 | start.sh v3.5.0 - 支援 zsh 優先檢測、Homebrew 版本優先、快速模式
         </div>
 
         <!-- Installation Features -->
@@ -781,8 +852,10 @@
               </div>
               <h4 class="font-semibold mb-2">Windows 用戶</h4>
               <p class="text-sm text-neutral-300">
-                執行 setup.bat 全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI
-                安裝
+                執行 setup.bat 全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI 安裝<br/>
+                • 全自動 WSL2 安裝與配置<br/>
+                • Ubuntu 20.04 LTS 預裝環境<br/>
+                • 智能系統需求檢測（TPM 2.0、VT-x/AMD-V）
               </p>
             </div>
             <div class="text-center">
@@ -791,7 +864,10 @@
               </div>
               <h4 class="font-semibold mb-2">Linux/WSL 用戶</h4>
               <p class="text-sm text-neutral-300">
-                執行 start.sh 自動完成所有依賴與 CLI 安裝，支援智能修復
+                執行 start.sh 自動完成所有依賴與 CLI 安裝<br/>
+                • 優先檢測 bash 4.0+ 版本並升級<br/>
+                • 支援 zsh 5.0+ 檢測與安裝<br/>
+                • 智能套件管理器適配（apt/yum/dnf/pacman）
               </p>
             </div>
             <div class="text-center">
@@ -800,7 +876,10 @@
               </div>
               <h4 class="font-semibold mb-2">macOS 用戶</h4>
               <p class="text-sm text-neutral-300">
-                執行 start.sh 一鍵安裝，完整支援 macOS 15.5+ 和 zsh 環境
+                執行 start.sh 一鍵安裝，完整支援 macOS 15.5+ 和 zsh 環境<br/>
+                • <strong>優先檢測 zsh 5.0+ 版本</strong>（步驟 1/3）<br/>
+                • 自動檢測 bash 4.0+ 版本（步驟 2/3）<br/>
+                • <strong>Homebrew 版本優先</strong>檢測機制
               </p>
             </div>
           </div>
