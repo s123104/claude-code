@@ -12,7 +12,7 @@
   [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
   [![WSL](https://img.shields.io/badge/WSL-Auto%20Setup-orange.svg)](wsl_claude_code_setup.sh)
   
-  > 最後更新時間：2025-07-17T23:45:15+08:00  
+  > 最後更新時間：2025-07-18T23:45:00+08:00  
   > 文件語言：繁體中文  
   > 專案維護者：s123104
 </div>
@@ -45,7 +45,7 @@
 
 ### 🐧 Linux/WSL 用戶
 
-**自動安裝腳本 v3.5.0 - 智能環境檢測與修復**
+**自動安裝腳本 v3.5.3 - 強化 npm/nvm 衝突檢測與修復功能**
 
 ```bash
 # 一鍵安裝 (推薦)
@@ -75,7 +75,7 @@ curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
 chmod +x start.sh && ./start.sh
 ```
 
-**腳本特色 v3.5.2**：
+**腳本特色 v3.5.3**：
 
 - ✅ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
 - ✅ **Bash 版本檢測升級**：自動檢測並升級 Bash 到 4.0+ 版本
@@ -84,8 +84,9 @@ chmod +x start.sh && ./start.sh
 - ✅ **ShellCheck 零警告**：通過 ShellCheck 靜態分析，符合 2025 最佳實踐
 - ✅ **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並適配
 - ✅ **Claude Code CLI 狀態檢測**：智能檢測並更新 Claude Code CLI
-- 🆕 **npm/nvm 衝突自動修復**：自動檢測並清理 .npmrc 中的 prefix/globalconfig 衝突
-- 🆕 **nvm delete-prefix 自動執行**：完整解決 macOS zsh 環境中的 nvm 配置問題
+- 🆕 **強化 npm/nvm 衝突檢測**：多 .npmrc 檔案檢測，支援 npm 8.0+ 語法
+- 🆕 **自動執行 delete-prefix**：完整解決 macOS zsh 問題，LTS 版本優先修復
+- 🆕 **多層修復機制**：nvm delete-prefix + 手動清理 + 環境變數處理
 
 ### 🖥️ Windows 用戶
 
@@ -119,7 +120,7 @@ claude "幫我分析這個專案的架構"
 claude --help
 ```
 
-_最後更新：2025-07-16T20:03:06+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-07-18T23:45:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
@@ -320,7 +321,7 @@ chmod +x start.sh
 ./start.sh
 ```
 
-#### 🛠️ 腳本功能特色 v3.5.0
+#### 🛠️ 腳本功能特色 v3.5.3
 
 **核心功能升級：**
 
@@ -331,6 +332,8 @@ chmod +x start.sh
 - ✅ **ShellCheck 零警告**：通過 ShellCheck v0.10.0 靜態分析，符合 2025 Shell 最佳實踐
 - 🔧 **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並進行適配
 - 📦 **Claude Code CLI 狀態檢測**：智能檢測已安裝版本並提供更新建議
+- 🔥 **強化 npm/nvm 衝突檢測**：多 .npmrc 檔案檢測，支援 npm 8.0+ 語法
+- 🛠️ **自動執行 delete-prefix**：完整解決 macOS zsh 問題，LTS 版本優先修復
 
 **品質保證系統：**
 
@@ -354,13 +357,14 @@ chmod +x start.sh
 - 🔄 **錯誤恢復**：自動重試失敗的安裝步驟
 - 📋 **詳細診斷**：提供具體的錯誤原因和解決建議
 
-**npm/nvm 衝突自動修復（v3.5.2 新增）：**
+**npm/nvm 衝突自動修復（v3.5.3 強化）：**
 
-- 🔍 **智能檢測**：自動檢測 `~/.npmrc` 中的 `prefix` 和 `globalconfig` 設定衝突
+- 🔍 **多層檢測**：檢測多個 .npmrc 檔案位置，支援 npm 8.0+ 語法
 - 💾 **安全備份**：修復前自動備份原始配置文件
 - ⚡ **自動執行**：執行 `nvm use --delete-prefix` 指令解決 nvm 衝突
-- 🛠️ **多重修復**：提供手動清理和替代修復方案
+- 🛠️ **多重修復**：nvm delete-prefix + 手動清理 + 環境變數處理
 - 🎯 **macOS 優化**：專門解決 macOS zsh 環境中的常見 nvm 問題
+- 🔧 **LTS 版本優先**：優先嘗試 LTS 版本進行修復
 
 **安全性與穩定性：**
 
@@ -1192,7 +1196,7 @@ Claude Code 中文文件整合專案致力於為華語地區的開發者提供�
 
 ---
 
-_最後更新：2025-07-16T19:34:22+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-07-18T23:45:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
