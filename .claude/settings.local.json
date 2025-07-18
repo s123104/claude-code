@@ -72,7 +72,8 @@
       "Bash(cmd.exe:*)",
       "Bash(brew install:*)",
       "Bash(brew:*)",
-      "Bash(zsh:*)"
+      "Bash(zsh:*)",
+      "Bash(true)"
     ],
     "deny": []
   }

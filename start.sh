@@ -3,14 +3,15 @@
 set -euo pipefail
 
 # ========== Claude Code 自動化安裝與啟動腳本 ==========
-# 版本: 3.5.2 (2025 最佳實踐優化版)
+# 版本: 3.5.3 (2025 最佳實踐優化版)
 # 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
 # 新增: 強化 npm/nvm 衝突修復，自動執行 delete-prefix，完整解決 macOS zsh 問題
+# 改進: 多 .npmrc 檔案檢測，支援 npm 8.0+ 語法，LTS 版本優先修復
 # 作者: Claude Code 中文社群
-# 更新: 2025-07-17T23:45:15+08:00
+# 更新: 2025-07-18T23:45:00+08:00
 
 # ========== 配置參數 ==========
-SCRIPT_VERSION="3.5.2"
+SCRIPT_VERSION="3.5.3"
 # shellcheck disable=SC2034
 NVM_VERSION="v0.40.3"            # 最新穩定版本 (2025-04-23)
 # shellcheck disable=SC2034
@@ -508,7 +509,7 @@ check_claude_cli_status() {
             fi
             
             if [[ "$current_version_number" != "$latest_version" ]]; then
-                log_warn "claude code CLI 版本較舊（當前：$current_version_number，最新：$latest_version），建議更新"
+                log_warn "claude code CLI 版本較舊（當前：${current_version_number}，最新：${latest_version}），建議更新"
                 needs_update=true
             else
                 log_success "claude code CLI 版本已是最新（${current_version_number}）"
@@ -561,31 +562,71 @@ clean_npm_config_conflicts() {
     
     local npmrc_file="$HOME/.npmrc"
     local has_conflicts=false
-    local nvm_conflict_detected=false
     local backup_created=false
     local repair_success=false
-    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local timestamp
+    timestamp=$(date +%Y%m%d_%H%M%S)
+    
+    # 多個 .npmrc 檔案位置檢查 (最佳實踐)
+    local npmrc_files=("$HOME/.npmrc" "/usr/local/etc/npmrc" "/etc/npmrc")
     
     # === 步驟 1: 檢測所有可能的衝突源 ===
     log_info "📋 檢測 npm 配置衝突源..."
     
-    # 1.1 檢查 ~/.npmrc 檔案中的衝突設定
-    if [[ -f "$npmrc_file" ]]; then
-        local conflict_lines
-        conflict_lines=$(grep -E "^(prefix|globalconfig)" "$npmrc_file" 2>/dev/null || true)
+    # 1.1 檢查多個 .npmrc 檔案位置（最佳實踐）
+    log_info "🔍 檢查多個 .npmrc 檔案位置..."
+    for npmrc_path in "${npmrc_files[@]}"; do
+        if [[ -f "$npmrc_path" ]]; then
+            local conflict_lines
+            conflict_lines=$(grep -E "^(prefix|globalconfig)" "$npmrc_path" 2>/dev/null || true)
+            
+            if [[ -n "$conflict_lines" ]]; then
+                log_warn "🚨 發現 $npmrc_path 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
+                has_conflicts=true
+                
+                log_info "衝突的設定行："
+                echo "$conflict_lines" | while IFS= read -r line; do
+                    echo "  ❌ $line (在 $npmrc_path)"
+                done
+                
+                log_info "檔案內容："
+                sed 's/^/    /' "$npmrc_path"
+            fi
+        fi
+    done
+    
+    # 1.2 使用 npm config ls -l 檢查所有配置位置（最佳實踐）
+    if command -v npm &>/dev/null; then
+        log_info "🔍 使用 npm config ls -l 檢查所有配置位置..."
+        local npm_config_output
+        npm_config_output=$(npm config ls -l 2>/dev/null || echo "")
         
-        if [[ -n "$conflict_lines" ]]; then
-            log_warn "🚨 發現 ~/.npmrc 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
-            has_conflicts=true
-            nvm_conflict_detected=true
+        if [[ -n "$npm_config_output" ]]; then
+            # 檢查配置檔案位置
+            local config_files
+            config_files=$(echo "$npm_config_output" | grep -E "^; .*\.npmrc" | grep -v "builtin" || echo "")
             
-            log_info "衝突的設定行："
-            echo "$conflict_lines" | while IFS= read -r line; do
-                echo "  ❌ $line"
-            done
+            if [[ -n "$config_files" ]]; then
+                log_info "發現的 npm 配置檔案："
+                echo "$config_files" | while IFS= read -r config_file; do
+                    echo "  📄 $config_file"
+                done
+            fi
             
-            log_info "檔案內容："
-            cat "$npmrc_file" | sed 's/^/    /'
+            # 檢查 prefix 和 globalconfig 設定
+            if echo "$npm_config_output" | grep -E "^prefix" | grep -v "undefined" >/dev/null 2>&1; then
+                local prefix_setting
+                prefix_setting=$(echo "$npm_config_output" | grep -E "^prefix" | head -1)
+                log_warn "🚨 發現 prefix 設定：$prefix_setting"
+                has_conflicts=true
+            fi
+            
+            if echo "$npm_config_output" | grep -E "^globalconfig" | grep -v "undefined" >/dev/null 2>&1; then
+                local globalconfig_setting
+                globalconfig_setting=$(echo "$npm_config_output" | grep -E "^globalconfig" | head -1)
+                log_warn "🚨 發現 globalconfig 設定：$globalconfig_setting"
+                has_conflicts=true
+            fi
         fi
     fi
     
@@ -594,7 +635,6 @@ clean_npm_config_conflicts() {
     if [[ -n "${NPM_CONFIG_PREFIX:-}" ]]; then
         env_conflicts+=("NPM_CONFIG_PREFIX=${NPM_CONFIG_PREFIX}")
         has_conflicts=true
-        nvm_conflict_detected=true
     fi
     
     if [[ -n "${PREFIX:-}" ]] && [[ "${PREFIX}" != "/usr/local" ]]; then
@@ -620,8 +660,7 @@ clean_npm_config_conflicts() {
             if [[ "$current_prefix" != *"/.nvm/versions/node/"* ]] && [[ "$current_prefix" != *"/.npm-global" ]]; then
                 npm_config_conflicts+=("prefix=$current_prefix")
                 has_conflicts=true
-                nvm_conflict_detected=true
-            fi
+                fi
         fi
         
         local current_globalconfig
@@ -629,7 +668,6 @@ clean_npm_config_conflicts() {
         if [[ -n "$current_globalconfig" ]] && [[ "$current_globalconfig" != *"/.nvm/"* ]]; then
             npm_config_conflicts+=("globalconfig=$current_globalconfig")
             has_conflicts=true
-            nvm_conflict_detected=true
         fi
     fi
     
@@ -683,67 +721,151 @@ clean_npm_config_conflicts() {
         fi
         
         # 3.2 使用 nvm delete-prefix（最佳方法）
-        if [[ "$nvm_available" == "true" ]] && [[ -n "$current_node_version" ]]; then
+        if [[ "$nvm_available" == "true" ]]; then
             log_info "🔧 使用 nvm --delete-prefix 自動修復..."
             
-            # 嘗試使用當前版本執行 delete-prefix
-            if nvm use --delete-prefix "v${current_node_version}" --silent 2>/dev/null; then
-                log_success "✅ nvm delete-prefix 修復成功"
-                repair_success=true
-            else
-                # 如果當前版本失敗，嘗試可用的版本
-                log_info "🔄 當前版本修復失敗，嘗試可用版本..."
-                local available_versions
-                available_versions=$(nvm ls --no-colors 2>/dev/null | grep -E "v[0-9]+" | head -3 || echo "")
-                
-                if [[ -n "$available_versions" ]]; then
-                    echo "$available_versions" | while IFS= read -r version_line; do
-                        local version
-                        version=$(echo "$version_line" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
-                        if [[ -n "$version" ]]; then
-                            log_info "嘗試版本：$version"
-                            if nvm use --delete-prefix "$version" --silent 2>/dev/null; then
-                                log_success "✅ 使用版本 $version 修復成功"
-                                repair_success=true
-                                break
-                            fi
-                        fi
-                    done
+            # 先檢查是否有正在使用的 Node.js 版本
+            local current_nvm_version
+            current_nvm_version=$(nvm current 2>/dev/null || echo "none")
+            
+            # 嘗試使用當前 nvm 版本執行 delete-prefix
+            if [[ "$current_nvm_version" != "none" ]] && [[ "$current_nvm_version" != "system" ]]; then
+                log_info "🔄 使用當前 nvm 版本：$current_nvm_version"
+                if nvm use --delete-prefix "$current_nvm_version" --silent 2>/dev/null; then
+                    log_success "✅ nvm delete-prefix 修復成功"
+                    repair_success=true
                 fi
             fi
+            
+            # 如果當前版本失敗，嘗試可用的版本
+            if [[ "$repair_success" == "false" ]]; then
+                log_info "🔄 當前版本修復失敗，嘗試可用版本..."
+                local available_versions
+                available_versions=$(nvm ls --no-colors 2>/dev/null | grep -E "v[0-9]+" | head -5 || echo "")
+                
+                if [[ -n "$available_versions" ]]; then
+                    # 優先嘗試 LTS 版本
+                    local lts_versions
+                    lts_versions=$(echo "$available_versions" | grep -E "(lts|Latest LTS)" | head -3 || echo "")
+                    
+                    if [[ -n "$lts_versions" ]]; then
+                        echo "$lts_versions" | while IFS= read -r version_line; do
+                            local version
+                            version=$(echo "$version_line" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
+                            if [[ -n "$version" ]]; then
+                                log_info "嘗試 LTS 版本：$version"
+                                if nvm use --delete-prefix "$version" --silent 2>/dev/null; then
+                                    log_success "✅ 使用 LTS 版本 $version 修復成功"
+                                    repair_success=true
+                                    break
+                                fi
+                            fi
+                        done
+                    fi
+                    
+                    # 如果 LTS 版本失敗，嘗試其他版本
+                    if [[ "$repair_success" == "false" ]]; then
+                        echo "$available_versions" | while IFS= read -r version_line; do
+                            local version
+                            version=$(echo "$version_line" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
+                            if [[ -n "$version" ]]; then
+                                log_info "嘗試版本：$version"
+                                if nvm use --delete-prefix "$version" --silent 2>/dev/null; then
+                                    log_success "✅ 使用版本 $version 修復成功"
+                                    repair_success=true
+                                    break
+                                fi
+                            fi
+                        done
+                    fi
+                else
+                    log_warn "⚠️  未找到可用的 nvm 版本，將使用手動修復"
+                fi
+            fi
+        else
+            log_warn "⚠️  nvm 不可用，將使用手動修復方法"
         fi
         
         # 3.3 手動修復方法（備用）
         if [[ "$repair_success" == "false" ]]; then
             log_info "🔧 執行手動修復方法..."
             
-            # 移除 ~/.npmrc 中的衝突設定
-            if [[ -f "$npmrc_file" ]]; then
-                log_info "清理 ~/.npmrc 中的衝突設定..."
-                if grep -vE "^(prefix|globalconfig)" "$npmrc_file" > "${npmrc_file}.tmp" 2>/dev/null; then
-                    mv "${npmrc_file}.tmp" "$npmrc_file"
-                    log_info "✅ 已從 ~/.npmrc 移除 prefix 和 globalconfig 設定"
-                    log_info "修復後的 .npmrc 內容："
-                    cat "$npmrc_file" | sed 's/^/    /'
+            # 3.3.1 移除多個 .npmrc 檔案中的衝突設定
+            for npmrc_path in "${npmrc_files[@]}"; do
+                if [[ -f "$npmrc_path" ]]; then
+                    log_info "清理 $npmrc_path 中的衝突設定..."
+                    if grep -vE "^(prefix|globalconfig)" "$npmrc_path" > "${npmrc_path}.tmp" 2>/dev/null; then
+                        # 檢查是否有權限修改檔案
+                        if [[ -w "$npmrc_path" ]]; then
+                            mv "${npmrc_path}.tmp" "$npmrc_path"
+                            log_info "✅ 已從 $npmrc_path 移除 prefix 和 globalconfig 設定"
+                            log_info "修復後的 .npmrc 內容："
+                            sed 's/^/    /' "$npmrc_path"
+                        else
+                            log_warn "⚠️  無法修改 $npmrc_path，需要管理員權限"
+                            rm -f "${npmrc_path}.tmp"
+                        fi
+                    fi
                 fi
-            fi
+            done
             
-            # 使用 npm config 直接刪除
+            # 3.3.2 使用 npm config 直接刪除（支援新版 npm 語法）
             if command -v npm &>/dev/null; then
                 log_info "使用 npm config 清理設定..."
                 
-                # 嘗試新版 npm 語法
-                npm config delete prefix --location=user 2>/dev/null || npm config delete prefix 2>/dev/null || true
-                npm config delete globalconfig --location=user 2>/dev/null || npm config delete globalconfig 2>/dev/null || true
+                # 支援新版 npm 的 --location 參數
+                local npm_version
+                npm_version=$(npm --version 2>/dev/null | head -1 || echo "0.0.0")
+                local npm_major_version
+                npm_major_version=$(echo "$npm_version" | cut -d. -f1)
                 
-                # 也清理全域層級（如果需要）
-                if [[ "${FAST_MODE:-}" == "true" ]] || interactive_prompt "是否也清理全域 npm 配置中的衝突設定？" "Y"; then
+                if [[ "$npm_major_version" -ge 8 ]]; then
+                    # npm 8.0+ 語法
+                    log_info "使用 npm 8.0+ 語法清理配置..."
+                    npm config delete prefix --location=user 2>/dev/null || true
+                    npm config delete globalconfig --location=user 2>/dev/null || true
+                    npm config delete prefix --location=global 2>/dev/null || true
+                    npm config delete globalconfig --location=global 2>/dev/null || true
+                else
+                    # 舊版 npm 語法
+                    log_info "使用舊版 npm 語法清理配置..."
+                    npm config delete prefix 2>/dev/null || true
+                    npm config delete globalconfig 2>/dev/null || true
                     npm config delete prefix -g 2>/dev/null || true
                     npm config delete globalconfig -g 2>/dev/null || true
-                    log_info "✅ 已清理全域 npm 配置"
+                fi
+                
+                # 3.3.3 清理環境變數（如果設定了）
+                if [[ -n "${NPM_CONFIG_PREFIX:-}" ]]; then
+                    log_info "清理 NPM_CONFIG_PREFIX 環境變數..."
+                    unset NPM_CONFIG_PREFIX
+                fi
+                
+                if [[ -n "${NPM_CONFIG_GLOBALCONFIG:-}" ]]; then
+                    log_info "清理 NPM_CONFIG_GLOBALCONFIG 環境變數..."
+                    unset NPM_CONFIG_GLOBALCONFIG
                 fi
                 
                 repair_success=true
+            fi
+            
+            # 3.3.4 驗證修復結果
+            if [[ "$repair_success" == "true" ]]; then
+                log_info "🔍 驗證修復結果..."
+                local current_prefix_after
+                current_prefix_after=$(npm config get prefix 2>/dev/null || echo "")
+                
+                if [[ -z "$current_prefix_after" ]] || [[ "$current_prefix_after" == "undefined" ]]; then
+                    log_success "✅ prefix 設定已成功清除"
+                else
+                    log_info "當前 prefix 設定：$current_prefix_after"
+                    # 檢查是否為 nvm 管理的路徑
+                    if [[ "$current_prefix_after" == *"/.nvm/versions/node/"* ]]; then
+                        log_success "✅ prefix 設定已更新為 nvm 管理的路徑"
+                    else
+                        log_warn "⚠️  prefix 設定仍可能存在衝突"
+                    fi
+                fi
             fi
         fi
         
@@ -854,9 +976,11 @@ setup_npm_global_config() {
         local shell_config="${SHELL_CONFIG:-$HOME/.zshrc}"
         if [[ -f "$shell_config" ]]; then
             if ! grep -q "npm-global/bin" "$shell_config" 2>/dev/null; then
-                echo "" >> "$shell_config"
-                echo "# npm 全域安裝目錄 PATH" >> "$shell_config"
-                echo "export PATH=\"\$HOME/.npm-global/bin:\$PATH\"" >> "$shell_config"
+                {
+                    echo ""
+                    echo "# npm 全域安裝目錄 PATH"
+                    echo "export PATH=\"\$HOME/.npm-global/bin:\$PATH\""
+                } >> "$shell_config"
                 log_info "已將 npm 全域 bin 目錄添加到 $shell_config"
             fi
         fi
