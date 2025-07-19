@@ -1,17 +1,16 @@
 #!/bin/bash
+# ========== Claude Code 融合智能安裝系統 v4.0.0 ==========
+# 結合官方二進制 + NPM 生態 + Context7 智能分析 + 全面環境修復
+# 支援: macOS + Linux + WSL2 全平台智能安裝
+# 特色: 雙引擎智能選擇、完整錯誤恢復、Context7 多模態分析、Shell 版本檢測升級
+# 作者: Claude Code 開發團隊 & 中文社群
+# 更新: 2025-07-19T23:00:00+08:00
+
 # 2025 Shell 最佳實踐：嚴格模式設定
 set -euo pipefail
 
-# ========== Claude Code 自動化安裝與啟動腳本 ==========
-# 版本: 3.5.3 (2025 最佳實踐優化版)
-# 支援: Windows WSL2 + Linux + macOS 環境自動偵測與安裝
-# 新增: 強化 npm/nvm 衝突修復，自動執行 delete-prefix，完整解決 macOS zsh 問題
-# 改進: 多 .npmrc 檔案檢測，支援 npm 8.0+ 語法，LTS 版本優先修復
-# 作者: Claude Code 中文社群
-# 更新: 2025-07-18T23:45:00+08:00
-
-# ========== 配置參數 ==========
-SCRIPT_VERSION="3.5.3"
+# ========== 核心配置參數 ==========
+SCRIPT_VERSION="4.0.0"
 # shellcheck disable=SC2034
 NVM_VERSION="v0.40.3"            # 最新穩定版本 (2025-04-23)
 # shellcheck disable=SC2034
@@ -19,11 +18,19 @@ NODE_TARGET_VERSION="22.14.0"    # LTS Jod 最新版本
 # shellcheck disable=SC2034
 NODE_FALLBACK_VERSION="18.20.8"  # LTS Hydrogen 備用版本
 CLAUDE_PACKAGE="@anthropic-ai/claude-code"
+GCS_BUCKET="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
+MIN_NODE_VERSION="18"
 MIN_BASH_VERSION="4.0"           # 建議的最低 bash 版本
 MIN_ZSH_VERSION="5.0"            # 建議的最低 zsh 版本
 
+# 智能安裝參數
+INSTALL_METHOD=""
+CONFIDENCE_SCORE=0
+BINARY_SCORE=0
+NPM_SCORE=0
+
 # ========== 日誌和顏色系統 ==========
-LOG_FILE="/tmp/claude_setup_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="/tmp/claude_fusion_setup_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # 顏色定義
@@ -32,6 +39,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
+PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 # 統一日誌函數
@@ -51,11 +59,111 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+log_debug() {
+    if [[ "${DEBUG_MODE:-}" == "true" ]]; then
+        echo -e "${PURPLE}[DEBUG]${NC} $1"
+    fi
+}
+
 # 兼容舊版函數名
 error_exit() {
     log_error "$1"
     log_info "完整日誌已保存至：$LOG_FILE"
     exit 1
+}
+
+# ========== 參數解析系統 ==========
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --fast|-f)
+                export FAST_MODE=true
+                log_info "啟用快速模式"
+                shift
+                ;;
+            --force-binary)
+                export FORCE_BINARY=true
+                log_info "強制使用官方二進制安裝"
+                shift
+                ;;
+            --force-npm)
+                export FORCE_NPM=true
+                log_info "強制使用 NPM 安裝"
+                shift
+                ;;
+            --version=*)
+                export TARGET_VERSION="${1#*=}"
+                log_info "指定版本: $TARGET_VERSION"
+                shift
+                ;;
+            --verbose|-v)
+                export DEBUG_MODE=true
+                log_info "啟用詳細日誌模式"
+                shift
+                ;;
+            --no-context7)
+                export DISABLE_CONTEXT7=true
+                log_info "禁用 Context7 分析"
+                shift
+                ;;
+            --dry-run)
+                export DRY_RUN=true
+                log_info "測試模式（不實際安裝）"
+                shift
+                ;;
+            --repair)
+                export REPAIR_MODE=true
+                log_info "修復模式"
+                shift
+                ;;
+            --clean-install)
+                export CLEAN_INSTALL=true
+                log_info "清理重新安裝模式"
+                shift
+                ;;
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            *)
+                log_warn "未知參數: $1"
+                shift
+                ;;
+        esac
+    done
+}
+
+# 顯示幫助資訊
+show_help() {
+    cat << EOF
+Claude Code 融合智能安裝系統 v$SCRIPT_VERSION
+
+使用方法:
+  $0 [選項]
+
+基本選項:
+  --fast, -f              快速模式（跳過互動）
+  --verbose, -v           詳細日誌模式
+  --help, -h              顯示幫助資訊
+
+安裝方式:
+  --force-binary          強制使用官方二進制安裝
+  --force-npm             強制使用 NPM 安裝
+  --version=VERSION       指定版本 (stable/latest/x.y.z)
+
+高級選項:
+  --no-context7           禁用 Context7 智能分析
+  --dry-run               測試模式（不實際安裝）
+  --repair                修復現有安裝
+  --clean-install         清理並重新安裝
+
+範例:
+  $0                      # 智能安裝
+  $0 --fast               # 快速安裝
+  $0 --force-binary       # 強制二進制安裝
+  $0 --version=stable     # 安裝穩定版
+
+EOF
 }
 
 # ========== Bash 版本檢測與升級系統 ==========
@@ -119,6 +227,36 @@ version_compare() {
     else
         return 1  # version1 >= version2 (false, no upgrade needed)
     fi
+}
+
+# 互動式提示函數
+interactive_prompt() {
+    local message="$1"
+    local default_answer="${2:-N}"
+    
+    # 快速模式下自動選擇預設答案
+    if [[ "${FAST_MODE:-}" == "true" ]]; then
+        log_info "快速模式：自動選擇 $default_answer"
+        if [[ "$default_answer" == "Y" || "$default_answer" == "y" ]]; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+    
+    local answer
+    echo -e "${YELLOW}[PROMPT]${NC} $message"
+    echo -e "${BLUE}提示：快速模式可使用 --fast 參數跳過互動${NC}"
+    read -r -p "Continue? (y/N): " answer
+    
+    if [[ -z "$answer" ]]; then
+        answer="$default_answer"
+    fi
+    
+    case "$answer" in
+        [Yy]* ) return 0 ;;
+        * ) return 1 ;;
+    esac
 }
 
 # 檢測並升級 zsh 版本
@@ -286,7 +424,7 @@ upgrade_bash_macos() {
         echo "$new_bash_path" | sudo tee -a /etc/shells >/dev/null
     fi
     
-    # 詢問是否更改默認 shell - 在 macOS 上推薦使用 zsh
+    # 在 macOS 上推薦使用 zsh
     if [[ "${FAST_MODE:-}" == "true" ]] || interactive_prompt "是否要將 zsh 設為默認 shell？（macOS 推薦）" "Y"; then
         log_info "更改默認 shell 到 zsh..."
         chsh -s /bin/zsh || log_warn "更改默認 shell 失敗，請手動執行：chsh -s /bin/zsh"
@@ -355,41 +493,11 @@ upgrade_bash_linux() {
     log_success "bash 升級完成"
 }
 
-# ========== 智能檢測與互動式修復系統 ==========
-
-# 互動式提示函數
-interactive_prompt() {
-    local message="$1"
-    local default_answer="${2:-N}"
-    
-    # 快速模式下自動選擇預設答案
-    if [[ "${FAST_MODE:-}" == "true" ]]; then
-        log_info "快速模式：自動選擇 $default_answer"
-        if [[ "$default_answer" == "Y" || "$default_answer" == "y" ]]; then
-            return 0
-        else
-            return 1
-        fi
-    fi
-    
-    local answer
-    echo -e "${YELLOW}[PROMPT]${NC} $message"
-    echo -e "${BLUE}提示：快速模式可使用 --fast 參數跳過互動${NC}"
-    read -r -p "Continue? (y/N): " answer
-    
-    if [[ -z "$answer" ]]; then
-        answer="$default_answer"
-    fi
-    
-    case "$answer" in
-        [Yy]* ) return 0 ;;
-        * ) return 1 ;;
-    esac
-}
+# ========== 環境檢測系統 ==========
 
 # 檢測作業系統環境
-detect_os() {
-    log_info "正在偵測作業系統環境..."
+detect_environment() {
+    log_info "🔍 正在檢測系統環境..."
     
     # 檢查 macOS 環境
     if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -480,6 +588,917 @@ detect_os() {
     if [[ $EUID -eq 0 ]]; then
         log_warn "偵測到 root 用戶，建議使用一般用戶執行此腳本"
     fi
+    
+    export SYSTEM_TYPE ARCH SHELL_TYPE SHELL_CONFIG
+}
+
+# 檢查系統資源
+check_system_resources() {
+    log_debug "檢查系統資源..."
+    
+    # CPU 核心數
+    local cpu_cores
+    cpu_cores=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo "1")
+    log_debug "CPU 核心數: $cpu_cores"
+    
+    # 記憶體大小
+    local memory_gb
+    if [[ "$SYSTEM_TYPE" == "macos" ]]; then
+        memory_gb=$(( $(sysctl -n hw.memsize 2>/dev/null || echo "4294967296") / 1024 / 1024 / 1024 ))
+    else
+        memory_gb=$(free -g 2>/dev/null | awk '/^Mem:/{print $2}' || echo "4")
+    fi
+    log_debug "記憶體大小: ${memory_gb}GB"
+    
+    # 磁碟空間
+    local disk_free
+    disk_free=$(df -h "$HOME" 2>/dev/null | awk 'NR==2{print $4}' || echo "unknown")
+    log_debug "可用磁碟空間: $disk_free"
+    
+    export CPU_CORES="$cpu_cores" MEMORY_GB="$memory_gb" DISK_FREE="$disk_free"
+}
+
+# 檢查網路條件
+check_network_conditions() {
+    log_debug "檢查網路條件..."
+    
+    # 測試 Google Cloud Storage 連線
+    local gcs_ping
+    gcs_ping=$(ping -c 1 -W 3 storage.googleapis.com 2>/dev/null | grep "time=" | cut -d'=' -f4 | cut -d' ' -f1 || echo "999")
+    local gcs_ms
+    gcs_ms=$(echo "$gcs_ping" | cut -d'.' -f1 2>/dev/null || echo "999")
+    
+    # 測試 NPM Registry 連線
+    local npm_ping
+    npm_ping=$(ping -c 1 -W 3 registry.npmjs.org 2>/dev/null | grep "time=" | cut -d'=' -f4 | cut -d' ' -f1 || echo "999")
+    local npm_ms
+    npm_ms=$(echo "$npm_ping" | cut -d'.' -f1 2>/dev/null || echo "999")
+    
+    log_debug "GCS 延遲: ${gcs_ms}ms"
+    log_debug "NPM 延遲: ${npm_ms}ms"
+    
+    export GCS_PING_MS="$gcs_ms" NPM_PING_MS="$npm_ms"
+}
+
+# 檢查官方二進制支援
+check_official_binary_support() {
+    log_debug "檢查官方二進制支援..."
+    
+    # 檢查平台支援
+    case "${SYSTEM_TYPE:-}" in
+        macos|linux)
+            log_debug "平台支援官方二進制"
+            ;;
+        wsl)
+            log_debug "WSL 環境，可能支援但建議使用 NPM"
+            return 1
+            ;;
+        *)
+            log_debug "平台不支援官方二進制"
+            return 1
+            ;;
+    esac
+    
+    # 檢查架構支援
+    case "${ARCH:-}" in
+        x86_64|amd64|arm64|aarch64)
+            log_debug "架構支援官方二進制"
+            ;;
+        *)
+            log_debug "架構不支援官方二進制"
+            return 1
+            ;;
+    esac
+    
+    # 檢查必需工具
+    if ! command -v curl &>/dev/null; then
+        log_debug "缺少 curl 工具"
+        return 1
+    fi
+    
+    # 測試 GCS 連線
+    if ! curl -I "$GCS_BUCKET/stable" --max-time 10 &>/dev/null; then
+        log_debug "無法連線到 GCS bucket"
+        return 1
+    fi
+    
+    log_debug "官方二進制支援檢查通過"
+    return 0
+}
+
+# 檢查 Node.js 環境健康度
+check_nodejs_health() {
+    log_debug "檢查 Node.js 環境健康度..."
+    
+    # 檢查 Node.js 是否安裝
+    if ! command -v node &>/dev/null; then
+        log_debug "Node.js 未安裝"
+        return 1
+    fi
+    
+    # 檢查 Node.js 版本
+    local node_version
+    node_version=$(node --version 2>/dev/null | sed 's/v//' | cut -d'.' -f1)
+    if [[ $node_version -lt $MIN_NODE_VERSION ]]; then
+        log_debug "Node.js 版本過舊: v$node_version (需要 v$MIN_NODE_VERSION+)"
+        return 1
+    fi
+    
+    # 檢查 npm 是否安裝
+    if ! command -v npm &>/dev/null; then
+        log_debug "npm 未安裝"
+        return 1
+    fi
+    
+    # 檢查 npm 配置是否有衝突
+    local prefix_conflict=false
+    if npm config get prefix 2>/dev/null | grep -v "undefined" | grep -qv ".nvm" 2>/dev/null; then
+        prefix_conflict=true
+    fi
+    
+    if [[ "$prefix_conflict" == "true" ]]; then
+        log_debug "檢測到 npm prefix 配置衝突"
+        return 1
+    fi
+    
+    log_debug "Node.js 環境健康檢查通過"
+    return 0
+}
+
+# ========== Context7 智能分析系統 ==========
+
+# Context7 多模態環境分析
+context7_analyze_environment() {
+    if [[ "${DISABLE_CONTEXT7:-}" == "true" ]]; then
+        echo "npm"  # 預設降級到 NPM
+        return 0
+    fi
+    
+    log_info "🧠 Context7 智能分析環境..."
+    
+    local analysis_result=""
+    local confidence_score=0
+    
+    # 1. 系統資源分析 (30%)
+    local resource_score=0
+    if [[ ${CPU_CORES:-1} -ge 4 ]] && [[ ${MEMORY_GB:-4} -ge 8 ]]; then
+        resource_score=30
+        analysis_result="binary"
+        log_debug "高性能系統，推薦官方二進制: +30分"
+    elif [[ ${CPU_CORES:-1} -ge 2 ]] && [[ ${MEMORY_GB:-4} -ge 4 ]]; then
+        resource_score=15
+        log_debug "中等性能系統: +15分"
+    fi
+    confidence_score=$((confidence_score + resource_score))
+    
+    # 2. 網路條件分析 (25%)
+    local network_score=0
+    if [[ ${GCS_PING_MS:-999} -lt 100 ]]; then
+        network_score=25
+        if [[ "$analysis_result" != "npm" ]]; then
+            analysis_result="binary"
+        fi
+        log_debug "優秀網路連線，推薦官方二進制: +25分"
+    elif [[ ${NPM_PING_MS:-999} -lt 150 ]]; then
+        network_score=15
+        if [[ -z "$analysis_result" ]]; then
+            analysis_result="npm"
+        fi
+        log_debug "良好 NPM 連線: +15分"
+    fi
+    confidence_score=$((confidence_score + network_score))
+    
+    # 3. 平台適配分析 (20%)
+    local platform_score=0
+    case "${SYSTEM_TYPE:-}" in
+        macos)
+            platform_score=20
+            if [[ "$analysis_result" != "npm" ]]; then
+                analysis_result="binary"
+            fi
+            log_debug "macOS 平台，推薦官方二進制: +20分"
+            ;;
+        linux)
+            platform_score=15
+            log_debug "Linux 平台: +15分"
+            ;;
+        wsl)
+            platform_score=10
+            analysis_result="npm"
+            log_debug "WSL 環境，推薦 NPM: +10分"
+            ;;
+    esac
+    confidence_score=$((confidence_score + platform_score))
+    
+    # 4. 歷史成功率分析 (15%)
+    local history_score=0
+    local history_file="$HOME/.claude/install_history.log"
+    if [[ -f "$history_file" ]]; then
+        local binary_success npm_success
+        binary_success=$(grep -c "binary.*success" "$history_file" 2>/dev/null || echo "0")
+        npm_success=$(grep -c "npm.*success" "$history_file" 2>/dev/null || echo "0")
+        
+        if [[ $binary_success -gt $npm_success ]]; then
+            history_score=15
+            analysis_result="binary"
+            log_debug "歷史二進制安裝成功率較高: +15分"
+        elif [[ $npm_success -gt $binary_success ]]; then
+            history_score=15
+            analysis_result="npm"
+            log_debug "歷史 NPM 安裝成功率較高: +15分"
+        else
+            history_score=5
+            log_debug "歷史記錄平衡: +5分"
+        fi
+    fi
+    confidence_score=$((confidence_score + history_score))
+    
+    # 5. 用戶偏好分析 (10%)
+    local preference_score=0
+    local prefs_file="$HOME/.claude/user_preferences.json"
+    if [[ -f "$prefs_file" ]]; then
+        local preferred_method
+        preferred_method=$(grep -o '"install_method":"[^"]*"' "$prefs_file" 2>/dev/null | cut -d'"' -f4 || echo "")
+        if [[ -n "$preferred_method" ]]; then
+            preference_score=10
+            analysis_result="$preferred_method"
+            log_debug "用戶偏好 $preferred_method: +10分"
+        fi
+    fi
+    confidence_score=$((confidence_score + preference_score))
+    
+    # 確保有有效的分析結果
+    if [[ -z "$analysis_result" ]]; then
+        analysis_result="npm"  # 預設使用 NPM
+        log_debug "使用預設 NPM 方法"
+    fi
+    
+    # 儲存分析結果
+    local context_dir="$HOME/.claude"
+    mkdir -p "$context_dir"
+    {
+        echo "timestamp=$(date +%s)"
+        echo "confidence_score=$confidence_score"
+        echo "recommended_method=$analysis_result"
+        echo "cpu_cores=${CPU_CORES:-1}"
+        echo "memory_gb=${MEMORY_GB:-4}"
+        echo "gcs_ping_ms=${GCS_PING_MS:-999}"
+        echo "npm_ping_ms=${NPM_PING_MS:-999}"
+        echo "system_type=${SYSTEM_TYPE:-unknown}"
+    } >> "$context_dir/context7_analysis.log"
+    
+    log_info "🎯 Context7 分析完成"
+    log_info "   推薦方法: $analysis_result"
+    log_info "   信心指數: $confidence_score/100"
+    
+    echo "$analysis_result"
+}
+
+# ========== 智能安裝引擎選擇器 ==========
+
+# 智能檢測最佳安裝方法
+detect_best_installation_method() {
+    log_info "🔍 智能分析最佳安裝方法..."
+    
+    # 檢查強制模式
+    if [[ "${FORCE_BINARY:-}" == "true" ]]; then
+        if check_official_binary_support; then
+            INSTALL_METHOD="binary"
+            log_success "🎯 強制使用官方二進制安裝"
+            return 0
+        else
+            log_error "當前環境不支援官方二進制安裝"
+            exit 1
+        fi
+    fi
+    
+    if [[ "${FORCE_NPM:-}" == "true" ]]; then
+        INSTALL_METHOD="npm"
+        log_success "🎯 強制使用 NPM 安裝"
+        return 0
+    fi
+    
+    # 重置評分
+    BINARY_SCORE=0
+    NPM_SCORE=0
+    
+    # 檢測官方二進制支援度
+    if check_official_binary_support; then
+        BINARY_SCORE=$((BINARY_SCORE + 40))
+        log_info "✅ 官方二進制支援: +40 分"
+    else
+        log_info "❌ 官方二進制不支援"
+    fi
+    
+    # 檢測平台兼容性
+    case "${SYSTEM_TYPE:-}" in
+        macos)
+            BINARY_SCORE=$((BINARY_SCORE + 35))
+            NPM_SCORE=$((NPM_SCORE + 30))
+            log_info "✅ macOS 環境，二進制優勢: +35分，NPM: +30分"
+            ;;
+        linux)
+            BINARY_SCORE=$((BINARY_SCORE + 30))
+            NPM_SCORE=$((NPM_SCORE + 30))
+            log_info "✅ Linux 環境，平衡支援: +30分"
+            ;;
+        wsl)
+            NPM_SCORE=$((NPM_SCORE + 40))
+            log_info "✅ WSL 環境，NPM 更適合: +40 分"
+            ;;
+    esac
+    
+    # 檢測網路連線品質
+    local network_quality="unknown"
+    if [[ ${GCS_PING_MS:-999} -lt 100 ]]; then
+        BINARY_SCORE=$((BINARY_SCORE + 20))
+        network_quality="excellent"
+        log_info "✅ 優秀 GCS 連線: +20 分"
+    elif [[ ${NPM_PING_MS:-999} -lt 150 ]]; then
+        NPM_SCORE=$((NPM_SCORE + 20))
+        network_quality="good"
+        log_info "✅ 良好 NPM 連線: +20 分"
+    fi
+    
+    # 檢測 Node.js 環境健康度
+    if check_nodejs_health; then
+        NPM_SCORE=$((NPM_SCORE + 30))
+        log_info "✅ Node.js 環境健康: +30 分"
+    else
+        BINARY_SCORE=$((BINARY_SCORE + 25))
+        log_info "⚠️  Node.js 環境問題，偏向二進制: +25 分"
+    fi
+    
+    # Context7 智能分析
+    local context_recommendation
+    context_recommendation=$(context7_analyze_environment)
+    case "$context_recommendation" in
+        "binary")
+            BINARY_SCORE=$((BINARY_SCORE + 15))
+            log_info "🧠 Context7 推薦二進制: +15 分"
+            ;;
+        "npm")
+            NPM_SCORE=$((NPM_SCORE + 15))
+            log_info "🧠 Context7 推薦 NPM: +15 分"
+            ;;
+    esac
+    
+    # 決策邏輯
+    echo
+    log_info "📊 智能安裝方法評分結果："
+    log_info "   🔹 官方二進制安裝: $BINARY_SCORE 分"
+    log_info "   🔹 NPM 生態安裝: $NPM_SCORE 分"
+    
+    if [[ $BINARY_SCORE -gt $NPM_SCORE ]]; then
+        INSTALL_METHOD="binary"
+        CONFIDENCE_SCORE=$BINARY_SCORE
+        log_success "🎯 選擇官方二進制安裝（推薦指數: $BINARY_SCORE）"
+    else
+        INSTALL_METHOD="npm"
+        CONFIDENCE_SCORE=$NPM_SCORE
+        log_success "🎯 選擇 NPM 生態安裝（推薦指數: $NPM_SCORE）"
+    fi
+    
+    export INSTALL_METHOD CONFIDENCE_SCORE
+}
+
+# ========== 官方二進制安裝引擎 ==========
+
+# JSON 解析函數（無 jq 時使用）
+get_checksum_from_manifest() {
+    local json="$1"
+    local platform="$2"
+    
+    # 規範化 JSON 並提取校驗和
+    json=$(echo "$json" | tr -d '\n\r\t' | sed 's/ \+/ /g')
+    
+    if [[ $json =~ \"$platform\"[^}]*\"checksum\"[[:space:]]*:[[:space:]]*\"([a-f0-9]{64})\" ]]; then
+        echo "${BASH_REMATCH[1]}"
+        return 0
+    fi
+    
+    return 1
+}
+
+# 官方二進制安裝實現
+install_via_official_binary() {
+    log_info "🚀 使用官方二進制安裝引擎..."
+    
+    if [[ "${DRY_RUN:-}" == "true" ]]; then
+        log_info "🧪 測試模式：模擬官方二進制安裝"
+        return 0
+    fi
+    
+    local target="${TARGET_VERSION:-stable}"
+    local download_dir="$HOME/.claude/downloads"
+    
+    # 創建下載目錄
+    mkdir -p "$download_dir"
+    
+    # 檢測平台
+    local os arch platform
+    case "$(uname -s)" in
+        Darwin) os="darwin" ;;
+        Linux) os="linux" ;;
+        *) 
+            log_error "不支援的作業系統: $(uname -s)"
+            return 1
+            ;;
+    esac
+    
+    case "$(uname -m)" in
+        x86_64|amd64) arch="x64" ;;
+        arm64|aarch64) arch="arm64" ;;
+        *) 
+            log_error "不支援的架構: $(uname -m)"
+            return 1
+            ;;
+    esac
+    
+    platform="${os}-${arch}"
+    log_info "🖥️  檢測到平台: $platform"
+    
+    # 獲取版本資訊
+    log_info "📡 獲取最新版本資訊..."
+    local version
+    if ! version=$(curl -fsSL "$GCS_BUCKET/stable" --max-time 30 2>/dev/null); then
+        log_error "無法獲取版本資訊，可能是網路問題"
+        return 1
+    fi
+    
+    if [[ -z "$version" ]]; then
+        log_error "版本資訊為空"
+        return 1
+    fi
+    
+    log_info "📦 目標版本: $version"
+    
+    # 下載並解析 manifest
+    log_info "📋 下載安裝清單..."
+    local manifest_json
+    if ! manifest_json=$(curl -fsSL "$GCS_BUCKET/$version/manifest.json" --max-time 30 2>/dev/null); then
+        log_error "無法下載安裝清單"
+        return 1
+    fi
+    
+    # 提取校驗和
+    local checksum
+    if command -v jq >/dev/null 2>&1; then
+        checksum=$(echo "$manifest_json" | jq -r ".platforms[\"$platform\"].checksum // empty" 2>/dev/null)
+    else
+        checksum=$(get_checksum_from_manifest "$manifest_json" "$platform")
+    fi
+    
+    if [[ -z "$checksum" ]] || [[ ! "$checksum" =~ ^[a-f0-9]{64}$ ]]; then
+        log_error "平台 $platform 不支援或校驗和無效"
+        log_debug "Checksum: '$checksum'"
+        return 1
+    fi
+    
+    log_info "🔐 安全校驗和: ${checksum:0:16}..."
+    
+    # 下載二進制文件
+    local binary_path="$download_dir/claude-$version-$platform"
+    log_info "⬇️  正在下載 Claude Code 二進制文件..."
+    
+    # 使用進度條下載
+    if ! curl -fsSL -o "$binary_path" "$GCS_BUCKET/$version/$platform/claude" \
+        --progress-bar --max-time 300; then
+        log_error "下載失敗，請檢查網路連線"
+        rm -f "$binary_path"
+        return 1
+    fi
+    
+    # 校驗檔案完整性
+    log_info "🔍 驗證檔案完整性..."
+    local actual_checksum
+    if [[ "$os" == "darwin" ]]; then
+        actual_checksum=$(shasum -a 256 "$binary_path" 2>/dev/null | cut -d' ' -f1)
+    else
+        actual_checksum=$(sha256sum "$binary_path" 2>/dev/null | cut -d' ' -f1)
+    fi
+    
+    if [[ "$actual_checksum" != "$checksum" ]]; then
+        log_error "檔案校驗失敗！可能檔案已損壞"
+        log_error "預期: $checksum"
+        log_error "實際: $actual_checksum"
+        rm -f "$binary_path"
+        return 1
+    fi
+    
+    log_success "✅ 檔案完整性驗證通過"
+    
+    # 設定執行權限
+    chmod +x "$binary_path"
+    
+    # 執行官方安裝程序
+    log_info "⚙️  執行官方安裝程序..."
+    if "$binary_path" install ${target:+"$target"}; then
+        log_success "✅ 官方二進制安裝完成"
+        
+        # 清理暫存檔案
+        rm -f "$binary_path"
+        
+        # 驗證安裝
+        verify_claude_installation "binary"
+        return 0
+    else
+        log_error "官方安裝程序執行失敗"
+        rm -f "$binary_path"
+        return 1
+    fi
+}
+
+# ========== NPM 生態安裝引擎 ==========
+
+# 強化版 npm/nvm 衝突檢測與自動修復系統
+clean_npm_config_conflicts() {
+    log_info "🔍 開始全面檢測 npm/nvm 配置衝突..."
+    
+    local npmrc_file="$HOME/.npmrc"
+    local has_conflicts=false
+    local backup_created=false
+    local repair_success=false
+    local timestamp
+    timestamp=$(date +%Y%m%d_%H%M%S)
+    
+    # 多個 .npmrc 檔案位置檢查 (最佳實踐)
+    local npmrc_files=("$HOME/.npmrc" "/usr/local/etc/npmrc" "/etc/npmrc")
+    
+    # === 步驟 1: 檢測所有可能的衝突源 ===
+    log_info "📋 檢測 npm 配置衝突源..."
+    
+    # 1.1 檢查多個 .npmrc 檔案位置（最佳實踐）
+    log_info "🔍 檢查多個 .npmrc 檔案位置..."
+    for npmrc_path in "${npmrc_files[@]}"; do
+        if [[ -f "$npmrc_path" ]]; then
+            local conflict_lines
+            conflict_lines=$(grep -E "^(prefix|globalconfig)" "$npmrc_path" 2>/dev/null || true)
+            
+            if [[ -n "$conflict_lines" ]]; then
+                log_warn "🚨 發現 $npmrc_path 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
+                has_conflicts=true
+                
+                log_info "衝突的設定行："
+                echo "$conflict_lines" | while IFS= read -r line; do
+                    echo "  ❌ $line (在 $npmrc_path)"
+                done
+            fi
+        fi
+    done
+    
+    # 1.2 使用 npm config ls -l 檢查所有配置位置（最佳實踐）
+    if command -v npm &>/dev/null; then
+        log_info "🔍 使用 npm config ls -l 檢查所有配置位置..."
+        local npm_config_output
+        npm_config_output=$(npm config ls -l 2>/dev/null || echo "")
+        
+        if [[ -n "$npm_config_output" ]]; then
+            # 檢查配置檔案位置
+            local config_files
+            config_files=$(echo "$npm_config_output" | grep -E "^; .*\.npmrc" | grep -v "builtin" || echo "")
+            
+            if [[ -n "$config_files" ]]; then
+                log_info "發現的 npm 配置檔案："
+                echo "$config_files" | while IFS= read -r config_file; do
+                    echo "  📄 $config_file"
+                done
+            fi
+            
+            # 檢查 prefix 和 globalconfig 設定
+            if echo "$npm_config_output" | grep -E "^prefix" | grep -v "undefined" >/dev/null 2>&1; then
+                local prefix_setting
+                prefix_setting=$(echo "$npm_config_output" | grep -E "^prefix" | head -1)
+                log_warn "🚨 發現 prefix 設定：$prefix_setting"
+                has_conflicts=true
+            fi
+            
+            if echo "$npm_config_output" | grep -E "^globalconfig" | grep -v "undefined" >/dev/null 2>&1; then
+                local globalconfig_setting
+                globalconfig_setting=$(echo "$npm_config_output" | grep -E "^globalconfig" | head -1)
+                log_warn "🚨 發現 globalconfig 設定：$globalconfig_setting"
+                has_conflicts=true
+            fi
+        fi
+    fi
+    
+    # 檢查當前 Node.js 和 nvm 狀態
+    local current_node_version=""
+    local node_path=""
+    local nvm_available=false
+    
+    if command -v node &>/dev/null; then
+        current_node_version=$(node --version 2>/dev/null | sed 's/^v//' || echo "")
+        node_path=$(which node 2>/dev/null || echo "")
+        log_info "當前 Node.js 版本：v$current_node_version"
+        log_info "Node.js 路徑：$node_path"
+    fi
+    
+    # 檢查並載入 nvm
+    local nvm_dir="${NVM_DIR:-$HOME/.nvm}"
+    if [[ -s "$nvm_dir/nvm.sh" ]]; then
+        log_info "🔄 載入 nvm 環境..."
+        # shellcheck source=/dev/null
+        source "$nvm_dir/nvm.sh" 2>/dev/null || true
+        
+        if command -v nvm &>/dev/null; then
+            nvm_available=true
+            local nvm_current
+            nvm_current=$(nvm current 2>/dev/null || echo "none")
+            log_info "nvm 當前版本：$nvm_current"
+        fi
+    fi
+    
+    # === 如果發現衝突，進行修復 ===
+    if [[ "$has_conflicts" == "true" ]]; then
+        log_warn "⚠️  檢測到 npm/nvm 配置衝突，開始自動修復..."
+        
+        # 安全備份現有配置
+        if [[ -f "$npmrc_file" ]] && [[ "$backup_created" == "false" ]]; then
+            local backup_file="${npmrc_file}.backup.${timestamp}"
+            if cp "$npmrc_file" "$backup_file" 2>/dev/null; then
+                backup_created=true
+                log_info "✅ 已備份 .npmrc 到：$backup_file"
+            else
+                log_warn "⚠️  無法備份 .npmrc，繼續修復..."
+            fi
+        fi
+        
+        # 使用 nvm delete-prefix（最佳方法）
+        if [[ "$nvm_available" == "true" ]]; then
+            log_info "🔧 使用 nvm --delete-prefix 自動修復..."
+            
+            # 先檢查是否有正在使用的 Node.js 版本
+            local current_nvm_version
+            current_nvm_version=$(nvm current 2>/dev/null || echo "none")
+            
+            # 嘗試使用當前 nvm 版本執行 delete-prefix
+            if [[ "$current_nvm_version" != "none" ]] && [[ "$current_nvm_version" != "system" ]]; then
+                log_info "🔄 使用當前 nvm 版本：$current_nvm_version"
+                if nvm use --delete-prefix "$current_nvm_version" --silent 2>/dev/null; then
+                    log_success "✅ nvm delete-prefix 修復成功"
+                    repair_success=true
+                fi
+            fi
+        fi
+        
+        # 手動修復方法（備用）
+        if [[ "$repair_success" == "false" ]] && command -v npm &>/dev/null; then
+            log_info "🔧 執行手動修復方法..."
+            
+            # 支援新版 npm 的 --location 參數
+            local npm_version
+            npm_version=$(npm --version 2>/dev/null | head -1 || echo "0.0.0")
+            local npm_major_version
+            npm_major_version=$(echo "$npm_version" | cut -d. -f1)
+            
+            if [[ "$npm_major_version" -ge 8 ]]; then
+                # npm 8.0+ 語法
+                log_info "使用 npm 8.0+ 語法清理配置..."
+                npm config delete prefix --location=user 2>/dev/null || true
+                npm config delete globalconfig --location=user 2>/dev/null || true
+                npm config delete prefix --location=global 2>/dev/null || true
+                npm config delete globalconfig --location=global 2>/dev/null || true
+            else
+                # 舊版 npm 語法
+                log_info "使用舊版 npm 語法清理配置..."
+                npm config delete prefix 2>/dev/null || true
+                npm config delete globalconfig 2>/dev/null || true
+                npm config delete prefix -g 2>/dev/null || true
+                npm config delete globalconfig -g 2>/dev/null || true
+            fi
+            
+            repair_success=true
+        fi
+    fi
+    
+    # 清理 npm 快取
+    if command -v npm &>/dev/null; then
+        npm cache clean --force 2>/dev/null || true
+        log_info "✅ npm 快取已清理"
+    fi
+    
+    # 最終狀態檢查
+    log_info "🔍 驗證修復結果..."
+    
+    local final_conflicts=false
+    
+    # 重新檢查配置
+    if command -v npm &>/dev/null; then
+        local final_prefix
+        final_prefix=$(npm config get prefix 2>/dev/null | grep -v "undefined" || echo "")
+        
+        if [[ -n "$final_prefix" ]]; then
+            log_info "當前 npm prefix：$final_prefix"
+            
+            # 檢查是否仍有衝突
+            if [[ "$final_prefix" != *"/.nvm/versions/node/"* ]] && [[ "$final_prefix" != *"/.npm-global"* ]]; then
+                if [[ "$nvm_available" == "true" ]]; then
+                    log_warn "⚠️  prefix 設定可能仍有問題，但 nvm 可用"
+                    final_conflicts=true
+                fi
+            else
+                log_success "✅ npm prefix 設定正常"
+            fi
+        else
+            log_success "✅ npm prefix 未設定（將使用 nvm 預設）"
+        fi
+    fi
+    
+    # 最終報告與建議
+    echo
+    if [[ "$has_conflicts" == "false" ]]; then
+        log_success "🎉 未發現 npm/nvm 配置衝突，環境正常"
+    elif [[ "$repair_success" == "true" ]] && [[ "$final_conflicts" == "false" ]]; then
+        log_success "🎉 npm/nvm 衝突修復成功！"
+        log_info "📋 修復摘要："
+        echo "  ✅ 已清理衝突的 npm 配置"
+        if [[ "$backup_created" == "true" ]]; then
+            echo "  ✅ 原始配置已備份"
+        fi
+        echo "  ✅ npm 快取已清理"
+        
+        log_info "🔄 建議執行以下操作完成修復："
+        echo "  1. 重新載入 shell：source ${SHELL_CONFIG:-~/.zshrc}"
+        if [[ "$nvm_available" == "true" ]] && [[ -n "$current_node_version" ]]; then
+            echo "  2. 重新設定 nvm 版本：nvm use v${current_node_version}"
+        fi
+        echo "  3. 驗證 npm 設定：npm config get prefix"
+    else
+        log_warn "⚠️  部分衝突可能需要手動處理"
+        log_info "🛠️  故障排查建議："
+        echo "  1. 檢查 shell 配置檔案中的環境變數設定"
+        echo "  2. 確認 nvm 正確安裝：curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash"
+        echo "  3. 重新啟動終端並測試：nvm --version"
+        
+        if [[ "$backup_created" == "true" ]]; then
+            echo "  4. 如需還原：mv $npmrc_file.backup.$timestamp $npmrc_file"
+        fi
+    fi
+    
+    return 0
+}
+
+# 設定 npm 全域安裝目錄
+setup_npm_global_config() {
+    log_info "⚙️  設定 npm 全域安裝目錄..."
+    
+    local npm_global_dir="$HOME/.npm-global"
+    
+    # 創建 npm 全域安裝目錄
+    if [[ ! -d "$npm_global_dir" ]]; then
+        mkdir -p "$npm_global_dir"
+        log_info "📁 已創建 npm 全域安裝目錄：$npm_global_dir"
+    fi
+    
+    # 配置 npm 使用此目錄
+    npm config set prefix "$npm_global_dir" 2>/dev/null || true
+    
+    # 確保 PATH 包含 npm 全域 bin 目錄
+    local npm_bin_dir="$npm_global_dir/bin"
+    
+    if [[ ":$PATH:" != *":$npm_bin_dir:"* ]]; then
+        # 添加到當前 shell
+        export PATH="$npm_bin_dir:$PATH"
+        
+        # 添加到 shell 配置檔案
+        if [[ -f "$SHELL_CONFIG" ]]; then
+            if ! grep -q "npm-global/bin" "$SHELL_CONFIG" 2>/dev/null; then
+                {
+                    echo ""
+                    echo "# npm 全域安裝目錄 PATH"
+                    echo "export PATH=\"\$HOME/.npm-global/bin:\$PATH\""
+                } >> "$SHELL_CONFIG"
+                log_info "✅ 已將 npm 全域 bin 目錄添加到 $SHELL_CONFIG"
+            fi
+        fi
+    fi
+    
+    log_success "✅ npm 全域安裝目錄設定完成"
+}
+
+# NPM 生態安裝實現
+install_via_npm_ecosystem() {
+    log_info "🔧 使用 NPM 生態安裝引擎..."
+    
+    if [[ "${DRY_RUN:-}" == "true" ]]; then
+        log_info "🧪 測試模式：模擬 NPM 安裝"
+        return 0
+    fi
+    
+    # 檢查 Node.js 環境
+    if ! command -v node &>/dev/null; then
+        log_error "❌ Node.js 未安裝，請先安裝 Node.js $MIN_NODE_VERSION+"
+        log_info "建議使用 nvm 安裝：curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash"
+        return 1
+    fi
+    
+    # 檢查 Node.js 版本
+    local node_version
+    node_version=$(node --version 2>/dev/null | sed 's/v//' | cut -d'.' -f1)
+    if [[ $node_version -lt $MIN_NODE_VERSION ]]; then
+        log_error "❌ Node.js 版本過舊: v$node_version (需要 v$MIN_NODE_VERSION+)"
+        return 1
+    fi
+    
+    # 檢查 npm
+    if ! command -v npm &>/dev/null; then
+        log_error "❌ npm 未安裝"
+        return 1
+    fi
+    
+    # 清理 npm 配置衝突
+    clean_npm_config_conflicts
+    
+    # 設定 npm 全域安裝目錄
+    setup_npm_global_config
+    
+    # 清理舊版本
+    if command -v claude &>/dev/null; then
+        log_info "🧹 清理舊版本..."
+        npm uninstall -g "$CLAUDE_PACKAGE" 2>/dev/null || true
+    fi
+    
+    # 確保使用正確的 npm 配置
+    log_info "當前 npm 配置："
+    npm config get prefix 2>/dev/null || true
+    
+    # 安裝新版本
+    log_info "📦 安裝 Claude Code NPM 套件..."
+    local install_attempts=0
+    local max_attempts=3
+    
+    while [[ $install_attempts -lt $max_attempts ]]; do
+        install_attempts=$((install_attempts + 1))
+        log_info "📥 安裝嘗試 $install_attempts/$max_attempts..."
+        
+        if npm install -g "$CLAUDE_PACKAGE" --force --no-audit --progress=true; then
+            log_success "✅ NPM 安裝完成"
+            verify_claude_installation "npm"
+            return 0
+        else
+            log_warn "⚠️  安裝嘗試 $install_attempts 失敗"
+            
+            if [[ $install_attempts -lt $max_attempts ]]; then
+                log_info "🔄 清理快取並重試..."
+                npm cache clean --force 2>/dev/null || true
+                sleep 2
+            fi
+        fi
+    done
+    
+    log_error "❌ NPM 安裝失敗，已嘗試 $max_attempts 次"
+    return 1
+}
+
+# ========== 安裝驗證與恢復系統 ==========
+
+# 安裝驗證與健康檢查
+verify_claude_installation() {
+    local install_method="$1"
+    
+    log_info "🔍 驗證 Claude Code 安裝..."
+    
+    # 基礎檢查
+    if ! command -v claude &>/dev/null; then
+        log_error "❌ claude 命令未找到"
+        return 1
+    fi
+    
+    local claude_path
+    claude_path=$(which claude 2>/dev/null)
+    log_info "📍 Claude 路徑: $claude_path"
+    
+    # 版本檢查
+    local claude_version
+    if claude_version=$(claude --version 2>/dev/null); then
+        log_success "✅ Claude 版本: $claude_version"
+    else
+        log_error "❌ 無法獲取 Claude 版本"
+        return 1
+    fi
+    
+    # 執行官方健康檢查（跳過互動式檢查）
+    log_info "🏥 執行基本功能檢查..."
+    if claude --help &>/dev/null; then
+        log_success "✅ Claude 基本功能檢查通過"
+    else
+        log_warn "⚠️  Claude 基本功能檢查發現問題"
+        return 1
+    fi
+    
+    # 記錄成功安裝
+    local context_dir="$HOME/.claude"
+    local history_file="$context_dir/install_history.log"
+    mkdir -p "$context_dir"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $install_method install success - $claude_version" >> "$history_file"
+    
+    # 更新用戶偏好
+    local prefs_file="$context_dir/user_preferences.json"
+    echo "{\"install_method\":\"$install_method\",\"last_success\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > "$prefs_file"
+    
+    log_success "🎉 Claude Code 安裝驗證完成"
+    return 0
 }
 
 # 檢查 Claude Code CLI 狀態
@@ -531,7 +1550,7 @@ check_claude_cli_status() {
         fi
         
         if [[ "$should_install" == "true" ]]; then
-            install_claude_code_fresh
+            return 0  # 讓主安裝流程處理
         else
             log_warn "跳過 claude code CLI 安裝"
         fi
@@ -547,537 +1566,130 @@ check_claude_cli_status() {
         fi
         
         if [[ "$should_update" == "true" ]]; then
-            install_claude_code_fresh
+            return 0  # 讓主安裝流程處理
         else
             log_warn "跳過 claude code CLI 更新"
         fi
     else
         log_success "claude code CLI 狀態正常"
+        return 1  # 已安裝且最新，跳過安裝流程
     fi
 }
 
-# 強化版 npm/nvm 衝突檢測與自動修復系統
-clean_npm_config_conflicts() {
-    log_info "🔍 開始全面檢測 npm/nvm 配置衝突..."
+# 錯誤恢復處理
+handle_installation_failure() {
+    local failed_method="$1"
+    local error_code="$2"
     
-    local npmrc_file="$HOME/.npmrc"
-    local has_conflicts=false
-    local backup_created=false
-    local repair_success=false
-    local timestamp
-    timestamp=$(date +%Y%m%d_%H%M%S)
+    log_error "❌ $failed_method 安裝失敗 (錯誤代碼: $error_code)"
     
-    # 多個 .npmrc 檔案位置檢查 (最佳實踐)
-    local npmrc_files=("$HOME/.npmrc" "/usr/local/etc/npmrc" "/etc/npmrc")
+    # 記錄失敗
+    local context_dir="$HOME/.claude"
+    local history_file="$context_dir/install_history.log"
+    mkdir -p "$context_dir"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $failed_method install failed - error_code:$error_code" >> "$history_file"
     
-    # === 步驟 1: 檢測所有可能的衝突源 ===
-    log_info "📋 檢測 npm 配置衝突源..."
-    
-    # 1.1 檢查多個 .npmrc 檔案位置（最佳實踐）
-    log_info "🔍 檢查多個 .npmrc 檔案位置..."
-    for npmrc_path in "${npmrc_files[@]}"; do
-        if [[ -f "$npmrc_path" ]]; then
-            local conflict_lines
-            conflict_lines=$(grep -E "^(prefix|globalconfig)" "$npmrc_path" 2>/dev/null || true)
-            
-            if [[ -n "$conflict_lines" ]]; then
-                log_warn "🚨 發現 $npmrc_path 中有 prefix 或 globalconfig 設定，這會與 nvm 衝突"
-                has_conflicts=true
-                
-                log_info "衝突的設定行："
-                echo "$conflict_lines" | while IFS= read -r line; do
-                    echo "  ❌ $line (在 $npmrc_path)"
-                done
-                
-                log_info "檔案內容："
-                sed 's/^/    /' "$npmrc_path"
-            fi
-        fi
-    done
-    
-    # 1.2 使用 npm config ls -l 檢查所有配置位置（最佳實踐）
-    if command -v npm &>/dev/null; then
-        log_info "🔍 使用 npm config ls -l 檢查所有配置位置..."
-        local npm_config_output
-        npm_config_output=$(npm config ls -l 2>/dev/null || echo "")
-        
-        if [[ -n "$npm_config_output" ]]; then
-            # 檢查配置檔案位置
-            local config_files
-            config_files=$(echo "$npm_config_output" | grep -E "^; .*\.npmrc" | grep -v "builtin" || echo "")
-            
-            if [[ -n "$config_files" ]]; then
-                log_info "發現的 npm 配置檔案："
-                echo "$config_files" | while IFS= read -r config_file; do
-                    echo "  📄 $config_file"
-                done
-            fi
-            
-            # 檢查 prefix 和 globalconfig 設定
-            if echo "$npm_config_output" | grep -E "^prefix" | grep -v "undefined" >/dev/null 2>&1; then
-                local prefix_setting
-                prefix_setting=$(echo "$npm_config_output" | grep -E "^prefix" | head -1)
-                log_warn "🚨 發現 prefix 設定：$prefix_setting"
-                has_conflicts=true
-            fi
-            
-            if echo "$npm_config_output" | grep -E "^globalconfig" | grep -v "undefined" >/dev/null 2>&1; then
-                local globalconfig_setting
-                globalconfig_setting=$(echo "$npm_config_output" | grep -E "^globalconfig" | head -1)
-                log_warn "🚨 發現 globalconfig 設定：$globalconfig_setting"
-                has_conflicts=true
-            fi
-        fi
-    fi
-    
-    # 1.2 檢查環境變數衝突
-    local env_conflicts=()
-    if [[ -n "${NPM_CONFIG_PREFIX:-}" ]]; then
-        env_conflicts+=("NPM_CONFIG_PREFIX=${NPM_CONFIG_PREFIX}")
-        has_conflicts=true
-    fi
-    
-    if [[ -n "${PREFIX:-}" ]] && [[ "${PREFIX}" != "/usr/local" ]]; then
-        env_conflicts+=("PREFIX=${PREFIX}")
-        has_conflicts=true
-    fi
-    
-    if [[ ${#env_conflicts[@]} -gt 0 ]]; then
-        log_warn "🚨 發現環境變數衝突："
-        for env_var in "${env_conflicts[@]}"; do
-            echo "  ❌ $env_var"
-        done
-    fi
-    
-    # 1.3 檢查當前 npm 配置中的衝突
-    local npm_config_conflicts=()
-    if command -v npm &>/dev/null; then
-        local current_prefix
-        current_prefix=$(npm config get prefix 2>/dev/null | grep -v "undefined" || echo "")
-        
-        if [[ -n "$current_prefix" ]]; then
-            # 檢查 prefix 是否指向非 nvm 管理的目錄
-            if [[ "$current_prefix" != *"/.nvm/versions/node/"* ]] && [[ "$current_prefix" != *"/.npm-global" ]]; then
-                npm_config_conflicts+=("prefix=$current_prefix")
-                has_conflicts=true
-                fi
-        fi
-        
-        local current_globalconfig
-        current_globalconfig=$(npm config get globalconfig 2>/dev/null | grep -v "undefined" || echo "")
-        if [[ -n "$current_globalconfig" ]] && [[ "$current_globalconfig" != *"/.nvm/"* ]]; then
-            npm_config_conflicts+=("globalconfig=$current_globalconfig")
-            has_conflicts=true
-        fi
-    fi
-    
-    if [[ ${#npm_config_conflicts[@]} -gt 0 ]]; then
-        log_warn "🚨 發現 npm 配置衝突："
-        for config in "${npm_config_conflicts[@]}"; do
-            echo "  ❌ $config"
-        done
-    fi
-    
-    # === 步驟 2: 檢測 Node.js 和 nvm 狀態 ===
-    local current_node_version=""
-    local node_path=""
-    local nvm_available=false
-    
-    if command -v node &>/dev/null; then
-        current_node_version=$(node --version 2>/dev/null | sed 's/^v//' || echo "")
-        node_path=$(which node 2>/dev/null || echo "")
-        log_info "當前 Node.js 版本：v$current_node_version"
-        log_info "Node.js 路徑：$node_path"
-    fi
-    
-    # 檢查並載入 nvm
-    local nvm_dir="${NVM_DIR:-$HOME/.nvm}"
-    if [[ -s "$nvm_dir/nvm.sh" ]]; then
-        log_info "🔄 載入 nvm 環境..."
-        # shellcheck source=/dev/null
-        source "$nvm_dir/nvm.sh" 2>/dev/null || true
-        
-        if command -v nvm &>/dev/null; then
-            nvm_available=true
-            local nvm_current
-            nvm_current=$(nvm current 2>/dev/null || echo "none")
-            log_info "nvm 當前版本：$nvm_current"
-        fi
-    fi
-    
-    # === 步驟 3: 如果發現衝突，進行修復 ===
-    if [[ "$has_conflicts" == "true" ]]; then
-        log_warn "⚠️  檢測到 npm/nvm 配置衝突，開始自動修復..."
-        
-        # 3.1 安全備份現有配置
-        if [[ -f "$npmrc_file" ]] && [[ "$backup_created" == "false" ]]; then
-            local backup_file="${npmrc_file}.backup.${timestamp}"
-            if cp "$npmrc_file" "$backup_file" 2>/dev/null; then
-                backup_created=true
-                log_info "✅ 已備份 .npmrc 到：$backup_file"
+    # 智能降級策略
+    case "$failed_method" in
+        "binary")
+            log_info "🔄 智能降級：切換到 NPM 安裝方式..."
+            if install_via_npm_ecosystem; then
+                log_success "✅ NPM 降級安裝成功"
+                return 0
             else
-                log_warn "⚠️  無法備份 .npmrc，繼續修復..."
+                log_error "❌ NPM 降級安裝也失敗"
             fi
-        fi
-        
-        # 3.2 使用 nvm delete-prefix（最佳方法）
-        if [[ "$nvm_available" == "true" ]]; then
-            log_info "🔧 使用 nvm --delete-prefix 自動修復..."
-            
-            # 先檢查是否有正在使用的 Node.js 版本
-            local current_nvm_version
-            current_nvm_version=$(nvm current 2>/dev/null || echo "none")
-            
-            # 嘗試使用當前 nvm 版本執行 delete-prefix
-            if [[ "$current_nvm_version" != "none" ]] && [[ "$current_nvm_version" != "system" ]]; then
-                log_info "🔄 使用當前 nvm 版本：$current_nvm_version"
-                if nvm use --delete-prefix "$current_nvm_version" --silent 2>/dev/null; then
-                    log_success "✅ nvm delete-prefix 修復成功"
-                    repair_success=true
-                fi
-            fi
-            
-            # 如果當前版本失敗，嘗試可用的版本
-            if [[ "$repair_success" == "false" ]]; then
-                log_info "🔄 當前版本修復失敗，嘗試可用版本..."
-                local available_versions
-                available_versions=$(nvm ls --no-colors 2>/dev/null | grep -E "v[0-9]+" | head -5 || echo "")
-                
-                if [[ -n "$available_versions" ]]; then
-                    # 優先嘗試 LTS 版本
-                    local lts_versions
-                    lts_versions=$(echo "$available_versions" | grep -E "(lts|Latest LTS)" | head -3 || echo "")
-                    
-                    if [[ -n "$lts_versions" ]]; then
-                        echo "$lts_versions" | while IFS= read -r version_line; do
-                            local version
-                            version=$(echo "$version_line" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
-                            if [[ -n "$version" ]]; then
-                                log_info "嘗試 LTS 版本：$version"
-                                if nvm use --delete-prefix "$version" --silent 2>/dev/null; then
-                                    log_success "✅ 使用 LTS 版本 $version 修復成功"
-                                    repair_success=true
-                                    break
-                                fi
-                            fi
-                        done
-                    fi
-                    
-                    # 如果 LTS 版本失敗，嘗試其他版本
-                    if [[ "$repair_success" == "false" ]]; then
-                        echo "$available_versions" | while IFS= read -r version_line; do
-                            local version
-                            version=$(echo "$version_line" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
-                            if [[ -n "$version" ]]; then
-                                log_info "嘗試版本：$version"
-                                if nvm use --delete-prefix "$version" --silent 2>/dev/null; then
-                                    log_success "✅ 使用版本 $version 修復成功"
-                                    repair_success=true
-                                    break
-                                fi
-                            fi
-                        done
-                    fi
-                else
-                    log_warn "⚠️  未找到可用的 nvm 版本，將使用手動修復"
-                fi
-            fi
-        else
-            log_warn "⚠️  nvm 不可用，將使用手動修復方法"
-        fi
-        
-        # 3.3 手動修復方法（備用）
-        if [[ "$repair_success" == "false" ]]; then
-            log_info "🔧 執行手動修復方法..."
-            
-            # 3.3.1 移除多個 .npmrc 檔案中的衝突設定
-            for npmrc_path in "${npmrc_files[@]}"; do
-                if [[ -f "$npmrc_path" ]]; then
-                    log_info "清理 $npmrc_path 中的衝突設定..."
-                    if grep -vE "^(prefix|globalconfig)" "$npmrc_path" > "${npmrc_path}.tmp" 2>/dev/null; then
-                        # 檢查是否有權限修改檔案
-                        if [[ -w "$npmrc_path" ]]; then
-                            mv "${npmrc_path}.tmp" "$npmrc_path"
-                            log_info "✅ 已從 $npmrc_path 移除 prefix 和 globalconfig 設定"
-                            log_info "修復後的 .npmrc 內容："
-                            sed 's/^/    /' "$npmrc_path"
-                        else
-                            log_warn "⚠️  無法修改 $npmrc_path，需要管理員權限"
-                            rm -f "${npmrc_path}.tmp"
-                        fi
-                    fi
-                fi
-            done
-            
-            # 3.3.2 使用 npm config 直接刪除（支援新版 npm 語法）
-            if command -v npm &>/dev/null; then
-                log_info "使用 npm config 清理設定..."
-                
-                # 支援新版 npm 的 --location 參數
-                local npm_version
-                npm_version=$(npm --version 2>/dev/null | head -1 || echo "0.0.0")
-                local npm_major_version
-                npm_major_version=$(echo "$npm_version" | cut -d. -f1)
-                
-                if [[ "$npm_major_version" -ge 8 ]]; then
-                    # npm 8.0+ 語法
-                    log_info "使用 npm 8.0+ 語法清理配置..."
-                    npm config delete prefix --location=user 2>/dev/null || true
-                    npm config delete globalconfig --location=user 2>/dev/null || true
-                    npm config delete prefix --location=global 2>/dev/null || true
-                    npm config delete globalconfig --location=global 2>/dev/null || true
-                else
-                    # 舊版 npm 語法
-                    log_info "使用舊版 npm 語法清理配置..."
-                    npm config delete prefix 2>/dev/null || true
-                    npm config delete globalconfig 2>/dev/null || true
-                    npm config delete prefix -g 2>/dev/null || true
-                    npm config delete globalconfig -g 2>/dev/null || true
-                fi
-                
-                # 3.3.3 清理環境變數（如果設定了）
-                if [[ -n "${NPM_CONFIG_PREFIX:-}" ]]; then
-                    log_info "清理 NPM_CONFIG_PREFIX 環境變數..."
-                    unset NPM_CONFIG_PREFIX
-                fi
-                
-                if [[ -n "${NPM_CONFIG_GLOBALCONFIG:-}" ]]; then
-                    log_info "清理 NPM_CONFIG_GLOBALCONFIG 環境變數..."
-                    unset NPM_CONFIG_GLOBALCONFIG
-                fi
-                
-                repair_success=true
-            fi
-            
-            # 3.3.4 驗證修復結果
-            if [[ "$repair_success" == "true" ]]; then
-                log_info "🔍 驗證修復結果..."
-                local current_prefix_after
-                current_prefix_after=$(npm config get prefix 2>/dev/null || echo "")
-                
-                if [[ -z "$current_prefix_after" ]] || [[ "$current_prefix_after" == "undefined" ]]; then
-                    log_success "✅ prefix 設定已成功清除"
-                else
-                    log_info "當前 prefix 設定：$current_prefix_after"
-                    # 檢查是否為 nvm 管理的路徑
-                    if [[ "$current_prefix_after" == *"/.nvm/versions/node/"* ]]; then
-                        log_success "✅ prefix 設定已更新為 nvm 管理的路徑"
-                    else
-                        log_warn "⚠️  prefix 設定仍可能存在衝突"
-                    fi
-                fi
-            fi
-        fi
-        
-        # 3.4 清理環境變數提示
-        if [[ ${#env_conflicts[@]} -gt 0 ]]; then
-            log_warn "⚠️  檢測到環境變數衝突，需要手動清理："
-            for env_var in "${env_conflicts[@]}"; do
-                local var_name=${env_var%%=*}
-                echo "  unset $var_name"
-            done
-            log_info "建議將以上 unset 指令加入您的 shell 配置檔案"
-        fi
-    fi
-    
-    # === 步驟 4: 清理與驗證 ===
-    log_info "🧹 清理 npm 快取並驗證修復結果..."
-    
-    # 清理 npm 快取
-    if command -v npm &>/dev/null; then
-        npm cache clean --force 2>/dev/null || true
-        log_info "✅ npm 快取已清理"
-    fi
-    
-    # === 步驟 5: 最終狀態檢查 ===
-    log_info "🔍 驗證修復結果..."
-    
-    local final_conflicts=false
-    
-    # 重新檢查配置
-    if command -v npm &>/dev/null; then
-        local final_prefix
-        final_prefix=$(npm config get prefix 2>/dev/null | grep -v "undefined" || echo "")
-        
-        if [[ -n "$final_prefix" ]]; then
-            log_info "當前 npm prefix：$final_prefix"
-            
-            # 檢查是否仍有衝突
-            if [[ "$final_prefix" != *"/.nvm/versions/node/"* ]] && [[ "$final_prefix" != *"/.npm-global"* ]]; then
-                if [[ "$nvm_available" == "true" ]]; then
-                    log_warn "⚠️  prefix 設定可能仍有問題，但 nvm 可用"
-                    final_conflicts=true
-                fi
+            ;;
+        "npm")
+            log_info "🔄 嘗試環境修復..."
+            clean_npm_config_conflicts
+            if install_via_npm_ecosystem; then
+                log_success "✅ 修復後 NPM 安裝成功"
+                return 0
             else
-                log_success "✅ npm prefix 設定正常"
+                log_error "❌ 環境修復失敗"
             fi
-        else
-            log_success "✅ npm prefix 未設定（將使用 nvm 預設）"
-        fi
-    fi
+            ;;
+    esac
     
-    # === 步驟 6: 最終報告與建議 ===
+    # 提供故障排除建議
+    provide_troubleshooting_advice "$failed_method"
+    return 1
+}
+
+# 故障排除建議
+provide_troubleshooting_advice() {
+    local failed_method="$1"
+    
     echo
-    if [[ "$has_conflicts" == "false" ]]; then
-        log_success "🎉 未發現 npm/nvm 配置衝突，環境正常"
-    elif [[ "$repair_success" == "true" ]] && [[ "$final_conflicts" == "false" ]]; then
-        log_success "🎉 npm/nvm 衝突修復成功！"
-        log_info "📋 修復摘要："
-        echo "  ✅ 已清理衝突的 npm 配置"
-        if [[ "$backup_created" == "true" ]]; then
-            echo "  ✅ 原始配置已備份"
-        fi
-        echo "  ✅ npm 快取已清理"
-        
-        log_info "🔄 建議執行以下操作完成修復："
-        echo "  1. 重新載入 shell：source ${SHELL_CONFIG:-~/.zshrc}"
-        if [[ "$nvm_available" == "true" ]] && [[ -n "$current_node_version" ]]; then
-            echo "  2. 重新設定 nvm 版本：nvm use v${current_node_version}"
-        fi
-        echo "  3. 驗證 npm 設定：npm config get prefix"
-    else
-        log_warn "⚠️  部分衝突可能需要手動處理"
-        log_info "🛠️  故障排查建議："
-        echo "  1. 檢查 shell 配置檔案中的環境變數設定"
-        echo "  2. 確認 nvm 正確安裝：curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash"
-        echo "  3. 重新啟動終端並測試：nvm --version"
-        
-        if [[ "$backup_created" == "true" ]]; then
-            echo "  4. 如需還原：mv $npmrc_file.backup.$timestamp $npmrc_file"
-        fi
-    fi
+    log_info "🛠️  故障排除建議："
     
-    return 0
+    case "$failed_method" in
+        "binary")
+            echo "  1. 檢查網路連線: ping storage.googleapis.com"
+            echo "  2. 檢查防火牆設定，確保允許 HTTPS 連線"
+            echo "  3. 嘗試使用 NPM 安裝: $0 --force-npm"
+            echo "  4. 檢查磁碟空間是否足夠"
+            ;;
+        "npm")
+            echo "  1. 檢查 Node.js 版本: node --version (需要 $MIN_NODE_VERSION+)"
+            echo "  2. 清理 npm 快取: npm cache clean --force"
+            echo "  3. 重新安裝 Node.js: 建議使用 nvm 管理版本"
+            echo "  4. 檢查網路代理設定: npm config get proxy"
+            echo "  5. 嘗試使用二進制安裝: $0 --force-binary"
+            ;;
+    esac
+    
+    echo "  📋 完整日誌位置: $LOG_FILE"
+    echo "  🔗 更多幫助: https://github.com/s123104/claude-code/wiki/troubleshooting"
 }
 
-# 設定 npm 全域安裝目錄
-setup_npm_global_config() {
-    log_info "設定 npm 全域安裝目錄..."
-    
-    local npm_global_dir="$HOME/.npm-global"
-    
-    # 創建 npm 全域安裝目錄
-    if [[ ! -d "$npm_global_dir" ]]; then
-        mkdir -p "$npm_global_dir"
-        log_info "已創建 npm 全域安裝目錄：$npm_global_dir"
-    fi
-    
-    # 配置 npm 使用此目錄
-    npm config set prefix "$npm_global_dir" 2>/dev/null || true
-    
-    # 確保 PATH 包含 npm 全域 bin 目錄
-    local npm_bin_dir="$npm_global_dir/bin"
-    
-    if [[ ":$PATH:" != *":$npm_bin_dir:"* ]]; then
-        # 添加到當前 shell
-        export PATH="$npm_bin_dir:$PATH"
-        
-        # 添加到 shell 配置檔案
-        local shell_config="${SHELL_CONFIG:-$HOME/.zshrc}"
-        if [[ -f "$shell_config" ]]; then
-            if ! grep -q "npm-global/bin" "$shell_config" 2>/dev/null; then
-                {
-                    echo ""
-                    echo "# npm 全域安裝目錄 PATH"
-                    echo "export PATH=\"\$HOME/.npm-global/bin:\$PATH\""
-                } >> "$shell_config"
-                log_info "已將 npm 全域 bin 目錄添加到 $shell_config"
-            fi
-        fi
-    fi
-    
-    log_success "npm 全域安裝目錄設定完成"
-}
-
-# 安裝 Claude Code CLI
-install_claude_code_fresh() {
-    log_info "安裝 Claude Code CLI..."
-    
-    # 清理 npm 配置衝突
-    clean_npm_config_conflicts
-    
-    # 設定 npm 全域安裝目錄
-    setup_npm_global_config
-    
-    # 清理舊版本（如果存在）
-    if command -v claude &>/dev/null; then
-        log_info "清理舊版本..."
-        npm uninstall -g "$CLAUDE_PACKAGE" 2>/dev/null || true
-    fi
-    
-    # 確保使用正確的 npm 配置
-    log_info "當前 npm 配置："
-    npm config get prefix 2>/dev/null || true
-    
-    # 安裝 Claude Code
-    log_info "正在安裝 $CLAUDE_PACKAGE..."
-    if ! npm install -g "$CLAUDE_PACKAGE" --force; then
-        error_exit "Claude Code CLI 安裝失敗"
-    fi
-    
-    # 驗證安裝
-    local claude_path
-    claude_path=$(which claude 2>/dev/null || echo "")
-    if [[ -n "$claude_path" ]]; then
-        log_success "Claude Code CLI 安裝完成：$claude_path"
-        
-        # 顯示版本資訊
-        local claude_version
-        claude_version=$(claude --version 2>/dev/null | head -1 || echo "unknown")
-        log_info "安裝版本：$claude_version"
-    else
-        log_warn "Claude Code CLI 安裝完成，但未在 PATH 中找到"
-        log_info "請重新載入 shell 或執行：source $SHELL_CONFIG"
-    fi
-}
-
-# 快速模式檢查
-check_fast_mode() {
-    local arg
-    for arg in "$@"; do
-        if [[ "$arg" == "--fast" || "$arg" == "-f" ]]; then
-            export FAST_MODE=true
-            log_info "啟用快速模式，將跳過非必要檢查"
-            return 0
-        fi
-    done
-    return 0
-}
+# ========== 主安裝流程 ==========
 
 # 優化的彩色輸出
 print_header() {
     local title="$1"
-    local width=60
+    local width=70
     local padding=$(((width - ${#title}) / 2))
     
-    echo -e "${CYAN}$(printf '=%.0s' $(seq 1 $width))${NC}"
+    echo
+    echo -e "${CYAN}$(printf '═%.0s' $(seq 1 $width))${NC}"
     echo -e "${CYAN}$(printf ' %.0s' $(seq 1 $padding))${YELLOW}$title${CYAN}$(printf ' %.0s' $(seq 1 $padding))${NC}"
-    echo -e "${CYAN}$(printf '=%.0s' $(seq 1 $width))${NC}"
+    echo -e "${CYAN}$(printf '═%.0s' $(seq 1 $width))${NC}"
+    echo
 }
 
-# 主安裝流程
+# 融合智能安裝主流程
 main_installation() {
-    # 檢查快速模式
-    check_fast_mode "$@"
+    local start_time
+    start_time=$(date +%s)
     
-    print_header "Claude Code 自動安裝工具 v$SCRIPT_VERSION"
-    echo -e "${GREEN}整合 Context7 最佳實踐優化${NC}"
-    echo -e "${GREEN}智能檢測與互動式修復${NC}"
-    echo -e "${GREEN}Zsh/Bash 版本檢測與升級功能${NC}"
+    # 解析命令列參數
+    parse_arguments "$@"
+    
+    # 顯示標題
+    print_header "Claude Code 融合智能安裝系統 v$SCRIPT_VERSION"
+    echo -e "${GREEN}🚀 雙引擎智能選擇 | Context7 多模態分析 | 完整錯誤恢復${NC}"
+    echo -e "${GREEN}🎯 官方二進制 + NPM 生態 | Shell 版本檢測升級 | 跨平台兼容${NC}"
+    
     if [[ "${FAST_MODE:-}" == "true" ]]; then
-        echo -e "${YELLOW}🚀 快速模式已啟用${NC}"
+        echo -e "${YELLOW}⚡ 快速模式已啟用${NC}"
     fi
+    
+    if [[ "${DRY_RUN:-}" == "true" ]]; then
+        echo -e "${PURPLE}🧪 測試模式已啟用（不會實際安裝）${NC}"
+    fi
+    
     echo
     
-    log_info "=== 開始 Claude Code 安裝流程 ==="
+    # 第一階段：智能環境檢測
+    log_info "=== 第一階段：智能環境檢測 ==="
+    detect_environment
+    check_system_resources
+    check_network_conditions
     
-    # 偵測作業系統環境
-    detect_os
-    
-    log_info "開始自動化安裝與修復程序（${SYSTEM_TYPE:-未知} 環境）"
-    
-    # 智能檢測與修復
-    log_info "=== 開始智能檢測與修復流程 ==="
+    # 第二階段：Shell 環境檢測與升級
+    log_info "=== 第二階段：Shell 環境檢測與升級 ==="
     
     # 在 macOS 上優先檢測 zsh，其他系統檢測 bash
     if [[ "${SYSTEM_TYPE:-}" == "macos" ]]; then
@@ -1091,7 +1703,13 @@ main_installation() {
         
         # Claude Code CLI 狀態檢測
         echo -e "${CYAN}[步驟 3/3]${NC} Claude Code CLI 狀態檢測"
-        check_claude_cli_status
+        if check_claude_cli_status; then
+            # 需要安裝或更新
+            CLAUDE_NEEDS_INSTALL=true
+        else
+            # 已安裝且最新
+            CLAUDE_NEEDS_INSTALL=false
+        fi
     else
         # Bash 版本檢測與升級
         echo -e "${CYAN}[步驟 1/3]${NC} Bash 版本檢測與升級"
@@ -1103,23 +1721,134 @@ main_installation() {
         
         # Claude Code CLI 狀態檢測
         echo -e "${CYAN}[步驟 3/3]${NC} Claude Code CLI 狀態檢測"
-        check_claude_cli_status
+        if check_claude_cli_status; then
+            # 需要安裝或更新
+            CLAUDE_NEEDS_INSTALL=true
+        else
+            # 已安裝且最新
+            CLAUDE_NEEDS_INSTALL=false
+        fi
     fi
     
-    print_header "安裝完成"
-    log_success "Claude Code 安裝流程完成！"
+    # 如果 Claude Code 已是最新，跳過安裝流程
+    if [[ "${CLAUDE_NEEDS_INSTALL:-true}" == "false" ]]; then
+        log_success "Claude Code 已是最新版本，跳過安裝流程"
+        local end_time duration
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        
+        print_header "🎉 檢查完成"
+        log_success "Claude Code 環境檢查完成！"
+        log_info "📊 檢查統計："
+        log_info "   🔹 檢查時間: ${duration}s"
+        
+        echo
+        log_info "📋 後續步驟："
+        echo "  1. 重新載入終端或執行: source ${SHELL_CONFIG:-~/.zshrc}"
+        echo "  2. 進入專案目錄並執行: claude"
+        echo "  3. 查看所有指令: claude --help"
+        echo "  4. 執行健康檢查: claude doctor"
+        return 0
+    fi
+    
+    # 第三階段：智能安裝引擎選擇
+    log_info "=== 第三階段：智能安裝引擎選擇 ==="
+    detect_best_installation_method
+    
+    # 第四階段：執行智能安裝
+    log_info "=== 第四階段：執行智能安裝 ==="
+    local install_success=false
+    
+    case "$INSTALL_METHOD" in
+        "binary")
+            if install_via_official_binary; then
+                install_success=true
+            else
+                log_warn "官方二進制安裝失敗，嘗試降級策略..."
+                if handle_installation_failure "binary" "1"; then
+                    install_success=true
+                fi
+            fi
+            ;;
+        "npm")
+            if install_via_npm_ecosystem; then
+                install_success=true
+            else
+                log_warn "NPM 安裝失敗，嘗試修復策略..."
+                if handle_installation_failure "npm" "1"; then
+                    install_success=true
+                fi
+            fi
+            ;;
+        *)
+            log_error "未知的安裝方法: $INSTALL_METHOD"
+            exit 1
+            ;;
+    esac
+    
+    # 計算安裝時間
+    local end_time duration
+    end_time=$(date +%s)
+    duration=$((end_time - start_time))
+    
+    # 最終結果
+    echo
+    if [[ "$install_success" == "true" ]]; then
+        print_header "🎉 安裝成功完成"
+        log_success "Claude Code 融合智能安裝成功！"
+        log_info "📊 安裝統計："
+        log_info "   🔹 安裝方法: $INSTALL_METHOD"
+        log_info "   🔹 安裝時間: ${duration}s"
+        log_info "   🔹 信心指數: $CONFIDENCE_SCORE/100"
+        
+        # 後續步驟指引
+        echo
+        log_info "📋 後續步驟："
+        echo "  1. 重新載入終端或執行: source ${SHELL_CONFIG:-~/.zshrc}"
+        echo "  2. 進入專案目錄並執行: claude"
+        echo "  3. 查看所有指令: claude --help"
+        echo "  4. 執行健康檢查: claude doctor"
+        
+        # 收集統計資訊（匿名）
+        if [[ "${DRY_RUN:-}" != "true" ]]; then
+            {
+                echo "timestamp=$(date +%s)"
+                echo "install_method=$INSTALL_METHOD"
+                echo "success=true"
+                echo "duration=$duration"
+                echo "system_type=$SYSTEM_TYPE"
+                echo "confidence_score=$CONFIDENCE_SCORE"
+            } >> "$HOME/.claude/usage_stats.log" 2>/dev/null || true
+        fi
+        
+    else
+        print_header "❌ 安裝失敗"
+        log_error "Claude Code 安裝失敗，請查看故障排除建議"
+        
+        echo
+        log_info "📞 獲得幫助："
+        echo "  📋 完整日誌: $LOG_FILE"
+        echo "  📖 故障排除: https://github.com/s123104/claude-code/wiki/troubleshooting"
+        echo "  🐛 問題回報: https://github.com/s123104/claude-code/issues"
+        
+        exit 1
+    fi
 }
 
-# 執行主安裝流程
+# ========== 腳本入口點 ==========
+
 # 安全檢查：支援直接執行和管道執行
 if [[ "${BASH_SOURCE[0]:-$0}" == "${0}" ]] || [[ -z "${BASH_SOURCE[0]:-}" ]]; then
+    # 安全性檢查
+    if [[ $EUID -eq 0 ]] && [[ "${FORCE_ROOT:-}" != "true" ]]; then
+        log_error "❌ 不建議使用 root 權限執行此腳本"
+        log_info "如果確實需要，請使用 --force-root 參數"
+        exit 1
+    fi
+    
+    # 執行主安裝流程
     main_installation "$@"
     
     echo
-    log_info "=== 後續步驟 ==="
-    echo "  1. 重新載入終端或執行: source ${SHELL_CONFIG:-~/.zshrc}"
-    echo "  2. 進入專案目錄並執行: claude"
-    echo "  3. 查看所有指令: claude --help"
-    echo ""
     log_info "🔧 如遇問題，請檢查日誌：$LOG_FILE"
 fi
