@@ -73,7 +73,26 @@
       "Bash(brew install:*)",
       "Bash(brew:*)",
       "Bash(zsh:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(claude doctor)",
+      "Bash(sudo npm install -g @anthropic-ai/claude-code@latest)",
+      "Bash(chown:*)",
+      "Bash(git checkout:*)",
+      "mcp__time__*",
+      "mcp__fetch__*",
+      "mcp__context7__*",
+      "mcp__puppeteer__*",
+      "mcp__sequential-thinking__*",
+      "\"Bash\"",
+      "\"View\"",
+      "\"mcp__context7__*\"",
+      "\"mcp__fetch__*\"",
+      "\"mcp__puppeteer__*\"",
+      "\"mcp__sequential-thinking__*\"]",
+      "\"mcp__time__*\"",
+      "[\"Edit\"",
+      "Bash(git rm:*)",
+      "Bash(quick_fix_nvm_warning:*)"
     ],
     "deny": []
   }

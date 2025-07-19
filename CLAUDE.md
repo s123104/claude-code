@@ -40,11 +40,13 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 ## Document Categories
 
 ### Core Documents
+
 - **cursor-claude-master-guide-zh-tw.md**: Master control guide - comprehensive overview of all features with v2.0.0 intelligent agent system
 - **claude-code-guide-zh-tw.md**: Basic API guide and fundamental commands with MCP integration
 - **docs/README.md**: Document index with quick navigation and WSL setup guide
 
 ### Specialized Documents
+
 - **awesome-claude-code-zh-tw.md**: Community best practices, workflows, hooks, and integrations
 - **superclaude-zh-tw.md**: Advanced flag system, personas, and complex automation
 - **claude-code-usage-monitor-zh-tw.md**: Usage monitoring, security, cost control, and Docker deployment
@@ -52,16 +54,19 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 - **bplustree3-zh-tw.md**: Performance optimization strategies and B+Tree caching
 
 ### Project Assets
+
 - **img/logo.png**: Claude Code logo in pixelated style with 3D cube design
 - **index.html**: Modern interactive web interface with responsive design, animations, and easter eggs
 
 ### Installation Scripts
+
 - **setup.bat**: Windows batch file entry point with admin check and WSL validation
 - **setup.ps1**: PowerShell main installer with multilingual support and automated WSL2 setup
 - **start.bat**: Windows launcher with path conversion and error handling
 - **start.sh**: Cross-platform installer (Linux/WSL/macOS) with zsh/bash version detection and upgrade (v3.5.0)
 
 ### Project Files
+
 - **CONTRIBUTING.md**: Contribution guidelines and development standards
 - **LICENSE**: MIT License terms and conditions
 - **TESTING_REPORT.md**: Test results and quality assurance documentation
@@ -70,18 +75,21 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 ## Working with Documentation
 
 ### Reading Order by Role
+
 - **Beginners**: guide → awesome → ui
-- **Developers**: guide → superclaude → monitor  
+- **Developers**: guide → superclaude → monitor
 - **Team Leaders**: monitor → awesome → ui
 - **Architects**: bplustree → guide → superclaude
 
 ### Common Tasks
+
 - **Project Setup**: awesome + superclaude + guide
 - **Code Fixing**: guide + awesome + monitor
 - **Production Deployment**: monitor + ui + guide
 - **Performance Optimization**: bplustree + monitor + guide
 
 ### Key Flag Categories
+
 - **Project Creation**: `--create --template --mcp`
 - **Error Fixing**: `--scan --fix --lint --test`
 - **Deployment**: `--build --deploy --monitor`
@@ -91,6 +99,7 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 ## New Features in v3.0.0
 
 ### Enhanced Installation System
+
 - **Cross-platform Compatibility**: Windows (setup.bat, setup.ps1) and Linux/WSL (start.sh) support
 - **Automated OS Detection**: Intelligent system environment detection and compatibility checks
 - **Version Updates**: nvm v0.40.3, Node.js 18 LTS, latest @anthropic-ai/claude-code
@@ -99,6 +108,7 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 - **Windows 11 Support**: TPM 2.0 detection and advanced Windows 11 features
 
 ### Smart Environment Diagnostics
+
 - **Multi-layer OS Detection**: WSL2, Linux distributions, system architecture identification
 - **Virtualization Validation**: VT-x/AMD-V, SLAT, Hyper-V requirements verification
 - **Path Pollution Cleanup**: Automatic npm configuration cleanup and repair
@@ -106,6 +116,7 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 - **Performance Optimization**: Load balancing and resource usage monitoring
 
 ### Enhanced Web Interface (index.html)
+
 - **Modern Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Interactive Features**: Animations, easter eggs, terminal demo
 - **PWA Support**: Installable on desktop and mobile devices
@@ -131,6 +142,22 @@ xdg-open index.html
 
 # Check documentation encoding
 for f in docs/*.md; do iconv -f UTF-8 -t UTF-8 "$f" > /dev/null && echo "$f: OK"; done
+```
+
+### MCP 伺服器管理
+
+```bash
+# 自動導入 Claude Desktop MCP 伺服器
+./scripts/import-mcp-servers.sh
+
+# 查看當前 MCP 伺服器
+claude mcp list
+
+# 手動添加 MCP 伺服器
+claude mcp add-json <name> '<json-config>'
+
+# 移除 MCP 伺服器
+claude mcp remove <server-name>
 ```
 
 ### Git Operations for Documentation Updates
@@ -169,6 +196,7 @@ claude mcp add postgres-server
 ## Content Guidelines
 
 ### Document Maintenance
+
 - All documents are in Traditional Chinese (繁體中文)
 - Cross-references between documents should be maintained
 - Flag examples should be consistent across documents
@@ -176,6 +204,7 @@ claude mcp add postgres-server
 - Version 2.0.0 introduces intelligent agent system features
 
 ### File Organization
+
 - Main navigation starts from README.md
 - Primary content is in cursor-claude-master-guide-zh-tw.md
 - Specialized topics have dedicated files in docs/
@@ -184,6 +213,7 @@ claude mcp add postgres-server
 - No build process - static documentation files with interactive web components
 
 ### Technical Stack
+
 - **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6+)
 - **Backend**: Node.js 18+ (for Claude Code)
 - **Deployment**: Static hosting (GitHub Pages, Netlify, Vercel)
@@ -193,6 +223,7 @@ claude mcp add postgres-server
 ## Usage Context
 
 This repository serves as a comprehensive Chinese language resource for:
+
 - Claude Code installation and setup (including WSL automation)
 - AI-assisted development workflows with intelligent agent system
 - MCP (Multi-Agent Protocol) integration and multi-modal analysis
@@ -202,6 +233,7 @@ This repository serves as a comprehensive Chinese language resource for:
 - Modern web interface with PWA capabilities
 
 ### Target Audience
+
 - **AI 輔助開發初學者**: Beginners starting with Claude Code
 - **專業開發者**: Professional developers integrating AI tools
 - **架構師**: Architects needing performance optimization
@@ -209,6 +241,7 @@ This repository serves as a comprehensive Chinese language resource for:
 - **DevOps 工程師**: DevOps engineers handling monitoring and deployment
 
 ### Key Repository Information
+
 - **GitHub Repository**: s123104/claude-code
 - **Current Version**: v3.5.0
 - **Last Update**: 2025-07-17T22:00:00+08:00
@@ -217,6 +250,7 @@ This repository serves as a comprehensive Chinese language resource for:
 - **Branch**: master
 
 ### Project Configuration
+
 - **Claude Code Settings**: `.claude/settings.local.json`
 - **Permissions**: Configured for Bash, WebFetch, MCP operations
 - **Allowed Tools**: Edit, View, Bash, Write, Read, Git operations
@@ -308,18 +342,21 @@ claude mcp restart --all
 ### Core Components
 
 **Installation System (v3.5.0)**:
+
 - `start.sh` - Main cross-platform installation script (Linux/WSL/macOS)
 - `setup.bat` / `setup.ps1` - Windows installation automation
 - `SuperClaude/` - Advanced development framework submodule
 - Supports macOS (Homebrew), Linux (apt/yum/pacman), and Windows (WSL2)
 
 **Documentation Architecture**:
+
 - **Primary Entry Point**: `cursor-claude-master-guide-zh-tw.md` - Master control guide
 - **Specialized Modules**: 7 focused documents covering specific functionality
 - **Interactive Web Interface**: `index.html` with modern responsive design
 - **Cross-Reference System**: Documents are interconnected with consistent flag references
 
 **Shell Script Architecture (start.sh)**:
+
 - **Multi-OS Detection**: Automatic detection of macOS, Linux, WSL2 environments
 - **Version Management**: Zsh (5.0+) and Bash (4.0+) version checking and upgrade
 - **Package Management**: Homebrew (macOS), apt/yum/dnf/pacman (Linux) support
@@ -329,16 +366,19 @@ claude mcp restart --all
 ### Key Technical Decisions
 
 **Shell Priority (macOS)**:
+
 - Zsh is prioritized over Bash on macOS (steps 1→2→3)
 - Automatic .zshrc configuration file creation
 - Homebrew-installed shells take precedence over system versions
 
 **Version Detection Logic**:
+
 - Uses `npm view` to fetch latest package versions
 - Regex-based version extraction with fallback handling
 - Supports both semantic versioning and build identifiers
 
 **Security Model**:
+
 - Permissions defined in `.claude/settings.local.json`
 - Granular tool access control (Bash, WebFetch, MCP operations)
 - Audit trail for all operations
@@ -346,18 +386,21 @@ claude mcp restart --all
 ### Development Workflow
 
 **Documentation Updates**:
+
 1. Update individual documents in `docs/` directory
 2. Update cross-references and timestamps
 3. Test encoding with `iconv` validation
 4. Commit with structured message format
 
 **Script Development**:
+
 1. Follow ShellCheck best practices (zero warnings required)
 2. Use `set -euo pipefail` for strict error handling
 3. Test with both interactive and fast modes
 4. Validate across multiple OS environments
 
 **Web Interface**:
+
 - Built with vanilla JavaScript and Tailwind CSS
 - Responsive design with mobile-first approach
 - PWA capabilities for offline access
@@ -366,16 +409,19 @@ claude mcp restart --all
 ### Integration Points
 
 **MCP (Model Context Protocol)**:
+
 - Supports multi-agent collaboration
 - Context7 library integration for enhanced functionality
 - Sequential thinking execution flow
 
 **IDE Integration**:
+
 - VSCode and Cursor editor support
 - Hooks system for custom workflow automation
 - Slash commands for rapid development
 
 **Monitoring and Analytics**:
+
 - Usage tracking via `claude-code-usage-monitor-zh-tw.md`
 - Performance optimization with B+Tree caching
 - Security audit and compliance features
