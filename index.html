@@ -173,8 +173,13 @@
                 "50%": { transform: "scale(1.05)", opacity: "0.8" },
               },
               "text-glow": {
-                "0%, 100%": { "text-shadow": "0 0 10px rgba(6, 182, 212, 0.5)" },
-                "50%": { "text-shadow": "0 0 20px rgba(6, 182, 212, 0.8), 0 0 30px rgba(139, 92, 246, 0.4)" },
+                "0%, 100%": {
+                  "text-shadow": "0 0 10px rgba(6, 182, 212, 0.5)",
+                },
+                "50%": {
+                  "text-shadow":
+                    "0 0 20px rgba(6, 182, 212, 0.8), 0 0 30px rgba(139, 92, 246, 0.4)",
+                },
               },
               "halo-expand": {
                 "0%": { transform: "scale(0.8)", opacity: "0.6" },
@@ -352,14 +357,18 @@
       }
 
       .logo-container::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 60px;
         height: 60px;
-        background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(6, 182, 212, 0.2) 0%,
+          transparent 70%
+        );
         border-radius: 50%;
         animation: halo-expand 3s ease-out infinite;
         pointer-events: none;
@@ -375,10 +384,8 @@
       }
 
       .text-shadow-glow {
-        text-shadow: 
-          0 0 10px rgba(6, 182, 212, 0.6),
-          0 0 20px rgba(6, 182, 212, 0.4),
-          0 0 30px rgba(139, 92, 246, 0.3);
+        text-shadow: 0 0 10px rgba(6, 182, 212, 0.6),
+          0 0 20px rgba(6, 182, 212, 0.4), 0 0 30px rgba(139, 92, 246, 0.3);
       }
 
       .logo-shine {
@@ -387,13 +394,18 @@
       }
 
       .logo-shine::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
         transition: left 0.6s ease;
       }
 
@@ -413,13 +425,12 @@
 
       /* Premium Logo 容器 */
       .premium-logo-container {
-        padding: 1rem 2rem;
-        border-radius: 1.5rem;
-        backdrop-filter: blur(30px);
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 
-          0 20px 50px rgba(0, 0, 0, 0.4),
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.5rem;
+        backdrop-filter: blur(20px);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.005));
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
           0 0 60px rgba(6, 182, 212, 0.15),
           inset 0 2px 0 rgba(255, 255, 255, 0.1),
           inset 0 -2px 0 rgba(0, 0, 0, 0.1);
@@ -429,23 +440,28 @@
       }
 
       .premium-logo-container::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 1.2s ease;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.04),
+          transparent
+        );
+        transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: inherit;
+        z-index: 1;
       }
 
       .premium-logo-container:hover {
-        transform: translateY(-4px) rotateX(5deg) rotateY(5deg);
-        box-shadow: 
-          0 30px 80px rgba(0, 0, 0, 0.5),
-          0 0 100px rgba(6, 182, 212, 0.3),
-          0 0 150px rgba(139, 92, 246, 0.2),
-          inset 0 2px 0 rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px) scale(1.01);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+          0 0 30px rgba(6, 182, 212, 0.15), 0 0 40px rgba(139, 92, 246, 0.1);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01));
       }
 
       .premium-logo-container:hover::before {
@@ -462,13 +478,14 @@
         cursor: pointer;
         transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         transform-style: preserve-3d;
-        
-        background: linear-gradient(135deg, 
-          #06b6d4 0%, 
+
+        background: linear-gradient(
+          135deg,
+          #06b6d4 0%,
           #22d3ee 15%,
-          #8b5cf6 30%, 
+          #8b5cf6 30%,
           #a855f7 45%,
-          #06b6d4 60%, 
+          #06b6d4 60%,
           #ec4899 75%,
           #f472b6 90%,
           #06b6d4 100%
@@ -478,9 +495,8 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
-        filter: 
-          drop-shadow(0 4px 8px rgba(6, 182, 212, 0.4))
+
+        filter: drop-shadow(0 4px 8px rgba(6, 182, 212, 0.4))
           drop-shadow(0 0 20px rgba(139, 92, 246, 0.2));
       }
 
@@ -507,8 +523,7 @@
 
       .premium-letter:hover {
         transform: translateY(-6px) scale(1.2) rotateX(15deg);
-        filter: 
-          drop-shadow(0 15px 30px rgba(6, 182, 212, 0.6))
+        filter: drop-shadow(0 15px 30px rgba(6, 182, 212, 0.6))
           drop-shadow(0 0 40px rgba(139, 92, 246, 0.4))
           drop-shadow(0 0 60px rgba(236, 72, 153, 0.3));
       }
@@ -523,13 +538,14 @@
         cursor: pointer;
         transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         transform-style: preserve-3d;
-        
-        background: linear-gradient(135deg, 
-          #22c55e 0%, 
+
+        background: linear-gradient(
+          135deg,
+          #22c55e 0%,
           #16a34a 20%,
-          #06b6d4 40%, 
+          #06b6d4 40%,
           #0891b2 60%,
-          #8b5cf6 80%, 
+          #8b5cf6 80%,
           #ec4899 100%
         );
         background-size: 400% 400%;
@@ -537,16 +553,14 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
-        filter: 
-          drop-shadow(0 3px 6px rgba(34, 197, 94, 0.4))
+
+        filter: drop-shadow(0 3px 6px rgba(34, 197, 94, 0.4))
           drop-shadow(0 0 15px rgba(6, 182, 212, 0.2));
       }
 
       .premium-code-letter:hover {
         transform: translateY(-4px) scale(1.15) rotateX(10deg);
-        filter: 
-          drop-shadow(0 8px 20px rgba(34, 197, 94, 0.5))
+        filter: drop-shadow(0 8px 20px rgba(34, 197, 94, 0.5))
           drop-shadow(0 0 30px rgba(6, 182, 212, 0.4))
           drop-shadow(0 0 50px rgba(139, 92, 246, 0.3));
       }
@@ -628,14 +642,18 @@
       }
 
       .premium-logo-container .mx-3::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 20px;
         height: 20px;
-        background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(6, 182, 212, 0.3) 0%,
+          transparent 70%
+        );
         border-radius: 50%;
         animation: pulse 2s ease-in-out infinite;
       }
@@ -646,19 +664,20 @@
       }
 
       @keyframes rainbow-dance {
-        0%, 100% { 
+        0%,
+        100% {
           transform: scale(1) rotate(0deg);
           filter: hue-rotate(0deg);
         }
-        25% { 
+        25% {
           transform: scale(1.1) rotate(5deg);
           filter: hue-rotate(90deg);
         }
-        50% { 
+        50% {
           transform: scale(1.2) rotate(0deg);
           filter: hue-rotate(180deg);
         }
-        75% { 
+        75% {
           transform: scale(1.1) rotate(-5deg);
           filter: hue-rotate(270deg);
         }
@@ -680,54 +699,148 @@
         class="container mx-auto px-4 py-4 flex items-center justify-between"
       >
         <!-- Logo -->
-        <div class="flex items-center group interactive-logo" onclick="logoClickEffect()">
+        <div
+          class="flex items-center group interactive-logo"
+          onclick="logoClickEffect()"
+        >
           <div class="relative premium-logo-container">
             <!-- 背景光暈效果 -->
-            <div class="absolute inset-0 bg-gradient-to-r from-primary-400/5 via-secondary-400/5 to-accent-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl scale-110"></div>
-            
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-primary-400/5 via-secondary-400/5 to-accent-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl scale-110"
+            ></div>
+
             <!-- 主要 Logo 容器 -->
-            <div class="relative flex items-center space-x-2">
+            <div class="relative flex items-center space-x-1.5">
               <!-- Claude 文字 -->
               <div class="relative claude-wordmark">
                 <div class="flex items-center space-x-0.5">
-                  <span class="claude-letter premium-letter" data-letter="C" style="font-family: 'Orbitron', monospace;">C</span>
-                  <span class="claude-letter premium-letter" data-letter="L" style="font-family: 'Orbitron', monospace;">L</span>
-                  <span class="claude-letter premium-letter" data-letter="A" style="font-family: 'Orbitron', monospace;">A</span>
-                  <span class="claude-letter premium-letter" data-letter="U" style="font-family: 'Orbitron', monospace;">U</span>
-                  <span class="claude-letter premium-letter" data-letter="D" style="font-family: 'Orbitron', monospace;">D</span>
-                  <span class="claude-letter premium-letter" data-letter="E" style="font-family: 'Orbitron', monospace;">E</span>
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="C"
+                    style="font-family: 'Orbitron', monospace"
+                    >C</span
+                  >
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="L"
+                    style="font-family: 'Orbitron', monospace"
+                    >L</span
+                  >
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="A"
+                    style="font-family: 'Orbitron', monospace"
+                    >A</span
+                  >
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="U"
+                    style="font-family: 'Orbitron', monospace"
+                    >U</span
+                  >
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="D"
+                    style="font-family: 'Orbitron', monospace"
+                    >D</span
+                  >
+                  <span
+                    class="claude-letter premium-letter"
+                    data-letter="E"
+                    style="font-family: 'Orbitron', monospace"
+                    >E</span
+                  >
                 </div>
-                
+
                 <!-- Claude 下方裝飾線 -->
-                <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 group-hover:w-full transition-all duration-1000 rounded-full"></div>
+                <div
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 group-hover:w-full transition-all duration-1000 rounded-full"
+                ></div>
               </div>
-              
+
               <!-- 分隔符 -->
-              <div class="relative flex items-center mx-3">
-                <div class="w-px h-8 bg-gradient-to-b from-transparent via-primary-400 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute inset-0 w-px h-8 bg-gradient-to-b from-transparent via-secondary-400 to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500 animate-pulse"></div>
+              <div class="relative flex items-center mx-2">
+                <div
+                  class="w-px h-6 bg-gradient-to-b from-transparent via-primary-400 to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-400"
+                ></div>
+                <div
+                  class="absolute inset-0 w-px h-6 bg-gradient-to-b from-transparent via-secondary-400 to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-400 animate-pulse"
+                ></div>
               </div>
-              
+
               <!-- Code 文字 -->
               <div class="relative code-wordmark">
                 <div class="flex items-center">
-                  <span class="code-letter premium-code-letter" data-letter="C" style="font-family: 'Exo 2', sans-serif;">C</span>
-                  <span class="code-letter premium-code-letter" data-letter="o" style="font-family: 'Exo 2', sans-serif;">o</span>
-                  <span class="code-letter premium-code-letter" data-letter="d" style="font-family: 'Exo 2', sans-serif;">d</span>
-                  <span class="code-letter premium-code-letter" data-letter="e" style="font-family: 'Exo 2', sans-serif;">e</span>
+                  <span
+                    class="code-letter premium-code-letter"
+                    data-letter="C"
+                    style="font-family: 'Exo 2', sans-serif"
+                    >C</span
+                  >
+                  <span
+                    class="code-letter premium-code-letter"
+                    data-letter="o"
+                    style="font-family: 'Exo 2', sans-serif"
+                    >o</span
+                  >
+                  <span
+                    class="code-letter premium-code-letter"
+                    data-letter="d"
+                    style="font-family: 'Exo 2', sans-serif"
+                    >d</span
+                  >
+                  <span
+                    class="code-letter premium-code-letter"
+                    data-letter="e"
+                    style="font-family: 'Exo 2', sans-serif"
+                    >e</span
+                  >
                 </div>
-                
+
                 <!-- Code 下方裝飾線 -->
-                <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-accent-400 via-primary-400 to-secondary-400 group-hover:w-full transition-all duration-1000 delay-200 rounded-full"></div>
+                <div
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-accent-400 via-primary-400 to-secondary-400 group-hover:w-full transition-all duration-1000 delay-200 rounded-full"
+                ></div>
               </div>
             </div>
-            
-            <!-- 周圍粒子效果 -->
-            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-              <div class="absolute top-0 left-0 w-1 h-1 bg-primary-400 rounded-full animate-ping"></div>
-              <div class="absolute top-2 right-0 w-1 h-1 bg-secondary-400 rounded-full animate-ping" style="animation-delay: 0.2s;"></div>
-              <div class="absolute bottom-0 left-4 w-1 h-1 bg-accent-400 rounded-full animate-ping" style="animation-delay: 0.4s;"></div>
-              <div class="absolute bottom-2 right-4 w-1 h-1 bg-primary-400 rounded-full animate-ping" style="animation-delay: 0.6s;"></div>
+
+            <!-- 精緻微粒子效果 -->
+            <div
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            >
+              <div
+                class="absolute -top-0.5 -left-0.5 w-0.5 h-0.5 bg-primary-400 rounded-full animate-ping"
+                style="animation-delay: 0s"
+              ></div>
+              <div
+                class="absolute -top-0.5 -right-0.5 w-0.5 h-0.5 bg-secondary-400 rounded-full animate-ping"
+                style="animation-delay: 0.2s"
+              ></div>
+              <div
+                class="absolute -bottom-0.5 -left-0.5 w-0.5 h-0.5 bg-accent-400 rounded-full animate-ping"
+                style="animation-delay: 0.4s"
+              ></div>
+              <div
+                class="absolute -bottom-0.5 -right-0.5 w-0.5 h-0.5 bg-primary-400 rounded-full animate-ping"
+                style="animation-delay: 0.6s"
+              ></div>
+              <!-- 隱藏微光效果 -->
+              <div
+                class="absolute top-1/2 left-0 w-0.25 h-0.25 bg-secondary-300 rounded-full animate-pulse opacity-50"
+                style="animation-delay: 0.8s; transform: translateX(-25%)"
+              ></div>
+              <div
+                class="absolute top-1/2 right-0 w-0.25 h-0.25 bg-accent-300 rounded-full animate-pulse opacity-50"
+                style="animation-delay: 1s; transform: translateX(25%)"
+              ></div>
+              <div
+                class="absolute top-0 left-1/2 w-0.25 h-0.25 bg-primary-300 rounded-full animate-pulse opacity-50"
+                style="animation-delay: 1.2s; transform: translateY(-25%)"
+              ></div>
+              <div
+                class="absolute bottom-0 left-1/2 w-0.25 h-0.25 bg-secondary-300 rounded-full animate-pulse opacity-50"
+                style="animation-delay: 1.4s; transform: translateY(25%)"
+              ></div>
             </div>
           </div>
         </div>
@@ -1401,7 +1514,8 @@
         </div>
         <!-- 更新最後更新時間戳記 -->
         <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-07-18T23:45:00+08:00 | start.sh v3.5.3 - 強化 npm/nvm 衝突檢測與修復功能
+          最後更新：2025-07-18T23:45:00+08:00 | start.sh v3.5.3 - 強化 npm/nvm
+          衝突檢測與修復功能
         </div>
 
         <!-- Installation Features -->
@@ -1420,7 +1534,9 @@
               <i class="fas fa-tools"></i>
             </div>
             <h4 class="font-semibold mb-2">智能問題修復</h4>
-            <p class="text-sm text-neutral-400">npm/nvm 衝突修復、delete-prefix 自動執行</p>
+            <p class="text-sm text-neutral-400">
+              npm/nvm 衝突修復、delete-prefix 自動執行
+            </p>
           </div>
           <div class="text-center observe-fade">
             <div class="text-accent-400 text-3xl mb-3">
@@ -2042,7 +2158,10 @@
       <div class="container mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="flex items-center space-x-3 mb-4 md:mb-0 group">
-            <span class="text-xl font-bold gradient-text group-hover:text-shadow-glow transition-all duration-300">Claude Code</span>
+            <span
+              class="text-xl font-bold gradient-text group-hover:text-shadow-glow transition-all duration-300"
+              >Claude Code</span
+            >
           </div>
           <div class="flex items-center space-x-6">
             <a
@@ -2080,7 +2199,8 @@
           <p class="text-xs text-neutral-500 mt-2">
             本網站整合了 cursor-claude-master-guide-zh-tw.md、README.md
             及各子文件內容，<br />
-            v3.5.3 強化 npm/nvm 衝突檢測與修復功能，自動執行 delete-prefix，完整解決 macOS zsh 問題。
+            v3.5.3 強化 npm/nvm 衝突檢測與修復功能，自動執行
+            delete-prefix，完整解決 macOS zsh 問題。
           </p>
         </div>
       </div>
@@ -2316,146 +2436,172 @@
         konami: [],
         mousePattern: [],
         timeBasedSecret: 0,
-        secretsFound: new Set()
+        secretsFound: new Set(),
       };
 
       // Logo 點擊特效
       function logoClickEffect() {
-        const logoContainer = document.querySelector('.interactive-logo');
-        
+        const logoContainer = document.querySelector(".interactive-logo");
+
         // 創建爆炸效果
         createLogoExplosion(logoContainer);
-        
+
         // 添加短暫的放大效果
-        logoContainer.style.transform = 'scale(1.3)';
+        logoContainer.style.transform = "scale(1.3)";
         setTimeout(() => {
-          logoContainer.style.transform = 'scale(1)';
+          logoContainer.style.transform = "scale(1)";
         }, 200);
-        
+
         // 檢查秘密組合
         checkClaudeSecrets();
       }
-      
+
       // 創建 Logo 爆炸效果
       function createLogoExplosion(container) {
         const rect = container.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        
+
         // 創建多個粒子效果
         for (let i = 0; i < 12; i++) {
-          const particle = document.createElement('div');
-          particle.className = 'fixed w-2 h-2 rounded-full pointer-events-none z-50';
-          particle.style.left = centerX + 'px';
-          particle.style.top = centerY + 'px';
-          
+          const particle = document.createElement("div");
+          particle.className =
+            "fixed w-2 h-2 rounded-full pointer-events-none z-50";
+          particle.style.left = centerX + "px";
+          particle.style.top = centerY + "px";
+
           // 隨機顏色
-          const colors = ['bg-primary-400', 'bg-secondary-400', 'bg-accent-400'];
-          particle.classList.add(colors[Math.floor(Math.random() * colors.length)]);
-          
+          const colors = [
+            "bg-primary-400",
+            "bg-secondary-400",
+            "bg-accent-400",
+          ];
+          particle.classList.add(
+            colors[Math.floor(Math.random() * colors.length)]
+          );
+
           // 隨機方向和距離
-          const angle = (i * 30) * Math.PI / 180;
+          const angle = (i * 30 * Math.PI) / 180;
           const distance = 100 + Math.random() * 100;
           const finalX = centerX + Math.cos(angle) * distance;
           const finalY = centerY + Math.sin(angle) * distance;
-          
+
           document.body.appendChild(particle);
-          
+
           // 動畫效果
-          particle.animate([
-            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
-            { transform: `translate(${finalX - centerX}px, ${finalY - centerY}px) scale(0)`, opacity: 0 }
-          ], {
-            duration: 1000,
-            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-          }).onfinish = () => {
+          particle.animate(
+            [
+              { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+              {
+                transform: `translate(${finalX - centerX}px, ${
+                  finalY - centerY
+                }px) scale(0)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 1000,
+              easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            }
+          ).onfinish = () => {
             document.body.removeChild(particle);
           };
         }
       }
-      
+
       // CLAUDE 字母點擊處理
       function setupClaudeLetters() {
-        const claudeLetters = document.querySelectorAll('.claude-letter');
-        
-        claudeLetters.forEach(letter => {
-          letter.addEventListener('click', (e) => {
+        const claudeLetters = document.querySelectorAll(".claude-letter");
+
+        claudeLetters.forEach((letter) => {
+          letter.addEventListener("click", (e) => {
             e.stopPropagation();
-            const letterValue = letter.getAttribute('data-letter');
+            const letterValue = letter.getAttribute("data-letter");
             claudeSequence.push(letterValue);
-            
+
             // 限制序列長度
             if (claudeSequence.length > 10) {
               claudeSequence.shift();
             }
-            
+
             // 檢查各種秘密組合
             checkClaudeSecrets();
-            
+
             // 字母特效
             triggerLetterEffect(letter);
           });
         });
       }
-      
+
       // 檢查 CLAUDE 秘密組合
       function checkClaudeSecrets() {
-        const sequence = claudeSequence.join('');
-        
+        const sequence = claudeSequence.join("");
+
         // 秘密 1: 連續點擊 CLAUDE
-        if (sequence.includes('CLAUDE')) {
-          activateSecret('claude-sequence', () => {
-            const letters = document.querySelectorAll('.claude-letter');
-            letters.forEach(letter => letter.classList.add('claude-activated'));
+        if (sequence.includes("CLAUDE")) {
+          activateSecret("claude-sequence", () => {
+            const letters = document.querySelectorAll(".claude-letter");
+            letters.forEach((letter) =>
+              letter.classList.add("claude-activated")
+            );
             setTimeout(() => {
-              letters.forEach(letter => letter.classList.remove('claude-activated'));
+              letters.forEach((letter) =>
+                letter.classList.remove("claude-activated")
+              );
             }, 3000);
           });
         }
-        
+
         // 秘密 2: 倒序 EDUAUC
-        if (sequence.includes('EDUAUC')) {
-          activateSecret('reverse-claude', () => {
-            document.body.style.transform = 'rotateY(180deg)';
+        if (sequence.includes("EDUAUC")) {
+          activateSecret("reverse-claude", () => {
+            document.body.style.transform = "rotateY(180deg)";
             setTimeout(() => {
-              document.body.style.transform = 'rotateY(0deg)';
+              document.body.style.transform = "rotateY(0deg)";
             }, 2000);
           });
         }
-        
+
         // 秘密 3: 重複字母 CCC
-        if (sequence.includes('CCC')) {
-          activateSecret('triple-c', () => {
+        if (sequence.includes("CCC")) {
+          activateSecret("triple-c", () => {
             createMatrixRain();
           });
         }
-        
+
         // 秘密 4: 對稱 AUA
-        if (sequence.includes('AUA')) {
-          activateSecret('mirror-pattern', () => {
+        if (sequence.includes("AUA")) {
+          activateSecret("mirror-pattern", () => {
             createMirrorEffect();
           });
         }
-        
+
         // 秘密 5: 所有字母至少點一次
         const uniqueLetters = new Set(claudeSequence);
-        if (uniqueLetters.size >= 6 && uniqueLetters.has('C') && uniqueLetters.has('L') && 
-            uniqueLetters.has('A') && uniqueLetters.has('U') && uniqueLetters.has('D') && uniqueLetters.has('E')) {
-          activateSecret('all-letters', () => {
+        if (
+          uniqueLetters.size >= 6 &&
+          uniqueLetters.has("C") &&
+          uniqueLetters.has("L") &&
+          uniqueLetters.has("A") &&
+          uniqueLetters.has("U") &&
+          uniqueLetters.has("D") &&
+          uniqueLetters.has("E")
+        ) {
+          activateSecret("all-letters", () => {
             createRainbowWave();
           });
         }
       }
-      
+
       // 激活秘密效果
       function activateSecret(secretId, effect) {
         if (!claudeSecrets.secretsFound.has(secretId)) {
           claudeSecrets.secretsFound.add(secretId);
           effect();
-          
+
           // 靜默記錄到 console
           console.log(`🎉 Secret unlocked: ${secretId}`);
-          
+
           // 更新頁面標題
           const originalTitle = document.title;
           document.title = `🎯 Secret Found: ${secretId}`;
@@ -2464,182 +2610,207 @@
           }, 3000);
         }
       }
-      
+
       // 字母特效
       function triggerLetterEffect(letter) {
         const originalTransform = letter.style.transform;
-        letter.style.transform = 'scale(1.5) rotate(360deg)';
-        letter.style.transition = 'transform 0.5s ease';
-        
+        letter.style.transform = "scale(1.5) rotate(360deg)";
+        letter.style.transition = "transform 0.5s ease";
+
         setTimeout(() => {
           letter.style.transform = originalTransform;
         }, 500);
       }
-      
+
       // 矩陣雨效果
       function createMatrixRain() {
-        const chars = 'CLAUDE01';
+        const chars = "CLAUDE01";
         for (let i = 0; i < 50; i++) {
-          const drop = document.createElement('div');
+          const drop = document.createElement("div");
           drop.textContent = chars[Math.floor(Math.random() * chars.length)];
-          drop.className = 'fixed text-green-400 font-mono text-sm pointer-events-none z-40';
-          drop.style.left = Math.random() * window.innerWidth + 'px';
-          drop.style.top = '-20px';
-          drop.style.opacity = '0.7';
-          
+          drop.className =
+            "fixed text-green-400 font-mono text-sm pointer-events-none z-40";
+          drop.style.left = Math.random() * window.innerWidth + "px";
+          drop.style.top = "-20px";
+          drop.style.opacity = "0.7";
+
           document.body.appendChild(drop);
-          
-          drop.animate([
-            { transform: 'translateY(0px)', opacity: 0.7 },
-            { transform: `translateY(${window.innerHeight + 50}px)`, opacity: 0 }
-          ], {
-            duration: 3000 + Math.random() * 2000,
-            easing: 'linear'
-          }).onfinish = () => {
+
+          drop.animate(
+            [
+              { transform: "translateY(0px)", opacity: 0.7 },
+              {
+                transform: `translateY(${window.innerHeight + 50}px)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 3000 + Math.random() * 2000,
+              easing: "linear",
+            }
+          ).onfinish = () => {
             document.body.removeChild(drop);
           };
         }
       }
-      
+
       // 鏡像效果
       function createMirrorEffect() {
-        const main = document.querySelector('main') || document.body;
-        main.style.transform = 'scaleX(-1)';
-        main.style.transition = 'transform 1s ease';
-        
+        const main = document.querySelector("main") || document.body;
+        main.style.transform = "scaleX(-1)";
+        main.style.transition = "transform 1s ease";
+
         setTimeout(() => {
-          main.style.transform = 'scaleX(1)';
+          main.style.transform = "scaleX(1)";
         }, 3000);
       }
-      
+
       // 彩虹波浪效果
       function createRainbowWave() {
-        const elements = document.querySelectorAll('h1, h2, h3, .claude-letter');
-        
+        const elements = document.querySelectorAll(
+          "h1, h2, h3, .claude-letter"
+        );
+
         elements.forEach((el, index) => {
           setTimeout(() => {
-            el.style.filter = 'hue-rotate(180deg) brightness(1.5)';
-            el.style.transform = 'scale(1.1) translateY(-10px)';
-            el.style.transition = 'all 0.5s ease';
-            
+            el.style.filter = "hue-rotate(180deg) brightness(1.5)";
+            el.style.transform = "scale(1.1) translateY(-10px)";
+            el.style.transition = "all 0.5s ease";
+
             setTimeout(() => {
-              el.style.filter = '';
-              el.style.transform = '';
+              el.style.filter = "";
+              el.style.transform = "";
             }, 1000);
           }, index * 100);
         });
       }
-      
+
       // 增強版 Logo 動畫初始化
       function initAdvancedLogoAnimations() {
         // 設置 CLAUDE 字母互動
         setupClaudeLetters();
-        
+
         // 設置鍵盤彩蛋
         setupKeyboardSecrets();
-        
+
         // 設置鼠標彩蛋
         setupMouseSecrets();
-        
+
         // 設置時間基彩蛋
         setupTimeBasedSecrets();
       }
-      
+
       // 鍵盤秘密設置
       function setupKeyboardSecrets() {
         let keySequence = [];
-        
-        document.addEventListener('keydown', (e) => {
+
+        document.addEventListener("keydown", (e) => {
           keySequence.push(e.key.toLowerCase());
-          
+
           // 限制序列長度
           if (keySequence.length > 15) {
             keySequence.shift();
           }
-          
-          const sequence = keySequence.join('');
-          
+
+          const sequence = keySequence.join("");
+
           // 秘密 1: 輸入 "claude"
-          if (sequence.includes('claude')) {
-            activateSecret('keyboard-claude', () => {
+          if (sequence.includes("claude")) {
+            activateSecret("keyboard-claude", () => {
               createKeyboardRipple();
             });
             keySequence = [];
           }
-          
+
           // 秘密 2: 輸入 "ai"
-          if (sequence.includes('ai')) {
-            activateSecret('keyboard-ai', () => {
+          if (sequence.includes("ai")) {
+            activateSecret("keyboard-ai", () => {
               createFloatingLetters();
             });
             keySequence = [];
           }
-          
+
           // 秘密 3: 輸入 "code"
-          if (sequence.includes('code')) {
-            activateSecret('keyboard-code', () => {
+          if (sequence.includes("code")) {
+            activateSecret("keyboard-code", () => {
               createBinaryRain();
             });
             keySequence = [];
           }
-          
+
           // 秘密 4: Konami Code
-          const konami = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'keyb', 'keya'];
-          if (konami.every((key, index) => keySequence[keySequence.length - konami.length + index] === key)) {
-            activateSecret('konami-code', () => {
+          const konami = [
+            "arrowup",
+            "arrowup",
+            "arrowdown",
+            "arrowdown",
+            "arrowleft",
+            "arrowright",
+            "arrowleft",
+            "arrowright",
+            "keyb",
+            "keya",
+          ];
+          if (
+            konami.every(
+              (key, index) =>
+                keySequence[keySequence.length - konami.length + index] === key
+            )
+          ) {
+            activateSecret("konami-code", () => {
               createKonamiEffect();
             });
             keySequence = [];
           }
         });
       }
-      
+
       // 鼠標秘密設置
       function setupMouseSecrets() {
         let mousePattern = [];
         let lastMouseTime = 0;
-        
-        document.addEventListener('mousemove', (e) => {
+
+        document.addEventListener("mousemove", (e) => {
           const now = Date.now();
-          
+
           // 記錄鼠標軌跡
           if (now - lastMouseTime > 100) {
             mousePattern.push({
               x: e.clientX,
               y: e.clientY,
-              time: now
+              time: now,
             });
-            
+
             // 限制軌跡長度
             if (mousePattern.length > 20) {
               mousePattern.shift();
             }
-            
+
             lastMouseTime = now;
           }
-          
+
           // 檢查圓形軌跡
           if (mousePattern.length >= 10) {
             if (isCircularPattern(mousePattern)) {
-              activateSecret('mouse-circle', () => {
+              activateSecret("mouse-circle", () => {
                 createCircularWave(e.clientX, e.clientY);
               });
               mousePattern = [];
             }
           }
         });
-        
+
         // 多次點擊檢測
         let clickCount = 0;
         let clickTimer;
-        
-        document.addEventListener('click', (e) => {
+
+        document.addEventListener("click", (e) => {
           clickCount++;
-          
+
           clearTimeout(clickTimer);
           clickTimer = setTimeout(() => {
             if (clickCount >= 10) {
-              activateSecret('rapid-clicks', () => {
+              activateSecret("rapid-clicks", () => {
                 createClickExplosion(e.clientX, e.clientY);
               });
             }
@@ -2647,222 +2818,256 @@
           }, 2000);
         });
       }
-      
+
       // 時間基秘密設置
       function setupTimeBasedSecrets() {
         // 長時間停留檢測
         let idleTimer;
-        
+
         function resetIdleTimer() {
           clearTimeout(idleTimer);
           idleTimer = setTimeout(() => {
-            activateSecret('idle-time', () => {
+            activateSecret("idle-time", () => {
               createIdleAnimation();
             });
           }, 60000); // 1分鐘
         }
-        
-        document.addEventListener('mousemove', resetIdleTimer);
-        document.addEventListener('keydown', resetIdleTimer);
-        document.addEventListener('click', resetIdleTimer);
-        
+
+        document.addEventListener("mousemove", resetIdleTimer);
+        document.addEventListener("keydown", resetIdleTimer);
+        document.addEventListener("click", resetIdleTimer);
+
         resetIdleTimer();
-        
+
         // 特殊時間檢測
         setInterval(() => {
           const now = new Date();
           const time = now.getHours() * 100 + now.getMinutes();
-          
+
           // 13:37 (1337 - leet time)
           if (time === 1337) {
-            activateSecret('leet-time', () => {
+            activateSecret("leet-time", () => {
               createLeetEffect();
             });
           }
-          
+
           // 00:00 (midnight)
           if (time === 0) {
-            activateSecret('midnight', () => {
+            activateSecret("midnight", () => {
               createMidnightEffect();
             });
           }
         }, 60000);
       }
-      
+
       // 特效函數
       function createKeyboardRipple() {
-        const ripple = document.createElement('div');
-        ripple.className = 'fixed inset-0 pointer-events-none z-30';
-        ripple.style.background = 'radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)';
-        ripple.style.animation = 'halo-expand 2s ease-out';
-        
+        const ripple = document.createElement("div");
+        ripple.className = "fixed inset-0 pointer-events-none z-30";
+        ripple.style.background =
+          "radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)";
+        ripple.style.animation = "halo-expand 2s ease-out";
+
         document.body.appendChild(ripple);
-        
+
         setTimeout(() => {
           document.body.removeChild(ripple);
         }, 2000);
       }
-      
+
       function createFloatingLetters() {
-        const letters = 'CLAUDE'.split('');
-        
+        const letters = "CLAUDE".split("");
+
         letters.forEach((letter, index) => {
-          const float = document.createElement('div');
+          const float = document.createElement("div");
           float.textContent = letter;
-          float.className = 'fixed text-6xl font-bold text-primary-400 pointer-events-none z-40';
-          float.style.left = Math.random() * window.innerWidth + 'px';
-          float.style.top = window.innerHeight + 'px';
-          float.style.opacity = '0.8';
-          
+          float.className =
+            "fixed text-6xl font-bold text-primary-400 pointer-events-none z-40";
+          float.style.left = Math.random() * window.innerWidth + "px";
+          float.style.top = window.innerHeight + "px";
+          float.style.opacity = "0.8";
+
           document.body.appendChild(float);
-          
+
           setTimeout(() => {
-            float.animate([
-              { transform: 'translateY(0px) rotate(0deg)', opacity: 0.8 },
-              { transform: `translateY(-${window.innerHeight + 200}px) rotate(360deg)`, opacity: 0 }
-            ], {
-              duration: 3000,
-              easing: 'ease-out'
-            }).onfinish = () => {
+            float.animate(
+              [
+                { transform: "translateY(0px) rotate(0deg)", opacity: 0.8 },
+                {
+                  transform: `translateY(-${
+                    window.innerHeight + 200
+                  }px) rotate(360deg)`,
+                  opacity: 0,
+                },
+              ],
+              {
+                duration: 3000,
+                easing: "ease-out",
+              }
+            ).onfinish = () => {
               document.body.removeChild(float);
             };
           }, index * 200);
         });
       }
-      
+
       function createBinaryRain() {
-        const binary = '01';
+        const binary = "01";
         for (let i = 0; i < 100; i++) {
-          const digit = document.createElement('div');
+          const digit = document.createElement("div");
           digit.textContent = binary[Math.floor(Math.random() * 2)];
-          digit.className = 'fixed text-primary-400 font-mono text-lg pointer-events-none z-40';
-          digit.style.left = Math.random() * window.innerWidth + 'px';
-          digit.style.top = '-20px';
-          digit.style.opacity = '0.6';
-          
+          digit.className =
+            "fixed text-primary-400 font-mono text-lg pointer-events-none z-40";
+          digit.style.left = Math.random() * window.innerWidth + "px";
+          digit.style.top = "-20px";
+          digit.style.opacity = "0.6";
+
           document.body.appendChild(digit);
-          
-          digit.animate([
-            { transform: 'translateY(0px)', opacity: 0.6 },
-            { transform: `translateY(${window.innerHeight + 50}px)`, opacity: 0 }
-          ], {
-            duration: 2000 + Math.random() * 3000,
-            easing: 'linear'
-          }).onfinish = () => {
+
+          digit.animate(
+            [
+              { transform: "translateY(0px)", opacity: 0.6 },
+              {
+                transform: `translateY(${window.innerHeight + 50}px)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 2000 + Math.random() * 3000,
+              easing: "linear",
+            }
+          ).onfinish = () => {
             document.body.removeChild(digit);
           };
         }
       }
-      
+
       function createKonamiEffect() {
-        document.body.style.filter = 'hue-rotate(180deg) saturate(150%)';
+        document.body.style.filter = "hue-rotate(180deg) saturate(150%)";
         setTimeout(() => {
-          document.body.style.filter = '';
+          document.body.style.filter = "";
         }, 5000);
       }
-      
+
       function isCircularPattern(pattern) {
         if (pattern.length < 8) return false;
-        
-        const center = pattern.reduce((acc, p) => ({
-          x: acc.x + p.x / pattern.length,
-          y: acc.y + p.y / pattern.length
-        }), { x: 0, y: 0 });
-        
-        const distances = pattern.map(p => 
+
+        const center = pattern.reduce(
+          (acc, p) => ({
+            x: acc.x + p.x / pattern.length,
+            y: acc.y + p.y / pattern.length,
+          }),
+          { x: 0, y: 0 }
+        );
+
+        const distances = pattern.map((p) =>
           Math.sqrt(Math.pow(p.x - center.x, 2) + Math.pow(p.y - center.y, 2))
         );
-        
-        const avgDistance = distances.reduce((a, b) => a + b) / distances.length;
-        const variance = distances.reduce((acc, d) => acc + Math.pow(d - avgDistance, 2), 0) / distances.length;
-        
+
+        const avgDistance =
+          distances.reduce((a, b) => a + b) / distances.length;
+        const variance =
+          distances.reduce((acc, d) => acc + Math.pow(d - avgDistance, 2), 0) /
+          distances.length;
+
         return variance < avgDistance * 0.3;
       }
-      
+
       function createCircularWave(x, y) {
-        const wave = document.createElement('div');
-        wave.className = 'fixed border-4 border-primary-400 rounded-full pointer-events-none z-40';
-        wave.style.left = x + 'px';
-        wave.style.top = y + 'px';
-        wave.style.width = '0px';
-        wave.style.height = '0px';
-        wave.style.transform = 'translate(-50%, -50%)';
-        
+        const wave = document.createElement("div");
+        wave.className =
+          "fixed border-4 border-primary-400 rounded-full pointer-events-none z-40";
+        wave.style.left = x + "px";
+        wave.style.top = y + "px";
+        wave.style.width = "0px";
+        wave.style.height = "0px";
+        wave.style.transform = "translate(-50%, -50%)";
+
         document.body.appendChild(wave);
-        
-        wave.animate([
-          { width: '0px', height: '0px', opacity: 1 },
-          { width: '500px', height: '500px', opacity: 0 }
-        ], {
-          duration: 1500,
-          easing: 'ease-out'
-        }).onfinish = () => {
+
+        wave.animate(
+          [
+            { width: "0px", height: "0px", opacity: 1 },
+            { width: "500px", height: "500px", opacity: 0 },
+          ],
+          {
+            duration: 1500,
+            easing: "ease-out",
+          }
+        ).onfinish = () => {
           document.body.removeChild(wave);
         };
       }
-      
+
       function createClickExplosion(x, y) {
         for (let i = 0; i < 20; i++) {
-          const spark = document.createElement('div');
-          spark.className = 'fixed w-1 h-1 bg-accent-400 rounded-full pointer-events-none z-40';
-          spark.style.left = x + 'px';
-          spark.style.top = y + 'px';
-          
+          const spark = document.createElement("div");
+          spark.className =
+            "fixed w-1 h-1 bg-accent-400 rounded-full pointer-events-none z-40";
+          spark.style.left = x + "px";
+          spark.style.top = y + "px";
+
           document.body.appendChild(spark);
-          
+
           const angle = (i / 20) * Math.PI * 2;
           const distance = 100 + Math.random() * 100;
-          
-          spark.animate([
-            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
-            { 
-              transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
-              opacity: 0 
+
+          spark.animate(
+            [
+              { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+              {
+                transform: `translate(${Math.cos(angle) * distance}px, ${
+                  Math.sin(angle) * distance
+                }px) scale(0)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 1000,
+              easing: "ease-out",
             }
-          ], {
-            duration: 1000,
-            easing: 'ease-out'
-          }).onfinish = () => {
+          ).onfinish = () => {
             document.body.removeChild(spark);
           };
         }
       }
-      
+
       function createIdleAnimation() {
-        const elements = document.querySelectorAll('.claude-letter');
-        
+        const elements = document.querySelectorAll(".claude-letter");
+
         elements.forEach((el, index) => {
           setTimeout(() => {
-            el.style.animation = 'logo-pulse 1s ease-in-out';
+            el.style.animation = "logo-pulse 1s ease-in-out";
             setTimeout(() => {
-              el.style.animation = '';
+              el.style.animation = "";
             }, 1000);
           }, index * 200);
         });
       }
-      
+
       function createLeetEffect() {
-        const text = document.createElement('div');
-        text.textContent = '1337 H4X0R M0D3 4CT1V4T3D';
-        text.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-green-400 font-mono text-4xl font-bold pointer-events-none z-50';
-        text.style.textShadow = '0 0 20px rgba(34, 197, 94, 0.8)';
-        
+        const text = document.createElement("div");
+        text.textContent = "1337 H4X0R M0D3 4CT1V4T3D";
+        text.className =
+          "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-green-400 font-mono text-4xl font-bold pointer-events-none z-50";
+        text.style.textShadow = "0 0 20px rgba(34, 197, 94, 0.8)";
+
         document.body.appendChild(text);
-        
+
         setTimeout(() => {
           document.body.removeChild(text);
         }, 3000);
       }
-      
+
       function createMidnightEffect() {
-        document.body.style.filter = 'brightness(0.3) contrast(1.5)';
+        document.body.style.filter = "brightness(0.3) contrast(1.5)";
         setTimeout(() => {
-          document.body.style.filter = '';
+          document.body.style.filter = "";
         }, 5000);
       }
-      
+
       // 頁面載入完成後初始化
-      window.addEventListener('load', () => {
+      window.addEventListener("load", () => {
         initAdvancedLogoAnimations();
       });
 
