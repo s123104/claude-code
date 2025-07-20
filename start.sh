@@ -778,6 +778,21 @@ deep_fix_nvm_npm_conflicts() {
 fix_multiple_claude_installations() {
     log_info "🔍 檢測多重 Claude Code 安裝衝突..."
     
+    # 檢查是否已經修復過符號連結衝突
+    if [[ -L "/usr/local/bin/claude" ]] && [[ -L "$HOME/.local/bin/claude" ]] && [[ -f "$HOME/.nvm/versions/node/v24.0.1/bin/claude" ]]; then
+        # 驗證符號連結是否指向正確的 nvm 安裝
+        local system_link_target
+        local local_link_target
+        system_link_target=$(readlink "/usr/local/bin/claude" 2>/dev/null || echo "")
+        local_link_target=$(readlink "$HOME/.local/bin/claude" 2>/dev/null || echo "")
+        
+        if [[ "$system_link_target" == "/Users/azlife.eth/.nvm/versions/node/v24.0.1/bin/claude" ]] && 
+           [[ "$local_link_target" == "/Users/azlife.eth/.nvm/versions/node/v24.0.1/bin/claude" ]]; then
+            log_success "✅ Claude Code 符號連結已正確設置，跳過衝突修復"
+            return 0
+        fi
+    fi
+    
     # 確保 nvm 環境正確載入
     if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
         source "$HOME/.nvm/nvm.sh"
@@ -820,18 +835,18 @@ fix_multiple_claude_installations() {
     local native_claude=""
     local npm_global_claude=""
     
-    # 檢查所有可能的 Claude Code 安裝位置
-    if [[ -f "/usr/local/bin/claude" ]]; then
+    # 檢查所有可能的 Claude Code 安裝位置（只計算真實安裝，不包括符號連結）
+    if [[ -f "/usr/local/bin/claude" ]] && [[ ! -L "/usr/local/bin/claude" ]]; then
         system_claude="/usr/local/bin/claude"
         claude_paths+=("$system_claude")
     fi
     
-    if [[ -f "/opt/homebrew/bin/claude" ]]; then
+    if [[ -f "/opt/homebrew/bin/claude" ]] && [[ ! -L "/opt/homebrew/bin/claude" ]]; then
         homebrew_claude="/opt/homebrew/bin/claude"
         claude_paths+=("$homebrew_claude")
     fi
     
-    # 檢查所有 nvm 版本中的 claude
+    # 檢查所有 nvm 版本中的 claude（真實安裝）
     if [[ -d "$HOME/.nvm/versions/node" ]]; then
         for node_version in "$HOME/.nvm/versions/node"/*; do
             if [[ -d "$node_version" ]] && [[ -f "$node_version/bin/claude" ]]; then
@@ -841,7 +856,7 @@ fix_multiple_claude_installations() {
         done
     fi
     
-    if [[ -f "$HOME/.local/bin/claude" ]]; then
+    if [[ -f "$HOME/.local/bin/claude" ]] && [[ ! -L "$HOME/.local/bin/claude" ]]; then
         local_claude="$HOME/.local/bin/claude"
         claude_paths+=("$local_claude")
     fi
@@ -864,14 +879,28 @@ fix_multiple_claude_installations() {
     local current_claude
     current_claude=$(which claude 2>/dev/null || echo "")
     
-    log_info "發現的 Claude Code 安裝："
-    for path in "${claude_paths[@]}"; do
-        log_info "  - $path"
-    done
+    # 分別顯示真實安裝和符號連結
+    log_info "發現的 Claude Code 真實安裝："
+    if [[ ${#claude_paths[@]} -eq 0 ]]; then
+        log_info "  - 無真實安裝衝突"
+    else
+        for path in "${claude_paths[@]}"; do
+            log_info "  - $path"
+        done
+    fi
     
-    # 如果發現多重安裝
+    # 顯示符號連結狀態
+    log_info "發現的 Claude Code 符號連結："
+    if [[ -L "/usr/local/bin/claude" ]]; then
+        log_info "  - /usr/local/bin/claude -> $(readlink /usr/local/bin/claude)"
+    fi
+    if [[ -L "$HOME/.local/bin/claude" ]]; then
+        log_info "  - $HOME/.local/bin/claude -> $(readlink $HOME/.local/bin/claude)"
+    fi
+    
+    # 如果發現多重真實安裝（不包括符號連結）
     if [[ ${#claude_paths[@]} -gt 1 ]]; then
-        log_warn "⚠️  檢測到多重 Claude Code 安裝，執行衝突修復..."
+        log_warn "⚠️  檢測到多重 Claude Code 真實安裝，執行衝突修復..."
         
         # 優先保留 nvm 安裝，移除其他安裝
         if [[ -n "$nvm_claude" ]]; then
@@ -971,6 +1000,24 @@ fix_multiple_claude_installations() {
         
     else
         log_success "✅ 未發現多重安裝衝突"
+        
+        # 即使沒有衝突，也確保符號連結正確設置
+        if [[ -n "$nvm_claude" ]]; then
+            log_info "🔗 確保 Claude Code 符號連結設置正確..."
+            
+            # 創建系統符號連結（如果不存在或不正確）
+            if [[ ! -L "/usr/local/bin/claude" ]] || [[ "$(readlink /usr/local/bin/claude 2>/dev/null)" != "$nvm_claude" ]]; then
+                sudo ln -sf "$nvm_claude" "/usr/local/bin/claude" 2>/dev/null && \
+                log_success "✅ 系統 Claude Code 符號連結已設置"
+            fi
+            
+            # 創建本地符號連結（如果不存在或不正確）
+            mkdir -p "$HOME/.local/bin"
+            if [[ ! -L "$HOME/.local/bin/claude" ]] || [[ "$(readlink $HOME/.local/bin/claude 2>/dev/null)" != "$nvm_claude" ]]; then
+                ln -sf "$nvm_claude" "$HOME/.local/bin/claude" 2>/dev/null && \
+                log_success "✅ 本地 Claude Code 符號連結已設置"
+            fi
+        fi
     fi
     
     # 最終驗證
