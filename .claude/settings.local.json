@@ -92,7 +92,10 @@
       "\"mcp__time__*\"",
       "[\"Edit\"",
       "Bash(git rm:*)",
-      "Bash(quick_fix_nvm_warning:*)"
+      "Bash(quick_fix_nvm_warning:*)",
+      "Bash(test:*)",
+      "Bash(claude \"Hello, test message\" --no-interaction)",
+      "Bash(claude \"Hello\" --print)"
     ],
     "deny": []
   }

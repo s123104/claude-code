@@ -686,7 +686,7 @@ fix_claude_path_issues() {
             fi
             
             if [[ -f "$shell_config" ]] && ! grep -q ".local/bin" "$shell_config" 2>/dev/null; then
-                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$shell_config"
+                echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$shell_config"
                 log_success "✅ PATH 已更新到 $shell_config"
             fi
         fi
@@ -704,6 +704,525 @@ fix_claude_path_issues() {
     fi
 }
 
+# 深度修復 nvm 和 npm 配置衝突
+deep_fix_nvm_npm_conflicts() {
+    log_info "🔧 執行深度 nvm/npm 配置衝突修復..."
+    
+    # 檢查 nvm 是否可用
+    if ! command -v nvm &>/dev/null; then
+        log_warn "⚠️  nvm 未安裝或未載入"
+        return 1
+    fi
+    
+    # 檢查當前 nvm 版本
+    local current_nvm
+    current_nvm=$(timeout 5 nvm current 2>/dev/null || echo "system")
+    log_info "當前 nvm 版本: $current_nvm"
+    
+    # 如果使用 system，嘗試切換到 nvm 管理的版本
+    if [[ "$current_nvm" == "system" ]]; then
+        log_info "🔄 嘗試切換到 nvm 管理的版本..."
+        
+        # 獲取可用的 nvm 版本
+        local available_versions
+        available_versions=$(timeout 10 nvm ls --no-colors 2>/dev/null | grep -E "v[0-9]+\.[0-9]+\.[0-9]+" | grep -v "system" | head -3 || echo "")
+        
+        if [[ -n "$available_versions" ]]; then
+            # 優先使用 LTS 版本
+            local target_version
+            target_version=$(echo "$available_versions" | grep "v20\|v22" | head -1 || echo "$available_versions" | head -1)
+            
+            if [[ -n "$target_version" ]]; then
+                log_info "🔄 切換到 nvm 版本: $target_version"
+                
+                # 使用 --delete-prefix 來清理 npmrc 配置衝突
+                if timeout 15 nvm use --delete-prefix "$target_version" --silent 2>/dev/null; then
+                    log_success "✅ 成功切換到 $target_version 並清理配置衝突"
+                    
+                    # 重新載入 shell 環境
+                    export PATH="$HOME/.nvm/versions/node/$target_version/bin:$PATH"
+                    
+                    # 驗證切換是否成功
+                    local new_nvm_version
+                    new_nvm_version=$(timeout 5 nvm current 2>/dev/null || echo "system")
+                    if [[ "$new_nvm_version" != "system" ]]; then
+                        log_success "✅ nvm 切換成功，當前版本: $new_nvm_version"
+                        return 0
+                    else
+                        log_warn "⚠️  nvm 切換可能失敗，繼續手動清理"
+                    fi
+                else
+                    log_warn "⚠️  nvm 切換失敗，使用手動清理"
+                fi
+            fi
+        fi
+    fi
+    
+    # 手動清理 npm 配置
+    log_info "🔧 執行手動 npm 配置清理..."
+    manual_npm_cleanup
+    
+    # 檢查清理結果
+    local nvm_warning
+    nvm_warning=$(timeout 5 nvm current 2>&1 | grep -i "globalconfig\|prefix.*incompatible" || echo "")
+    if [[ -z "$nvm_warning" ]]; then
+        log_success "✅ npm/nvm 配置衝突已修復"
+        return 0
+    else
+        log_warn "⚠️  npm/nvm 配置衝突仍然存在"
+        return 1
+    fi
+}
+
+# 檢測和修復多重 Claude Code 安裝衝突
+fix_multiple_claude_installations() {
+    log_info "🔍 檢測多重 Claude Code 安裝衝突..."
+    
+    # 確保 nvm 環境正確載入
+    if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
+        source "$HOME/.nvm/nvm.sh"
+        log_info "✅ nvm 環境已載入"
+    else
+        log_error "❌ nvm 未安裝或找不到 nvm.sh"
+        return 1
+    fi
+    
+    # 檢查並清理 npm 配置衝突
+    log_info "🔧 檢查 npm 配置相容性..."
+    local npm_prefix
+    npm_prefix=$(npm config get prefix 2>/dev/null || echo "")
+    
+    if [[ "$npm_prefix" != "$HOME/.nvm/versions/node/v24.0.1" ]]; then
+        log_warn "⚠️  發現 npm 配置與 nvm 不相容，正在修正..."
+        
+        # 刪除不相容的 prefix 配置
+        if npm config delete prefix 2>/dev/null; then
+            log_success "✅ 已清理不相容的 npm prefix 配置"
+        fi
+        
+        # 使用 nvm 的 delete-prefix 功能
+        if nvm use --delete-prefix v24.0.1 --silent 2>/dev/null; then
+            log_success "✅ 已使用 nvm delete-prefix 清理配置"
+        fi
+        
+        # 重新載入 nvm 環境
+        source "$HOME/.nvm/nvm.sh"
+        log_success "✅ nvm 環境已重新載入"
+    else
+        log_success "✅ npm 配置與 nvm 相容"
+    fi
+    
+    local claude_paths=()
+    local system_claude=""
+    local homebrew_claude=""
+    local nvm_claude=""
+    local local_claude=""
+    local native_claude=""
+    local npm_global_claude=""
+    
+    # 檢查所有可能的 Claude Code 安裝位置
+    if [[ -f "/usr/local/bin/claude" ]]; then
+        system_claude="/usr/local/bin/claude"
+        claude_paths+=("$system_claude")
+    fi
+    
+    if [[ -f "/opt/homebrew/bin/claude" ]]; then
+        homebrew_claude="/opt/homebrew/bin/claude"
+        claude_paths+=("$homebrew_claude")
+    fi
+    
+    # 檢查所有 nvm 版本中的 claude
+    if [[ -d "$HOME/.nvm/versions/node" ]]; then
+        for node_version in "$HOME/.nvm/versions/node"/*; do
+            if [[ -d "$node_version" ]] && [[ -f "$node_version/bin/claude" ]]; then
+                nvm_claude="$node_version/bin/claude"
+                claude_paths+=("$nvm_claude")
+            fi
+        done
+    fi
+    
+    if [[ -f "$HOME/.local/bin/claude" ]]; then
+        local_claude="$HOME/.local/bin/claude"
+        claude_paths+=("$local_claude")
+    fi
+    
+    # 檢查 native 安裝
+    if [[ -d "$HOME/.local/share/claude" ]]; then
+        native_claude="$HOME/.local/share/claude"
+        claude_paths+=("$native_claude")
+        log_warn "⚠️  發現 native Claude Code 安裝: $native_claude"
+    fi
+    
+    # 檢查 npm-global 安裝
+    if [[ -f "$HOME/.npm-global/bin/claude" ]]; then
+        npm_global_claude="$HOME/.npm-global/bin/claude"
+        claude_paths+=("$npm_global_claude")
+        log_warn "⚠️  發現 npm-global Claude Code 安裝: $npm_global_claude"
+    fi
+    
+    # 檢查當前 PATH 中的 claude
+    local current_claude
+    current_claude=$(which claude 2>/dev/null || echo "")
+    
+    log_info "發現的 Claude Code 安裝："
+    for path in "${claude_paths[@]}"; do
+        log_info "  - $path"
+    done
+    
+    # 如果發現多重安裝
+    if [[ ${#claude_paths[@]} -gt 1 ]]; then
+        log_warn "⚠️  檢測到多重 Claude Code 安裝，執行衝突修復..."
+        
+        # 優先保留 nvm 安裝，移除其他安裝
+        if [[ -n "$nvm_claude" ]]; then
+            log_info "🔄 移除其他安裝，保留 nvm 安裝..."
+            
+            # 移除系統安裝
+            if [[ -n "$system_claude" ]]; then
+                if sudo rm -f "$system_claude" 2>/dev/null; then
+                    log_success "✅ 已移除系統 Claude Code 安裝"
+                fi
+                if sudo rm -rf "/usr/local/lib/node_modules/@anthropic-ai/claude-code" 2>/dev/null; then
+                    log_success "✅ 已移除系統 node_modules"
+                fi
+            fi
+            
+            # 移除 Homebrew 安裝
+            if [[ -n "$homebrew_claude" ]]; then
+                if rm -f "$homebrew_claude" 2>/dev/null; then
+                    log_success "✅ 已移除 Homebrew Claude Code 安裝"
+                fi
+            fi
+            
+            # 移除本地軟連結
+            if [[ -n "$local_claude" ]]; then
+                if rm -f "$local_claude" 2>/dev/null; then
+                    log_success "✅ 已移除本地軟連結"
+                fi
+            fi
+            
+            # 移除 native 安裝
+            if [[ -n "$native_claude" ]]; then
+                if rm -rf "$native_claude" 2>/dev/null; then
+                    log_success "✅ 已移除 native Claude Code 安裝"
+                fi
+                # 同時移除相關的 state 目錄
+                if rm -rf "$HOME/.local/state/claude" 2>/dev/null; then
+                    log_success "✅ 已移除 native Claude Code state"
+                fi
+            fi
+            
+            # 移除 npm-global 安裝
+            if [[ -n "$npm_global_claude" ]]; then
+                if rm -rf "$HOME/.npm-global" 2>/dev/null; then
+                    log_success "✅ 已移除 npm-global Claude Code 安裝"
+                fi
+            fi
+            
+            # 確保 nvm 環境正確並使用最新版本
+            local latest_nvm_version
+            latest_nvm_version=$(ls -1 "$HOME/.nvm/versions/node" | grep "^v" | sort -V | tail -1)
+            if [[ -n "$latest_nvm_version" ]]; then
+                nvm use "$latest_nvm_version" 2>/dev/null || true
+                log_success "✅ 已切換到 nvm 環境: $latest_nvm_version"
+                nvm_claude="$HOME/.nvm/versions/node/$latest_nvm_version/bin/claude"
+                
+                # 驗證 Node.js 版本一致性
+                local current_node_path
+                current_node_path=$(which node 2>/dev/null || echo "")
+                local expected_node_path
+                expected_node_path="$HOME/.nvm/versions/node/$latest_nvm_version/bin/node"
+                
+                if [[ "$current_node_path" != "$expected_node_path" ]]; then
+                    log_warn "⚠️  Node.js 路徑不一致，正在修正..."
+                    export PATH="$HOME/.nvm/versions/node/$latest_nvm_version/bin:$PATH"
+                    log_success "✅ Node.js 路徑已修正"
+                fi
+            fi
+            
+            # 重新安裝到 nvm 環境
+            log_info "🔄 重新安裝 Claude Code 到 nvm 環境..."
+            if npm install -g @anthropic-ai/claude-code@latest 2>/dev/null; then
+                log_success "✅ Claude Code 重新安裝成功"
+            else
+                log_error "❌ Claude Code 重新安裝失敗"
+                return 1
+            fi
+        fi
+        
+        # 創建統一的軟連結
+        log_info "🔗 創建統一的 Claude Code 軟連結..."
+        mkdir -p "$HOME/.local/bin"
+        if ln -sf "$nvm_claude" "$HOME/.local/bin/claude" 2>/dev/null; then
+            log_success "✅ 統一軟連結創建成功"
+        fi
+        
+        # 更新 PATH 並確保 nvm 環境優先
+        if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+            export PATH="$HOME/.local/bin:$PATH"
+            log_success "✅ PATH 已更新"
+        fi
+        
+        # 確保 nvm 環境在 PATH 中優先
+        if [[ ":$PATH:" != *":$HOME/.nvm/versions/node/$latest_nvm_version/bin:"* ]]; then
+            export PATH="$HOME/.nvm/versions/node/$latest_nvm_version/bin:$PATH"
+            log_success "✅ nvm Node.js 環境已優先配置"
+        fi
+        
+    else
+        log_success "✅ 未發現多重安裝衝突"
+    fi
+    
+    # 最終驗證
+    local final_claude
+    final_claude=$(which claude 2>/dev/null || echo "")
+    if [[ -n "$final_claude" ]]; then
+        log_success "✅ Claude Code 安裝驗證通過: $final_claude"
+        
+        # 額外驗證：檢查 Node.js 版本一致性
+        local claude_node_path
+        claude_node_path=$(head -1 "$final_claude" | sed 's|^#!||' | sed 's|/usr/bin/env node||' | xargs which 2>/dev/null || echo "")
+        local current_node_path
+        current_node_path=$(which node 2>/dev/null || echo "")
+        
+        if [[ "$claude_node_path" == "$current_node_path" ]]; then
+            log_success "✅ Node.js 版本一致性驗證通過"
+        else
+            log_warn "⚠️  Node.js 版本不一致，但 Claude Code 仍可運行"
+        fi
+        
+        return 0
+    else
+        log_error "❌ Claude Code 安裝驗證失敗"
+        return 1
+    fi
+}
+
+# 修復系統符號連結，確保 GUI 應用程式能找到 NVM Node.js
+fix_system_symlinks() {
+    log_info "🔗 修復系統符號連結，確保 GUI 應用程式能找到 NVM Node.js..."
+    
+    # 確保 nvm 環境正確載入
+    if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
+        source "$HOME/.nvm/nvm.sh"
+    else
+        log_error "❌ nvm 未安裝或找不到 nvm.sh"
+        return 1
+    fi
+    
+    # 獲取當前 nvm 使用的 Node.js 版本路徑
+    local current_node_version
+    current_node_version=$(nvm current 2>/dev/null || echo "")
+    
+    if [[ -z "$current_node_version" || "$current_node_version" == "system" ]]; then
+        log_warn "⚠️  當前使用系統 Node.js，切換到 nvm 版本..."
+        local latest_nvm_version
+        latest_nvm_version=$(ls -1 "$HOME/.nvm/versions/node" | grep "^v" | sort -V | tail -1)
+        if [[ -n "$latest_nvm_version" ]]; then
+            nvm use "$latest_nvm_version" 2>/dev/null || true
+            current_node_version="$latest_nvm_version"
+        else
+            log_error "❌ 找不到任何 nvm Node.js 版本"
+            return 1
+        fi
+    fi
+    
+    local node_path="$HOME/.nvm/versions/node/$current_node_version/bin/node"
+    local npm_path="$HOME/.nvm/versions/node/$current_node_version/bin/npm"
+    local claude_path="$HOME/.nvm/versions/node/$current_node_version/bin/claude"
+    
+    # 檢查檔案是否存在
+    if [[ ! -f "$node_path" ]]; then
+        log_error "❌ Node.js 二進制檔案不存在: $node_path"
+        return 1
+    fi
+    
+    if [[ ! -f "$claude_path" ]]; then
+        log_error "❌ Claude Code 二進制檔案不存在: $claude_path"
+        return 1
+    fi
+    
+    # 創建系統符號連結到 /usr/local/bin
+    log_info "🔧 創建系統符號連結..."
+    
+    # Node.js 符號連結
+    if sudo ln -sf "$node_path" /usr/local/bin/node 2>/dev/null; then
+        log_success "✅ Node.js 符號連結已創建: /usr/local/bin/node -> $node_path"
+    else
+        log_warn "⚠️  無法創建 Node.js 符號連結 (可能需要管理員權限)"
+    fi
+    
+    # npm 符號連結
+    if [[ -f "$npm_path" ]] && sudo ln -sf "$npm_path" /usr/local/bin/npm 2>/dev/null; then
+        log_success "✅ npm 符號連結已創建: /usr/local/bin/npm -> $npm_path"
+    else
+        log_warn "⚠️  無法創建 npm 符號連結"
+    fi
+    
+    # Claude Code 符號連結
+    if sudo ln -sf "$claude_path" /usr/local/bin/claude 2>/dev/null; then
+        log_success "✅ Claude Code 符號連結已創建: /usr/local/bin/claude -> $claude_path"
+    else
+        log_warn "⚠️  無法創建 Claude Code 符號連結"
+    fi
+    
+    # 驗證符號連結
+    log_info "🔍 驗證符號連結..."
+    
+    if [[ -L "/usr/local/bin/node" ]] && [[ -x "/usr/local/bin/node" ]]; then
+        local node_version
+        node_version=$(/usr/local/bin/node --version 2>/dev/null || echo "unknown")
+        log_success "✅ Node.js 符號連結有效，版本: $node_version"
+    else
+        log_warn "⚠️  Node.js 符號連結可能無效"
+    fi
+    
+    if [[ -L "/usr/local/bin/claude" ]] && [[ -x "/usr/local/bin/claude" ]]; then
+        local claude_version
+        claude_version=$(/usr/local/bin/claude --version 2>/dev/null || echo "unknown")
+        log_success "✅ Claude Code 符號連結有效，版本: $claude_version"
+    else
+        log_warn "⚠️  Claude Code 符號連結可能無效"
+    fi
+    
+    # 創建 wrapper 腳本
+    log_info "📝 創建 Claude Code wrapper 腳本..."
+    local wrapper_content='#!/usr/bin/env zsh
+
+# Claude Code Wrapper Script for NVM Environment
+# 確保 NVM 環境正確載入，避免 "Claude symlink points to invalid binary" 錯誤
+
+# 載入 NVM 環境
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# 使用當前 Node.js 版本
+nvm use '"$current_node_version"' > /dev/null 2>&1
+
+# 確保 PATH 包含 NVM Node.js 路徑
+export PATH="$HOME/.nvm/versions/node/'"$current_node_version"'/bin:$PATH"
+
+# 執行 Claude Code
+exec "$HOME/.nvm/versions/node/'"$current_node_version"'/bin/claude" "$@"'
+    
+    if echo "$wrapper_content" | sudo tee /usr/local/bin/claude-wrapper > /dev/null 2>&1; then
+        sudo chmod +x /usr/local/bin/claude-wrapper 2>/dev/null
+        log_success "✅ Claude Code wrapper 腳本已創建: /usr/local/bin/claude-wrapper"
+    else
+        log_warn "⚠️  無法創建 Claude Code wrapper 腳本"
+    fi
+    
+    log_success "✅ 系統符號連結修復完成"
+    return 0
+}
+
+# 驗證和修復 Claude Code 二進制檔案
+validate_claude_binary() {
+    log_info "🔍 驗證 Claude Code 二進制檔案..."
+    
+    local claude_path
+    claude_path=$(which claude 2>/dev/null || echo "")
+    
+    if [[ -z "$claude_path" ]]; then
+        log_error "❌ Claude Code 未找到"
+        return 1
+    fi
+    
+    # 檢查軟連結是否有效
+    if [[ -L "$claude_path" ]]; then
+        local target_path
+        target_path=$(readlink "$claude_path" 2>/dev/null || echo "")
+        
+        if [[ -n "$target_path" ]]; then
+            # 處理相對路徑
+            local resolved_target
+            if [[ "$target_path" == .* ]]; then
+                # 相對路徑，需要解析
+                resolved_target=$(cd "$(dirname "$claude_path")" && readlink -f "$target_path" 2>/dev/null || echo "")
+            else
+                resolved_target="$target_path"
+            fi
+            
+            if [[ -n "$resolved_target" ]] && [[ -f "$resolved_target" ]]; then
+                log_success "✅ Claude Code 軟連結有效: $claude_path -> $target_path"
+                
+                # 檢查目標檔案是否可執行
+                if [[ -x "$resolved_target" ]]; then
+                    log_success "✅ Claude Code 二進制檔案可執行"
+                    
+                    # 測試執行
+                    if timeout 10 "$claude_path" --version >/dev/null 2>&1; then
+                        log_success "✅ Claude Code 執行測試通過"
+                        return 0
+                    else
+                        log_warn "⚠️  Claude Code 執行測試失敗"
+                        return 1
+                    fi
+                else
+                    log_error "❌ Claude Code 目標檔案不可執行: $resolved_target"
+                    return 1
+                fi
+            else
+                log_error "❌ Claude Code 軟連結目標無效: $target_path (解析後: $resolved_target)"
+                return 1
+            fi
+        else
+            log_error "❌ Claude Code 軟連結目標無效: $target_path (解析後: $resolved_target)"
+            return 1
+        fi
+    elif [[ -f "$claude_path" ]]; then
+        log_success "✅ Claude Code 直接檔案: $claude_path"
+        
+        # 測試執行
+        if timeout 10 "$claude_path" --version >/dev/null 2>&1; then
+            log_success "✅ Claude Code 執行測試通過"
+            return 0
+        else
+            log_warn "⚠️  Claude Code 執行測試失敗"
+            return 1
+        fi
+    else
+        log_error "❌ Claude Code 路徑無效: $claude_path"
+        return 1
+    fi
+}
+
+# 重新安裝 Claude Code（如果需要）
+reinstall_claude_code() {
+    log_info "🔄 重新安裝 Claude Code..."
+    
+    # 移除現有安裝
+    if command -v npm &>/dev/null; then
+        log_info "移除現有 Claude Code 安裝..."
+        npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || true
+    fi
+    
+    # 清理可能的殘留檔案
+    rm -f "$HOME/.local/bin/claude" 2>/dev/null || true
+    rm -f "$HOME/.npm-global/bin/claude" 2>/dev/null || true
+    
+    # 重新安裝
+    log_info "重新安裝 Claude Code..."
+    if npm install -g @anthropic-ai/claude-code 2>/dev/null; then
+        log_success "✅ Claude Code 重新安裝成功"
+        
+        # 修復路徑問題
+        fix_claude_path_issues
+        
+        # 驗證安裝
+        if validate_claude_binary; then
+            log_success "✅ Claude Code 安裝驗證通過"
+            return 0
+        else
+            log_error "❌ Claude Code 安裝驗證失敗"
+            return 1
+        fi
+    else
+        log_error "❌ Claude Code 重新安裝失敗"
+        return 1
+    fi
+}
+
 # 自動測試系統
 run_automated_tests() {
     log_info "🧪 開始自動測試 Claude Code 安裝..."
@@ -713,7 +1232,7 @@ run_automated_tests() {
     local test_results=()
     
     # 測試 1: Claude CLI 可執行性
-    log_info "測試 1/8: Claude CLI 可執行性..."
+    log_info "測試 1/10: Claude CLI 可執行性..."
     if command -v claude >/dev/null 2>&1; then
         log_success "✅ Claude CLI 可執行"
         ((tests_passed++))
@@ -725,7 +1244,7 @@ run_automated_tests() {
     fi
     
     # 測試 2: Claude 版本檢查
-    log_info "測試 2/8: Claude 版本檢查..."
+    log_info "測試 2/10: Claude 版本檢查..."
     local claude_version
     claude_version=$(timeout 10 claude --version 2>/dev/null || echo "failed")
     if [[ "$claude_version" != "failed" ]] && [[ -n "$claude_version" ]]; then
@@ -739,7 +1258,7 @@ run_automated_tests() {
     fi
     
     # 測試 3: Claude 路徑配置
-    log_info "測試 3/8: Claude 路徑配置..."
+    log_info "測試 3/10: Claude 路徑配置..."
     local claude_path expected_path
     claude_path=$(which claude 2>/dev/null)
     expected_path="$HOME/.local/bin/claude"
@@ -753,22 +1272,8 @@ run_automated_tests() {
         test_results+=("❌ Claude 路徑配置問題")
     fi
     
-    # 測試 4: npm/nvm 配置衝突檢查
-    log_info "測試 4/8: npm/nvm 配置衝突檢查..."
-    local nvm_warning
-    nvm_warning=$(timeout 5 nvm current 2>&1 | grep -i "globalconfig\|prefix.*incompatible" || echo "")
-    if [[ -z "$nvm_warning" ]]; then
-        log_success "✅ 無 npm/nvm 配置衝突"
-        ((tests_passed++))
-        test_results+=("✅ npm/nvm 配置正常")
-    else
-        log_error "❌ 存在 npm/nvm 配置衝突"
-        ((tests_failed++))
-        test_results+=("❌ npm/nvm 配置衝突")
-    fi
-    
-    # 測試 5: Claude 基本功能測試
-    log_info "測試 5/8: Claude 基本功能測試..."
+    # 測試 4: Claude 基本功能測試
+    log_info "測試 4/10: Claude 基本功能測試..."
     if timeout 10 claude --help >/dev/null 2>&1; then
         log_success "✅ Claude 基本功能正常"
         ((tests_passed++))
@@ -779,8 +1284,8 @@ run_automated_tests() {
         test_results+=("❌ Claude 基本功能異常")
     fi
     
-    # 測試 6: 環境變數檢查
-    log_info "測試 6/8: 環境變數檢查..."
+    # 測試 5: 環境變數檢查
+    log_info "測試 5/10: 環境變數檢查..."
     if [[ ":$PATH:" == *":$HOME/.local/bin:"* ]]; then
         log_success "✅ PATH 環境變數配置正確"
         ((tests_passed++))
@@ -791,8 +1296,8 @@ run_automated_tests() {
         test_results+=("❌ PATH 環境變數問題")
     fi
     
-    # 測試 7: Shell 配置檢查
-    log_info "測試 7/8: Shell 配置檢查..."
+    # 測試 6: Shell 配置檢查
+    log_info "測試 6/10: Shell 配置檢查..."
     local shell_config
     if [[ "$SHELL" == *"zsh"* ]] || [[ -n "${ZSH_VERSION:-}" ]]; then
         shell_config="$HOME/.zshrc"
@@ -810,8 +1315,34 @@ run_automated_tests() {
         test_results+=("⚠️ Shell 配置文件需更新")
     fi
     
-    # 測試 8: Claude 連線測試（可選）
-    log_info "測試 8/8: Claude 連線測試..."
+    # 測試 7: Claude 二進制檔案驗證
+    log_info "測試 7/10: Claude 二進制檔案驗證..."
+    if validate_claude_binary; then
+        log_success "✅ Claude 二進制檔案驗證通過"
+        ((tests_passed++))
+        test_results+=("✅ Claude 二進制檔案驗證")
+    else
+        log_error "❌ Claude 二進制檔案驗證失敗"
+        ((tests_failed++))
+        test_results+=("❌ Claude 二進制檔案驗證失敗")
+    fi
+    
+    # 測試 8: nvm/npm 配置衝突檢查
+    log_info "測試 8/10: nvm/npm 配置衝突檢查..."
+    local nvm_warning
+    nvm_warning=$(timeout 5 nvm current 2>&1 | grep -i "globalconfig\|prefix.*incompatible" || echo "")
+    if [[ -z "$nvm_warning" ]]; then
+        log_success "✅ 無 nvm/npm 配置衝突"
+        ((tests_passed++))
+        test_results+=("✅ nvm/npm 配置正常")
+    else
+        log_error "❌ 存在 nvm/npm 配置衝突"
+        ((tests_failed++))
+        test_results+=("❌ nvm/npm 配置衝突")
+    fi
+    
+    # 測試 9: Claude 連線測試（可選）
+    log_info "測試 9/10: Claude 連線測試..."
     if timeout 15 claude doctor >/dev/null 2>&1; then
         log_success "✅ Claude 連線正常"
         ((tests_passed++))
@@ -822,11 +1353,23 @@ run_automated_tests() {
         test_results+=("⚠️ Claude 連線需認證")
     fi
     
+    # 測試 10: MCP 伺服器檢查
+    log_info "測試 10/10: MCP 伺服器檢查..."
+    if timeout 10 claude mcp list >/dev/null 2>&1; then
+        log_success "✅ MCP 伺服器功能正常"
+        ((tests_passed++))
+        test_results+=("✅ MCP 伺服器功能")
+    else
+        log_warn "⚠️  MCP 伺服器功能測試失敗"
+        ((tests_failed++))
+        test_results+=("⚠️ MCP 伺服器功能異常")
+    fi
+    
     # 顯示測試結果摘要
     echo
     log_info "🧪 測試結果摘要："
-    log_info "   ✅ 通過測試: $tests_passed/8"
-    log_info "   ❌ 失敗測試: $tests_failed/8"
+    log_info "   ✅ 通過測試: $tests_passed/10"
+    log_info "   ❌ 失敗測試: $tests_failed/10"
     
     echo
     log_info "📋 詳細測試結果："
@@ -839,7 +1382,7 @@ run_automated_tests() {
     if [[ $tests_failed -eq 0 ]]; then
         log_success "🎉 所有測試通過！Claude Code 安裝完全正常。"
         return 0
-    elif [[ $tests_failed -le 2 ]]; then
+    elif [[ $tests_failed -le 3 ]]; then
         log_warn "⚠️  部分測試失敗，但核心功能正常。建議檢查上述問題。"
         return 1
     else
@@ -2150,8 +2693,31 @@ main_installation() {
     if [[ "${CLAUDE_NEEDS_INSTALL:-true}" == "false" ]]; then
         log_success "Claude Code 已是最新版本，跳過安裝流程"
         
+        # 檢測和修復多重 Claude Code 安裝衝突
+        fix_multiple_claude_installations
+        
+        # 修復系統符號連結，確保 GUI 應用程式能找到 NVM Node.js
+        fix_system_symlinks
+        
+        # 深度修復 nvm/npm 配置衝突
+        deep_fix_nvm_npm_conflicts
+        
+        # 驗證和修復 Claude Code 二進制檔案
+        if ! validate_claude_binary; then
+            log_warn "⚠️  Claude Code 二進制檔案驗證失敗，嘗試重新安裝..."
+            reinstall_claude_code
+        fi
+        
         # 修復路徑問題
         fix_claude_path_issues
+        
+        # 最終驗證
+        if validate_claude_binary; then
+            log_success "✅ Claude Code 完全修復成功"
+        else
+            log_error "❌ Claude Code 修復失敗，請手動檢查"
+        fi
+        
         local end_time duration
         end_time=$(date +%s)
         duration=$((end_time - start_time))
@@ -2271,3 +2837,4 @@ if [[ "${BASH_SOURCE[0]:-$0}" == "${0}" ]] || [[ -z "${BASH_SOURCE[0]:-}" ]]; th
     echo
     log_info "🔧 如遇問題，請檢查日誌：$LOG_FILE"
 fi
+
