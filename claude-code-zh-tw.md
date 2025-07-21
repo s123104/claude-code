@@ -774,7 +774,7 @@ claude --allowedTools "mcp__weather__get_forecast" "查詢明天天氣"
 claude --dangerously-skip-permissions "修復所有 lint 錯誤"
 ```
 
-**⚠️ 警告**：僅在隔離環境中使用，可能導致資料遺失或系統損壞。
+**⚠️ 警告**：建議僅在隔離環境中使用，該指令可能導致資料遺失或系統損壞。
 
 ---
 
