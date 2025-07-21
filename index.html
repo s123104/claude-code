@@ -3,6 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Claude Code 官方中文指南 - AI 驅動的終端開發助手，涵蓋安裝、配置、進階功能的完整文檔"
+    />
+    <meta
+      name="keywords"
+      content="Claude Code, AI, 終端, 開發助手, 人工智慧, CLI, 中文指南"
+    />
+    <meta name="author" content="Claude Code 中文社群" />
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Claude Code - AI 驅動的終端開發助手" />
+    <meta
+      property="og:description"
+      content="完整的 Claude Code 中文指南，涵蓋安裝、配置、進階功能等所有內容"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="img/logo.png" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Claude Code - AI 驅動的終端開發助手" />
+    <meta
+      name="twitter:description"
+      content="完整的 Claude Code 中文指南，涵蓋安裝、配置、進階功能等所有內容"
+    />
+
     <title>Claude Code - AI 驅動的終端開發助手</title>
 
     <!-- Tailwind CSS 官方 CDN（自動取得最新版本，來源：https://tailwindcss.com/docs/installation） -->
@@ -428,7 +456,11 @@
         padding: 0.375rem 0.75rem;
         border-radius: 0.5rem;
         backdrop-filter: blur(20px);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.005));
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.015),
+          rgba(255, 255, 255, 0.005)
+        );
         position: relative;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
           0 0 60px rgba(6, 182, 212, 0.15),
@@ -461,7 +493,11 @@
         transform: translateY(-1px) scale(1.01);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
           0 0 30px rgba(6, 182, 212, 0.15), 0 0 40px rgba(139, 92, 246, 0.1);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01));
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.025),
+          rgba(255, 255, 255, 0.01)
+        );
       }
 
       .premium-logo-container:hover::before {
@@ -685,20 +721,21 @@
 
       /* Logo 呼吸動畫 */
       @keyframes logo-breath {
-        0%, 100% {
+        0%,
+        100% {
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
             0 0 60px rgba(6, 182, 212, 0.15);
         }
         50% {
           box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),
-            0 0 80px rgba(6, 182, 212, 0.25),
-            0 0 120px rgba(139, 92, 246, 0.1);
+            0 0 80px rgba(6, 182, 212, 0.25), 0 0 120px rgba(139, 92, 246, 0.1);
         }
       }
 
       /* 隱藏微光動畫 */
       @keyframes micro-sparkle {
-        0%, 100% {
+        0%,
+        100% {
           opacity: 0;
           transform: scale(0.8);
         }
@@ -710,7 +747,8 @@
 
       /* 神秘光暈動畫 */
       @keyframes mystic-glow {
-        0%, 100% {
+        0%,
+        100% {
           opacity: 0.3;
           transform: rotate(0deg) scale(1);
         }
@@ -744,12 +782,7 @@
           class="flex items-center group interactive-logo"
           onclick="logoClickEffect()"
         >
-          <div class="relative premium-logo-container">
-            <!-- 背景光暈效果 -->
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-primary-400/5 via-secondary-400/5 to-accent-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl scale-110"
-            ></div>
-
+          <div class="relative">
             <!-- 主要 Logo 容器 -->
             <div class="relative flex items-center space-x-1.5">
               <!-- Claude 文字 -->
@@ -868,24 +901,39 @@
               <!-- 隱藏微光效果 -->
               <div
                 class="absolute top-1/4 left-1/4 w-1 h-1 bg-secondary-300 rounded-full opacity-0"
-                style="animation: micro-sparkle 3s ease-in-out infinite; animation-delay: 1s"
+                style="
+                  animation: micro-sparkle 3s ease-in-out infinite;
+                  animation-delay: 1s;
+                "
               ></div>
               <div
                 class="absolute top-3/4 right-1/4 w-1 h-1 bg-accent-300 rounded-full opacity-0"
-                style="animation: micro-sparkle 3s ease-in-out infinite; animation-delay: 2s"
+                style="
+                  animation: micro-sparkle 3s ease-in-out infinite;
+                  animation-delay: 2s;
+                "
               ></div>
               <div
                 class="absolute top-1/2 left-1/8 w-0.5 h-0.5 bg-primary-300 rounded-full opacity-0"
-                style="animation: micro-sparkle 4s ease-in-out infinite; animation-delay: 1.5s"
+                style="
+                  animation: micro-sparkle 4s ease-in-out infinite;
+                  animation-delay: 1.5s;
+                "
               ></div>
               <div
                 class="absolute bottom-1/4 right-1/8 w-0.5 h-0.5 bg-secondary-300 rounded-full opacity-0"
-                style="animation: micro-sparkle 4s ease-in-out infinite; animation-delay: 2.5s"
+                style="
+                  animation: micro-sparkle 4s ease-in-out infinite;
+                  animation-delay: 2.5s;
+                "
               ></div>
               <!-- 神秘光暈 -->
               <div
                 class="absolute inset-0 rounded-full border border-primary-400/20 opacity-0"
-                style="animation: mystic-glow 8s ease-in-out infinite; animation-delay: 0.5s"
+                style="
+                  animation: mystic-glow 8s ease-in-out infinite;
+                  animation-delay: 0.5s;
+                "
               ></div>
             </div>
           </div>
@@ -902,6 +950,11 @@
             href="#installation"
             class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
             >快速安裝</a
+          >
+          <a
+            href="#official-guide"
+            class="text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+            >官方指南</a
           >
           <a
             href="#docs-index"
@@ -941,6 +994,11 @@
             href="#installation"
             class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
             >快速安裝</a
+          >
+          <a
+            href="#official-guide"
+            class="block text-neutral-300 hover:text-primary-400 transition-colors duration-200"
+            >官方指南</a
           >
           <a
             href="#docs-index"
@@ -1920,6 +1978,356 @@
             </p>
             <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Official Function Guide Section -->
+    <section
+      id="official-guide"
+      class="py-20 px-4 bg-gradient-to-b from-neutral-900/50 to-neutral-800/50"
+    >
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
+            <i class="fas fa-star mr-3"></i>官方功能介紹專區
+          </h2>
+          <p class="text-xl text-neutral-300 max-w-4xl mx-auto leading-relaxed">
+            📚 完整的 Claude Code 官方驗證使用手冊，涵蓋初階到高階的所有功能
+          </p>
+          <p class="text-sm text-neutral-400 mt-3">
+            ✅ 100% 官方文檔驗證 | 💎 百科全書版本 v5.0.0 | 🔄 持續更新
+          </p>
+        </div>
+
+        <!-- Introduction Cards -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12"
+        >
+          <div class="glass-effect rounded-xl p-6 observe-fade">
+            <div class="text-primary-400 text-3xl mb-4">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-3">完整百科全書</h3>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              涵蓋安裝、認證、CLI 指令、進階功能等完整內容，經官方文檔 100% 驗證
+            </p>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6 observe-fade">
+            <div class="text-secondary-400 text-3xl mb-4">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-3">LLM 查詢優化</h3>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              結構化內容設計，讓 AI 能快速理解和回答 Claude Code 相關問題
+            </p>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6 observe-fade">
+            <div class="text-accent-400 text-3xl mb-4">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-3">互動式學習</h3>
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              複製內容或下載文檔上傳至 LLM，進行個人化的學習互動
+            </p>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="glass-effect rounded-xl p-8 observe-fade">
+          <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Content -->
+            <div class="lg:w-2/3 space-y-6">
+              <div class="text-center lg:text-left">
+                <h3 class="text-2xl font-bold text-white mb-4">
+                  📖 Claude Code 官方驗證使用手冊
+                </h3>
+                <div
+                  class="flex flex-wrap justify-center lg:justify-start gap-2 mb-4"
+                >
+                  <span
+                    class="px-3 py-1 bg-primary-500/20 text-primary-300 rounded-full text-xs font-medium"
+                  >
+                    v5.0.0 百科全書版本
+                  </span>
+                  <span
+                    class="px-3 py-1 bg-secondary-500/20 text-secondary-300 rounded-full text-xs font-medium"
+                  >
+                    100% 官方驗證
+                  </span>
+                  <span
+                    class="px-3 py-1 bg-accent-500/20 text-accent-300 rounded-full text-xs font-medium"
+                  >
+                    繁體中文
+                  </span>
+                </div>
+              </div>
+
+              <!-- Feature Highlights -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-primary-400 text-sm">
+                    🚀 快速開始內容
+                  </h4>
+                  <ul class="text-neutral-300 text-sm space-y-1">
+                    <li>• 環境需求與安裝指南</li>
+                    <li>• 認證設定與基礎操作</li>
+                    <li>• 常用指令與旗標參考</li>
+                    <li>• 斜線命令系統</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-secondary-400 text-sm">
+                    🔧 進階功能
+                  </h4>
+                  <ul class="text-neutral-300 text-sm space-y-1">
+                    <li>• Hooks 自動化機制</li>
+                    <li>• 設定檔案與環境變數</li>
+                    <li>• 工具完整參考</li>
+                    <li>• 企業部署方案</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-accent-400 text-sm">
+                    🌐 第三方整合
+                  </h4>
+                  <ul class="text-neutral-300 text-sm space-y-1">
+                    <li>• LLM Gateway 整合</li>
+                    <li>• AWS Bedrock & Google Vertex AI</li>
+                    <li>• GitHub Actions CI/CD</li>
+                    <li>• 企業代理設定</li>
+                  </ul>
+                </div>
+
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-pink-400 text-sm">
+                    🛠️ 實戰應用
+                  </h4>
+                  <ul class="text-neutral-300 text-sm space-y-1">
+                    <li>• 工作流程大全</li>
+                    <li>• 權限管理與安全控制</li>
+                    <li>• 疑難排解</li>
+                    <li>• 最佳實踐</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Statistics -->
+              <div
+                class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-neutral-700"
+              >
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-primary-400">2000+</div>
+                  <div class="text-xs text-neutral-400">行完整內容</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-secondary-400">15+</div>
+                  <div class="text-xs text-neutral-400">主要章節</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-accent-400">50+</div>
+                  <div class="text-xs text-neutral-400">實用範例</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-pink-400">100%</div>
+                  <div class="text-xs text-neutral-400">官方驗證</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Action Panel -->
+            <div class="lg:w-1/3 space-y-6">
+              <div
+                class="bg-gradient-to-br from-primary-500/10 to-secondary-500/10 rounded-xl p-6 border border-primary-500/20"
+              >
+                <h4 class="font-bold text-white mb-4 text-center">
+                  <i class="fas fa-download mr-2"></i>下載與使用
+                </h4>
+
+                <div class="space-y-3">
+                  <!-- View Online -->
+                  <a
+                    href="claude-code-zh-tw.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block w-full bg-primary-600 hover:bg-primary-700 px-4 py-3 rounded-lg text-white text-sm font-semibold text-center transition-all duration-300 transform hover:scale-105"
+                  >
+                    <i class="fas fa-eye mr-2"></i>
+                    線上閱讀
+                  </a>
+
+                  <!-- Download -->
+                  <a
+                    href="claude-code-zh-tw.md"
+                    download="claude-code-zh-tw.md"
+                    class="block w-full bg-secondary-600 hover:bg-secondary-700 px-4 py-3 rounded-lg text-white text-sm font-semibold text-center transition-all duration-300 transform hover:scale-105"
+                  >
+                    <i class="fas fa-download mr-2"></i>
+                    下載文檔
+                  </a>
+
+                  <!-- Copy Content Button -->
+                  <button
+                    id="copy-guide-content"
+                    class="block w-full bg-accent-600 hover:bg-accent-700 px-4 py-3 rounded-lg text-white text-sm font-semibold text-center transition-all duration-300 transform hover:scale-105"
+                  >
+                    <i class="fas fa-copy mr-2"></i>
+                    複製全文
+                  </button>
+                </div>
+
+                <div class="mt-4 p-3 bg-neutral-800/50 rounded-lg">
+                  <p class="text-xs text-neutral-300 text-center">
+                    💡 建議將文檔內容上傳至 ChatGPT、Claude 或其他
+                    LLM，進行互動式學習
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Navigation -->
+              <div
+                class="bg-gradient-to-br from-accent-500/10 to-pink-500/10 rounded-xl p-6 border border-accent-500/20"
+              >
+                <h4 class="font-bold text-white mb-4 text-center">
+                  <i class="fas fa-compass mr-2"></i>快速導航
+                </h4>
+
+                <div class="space-y-2">
+                  <a
+                    href="#installation"
+                    class="block w-full bg-neutral-700/50 hover:bg-neutral-600/50 px-3 py-2 rounded text-neutral-300 hover:text-white text-xs transition-colors duration-200"
+                  >
+                    <i class="fas fa-download mr-2 text-primary-400"></i>
+                    安裝指南
+                  </a>
+                  <a
+                    href="#docs-index"
+                    class="block w-full bg-neutral-700/50 hover:bg-neutral-600/50 px-3 py-2 rounded text-neutral-300 hover:text-white text-xs transition-colors duration-200"
+                  >
+                    <i class="fas fa-book mr-2 text-secondary-400"></i>
+                    文檔導覽
+                  </a>
+                  <a
+                    href="#workflows-examples"
+                    class="block w-full bg-neutral-700/50 hover:bg-neutral-600/50 px-3 py-2 rounded text-neutral-300 hover:text-white text-xs transition-colors duration-200"
+                  >
+                    <i class="fas fa-code mr-2 text-accent-400"></i>
+                    工作流程
+                  </a>
+                  <a
+                    href="#faq"
+                    class="block w-full bg-neutral-700/50 hover:bg-neutral-600/50 px-3 py-2 rounded text-neutral-300 hover:text-white text-xs transition-colors duration-200"
+                  >
+                    <i class="fas fa-question-circle mr-2 text-pink-400"></i>
+                    常見問題
+                  </a>
+                </div>
+              </div>
+
+              <!-- Usage Tips -->
+              <div
+                class="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-xl p-6 border border-yellow-500/20"
+              >
+                <h4 class="font-bold text-white mb-4 text-center">
+                  <i class="fas fa-lightbulb mr-2"></i>使用建議
+                </h4>
+
+                <div class="space-y-3 text-xs text-neutral-300">
+                  <div class="flex items-start space-x-2">
+                    <i
+                      class="fas fa-check-circle text-green-400 mt-0.5 flex-shrink-0"
+                    ></i>
+                    <span>下載文檔後上傳至 LLM，詢問特定功能用法</span>
+                  </div>
+                  <div class="flex items-start space-x-2">
+                    <i
+                      class="fas fa-check-circle text-green-400 mt-0.5 flex-shrink-0"
+                    ></i>
+                    <span>複製特定章節內容，進行針對性學習</span>
+                  </div>
+                  <div class="flex items-start space-x-2">
+                    <i
+                      class="fas fa-check-circle text-green-400 mt-0.5 flex-shrink-0"
+                    ></i>
+                    <span>結合實際專案需求，查詢相關最佳實踐</span>
+                  </div>
+                  <div class="flex items-start space-x-2">
+                    <i
+                      class="fas fa-check-circle text-green-400 mt-0.5 flex-shrink-0"
+                    ></i>
+                    <span>遇到問題時，查詢疑難排解章節</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Preview -->
+        <div class="mt-12 glass-effect rounded-xl p-8 observe-fade">
+          <h3 class="text-xl font-bold text-white mb-6 text-center">
+            <i class="fas fa-eye mr-2"></i>內容預覽
+          </h3>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+          >
+            <!-- Preview Card 1 -->
+            <div
+              class="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700"
+            >
+              <h4 class="font-semibold text-primary-400 mb-2 text-sm">
+                🚀 快速開始
+              </h4>
+              <div class="code-block rounded p-3 text-xs font-mono">
+                <div class="text-neutral-400"># 安裝 Claude Code</div>
+                <div class="text-primary-400">
+                  npm install -g @anthropic-ai/claude-code
+                </div>
+                <div class="text-secondary-400"># 啟動互動模式</div>
+                <div class="text-accent-400">claude</div>
+              </div>
+            </div>
+
+            <!-- Preview Card 2 -->
+            <div
+              class="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700"
+            >
+              <h4 class="font-semibold text-secondary-400 mb-2 text-sm">
+                🪝 Hooks 功能
+              </h4>
+              <div class="text-xs text-neutral-300">
+                <p class="mb-2">
+                  使用者定義的 shell 命令，在 Claude Code
+                  生命週期的各個時點自動執行...
+                </p>
+                <div class="text-secondary-400">✓ PreToolUse / PostToolUse</div>
+                <div class="text-secondary-400">✓ 自動格式化與安全檢查</div>
+              </div>
+            </div>
+
+            <!-- Preview Card 3 -->
+            <div
+              class="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700"
+            >
+              <h4 class="font-semibold text-accent-400 mb-2 text-sm">
+                ⚙️ 環境變數
+              </h4>
+              <div class="text-xs text-neutral-300">
+                <p class="mb-2">
+                  完整的環境變數參考，支援企業部署和第三方整合...
+                </p>
+                <div class="text-accent-400">✓ ANTHROPIC_API_KEY</div>
+                <div class="text-accent-400">
+                  ✓ AWS Bedrock / Google Vertex AI
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -3112,15 +3520,88 @@
         }, 5000);
       }
 
+      // 複製全文功能
+      function setupCopyGuideContent() {
+        const copyButton = document.getElementById("copy-guide-content");
+
+        if (copyButton) {
+          copyButton.addEventListener("click", async () => {
+            try {
+              // 顯示載入狀態
+              const originalText = copyButton.innerHTML;
+              copyButton.innerHTML =
+                '<i class="fas fa-spinner fa-spin mr-2"></i>載入中...';
+              copyButton.disabled = true;
+
+              // 獲取文檔內容
+              const response = await fetch("claude-code-zh-tw.md");
+              const content = await response.text();
+
+              // 複製到剪貼簿
+              await navigator.clipboard.writeText(content);
+
+              // 顯示成功狀態
+              copyButton.innerHTML =
+                '<i class="fas fa-check mr-2"></i>複製成功！';
+              copyButton.classList.remove(
+                "bg-accent-600",
+                "hover:bg-accent-700"
+              );
+              copyButton.classList.add("bg-green-600", "hover:bg-green-700");
+
+              // 3秒後恢復原狀
+              setTimeout(() => {
+                copyButton.innerHTML = originalText;
+                copyButton.classList.remove(
+                  "bg-green-600",
+                  "hover:bg-green-700"
+                );
+                copyButton.classList.add(
+                  "bg-accent-600",
+                  "hover:bg-accent-700"
+                );
+                copyButton.disabled = false;
+              }, 3000);
+
+              console.log("📋 Claude Code 官方手冊內容已複製到剪貼簿");
+            } catch (error) {
+              console.error("複製失敗:", error);
+
+              // 顯示錯誤狀態
+              copyButton.innerHTML =
+                '<i class="fas fa-times mr-2"></i>複製失敗';
+              copyButton.classList.remove(
+                "bg-accent-600",
+                "hover:bg-accent-700"
+              );
+              copyButton.classList.add("bg-red-600", "hover:bg-red-700");
+
+              // 3秒後恢復原狀
+              setTimeout(() => {
+                copyButton.innerHTML = originalText;
+                copyButton.classList.remove("bg-red-600", "hover:bg-red-700");
+                copyButton.classList.add(
+                  "bg-accent-600",
+                  "hover:bg-accent-700"
+                );
+                copyButton.disabled = false;
+              }, 3000);
+            }
+          });
+        }
+      }
+
       // 頁面載入完成後初始化
       window.addEventListener("load", () => {
         initAdvancedLogoAnimations();
+        setupCopyGuideContent();
       });
 
       console.log("🎉 Claude Code 展示頁面已載入完成！");
       console.log("💡 技術特點：Mobile-first RWD、Tailwind CSS、微互動設計");
       console.log("🎯 設計重點：WCAG AA 對比度、語意化 HTML、效能最佳化");
       console.log("🚀 互動功能：Intersection Observer、CSS 動畫、隱藏彩蛋");
+      console.log("📚 新增功能：官方功能介紹專區、文檔複製功能");
     </script>
   </body>
 </html>
