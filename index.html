@@ -435,8 +435,8 @@
           inset 0 2px 0 rgba(255, 255, 255, 0.1),
           inset 0 -2px 0 rgba(0, 0, 0, 0.1);
         transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-        position: relative;
         overflow: hidden;
+        animation: logo-breath 6s ease-in-out infinite;
       }
 
       .premium-logo-container::before {
@@ -470,13 +470,13 @@
 
       /* Premium 字母效果 */
       .premium-letter {
-        font-size: 2rem;
-        font-weight: 900;
-        letter-spacing: 0.15em;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
         position: relative;
         display: inline-block;
         cursor: pointer;
-        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         transform-style: preserve-3d;
 
         background: linear-gradient(
@@ -522,16 +522,16 @@
       }
 
       .premium-letter:hover {
-        transform: translateY(-6px) scale(1.2) rotateX(15deg);
-        filter: drop-shadow(0 15px 30px rgba(6, 182, 212, 0.6))
-          drop-shadow(0 0 40px rgba(139, 92, 246, 0.4))
-          drop-shadow(0 0 60px rgba(236, 72, 153, 0.3));
+        transform: translateY(-2px) scale(1.1) rotateX(8deg);
+        filter: drop-shadow(0 8px 16px rgba(6, 182, 212, 0.4))
+          drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))
+          drop-shadow(0 0 30px rgba(236, 72, 153, 0.2));
       }
 
       /* Code 字母效果 */
       .premium-code-letter {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: 1.125rem;
+        font-weight: 600;
         letter-spacing: 0.1em;
         position: relative;
         display: inline-block;
@@ -559,45 +559,45 @@
       }
 
       .premium-code-letter:hover {
-        transform: translateY(-4px) scale(1.15) rotateX(10deg);
-        filter: drop-shadow(0 8px 20px rgba(34, 197, 94, 0.5))
-          drop-shadow(0 0 30px rgba(6, 182, 212, 0.4))
-          drop-shadow(0 0 50px rgba(139, 92, 246, 0.3));
+        transform: translateY(-2px) scale(1.08) rotateX(6deg);
+        filter: drop-shadow(0 4px 12px rgba(34, 197, 94, 0.4))
+          drop-shadow(0 0 20px rgba(6, 182, 212, 0.3))
+          drop-shadow(0 0 30px rgba(139, 92, 246, 0.2));
       }
 
       /* 特殊字母效果 */
       .premium-letter[data-letter="C"]:hover {
-        transform: rotate(-12deg) scale(1.3) translateY(-8px) rotateX(20deg);
+        transform: rotate(-6deg) scale(1.15) translateY(-3px) rotateX(10deg);
         background: linear-gradient(135deg, #06b6d4, #22d3ee, #10b981, #06b6d4);
         animation: premium-gradient 3s ease infinite;
       }
 
       .premium-letter[data-letter="L"]:hover {
-        transform: skew(-20deg) scale(1.25) translateY(-6px) rotateX(15deg);
+        transform: skew(-10deg) scale(1.12) translateY(-2px) rotateX(8deg);
         background: linear-gradient(135deg, #8b5cf6, #a855f7, #ec4899, #8b5cf6);
         animation: premium-gradient 4s ease infinite;
       }
 
       .premium-letter[data-letter="A"]:hover {
-        transform: rotate(12deg) scale(1.35) translateY(-10px) rotateX(25deg);
+        transform: rotate(6deg) scale(1.18) translateY(-3px) rotateX(12deg);
         background: linear-gradient(135deg, #f59e0b, #fbbf24, #ef4444, #f59e0b);
         animation: premium-gradient 3.5s ease infinite;
       }
 
       .premium-letter[data-letter="U"]:hover {
-        transform: translateY(-12px) scale(1.3) rotateX(20deg);
+        transform: translateY(-3px) scale(1.15) rotateX(10deg);
         background: linear-gradient(135deg, #10b981, #22c55e, #06b6d4, #10b981);
         animation: premium-gradient 4.5s ease infinite;
       }
 
       .premium-letter[data-letter="D"]:hover {
-        transform: skew(20deg) scale(1.25) translateY(-6px) rotateX(15deg);
+        transform: skew(10deg) scale(1.12) translateY(-2px) rotateX(8deg);
         background: linear-gradient(135deg, #ec4899, #f472b6, #8b5cf6, #ec4899);
         animation: premium-gradient 3.8s ease infinite;
       }
 
       .premium-letter[data-letter="E"]:hover {
-        transform: rotate(-10deg) scale(1.3) translateY(-8px) rotateX(18deg);
+        transform: rotate(-5deg) scale(1.15) translateY(-2px) rotateX(9deg);
         background: linear-gradient(135deg, #ef4444, #f87171, #f59e0b, #ef4444);
         animation: premium-gradient 4.2s ease infinite;
       }
@@ -680,6 +680,47 @@
         75% {
           transform: scale(1.1) rotate(-5deg);
           filter: hue-rotate(270deg);
+        }
+      }
+
+      /* Logo 呼吸動畫 */
+      @keyframes logo-breath {
+        0%, 100% {
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+            0 0 60px rgba(6, 182, 212, 0.15);
+        }
+        50% {
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),
+            0 0 80px rgba(6, 182, 212, 0.25),
+            0 0 120px rgba(139, 92, 246, 0.1);
+        }
+      }
+
+      /* 隱藏微光動畫 */
+      @keyframes micro-sparkle {
+        0%, 100% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      }
+
+      /* 神秘光暈動畫 */
+      @keyframes mystic-glow {
+        0%, 100% {
+          opacity: 0.3;
+          transform: rotate(0deg) scale(1);
+        }
+        33% {
+          opacity: 0.6;
+          transform: rotate(120deg) scale(1.1);
+        }
+        66% {
+          opacity: 0.4;
+          transform: rotate(240deg) scale(0.9);
         }
       }
     </style>
@@ -826,20 +867,25 @@
               ></div>
               <!-- 隱藏微光效果 -->
               <div
-                class="absolute top-1/2 left-0 w-0.25 h-0.25 bg-secondary-300 rounded-full animate-pulse opacity-50"
-                style="animation-delay: 0.8s; transform: translateX(-25%)"
+                class="absolute top-1/4 left-1/4 w-1 h-1 bg-secondary-300 rounded-full opacity-0"
+                style="animation: micro-sparkle 3s ease-in-out infinite; animation-delay: 1s"
               ></div>
               <div
-                class="absolute top-1/2 right-0 w-0.25 h-0.25 bg-accent-300 rounded-full animate-pulse opacity-50"
-                style="animation-delay: 1s; transform: translateX(25%)"
+                class="absolute top-3/4 right-1/4 w-1 h-1 bg-accent-300 rounded-full opacity-0"
+                style="animation: micro-sparkle 3s ease-in-out infinite; animation-delay: 2s"
               ></div>
               <div
-                class="absolute top-0 left-1/2 w-0.25 h-0.25 bg-primary-300 rounded-full animate-pulse opacity-50"
-                style="animation-delay: 1.2s; transform: translateY(-25%)"
+                class="absolute top-1/2 left-1/8 w-0.5 h-0.5 bg-primary-300 rounded-full opacity-0"
+                style="animation: micro-sparkle 4s ease-in-out infinite; animation-delay: 1.5s"
               ></div>
               <div
-                class="absolute bottom-0 left-1/2 w-0.25 h-0.25 bg-secondary-300 rounded-full animate-pulse opacity-50"
-                style="animation-delay: 1.4s; transform: translateY(25%)"
+                class="absolute bottom-1/4 right-1/8 w-0.5 h-0.5 bg-secondary-300 rounded-full opacity-0"
+                style="animation: micro-sparkle 4s ease-in-out infinite; animation-delay: 2.5s"
+              ></div>
+              <!-- 神秘光暈 -->
+              <div
+                class="absolute inset-0 rounded-full border border-primary-400/20 opacity-0"
+                style="animation: mystic-glow 8s ease-in-out infinite; animation-delay: 0.5s"
               ></div>
             </div>
           </div>
