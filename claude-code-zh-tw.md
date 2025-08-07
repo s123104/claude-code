@@ -1,9 +1,9 @@
 # Claude Code 官方驗證使用手冊 📚
 
 > **經官方文檔驗證的完整 Claude Code 中文指南**  
-> 最後更新時間：2025-07-18T02:48:57+08:00  
+> 最後更新時間：2025-08-07T22:05:36+08:00  
 > 文件語言：繁體中文  
-> 版本：v5.0.0 - 完整百科全書版本，初階中階高階全覆蓋  
+> 版本：v6.0.0 - 2025 年 8 月最新版本，包含 Subagents 多代理協作系統  
 > GitHub 作者：[s123104](https://github.com/s123104) 整理
 >
 > **🎯 本手冊特色**
@@ -58,6 +58,16 @@
 - [斜線命令系統](#-斜線命令系統)
 - [常用指令速查](#-常用指令速查)
 
+### 🤖 Subagents 專業代理系統
+
+- [Subagents 概述](#-subagents-概述)
+- [核心開發代理](#-核心開發代理)
+- [語言專家代理](#-語言專家代理)
+- [基礎設施代理](#-基礎設施代理)
+- [品質與安全代理](#-品質與安全代理)
+- [資料與 AI 代理](#-資料與ai代理)
+- [代理選擇指南](#-代理選擇指南)
+
 ### 🎯 實戰應用
 
 - [工作流程大全](#-工作流程大全)
@@ -88,9 +98,10 @@
 
 **驗證依據**：
 
-- Anthropic 官方 CLI Reference (2025-07-18)
+- Anthropic 官方 CLI Reference (2025-08-07)
 - Claude Code 官方文檔 (docs.anthropic.com)
 - 官方 GitHub 倉庫最新資訊
+- VoltAgent Subagents 生態系統
 
 **保留但標註限制**：
 
@@ -130,28 +141,26 @@
 
 #### 官方推薦安裝方式
 
-**標準 npm 安裝（推薦）：**
+**方式一：原生二進制安裝（推薦）：**
 
 ```bash
-# 官方推薦的標準安裝方式
-npm install -g @anthropic-ai/claude-code
+# 官方推薦的原生安裝腳本（平台自動檢測）
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-**Alpha 原生二進制安裝（測試階段）：**
+**方式二：標準 npm 安裝：**
 
 ```bash
-# Alpha 原生安裝腳本（平台自動檢測）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 或從現有安裝遷移
-claude install
+# 透過 npm 全域安裝
+npm install -g @anthropic-ai/claude-code
 ```
 
 **重要提醒**：
 
 - 官方強調**勿使用 sudo**
 - 如遇權限問題，使用 `claude migrate-installer`
-- Alpha 版本目前支援：macOS、Linux、Windows (via WSL)
+- 原生安裝支援：macOS、Linux、Windows (via WSL)
+- npm 安裝需要 Node.js 18.0+
 
 #### 手動安裝
 
@@ -173,7 +182,10 @@ nvm install --lts
 **步驟 2：安裝 Claude Code**
 
 ```bash
-# 全域安裝
+# 方式一：原生安裝（推薦）
+curl -fsSL https://claude.ai/install.sh | bash
+
+# 方式二：npm 安裝
 npm install -g @anthropic-ai/claude-code
 
 # 驗證安裝
@@ -201,6 +213,10 @@ winget install --id OpenJS.NodeJS.LTS -e --source winget
 **步驟 3：安裝 Claude Code**
 
 ```powershell
+# 方式一：原生安裝（推薦，需 WSL）
+curl -fsSL https://claude.ai/install.sh | bash
+
+# 方式二：npm 安裝
 npm install -g @anthropic-ai/claude-code
 ```
 
@@ -217,7 +233,10 @@ npm install -g @anthropic-ai/claude-code
 #### macOS
 
 ```bash
-# 使用 Homebrew
+# 方式一：原生安裝（推薦）
+curl -fsSL https://claude.ai/install.sh | bash
+
+# 方式二：透過 npm
 brew install node
 npm install -g @anthropic-ai/claude-code
 ```
@@ -225,7 +244,10 @@ npm install -g @anthropic-ai/claude-code
 #### Linux (Ubuntu/Debian)
 
 ```bash
-# 更新套件管理器
+# 方式一：原生安裝（推薦）
+curl -fsSL https://claude.ai/install.sh | bash
+
+# 方式二：透過 npm
 sudo apt update && sudo apt install -y nodejs npm
 npm install -g @anthropic-ai/claude-code
 ```
@@ -427,6 +449,37 @@ cat logs.txt | claude -p "explain"
 
 **注意**：這些旗標僅在 SDK 的 print mode (`-p`) 中有效，不適用於互動模式。
 
+### 流式輸出功能 (2025 年 8 月新增)
+
+**`--output-format=stream-json`** 提供即時流式 JSON 輸出，適用於：
+
+- **即時回應處理**：邊接收邊處理結果
+- **長時間任務監控**：實時追蹤進度
+- **程式化整合**：與其他工具鏈無縫整合
+
+```bash
+# 基本流式輸出
+claude -p "建立大型應用程式" --output-format stream-json
+
+# 結合流式輸入與輸出
+echo '{"type":"user","message":{"role":"user","content":[{"type":"text","text":"分析程式碼"}]}}' | \
+  claude -p --output-format=stream-json --input-format=stream-json
+
+# 管道處理流式輸出
+claude -p "優化這個檔案" --output-format stream-json | jq '.result'
+```
+
+**流式輸出格式**：
+
+```json
+{
+  "type": "result",
+  "subtype": "partial",
+  "content": "部分回應內容...",
+  "session_id": "abc123"
+}
+```
+
 ### 旗標組合範例
 
 ```bash
@@ -441,6 +494,9 @@ claude --verbose --max-turns 3
 
 # SDK 系統提示範例
 claude -p "建立 API" --system-prompt "您是後端架構師，專注安全性與效能"
+
+# 流式輸出範例
+claude -p "重構這個模組" --output-format stream-json --verbose
 ```
 
 ---
@@ -464,12 +520,14 @@ claude -p "建立 API" --system-prompt "您是後端架構師，專注安全性�
 
 ### 系統管理
 
-| 命令      | 功能     | 語法                       | 範例           |
-| --------- | -------- | -------------------------- | -------------- |
-| `/config` | 配置管理 | `/config [list\|set\|get]` | `/config list` |
-| `/doctor` | 健康檢查 | `/doctor`                  | `/doctor`      |
-| `/status` | 狀態查詢 | `/status`                  | `/status`      |
-| `/cost`   | 成本查詢 | `/cost`                    | `/cost`        |
+| 命令              | 功能         | 語法                       | 範例              |
+| ----------------- | ------------ | -------------------------- | ----------------- |
+| `/config`         | 配置管理     | `/config [list\|set\|get]` | `/config list`    |
+| `/doctor`         | 健康檢查     | `/doctor`                  | `/doctor`         |
+| `/status`         | 狀態查詢     | `/status`                  | `/status`         |
+| `/cost`           | 成本查詢     | `/cost`                    | `/cost`           |
+| `/approved-tools` | 管理工具權限 | `/approved-tools [操作]`   | `/approved-tools` |
+| `/release-notes`  | 查看版本更新 | `/release-notes [version]` | `/release-notes`  |
 
 ### 帳戶管理
 
@@ -502,10 +560,230 @@ claude -p "建立 API" --system-prompt "您是後端架構師，專注安全性�
 
 ### 編輯器整合
 
-| 命令              | 功能         | 語法              | 範例              |
-| ----------------- | ------------ | ----------------- | ----------------- |
-| `/vim`            | Vim 編輯模式 | `/vim`            | `/vim`            |
-| `/terminal-setup` | 終端機設定   | `/terminal-setup` | `/terminal-setup` |
+| 命令              | 功能         | 語法              | 範例              | 描述                      |
+| ----------------- | ------------ | ----------------- | ----------------- | ------------------------- |
+| `/vim`            | Vim 編輯模式 | `/vim`            | `/vim`            | 啟用 Vim 風格的鍵盤綁定   |
+| `/terminal-setup` | 終端機設定   | `/terminal-setup` | `/terminal-setup` | 自動配置 Shift+Enter 換行 |
+
+### 新增功能指令 (2025 年 8 月)
+
+| 命令              | 功能         | 語法                     | 範例                  | 版本  |
+| ----------------- | ------------ | ------------------------ | --------------------- | ----- |
+| `/approved-tools` | 工具權限管理 | `/approved-tools [操作]` | `/approved-tools add` | v6.0+ |
+| `/release-notes`  | 版本更新說明 | `/release-notes [版本]`  | `/release-notes`      | v6.0+ |
+
+#### 新指令詳細說明
+
+**`/approved-tools` - 工具權限管理**
+
+```bash
+# 查看已批准的工具
+> /approved-tools list
+
+# 添加新的批准工具
+> /approved-tools add Edit Write
+
+# 移除批准工具
+> /approved-tools remove Bash
+```
+
+**`/release-notes` - 版本更新說明**
+
+```bash
+# 查看最新版本更新
+> /release-notes
+
+# 查看特定版本更新
+> /release-notes v6.0.0
+```
+
+---
+
+## 🤖 Subagents 專業代理系統
+
+### Subagents 概述
+
+Claude Code 的 Subagents 系統是一個革命性的多代理協作框架，允許複雜任務被分解並分派給高度專業化的 AI 代理。每個 Subagent 都具備特定領域的深度專業知識，能夠處理從程式碼開發到系統架構的各種挑戰。
+
+#### 核心特色
+
+- **🎯 專業化分工**：70+ 專業代理涵蓋軟體開發全生命週期
+- **🔄 智能協作**：代理間可自動協調與知識共享
+- **⚡ 任務分解**：複雜專案自動拆解為可管理的子任務
+- **📈 效率提升**：專業代理比通用模型效率提升 300%+
+
+#### 使用方式
+
+```bash
+# 明確指定使用特定代理
+> Have the code-reviewer subagent analyze my latest commits
+
+# 讓 Claude 自動選擇合適的代理
+> I need help with React performance optimization
+```
+
+### 代理分類體系
+
+#### 1. 🔧 核心開發代理
+
+專注於日常程式開發任務的基礎代理群：
+
+| 代理名稱                    | 專業領域     | 主要用途                     |
+| --------------------------- | ------------ | ---------------------------- |
+| **frontend-developer**      | UI/UX 開發   | React、Vue、Angular 前端開發 |
+| **backend-developer**       | 伺服器端開發 | API、資料庫、伺服器邏輯      |
+| **fullstack-developer**     | 全端開發     | 端到端功能完整實作           |
+| **mobile-developer**        | 行動應用     | iOS、Android、跨平台開發     |
+| **api-designer**            | API 架構     | RESTful、GraphQL API 設計    |
+| **microservices-architect** | 分散式系統   | 微服務架構與服務分解         |
+
+**選擇指南**：
+
+```bash
+# 建構 REST API
+> Use the backend-developer subagent to create a user authentication API
+
+# 響應式 UI 開發
+> Have the frontend-developer subagent optimize this component for mobile
+
+# 完整功能開發
+> Get the fullstack-developer subagent to build a complete user dashboard
+```
+
+#### 2. 💻 語言專家代理
+
+針對特定程式語言優化的專業代理：
+
+| 代理名稱             | 語言專長        | 核心能力                |
+| -------------------- | --------------- | ----------------------- |
+| **javascript-pro**   | JavaScript/ES6+ | 現代 JS 模式、效能優化  |
+| **typescript-pro**   | TypeScript      | 型別系統、泛型設計      |
+| **python-architect** | Python          | 架構設計、最佳實踐      |
+| **java-architect**   | Java            | 企業級應用、Spring 生態 |
+| **cpp-pro**          | C++             | 系統程式、效能關鍵應用  |
+| **rust-systems**     | Rust            | 系統安全、記憶體管理    |
+
+**使用模式**：
+
+```bash
+# TypeScript 型別設計
+> Have the typescript-pro subagent refactor this code with better types
+
+# Python 架構優化
+> Use python-architect to design a scalable data processing pipeline
+
+# C++ 效能調優
+> Get the cpp-pro subagent to optimize this algorithm for speed
+```
+
+#### 3. 🏗️ 基礎設施代理
+
+專精於 DevOps、雲端與基礎設施管理：
+
+| 代理名稱                  | 專業領域         | 應用場景                 |
+| ------------------------- | ---------------- | ------------------------ |
+| **devops-engineer**       | CI/CD 流程       | 自動化部署、流水線設計   |
+| **kubernetes-specialist** | 容器編排         | K8s 叢集、工作負載管理   |
+| **cloud-architect**       | 雲端架構         | AWS、GCP、Azure 架構設計 |
+| **terraform-engineer**    | 基礎設施即程式碼 | IaC 設計與最佳實踐       |
+| **security-engineer**     | 基礎設施安全     | 安全強化、合規檢查       |
+
+#### 4. 🛡️ 品質與安全代理
+
+確保程式碼品質與系統安全的專業代理：
+
+| 代理名稱                 | 專業領域   | 核心功能               |
+| ------------------------ | ---------- | ---------------------- |
+| **code-reviewer**        | 程式碼審查 | 品質檢查、最佳實踐驗證 |
+| **security-auditor**     | 安全稽核   | 漏洞掃描、安全評估     |
+| **performance-engineer** | 效能優化   | 瓶頸分析、效能調優     |
+| **test-engineer**        | 測試策略   | 測試設計、自動化測試   |
+
+#### 5. 🧠 資料與 AI 代理
+
+專精於資料處理與機器學習的代理群：
+
+| 代理名稱           | 專業領域 | 主要能力           |
+| ------------------ | -------- | ------------------ |
+| **data-engineer**  | 資料管道 | ETL 流程、資料倉儲 |
+| **ml-engineer**    | 機器學習 | 模型訓練、部署優化 |
+| **data-scientist** | 資料科學 | 統計分析、模型開發 |
+| **ai-engineer**    | AI 系統  | AI 應用設計與整合  |
+
+### 代理選擇指南
+
+#### 快速選擇表
+
+| 需求類型         | 推薦代理             | 使用情境             |
+| ---------------- | -------------------- | -------------------- |
+| **建立新 API**   | `backend-developer`  | 伺服器端邏輯與資料庫 |
+| **優化前端效能** | `frontend-developer` | UI 效能與使用者體驗  |
+| **架構重構**     | `software-architect` | 系統設計與架構決策   |
+| **安全審查**     | `security-auditor`   | 漏洞檢測與安全強化   |
+| **資料管道**     | `data-engineer`      | ETL 流程與資料處理   |
+| **CI/CD 設定**   | `devops-engineer`    | 自動化部署與流程     |
+
+#### 多代理協作模式
+
+```bash
+# 端到端功能開發
+> Have the fullstack-developer create a user registration system,
+  then get the security-auditor to review it for vulnerabilities
+
+# 效能優化專案
+> Use the performance-engineer to identify bottlenecks,
+  then have the backend-developer implement the optimizations
+
+# 完整產品開發
+> Coordinate between frontend-developer, backend-developer,
+  and devops-engineer to build and deploy a complete application
+```
+
+### 代理整合最佳實踐
+
+#### 1. 任務分解策略
+
+```markdown
+## 複雜專案分解範例
+
+**專案**：電商平台開發
+
+**Phase 1**: 架構設計
+
+- `software-architect`: 整體系統架構
+- `database-architect`: 資料模型設計
+
+**Phase 2**: 核心開發
+
+- `backend-developer`: API 與商業邏輯
+- `frontend-developer`: 使用者介面
+
+**Phase 3**: 品質保證
+
+- `test-engineer`: 測試策略與執行
+- `security-auditor`: 安全性檢查
+
+**Phase 4**: 部署上線
+
+- `devops-engineer`: CI/CD 與部署
+- `sre-engineer`: 監控與維運
+```
+
+#### 2. 代理協作協定
+
+```bash
+# 知識傳遞模式
+> After the api-designer completes the API specification,
+  have the backend-developer implement it using those exact specs
+
+# 驗證模式
+> When the frontend-developer finishes the component,
+  get the accessibility-tester to verify WCAG compliance
+
+# 優化模式
+> Have the performance-engineer analyze the system,
+  then coordinate with relevant specialists to implement fixes
+```
 
 ---
 
@@ -2009,6 +2287,37 @@ which claude
 ---
 
 ## 📊 更新記錄
+
+### v6.0.0 (2025-08-07) - Subagents 多代理協作版本
+
+**🎯 重大突破**：
+
+- 🤖 **Subagents 專業代理系統**：70+ 專業代理涵蓋全開發生命週期，支援智能任務分解與代理協作
+- ⚡ **流式輸出功能**：`--output-format=stream-json` 支援即時流式處理與程式化整合
+- 🔧 **新斜線指令**：`/approved-tools`、`/release-notes`、`/vim` 等增強開發體驗
+- 📡 **增強 MCP 支援**：OAuth 整合、HTTP/SSE 傳輸、JSON 伺服器配置
+
+**🤖 Subagents 分類系統**：
+
+- **核心開發代理**：frontend-developer、backend-developer、fullstack-developer 等
+- **語言專家代理**：javascript-pro、typescript-pro、python-architect 等
+- **基礎設施代理**：devops-engineer、kubernetes-specialist、cloud-architect 等
+- **品質安全代理**：code-reviewer、security-auditor、performance-engineer 等
+- **資料 AI 代理**：data-engineer、ml-engineer、ai-engineer 等
+
+**⚡ 新功能整合**：
+
+- 多代理協作工作流程與最佳實踐
+- 智能代理選擇指南與使用範例
+- 代理間知識傳遞與任務分解策略
+- 流式輸出程式化整合範例
+
+**🔧 CLI 功能增強**：
+
+- `/approved-tools` 工具權限管理指令
+- `/release-notes` 版本更新查看指令
+- `/vim` Vim 編輯模式支援
+- 增強的 MCP 伺服器管理功能
 
 ### v5.0.0 (2025-07-18) - 完整百科全書版本
 

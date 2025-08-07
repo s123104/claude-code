@@ -309,83 +309,40 @@ start.bat
 **如果您已經在 WSL 或 Linux 環境中，可以直接使用：**
 
 ```bash
-# 方式一：直接執行 (推薦)
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
+# 方式一：官方原生安裝（推薦）
+curl -fsSL https://claude.ai/install.sh | bash
 
-# 方式二：快速模式（跳過互動提示）
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
-
-# 方式三：下載後執行
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-chmod +x start.sh
-./start.sh
+# 方式二：透過 npm 安裝
+npm install -g @anthropic-ai/claude-code
 ```
 
-#### 🛠️ 腳本功能特色 v3.5.3
+#### ✨ 安裝特色
 
-**核心功能升級：**
+**官方安裝優勢：**
 
-- ⚡ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
-- 🍎 **Bash 版本檢測升級**：自動檢測 Bash 版本並升級至 4.0+ (macOS Homebrew / Linux 套件管理器)
-- 🧠 **Homebrew 版本優先**：macOS 上優先使用 Homebrew 安裝的 shell 版本檢測
-- 🚀 **快速模式支援**：使用 `--fast` 參數跳過所有互動提示，自動選擇最佳選項
-- ✅ **ShellCheck 零警告**：通過 ShellCheck v0.10.0 靜態分析，符合 2025 Shell 最佳實踐
-- 🔧 **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並進行適配
-- 📦 **Claude Code CLI 狀態檢測**：智能檢測已安裝版本並提供更新建議
-- 🔥 **強化 npm/nvm 衝突檢測**：多 .npmrc 檔案檢測，支援 npm 8.0+ 語法
-- 🛠️ **自動執行 delete-prefix**：完整解決 macOS zsh 問題，LTS 版本優先修復
+- 🚀 **原生二進制**：更快的啟動速度，無需 Node.js 依賴
+- 🔧 **自動平台檢測**：支援 macOS、Linux、Windows (WSL)
+- 📦 **自動更新**：內建版本管理和更新機制
+- 🛡️ **安全性**：官方簽名和驗證
+- ⚡ **效能優化**：針對各平台優化的執行檔
 
-**品質保證系統：**
+**系統需求：**
 
-- 🔍 **嚴格模式**：`set -euo pipefail` 確保腳本在遇到錯誤時立即停止
-- 📝 **完整日誌系統**：彩色輸出與詳細日誌，保存至 `/tmp/claude_setup_*.log`
-- 🎯 **版本比較邏輯**：優化的版本號比較算法，準確判斷升級需求
-- 🛡️ **錯誤處理機制**：完善的錯誤恢復與使用者友好的錯誤提示
+- 🖥️ **支援平台**：macOS 10.15+, Linux (Ubuntu 20.04+), Windows 10+ (WSL)
+- 🌐 **網路連線**：需要網路存取以下載安裝檔案
+- 💾 **磁碟空間**：至少 100MB 可用空間
 
-**跨平台支援：**
-
-- 🍎 **macOS 整合**：完整支援 Homebrew、zsh 環境優先、Apple Silicon (M1/M2)
-- 🐧 **Linux 發行版**：支援 Ubuntu、Debian、CentOS、Arch Linux 等主流發行版
-- 🔧 **WSL2 優化**：針對 WSL2 環境特殊優化，避免 Windows 路徑汙染
-
-#### 🔧 進階功能
-
-**錯誤處理與日誌系統：**
-
-- 📝 **完整日誌記錄**：自動保存至 `/tmp/claude_setup_YYYYMMDD_HHMMSS.log`
-- 🎨 **彩色輸出**：使用顏色區分錯誤、警告、成功、資訊訊息
-- 🔄 **錯誤恢復**：自動重試失敗的安裝步驟
-- 📋 **詳細診斷**：提供具體的錯誤原因和解決建議
-
-**npm/nvm 衝突自動修復（v3.5.3 強化）：**
-
-- 🔍 **多層檢測**：檢測多個 .npmrc 檔案位置，支援 npm 8.0+ 語法
-- 💾 **安全備份**：修復前自動備份原始配置文件
-- ⚡ **自動執行**：執行 `nvm use --delete-prefix` 指令解決 nvm 衝突
-- 🛠️ **多重修復**：nvm delete-prefix + 手動清理 + 環境變數處理
-- 🎯 **macOS 優化**：專門解決 macOS zsh 環境中的常見 nvm 問題
-- 🔧 **LTS 版本優先**：優先嘗試 LTS 版本進行修復
-
-**安全性與穩定性：**
-
-- 🔐 **管理員權限檢查**：Windows 端需要管理員權限
-- 🛡️ **路徑污染防護**：自動檢測並清理 Windows 路徑汙染
-- 📦 **依賴版本鎖定**：使用指定版本避免相容性問題
-- 🔍 **多層驗證**：每個安裝步驟都有驗證機制
-
-#### 🚀 使用範例
+#### 📋 安裝後驗證
 
 ```bash
-# 方式一：直接執行
-curl -sSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
-
-# 方式二：本地執行
-git clone https://github.com/s123104/claude-code.git
-cd claude-code
-./start.sh
-
-# 執行後檢查
+# 檢查安裝狀態
 claude --version
+
+# 執行健康檢查
+claude doctor
+
+# 測試基本功能
+claude -p "Hello, Claude Code!"
 npm list -g @anthropic-ai/claude-code
 ```
 
