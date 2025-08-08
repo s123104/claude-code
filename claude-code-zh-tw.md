@@ -300,7 +300,9 @@ claude migrate-installer
 
 ```bash
 # 首次使用建議透過網頁認證
-claude  # 會自動開啟瀏覽器登入頁面
+claude                   # 自動開啟瀏覽器登入頁面
+claude auth login        # 顯式登入指令
+claude auth status       # 檢查登入狀態
 
 # 手動前往：https://console.anthropic.com/login
 ```
@@ -2283,6 +2285,17 @@ which claude
 - [Discord 社群](https://discord.gg/anthropic)
 - [GitHub 討論區](https://github.com/anthropics/claude-code/discussions)
 - [問題回報](https://github.com/anthropics/claude-code/issues)
+
+### 本庫文件索引
+
+- [docs/README.md](docs/README.md) — 文檔索引與快速參考
+- [docs/cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md) — 綜合代理主控手冊（起點）
+- [docs/claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) — 基礎 API 與 CLI 指南
+- [docs/awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) — 社群最佳實踐與 Hooks
+- [docs/superclaude-zh-tw.md](docs/superclaude-zh-tw.md) — 高階旗標系統與進階工作流
+- [docs/claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) — 用量監控、安全與部署
+- [docs/claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) — Web UI 與 PWA 介面
+- [docs/bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) — 效能優化與 B+Tree 策略
 
 ---
 
