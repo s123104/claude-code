@@ -5,14 +5,14 @@
   
   **🚀 完整的 Claude Code 與 Cursor AI 整合說明書集合**
   
-  [![Version](https://img.shields.io/badge/Version-3.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
+  [![Version](https://img.shields.io/badge/Version-3.5.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-  [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2025.07.15-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
+  [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2025.08.08-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
   [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
   [![WSL](https://img.shields.io/badge/WSL-Auto%20Setup-orange.svg)](wsl_claude_code_setup.sh)
   
-  > 最後更新時間：2025-07-18T23:45:00+08:00  
+  > 最後更新時間：2025-08-08T00:00:00+08:00  
   > 文件語言：繁體中文  
   > 專案維護者：s123104
 </div>
@@ -120,7 +120,7 @@ claude "幫我分析這個專案的架構"
 claude --help
 ```
 
-_最後更新：2025-07-18T23:45:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
@@ -566,10 +566,10 @@ claude config set security.session_timeout 3600
 
 ### 🔧 進階功能
 
-- **MCP 多代理協作**：支援多個 AI 代理同時協作
+- **MCP 多代理協作**：支援多個 AI 代理同時協作（Subagents 分類與協作）
 - **專案記憶體管理**：透過 CLAUDE.md 管理專案記憶
 - **自訂 Hooks**：在開發流程中整合自訂腳本
-- **Slash Commands**：快速執行常用指令
+- **Slash Commands**：快速執行常用指令（新增：`/approved-tools`、`/release-notes`）
 
 ### 📊 監控與管理
 
@@ -869,7 +869,7 @@ claude --mcp-debug       # MCP 除錯
 **6. 工作流程與實戰範例**
 
 - 🔄 **Sequential-Thinking 標準流程**：4 階段執行模式
-- 🤖 **MCP 多代理協作**：外部工具整合
+- 🤖 **MCP 多代理協作**：外部工具整合與 Subagents 任務分解
 - 🔍 **錯誤修復與自動診斷**：智慧診斷系統
 - 🖥️ **Web UI 與遠端管理**：PWA 支援
 
@@ -1153,7 +1153,7 @@ Claude Code 中文文件整合專案致力於為華語地區的開發者提供�
 
 ---
 
-_最後更新：2025-07-18T23:45:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
 
 ---
 
