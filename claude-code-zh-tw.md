@@ -1,7 +1,7 @@
 # Claude Code 官方驗證使用手冊 📚
 
 > **經官方文檔驗證的完整 Claude Code 中文指南**  
-> 最後更新時間：2025-08-07T22:05:36+08:00  
+> 最後更新時間：2025-08-10T03:04:13+08:00  
 > 文件語言：繁體中文  
 > 版本：v6.0.0 - 2025 年 8 月最新版本，包含 Subagents 多代理協作系統  
 > GitHub 作者：[s123104](https://github.com/s123104) 整理
@@ -360,6 +360,11 @@ cat logs.txt | claude -p "explain"
 - **互動模式**：輸入 `exit` 或按 `Ctrl+C`
 - **非互動模式**：自動退出
 
+#### 背景命令與狀態列
+
+- **背景命令（Ctrl-b）**：在互動模式中按 `Ctrl-b`，可將當前 Bash 指令改為背景執行，Claude 可同時持續工作（適合啟動 dev server、tail logs 等）。
+- **自訂狀態列（/statusline）**：以斜線指令 `/statusline` 將您的終端提示（prompt）整合進 Claude Code 狀態列。
+
 ---
 
 ## 🔍 指令索引
@@ -438,9 +443,11 @@ cat logs.txt | claude -p "explain"
 
 ### 系統設定
 
-| 旗標        | 描述         | 範例                       |
-| ----------- | ------------ | -------------------------- |
-| `--add-dir` | 添加工作目錄 | `--add-dir ../apps ../lib` |
+| 旗標                   | 描述                        | 範例                                 |
+| ---------------------- | --------------------------- | ------------------------------------ |
+| `--add-dir`            | 添加工作目錄                | `--add-dir ../apps ../lib`           |
+| `--settings`           | 從 JSON 檔載入設定          | `--settings ./project-settings.json` |
+| `--system-prompt-file` | 覆寫 print 模式的系統提示檔 | `--system-prompt-file ./sys.md`      |
 
 ### SDK 專用旗標（僅限 Print Mode）
 
@@ -547,9 +554,9 @@ claude -p "重構這個模組" --output-format stream-json --verbose
 
 ### MCP 管理
 
-| 命令   | 功能     | 語法                                | 範例        |
-| ------ | -------- | ----------------------------------- | ----------- |
-| `/mcp` | MCP 管理 | `/mcp [list\|add\|remove\|restart]` | `/mcp list` |
+| 命令   | 功能             | 語法                                | 範例        |
+| ------ | ---------------- | ----------------------------------- | ----------- |
+| `/mcp` | MCP 管理與 OAuth | `/mcp [list\|add\|remove\|restart]` | `/mcp list` |
 
 ### 開發工具
 
@@ -559,13 +566,16 @@ claude -p "重構這個模組" --output-format stream-json --verbose
 | `/compact`     | 壓縮對話    | `/compact [description]` | `/compact "保留核心討論"` |
 | `/bug`         | 問題回報    | `/bug`                   | `/bug`                    |
 | `/pr_comments` | PR 評論查看 | `/pr_comments`           | `/pr_comments`            |
+| `/agents`      | 子代理管理  | `/agents`                | `/agents`                 |
+| `/export`      | 對話匯出    | `/export`                | `/export`                 |
 
 ### 編輯器整合
 
-| 命令              | 功能         | 語法              | 範例              | 描述                      |
-| ----------------- | ------------ | ----------------- | ----------------- | ------------------------- |
-| `/vim`            | Vim 編輯模式 | `/vim`            | `/vim`            | 啟用 Vim 風格的鍵盤綁定   |
-| `/terminal-setup` | 終端機設定   | `/terminal-setup` | `/terminal-setup` | 自動配置 Shift+Enter 換行 |
+| 命令              | 功能                        | 語法              | 範例              | 描述                      |
+| ----------------- | --------------------------- | ----------------- | ----------------- | ------------------------- |
+| `/vim`            | Vim 編輯模式                | `/vim`            | `/vim`            | 啟用 Vim 風格的鍵盤綁定   |
+| `/terminal-setup` | 終端機設定                  | `/terminal-setup` | `/terminal-setup` | 自動配置 Shift+Enter 換行 |
+| `/terminal-setup` | 終端機設定（iTerm2/VSCode） | `/terminal-setup` | `/terminal-setup` | 安裝 Shift+Enter 為換行   |
 
 ### 新增功能指令 (2025 年 8 月)
 
@@ -2153,6 +2163,14 @@ claude -p "部署應用程式" \
   --permission-prompt-tool mcp__permissions__approve
 ```
 
+#### 提示中引用 MCP 資源
+
+在互動或 print 模式中，可直接以 `@server:protocol://path` 引用 MCP 資源，例如：
+
+```bash
+claude -p "請閱讀 @drive:https://docs.example.com/path/to/doc 並摘要重點"
+```
+
 ### 除錯與監控
 
 #### 除錯設定
@@ -2274,6 +2292,11 @@ which claude
 - [CLI 參考文檔](https://docs.anthropic.com/en/docs/claude-code/cli-reference)
 - [GitHub 官方倉庫](https://github.com/anthropics/claude-code)
 
+### 本地鏡像索引（繁中）
+
+- [docs/anthropic-claude-code-zh-tw/README.md](docs/anthropic-claude-code-zh-tw/README.md) — Anthropic 官方文檔（繁中）本地鏡像索引
+  > 來源: https://docs.anthropic.com/zh-TW/docs/claude-code/overview · 抓取時間: 2025-08-09T22:31:55+08:00
+
 ### 學習資源
 
 - [快速入門指南](https://docs.anthropic.com/en/docs/claude-code/quickstart)
@@ -2372,6 +2395,207 @@ which claude
 - 🔗 **交叉引用**：章節間相互連結，便於導航
 - 📋 **表格化資訊**：旗標、命令、設定選項系統性整理
 - 🛡️ **安全性強調**：每個功能都包含安全考量說明
+
+---
+
+### CHANGELOG 新功能摘錄（依版本，來源：GitHub CHANGELOG）
+
+- 1.0.71
+
+  - 背景命令（Ctrl-b）可在背景執行 Bash（維持 Claude 持續工作）
+  - 可自訂狀態列（/statusline）
+
+- 1.0.70
+
+  - 斜線指令參數支援 `@` 提及
+  - 效能：優化大型上下文的訊息渲染效能
+  - Windows：修復原生檔案搜尋、ripgrep 與子代理功能
+
+- 1.0.69
+
+  - 模型：將 Opus 升級至 4.1 版
+
+- 1.0.68
+
+  - /doctor 增強（加入 `CLAUDE.md` 與 MCP 工具上下文）
+  - SDK：`canUseTool` callback 支援工具確認
+  - 新增設定：`disableAllHooks`
+  - 修正部分指令（如 `/pr-comments`）使用錯誤模型名稱
+  - Windows：改善允許/拒絕工具與專案信任權限檢查；修正子程序啟動（解決 pnpm 無檔案錯誤）
+  - 大型倉庫檔案建議效能提升
+
+- 1.0.65（穩定性修復）
+
+  - IDE：修復診斷連線穩定性與錯誤處理
+  - Windows：在缺少 `.bashrc` 的環境修正 shell 初始化
+
+- 1.0.64
+
+  - Agents：支援自訂每個代理所使用的模型
+  - Hooks：JSON 輸出新增 `systemMessage` 欄位（可顯示警告與上下文）
+  - SDK：修正多輪對話使用者輸入追蹤
+  - 檔案搜尋與 `@mention` 建議納入隱藏檔案
+
+- 1.0.63（穩定性修復）
+
+  - Windows：修復檔案搜尋、`@agent` 提及與自訂斜線命令功能
+
+- 1.0.62
+
+  - 自訂代理 `@mention` 與型別提前（typeahead）
+  - Hooks：新增 `SessionStart` 事件
+  - `/add-dir` 目錄路徑型別提前（typeahead）
+
+- 1.0.61
+
+  - 新增 `--settings` 旗標以從 JSON 檔載入設定
+  - IDE（macOS）：支援貼上圖片 ⌘+V
+  - 新增 `CLAUDE_CODE_SHELL_PREFIX`（包裝 Claude 與使用者提供的 shell 命令）
+  - 新增 `CLAUDE_CODE_AUTO_CONNECT_IDE=false`（停用 IDE 自動連線）
+  - Transcript 模式（Ctrl+R）：按 Esc 退出 transcript（不再中斷）
+  - 修正 symlink 設定檔路徑解析、OTEL 組織錯誤回報、Bash 允許工具權限檢查
+
+- 1.0.60
+
+  - 新增 `/agents` 建立自訂子代理（specialized subagents）
+
+- 1.0.59
+
+  - SDK：新增工具確認（`canUseTool`）；支援為子程序指定 `env`
+  - Hooks：暴露 `PermissionDecision`（含 "ask"）；`UserPromptSubmit` 進階 JSON 支援 `additionalContext`
+  - 修正少數情境指定 Opus 仍回退 Sonnet 的問題
+
+- 1.0.58
+
+  - 支援讀取 PDF
+  - Hooks：新增 `CLAUDE_PROJECT_DIR` 環境變數給 hook 命令
+
+- 1.0.57
+
+  - 斜線指令可在命令中指定模型
+  - 改善權限提示內容，協助 Claude 理解允許工具
+  - 修正 Bash 包裝輸出多餘換行
+
+- 1.0.56（Windows/WSL 改善）
+
+  - Windows：在支援 VT mode 的 Node.js 版本啟用 Shift+Tab 模式切換
+  - 修正 WSL IDE 偵測問題
+  - 修正 `awsRefreshHelper` 對 `.aws` 目錄變更未被偵測的問題
+
+- 1.0.55
+
+  - SDK：可擷取錯誤日誌（error logging）
+  - `--system-prompt-file` 支援在 print 模式覆寫系統提示
+  - Windows：修正 Ctrl+Z 當機
+  - 明確標注 Opus 4 與 Sonnet 4 的知識截止
+
+- 1.0.54
+
+  - Hooks：新增 `UserPromptSubmit` 事件；hook 輸入包含 CWD
+  - 自訂斜線指令：frontmatter 新增 `argument-hint`
+  - Windows：OAuth 使用 45454 連接埠並正確組合瀏覽器 URL；模式切換改為 Alt+M；計劃模式修正
+  - Shell：改用記憶體快照以修復檔案相關錯誤
+
+- 1.0.53
+
+  - `@mention` 檔案截斷上限由 100 行提升至 2000 行
+  - 新增 AWS Token 刷新腳本設定：`awsAuthRefresh`（前景，如 `aws sso login`）與 `awsCredentialExport`（背景，STS 類回應）
+
+- 1.0.52
+
+  - 支援 MCP 伺服器 instructions
+
+- 1.0.51
+
+  - 原生 Windows 支援
+  - 透過 `AWS_BEARER_TOKEN_BEDROCK` 提供 Bedrock API key
+  - `--append-system-prompt` 可用於互動模式（不再限 `-p`）
+  - 設定：`/doctor` 可協助識別與修正不合法設定檔
+  - 自動壓縮警告閾值從 60% 提升至 80%
+  - 修正含空白使用者目錄的 shell 快照
+  - OTEL 資源新增 `os.type`、`os.version`、`host.arch`、`wsl.version`
+  - 自訂斜線命令：修正使用者層級子目錄命令
+  - 計劃模式：修正拒絕子任務計劃時的處理
+
+- 1.0.48
+
+  - Bash 工具顯示進度訊息（基於最後 5 行輸出）
+  - MCP 伺服器設定支援變數展開
+  - Hooks：新增 `PreCompact` 事件
+  - Vim 模式新增 `c`、`f/F`、`t/T`
+
+- 1.0.45
+
+  - 重新設計 Search（Grep）工具，新增輸入參數與能力
+  - 停用 Notebook 檔 diff 造成的 1000ms 逾時問題
+  - 設定檔採用原子寫入以避免損毀
+  - Prompt Undo 改為 `Ctrl+_`（避免與 `Ctrl+U` 衝突）
+  - Stop Hooks：修正 `/clear` 後 transcript 路徑與迴圈以工具結束時的觸發
+  - 自訂斜線命令：恢復子目錄命名空間（`.claude/commands/frontend/component.md` → `/frontend:component`）
+
+- 1.0.44
+
+  - 新增 `/export` 指令
+  - MCP：支援 `resource_link` 結果；/mcp 檢視顯示工具註解與標題
+  - `Ctrl+Z` 改為暫停 Claude Code（以 `fg` 回復）；Prompt Undo 改為 `Ctrl+U`
+
+- 1.0.42
+
+  - `/add-dir` 支援 `~` 展開
+
+- 1.0.41
+
+  - Hooks：`Stop` 與 `SubagentStop` 分拆；每個命令可設定逾時
+
+- 1.0.39
+
+  - OTEL：新增 Active Time 指標
+
+- 1.0.35
+
+  - MCP OAuth Authorization Server discovery 支援
+
+- 1.0.33
+
+  - 輸入撤銷：`Ctrl+Z`、Vim `u`
+
+- 1.0.30
+
+  - 自訂斜線指令：支援輸出 bash 結果、`@mention` 檔案、thinking 關鍵字
+
+- 1.0.27
+
+  - 可串流 HTTP MCP 伺服器
+  - 遠端 MCP 伺服器支援 OAuth
+  - MCP 資源可 `@mention`
+  - 新增 `/resume` 指令
+
+- 1.0.23
+
+  - 發佈 TypeScript 與 Python SDK
+
+- 1.0.18
+
+  - 新增 `--add-dir` 旗標
+  - 輸入流式（無須 `-p`）
+  - 新增 `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR`
+  - /mcp 顯示詳細工具清單
+  - MCP SSE 斷線自動重連
+
+- 1.0.10
+
+  - Markdown 表格支援
+
+- 1.0.8
+
+  - Thinking：支援非英文語言觸發
+
+- 1.0.6
+
+  - `@file` 型別提前支援符號連結（symlinks）
+
+- 1.0.1
+  - 新增 `DISABLE_INTERLEAVED_THINKING`（停用交錯思考）
 
 ---
 
