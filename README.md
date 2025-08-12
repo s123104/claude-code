@@ -43,54 +43,34 @@
 
 ## ⚡ 快速開始 (5 分鐘內完成安裝)
 
-### 🐧 Linux/WSL 用戶
-
-**自動安裝腳本 v3.5.3 - 強化 npm/nvm 衝突檢測與修復功能**
+### 🐧 Linux/WSL 用戶（官方推薦）
 
 ```bash
-# 一鍵安裝 (推薦)
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
-
-# 快速模式（跳過互動提示）
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
-
-# 或下載後執行
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-chmod +x start.sh && ./start.sh
+# 安裝 Node.js 18+（依發行版）
+npm install -g @anthropic-ai/claude-code
+claude --version
 ```
 
-### 🍎 macOS 用戶
-
-**完整支援 macOS + zsh 環境**
+### 🍎 macOS 用戶（官方推薦）
 
 ```bash
-# 一鍵安裝 (推薦)
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash
-
-# 快速模式（跳過互動提示）
-curl -fsSL https://raw.githubusercontent.com/s123104/claude-code/master/start.sh | bash -s -- --fast
-
-# 或下載後執行
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-chmod +x start.sh && ./start.sh
+brew install node
+npm install -g @anthropic-ai/claude-code
+claude --version
 ```
 
-**腳本特色 v3.5.3**：
+<!-- 移除舊版自製腳本特色，統一採官方安裝與修復指引 -->
 
-- ✅ **Zsh 優先檢測升級**：macOS 上優先檢測 zsh 5.0+ 版本並支援自動升級
-- ✅ **Bash 版本檢測升級**：自動檢測並升級 Bash 到 4.0+ 版本
-- ✅ **Homebrew 版本優先**：macOS 上優先使用 Homebrew 安裝的 shell 版本
-- ✅ **快速模式優化**：支援 `--fast` 參數跳過互動提示
-- ✅ **ShellCheck 零警告**：通過 ShellCheck 靜態分析，符合 2025 最佳實踐
-- ✅ **智能環境檢測**：自動識別 WSL2/Linux/macOS 環境並適配
-- ✅ **Claude Code CLI 狀態檢測**：智能檢測並更新 Claude Code CLI
-- 🆕 **強化 npm/nvm 衝突檢測**：多 .npmrc 檔案檢測，支援 npm 8.0+ 語法
-- 🆕 **自動執行 delete-prefix**：完整解決 macOS zsh 問題，LTS 版本優先修復
-- 🆕 **多層修復機制**：nvm delete-prefix + 手動清理 + 環境變數處理
+### 🖥️ Windows 用戶（原生，無需 WSL）
 
-### 🖥️ Windows 用戶
+```powershell
+winget install --id OpenJS.NodeJS.LTS -e --source winget
+npm install -g @anthropic-ai/claude-code
+claude --version
 
-> ⚠️ Windows 一鍵安裝腳本維修中，敬請期待！
+# 可選：Git Bash 路徑（部分功能體驗更佳）
+$env:CLAUDE_CODE_GIT_BASH_PATH = "C:\Program Files\Git\bin\bash.exe"
+```
 
 ---
 
@@ -120,7 +100,7 @@ claude "幫我分析這個專案的架構"
 claude --help
 ```
 
-_最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-08-12T00:00:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件_
 
 ---
 
@@ -196,7 +176,7 @@ _最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護
 
 ### 📦 推薦安裝方式
 
-**NPM 官方安裝（推薦）：**
+**官方安裝（推薦）：**
 
 ```bash
 # 全域安裝 Claude Code
@@ -254,12 +234,15 @@ yay -S claude-code
 paru -S claude-code
 ```
 
-#### Windows/WSL
+#### Windows（原生）
 
 ```bash
-# 在 WSL Ubuntu 環境中執行
-sudo apt update && sudo apt install -y nodejs npm
+# 在 PowerShell / CMD 直接安裝
 npm install -g @anthropic-ai/claude-code
+
+# 若曾在 WSL 遇到 npm OS 偵測問題，可於 WSL 內：
+npm config set os linux
+npm install -g @anthropic-ai/claude-code --force --no-os-check
 ```
 
 #### Docker 容器化部署
@@ -272,23 +255,10 @@ docker build -t claude-code .
 docker run -it claude-code
 ```
 
-### 🪟 Windows 用戶快速安裝（推薦）
+### 🪟 Windows 說明
 
-**Windows 用戶可以使用我們的智能安裝腳本：**
-
-```batch
-:: 方式一：批次檔入口點（最簡單）
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.bat
-setup.bat
-
-:: 方式二：PowerShell 主安裝器（功能完整）
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/setup.ps1
-powershell -ExecutionPolicy Bypass -File setup.ps1
-
-:: 方式三：直接啟動（如果已有 WSL）
-curl -O https://raw.githubusercontent.com/s123104/claude-code/master/start.bat
-start.bat
-```
+- 現已支援 Windows 原生安裝（無需 WSL），直接使用 npm 全域安裝。
+- 若你偏好在 WSL 內使用，請在 WSL 內安裝 Node.js 18+，再執行 `npm install -g @anthropic-ai/claude-code`。
 
 **v3.0.0 新功能：**
 
@@ -308,29 +278,20 @@ start.bat
 
 ### 🐧 WSL/Linux 環境安裝
 
-**如果您已經在 WSL 或 Linux 環境中，可以直接使用：**
+**WSL 內若 npm 誤判 OS，可用以下修復：**
 
 ```bash
-# 方式一：官方原生安裝（推薦）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 方式二：透過 npm 安裝
-npm install -g @anthropic-ai/claude-code
+npm config set os linux
+npm install -g @anthropic-ai/claude-code --force --no-os-check
 ```
 
 #### ✨ 安裝特色
 
-**官方安裝優勢：**
-
-- 🚀 **原生二進制**：更快的啟動速度，無需 Node.js 依賴
-- 🔧 **自動平台檢測**：支援 macOS、Linux、Windows (WSL)
-- 📦 **自動更新**：內建版本管理和更新機制
-- 🛡️ **安全性**：官方簽名和驗證
-- ⚡ **效能優化**：針對各平台優化的執行檔
+**官方建議：** 跨平台以 npm 全域安裝；Windows 已支援原生安裝（無需 WSL）。
 
 **系統需求：**
 
-- 🖥️ **支援平台**：macOS 10.15+, Linux (Ubuntu 20.04+), Windows 10+ (WSL)
+- 🖥️ **支援平台**：macOS 10.15+, Linux (Ubuntu 20.04+), Windows 10+/11（原生）
 - 🌐 **網路連線**：需要網路存取以下載安裝檔案
 - 💾 **磁碟空間**：至少 100MB 可用空間
 
@@ -1155,7 +1116,7 @@ Claude Code 中文文件整合專案致力於為華語地區的開發者提供�
 
 ---
 
-_最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護者：s123104_
+_最後更新：2025-08-12T00:00:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件_
 
 ---
 
@@ -1165,14 +1126,11 @@ _最後更新：2025-08-08T00:00:00+08:00 | 語言：繁體中文 | 專案維護
 
 ## 🚀 一鍵安裝全環境說明
 
-> **統一安裝流程說明：**
+> **安裝重點：**
 >
-> - **Windows 用戶**：請優先執行 `setup.bat`，全自動完成 WSL2、Ubuntu、Node.js、Claude Code CLI 等安裝與修復
-> - **Linux/WSL 用戶**：直接執行 `start.sh`，自動完成所有依賴與 CLI 安裝
-> - **macOS 用戶**：使用 Homebrew 安裝 Node.js，然後 npm 全域安裝 Claude Code
-> - **所有腳本均可重複執行**：遇到問題可直接重新執行修復
-> - **詳細日誌與錯誤提示**：請參考 `/tmp/claude_setup_*.log`（Linux/WSL）或 PowerShell 輸出（Windows）
-> - **如需進階自訂**：請參考各腳本的進階參數或官方文檔
+> - 官方建議直接使用 npm 全域安裝（Node.js 18+）
+> - 避免使用 `sudo npm -g`，必要時請改用使用者目錄前綴（見官方 troubleshooting）
+> - Windows 可原生安裝；WSL 僅在需要 Linux 工具鏈時使用
 
 **快速驗證安裝：**
 

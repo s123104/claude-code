@@ -1075,14 +1075,13 @@
             <i class="fab fa-github mr-2"></i>
             GitHub 專案
           </a>
-          <!-- WSL 安裝腳本連結（官方最新版） -->
+          <!-- 官方安裝（npm）入口 -->
           <a
-            href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-            download="start.sh"
+            href="#installation"
             class="border-2 border-secondary-600 hover:bg-secondary-600 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 transform hover:scale-105"
           >
-            <i class="fab fa-linux mr-2"></i>
-            下載 start.sh 執行檔
+            <i class="fas fa-terminal mr-2"></i>
+            查看官方安裝方式（npm）
           </a>
         </div>
       </div>
@@ -1194,11 +1193,10 @@
             快速安裝
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            完整支援 Linux/WSL 和 macOS 一鍵安裝腳本（start.sh），Windows
-            自動安裝腳本維修中，敬請期待！
+            官方安裝：跨平台以 npm 全域安裝；Windows 支援原生（無需 WSL）。
           </p>
           <p class="text-sm text-neutral-400 mt-2 max-w-2xl mx-auto">
-            支援 Linux、WSL、macOS，Windows 請稍後，將於修復後開放
+            依官方文件建議：Node.js 18+，執行 <code>npm install -g @anthropic-ai/claude-code</code>
           </p>
         </div>
 
@@ -1211,123 +1209,20 @@
             </div>
             <div class="space-y-4">
               <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2">
-                  # 方法一：批次檔案執行（推薦）
-                </div>
+                <div class="text-neutral-400 mb-2"># Windows 原生安裝（無需 WSL）</div>
                 <div class="text-primary-400">
-                  # 1. 下載 setup.bat 執行檔<br />
-                  # 2. 以管理員身份執行 setup.bat
+                  winget install --id OpenJS.NodeJS.LTS -e --source winget<br/>
+                  npm install -g @anthropic-ai/claude-code<br/>
+                  claude --version
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2">
-                  # 方法二：PowerShell 腳本
-                </div>
+                <div class="text-neutral-400 mb-2"># 可選：Git Bash 路徑（部分功能更佳）</div>
                 <div class="text-primary-400">
-                  # 1. 下載 setup.ps1 執行檔<br />
-                  # 2. 以管理員身份開啟 PowerShell<br />
-                  # 3. 執行：Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
-                  -Scope CurrentUser<br />
-                  # 4. 執行：.\setup.ps1
+                  $env:CLAUDE_CODE_GIT_BASH_PATH = "C:\\Program Files\\Git\\bin\\bash.exe"
                 </div>
               </div>
-              <!-- Windows 安裝腳本修復中提示 -->
-              <div
-                class="mb-4 p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/20"
-              >
-                <div class="flex items-center mb-2">
-                  <i class="fas fa-tools text-yellow-400 mr-2"></i>
-                  <span class="text-yellow-300 font-medium text-sm"
-                    >Windows 一鍵安裝腳本維修中</span
-                  >
-                </div>
-                <p class="text-xs text-neutral-300">
-                  Windows 自動安裝腳本正在進行優化升級，暫時無法下載。建議使用
-                  WSL 環境執行 Linux 安裝腳本，或手動安裝 Node.js 後使用 npm
-                  安裝。
-                </p>
-              </div>
-
-              <div class="flex flex-wrap gap-2">
-                <button
-                  disabled
-                  class="bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold text-neutral-400 cursor-not-allowed opacity-50"
-                >
-                  <i class="fas fa-tools mr-2"></i>
-                  setup.bat 修復中
-                </button>
-                <button
-                  disabled
-                  class="bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold text-neutral-400 cursor-not-allowed opacity-50"
-                >
-                  <i class="fas fa-tools mr-2"></i>
-                  setup.ps1 修復中
-                </button>
-                <button
-                  disabled
-                  class="bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold text-neutral-400 cursor-not-allowed opacity-50"
-                >
-                  <i class="fas fa-tools mr-2"></i>
-                  start.bat 修復中
-                </button>
-                <a
-                  href="https://github.com/s123104/claude-code/tree/master"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fab fa-github mr-2"></i>
-                  查看所有檔案
-                </a>
-              </div>
-              <div
-                class="mt-4 p-4 bg-gradient-to-r from-primary-500/10 to-primary-600/10 rounded-xl border border-primary-500/20"
-              >
-                <div class="flex items-center mb-3">
-                  <div class="w-2 h-2 bg-primary-400 rounded-full mr-3"></div>
-                  <h5 class="font-semibold text-primary-300 text-sm">
-                    環境特色
-                  </h5>
-                </div>
-                <div class="space-y-2 text-xs text-neutral-300">
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>全自動 WSL2 安裝與配置</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>Ubuntu 20.04 LTS 預裝環境</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>智能系統需求檢測 (TPM 2.0, VT-x/AMD-V)</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>PowerShell 執行政策自動設定</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>路徑轉換與環境變數配置</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-primary-400 flex-shrink-0"
-                    ></i>
-                    <span>完整錯誤處理與日誌記錄</span>
-                  </div>
-                </div>
-              </div>
+              <!-- 省略舊的 WSL/批次腳本特色，統一改為官方 npm 安裝說明 -->
             </div>
           </div>
 
@@ -1338,121 +1233,48 @@
               <h3 class="text-2xl font-semibold">Linux/WSL 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm relative group cursor-pointer hover:bg-neutral-800/50 transition-all duration-300"
-                data-copy="curl -fsSL https://claude.ai/install.sh | bash"
-              >
-                <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 官方安裝（推薦）</div>
                 <div class="text-accent-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
-                </div>
-                <div
-                  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <div
-                    class="bg-neutral-700 rounded px-2 py-1 text-xs text-neutral-300 flex items-center"
-                  >
-                    <i class="fas fa-copy mr-1"></i>
-                    點擊複製
-                  </div>
-                </div>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm relative group cursor-pointer hover:bg-neutral-800/50 transition-all duration-300"
-                data-copy="npm install -g @anthropic-ai/claude-code"
-              >
-                <div class="text-neutral-400 mb-2">
-                  # 快速模式（跳過互動提示）
-                </div>
-                <div class="text-accent-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash -s -- --fast
-                </div>
-                <div
-                  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <div
-                    class="bg-neutral-700 rounded px-2 py-1 text-xs text-neutral-300 flex items-center"
-                  >
-                    <i class="fas fa-copy mr-1"></i>
-                    點擊複製
-                  </div>
+                  npm install -g @anthropic-ai/claude-code<br/>
+                  claude --version
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 下載後執行（推薦）</div>
+                <div class="text-neutral-400 mb-2"># 若在 WSL 內 npm 誤判 OS</div>
                 <div class="text-accent-400">
-                  # 1. 點擊下載按鈕獲取 start.sh<br />
-                  # 2. 在終端執行以下命令<br />
-                  chmod +x start.sh && ./start.sh
+                  npm config set os linux<br/>
+                  npm install -g @anthropic-ai/claude-code --force --no-os-check
                 </div>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  download="start.sh"
-                  class="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 start.sh 執行檔
-                </a>
-                <a
-                  href="https://github.com/s123104/claude-code/blob/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fab fa-github mr-2"></i>
-                  查看原始碼
-                </a>
-              </div>
+              <!-- 移除 start.sh 下載與示例，統一改為 npm 安裝與 WSL 修復指引 -->
               <div
                 class="mt-4 p-4 bg-gradient-to-r from-accent-500/10 to-accent-600/10 rounded-xl border border-accent-500/20"
               >
                 <div class="flex items-center mb-3">
                   <div class="w-2 h-2 bg-accent-400 rounded-full mr-3"></div>
-                  <h5 class="font-semibold text-accent-300 text-sm">
-                    環境特色
-                  </h5>
+                  <h5 class="font-semibold text-accent-300 text-sm">環境特色</h5>
                 </div>
                 <div class="space-y-2 text-xs text-neutral-300">
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-accent-400 flex-shrink-0"
-                    ></i>
-                    <span>自動檢測 bash 4.0+ 版本並升級</span>
+                    <i class="fas fa-check-circle text-accent-400 flex-shrink-0"></i>
+                    <span>跨平台官方安裝（npm）：<code class="bg-accent-500/20 px-2 py-0.5 rounded">npm install -g @anthropic-ai/claude-code</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-accent-400 flex-shrink-0"
-                    ></i>
-                    <span>支援 zsh 5.0+ 檢測與安裝</span>
+                    <i class="fas fa-stethoscope text-accent-400 flex-shrink-0"></i>
+                    <span>健康檢查與診斷：<code class="bg-accent-500/20 px-2 py-0.5 rounded">claude doctor</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-accent-400 flex-shrink-0"
-                    ></i>
-                    <span>智能套件管理器檢測 (apt/yum/dnf/pacman)</span>
+                    <i class="fas fa-toolbox text-accent-400 flex-shrink-0"></i>
+                    <span>WSL 安裝修復：<code class="bg-accent-500/20 px-2 py-0.5 rounded">npm config set os linux</code>、<code class="bg-accent-500/20 px-2 py-0.5 rounded">--no-os-check</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-accent-400 flex-shrink-0"
-                    ></i>
-                    <span>WSL2 環境優化，避免 Windows 路徑汙染</span>
+                    <i class="fas fa-project-diagram text-accent-400 flex-shrink-0"></i>
+                    <span>MCP 管理：<code class="bg-accent-500/20 px-2 py-0.5 rounded">claude mcp add</code> / <code class="bg-accent-500/20 px-2 py-0.5 rounded">claude mcp list</code> / <code class="bg-accent-500/20 px-2 py-0.5 rounded">add-from-claude-desktop</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-accent-400 flex-shrink-0"
-                    ></i>
-                    <span
-                      >完整日誌記錄：<code
-                        class="bg-accent-500/20 px-2 py-1 rounded text-accent-300"
-                        >/tmp/claude_setup_*.log</code
-                      ></span
-                    >
+                    <i class="fas fa-bell text-accent-400 flex-shrink-0"></i>
+                    <span>通知與偏好：<code class="bg-accent-500/20 px-2 py-0.5 rounded">claude config set --global preferredNotifChannel terminal_bell</code>、<code class="bg-accent-500/20 px-2 py-0.5 rounded">/vim</code>、<code class="bg-accent-500/20 px-2 py-0.5 rounded">/config</code></span>
                   </div>
                 </div>
               </div>
@@ -1466,150 +1288,45 @@
               <h3 class="text-2xl font-semibold">macOS 用戶</h3>
             </div>
             <div class="space-y-4">
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm relative group cursor-pointer hover:bg-neutral-800/50 transition-all duration-300"
-                data-copy="curl -fsSL https://claude.ai/install.sh | bash"
-              >
-                <div class="text-neutral-400 mb-2"># 一鍵安裝 (推薦)</div>
+              <div class="code-block rounded-lg p-4 font-mono text-sm">
+                <div class="text-neutral-400 mb-2"># 官方安裝（推薦）</div>
                 <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash
-                </div>
-                <div
-                  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <div
-                    class="bg-neutral-700 rounded px-2 py-1 text-xs text-neutral-300 flex items-center"
-                  >
-                    <i class="fas fa-copy mr-1"></i>
-                    點擊複製
-                  </div>
-                </div>
-              </div>
-              <div
-                class="code-block rounded-lg p-4 font-mono text-sm relative group cursor-pointer hover:bg-neutral-800/50 transition-all duration-300"
-                data-copy="npm install -g @anthropic-ai/claude-code"
-              >
-                <div class="text-neutral-400 mb-2">
-                  # 快速模式（跳過互動提示）
-                </div>
-                <div class="text-secondary-400">
-                  curl -fsSL
-                  https://raw.githubusercontent.com/s123104/claude-code/master/start.sh
-                  | bash -s -- --fast
-                </div>
-                <div
-                  class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <div
-                    class="bg-neutral-700 rounded px-2 py-1 text-xs text-neutral-300 flex items-center"
-                  >
-                    <i class="fas fa-copy mr-1"></i>
-                    點擊複製
-                  </div>
+                  brew install node<br/>
+                  npm install -g @anthropic-ai/claude-code
                 </div>
               </div>
               <div class="code-block rounded-lg p-4 font-mono text-sm">
-                <div class="text-neutral-400 mb-2"># 下載後執行（推薦）</div>
-                <div class="text-secondary-400">
-                  # 1. 點擊下載按鈕獲取 start.sh<br />
-                  # 2. 在終端執行以下命令<br />
-                  chmod +x start.sh && ./start.sh
-                </div>
+                <div class="text-neutral-400 mb-2"># 驗證</div>
+                <div class="text-secondary-400">claude --version</div>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <a
-                  href="https://raw.githubusercontent.com/s123104/claude-code/master/start.sh"
-                  download="start.sh"
-                  class="bg-secondary-600 hover:bg-secondary-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fas fa-download mr-2"></i>
-                  下載 start.sh 執行檔
-                </a>
-                <a
-                  href="https://github.com/s123104/claude-code/blob/master/start.sh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
-                >
-                  <i class="fab fa-github mr-2"></i>
-                  查看原始碼
-                </a>
-              </div>
+              <!-- 移除 start.sh 下載與示例 -->
               <div
                 class="mt-4 p-4 bg-gradient-to-r from-secondary-500/10 to-secondary-600/10 rounded-xl border border-secondary-500/20"
               >
                 <div class="flex items-center mb-3">
                   <div class="w-2 h-2 bg-secondary-400 rounded-full mr-3"></div>
-                  <h5 class="font-semibold text-secondary-300 text-sm">
-                    環境特色 (v3.5.0)
-                  </h5>
+                  <h5 class="font-semibold text-secondary-300 text-sm">環境特色</h5>
                 </div>
                 <div class="space-y-2 text-xs text-neutral-300">
                   <div class="flex items-center space-x-2">
-                    <i class="fas fa-star text-secondary-400 flex-shrink-0"></i>
-                    <span
-                      ><strong>優先檢測 zsh 5.0+ 版本</strong> (步驟 1/3)</span
-                    >
+                    <i class="fas fa-check-circle text-secondary-400 flex-shrink-0"></i>
+                    <span>官方安裝（Homebrew + npm）：<code class="bg-secondary-500/20 px-2 py-0.5 rounded">brew install node</code>，<code class="bg-secondary-500/20 px-2 py-0.5 rounded">npm install -g @anthropic-ai/claude-code</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span>自動檢測 bash 4.0+ 版本 (步驟 2/3)</span>
+                    <i class="fas fa-stethoscope text-secondary-400 flex-shrink-0"></i>
+                    <span>健康檢查與診斷：<code class="bg-secondary-500/20 px-2 py-0.5 rounded">claude doctor</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i class="fas fa-star text-secondary-400 flex-shrink-0"></i>
-                    <span><strong>Homebrew 版本優先</strong>檢測機制</span>
+                    <i class="fas fa-bell text-secondary-400 flex-shrink-0"></i>
+                    <span>通知設定：<code class="bg-secondary-500/20 px-2 py-0.5 rounded">claude config set --global preferredNotifChannel terminal_bell</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span
-                      >自動建立
-                      <code
-                        class="bg-secondary-500/20 px-2 py-1 rounded text-secondary-300"
-                        >~/.zshrc</code
-                      >
-                      配置文件</span
-                    >
+                    <i class="fas fa-sliders-h text-secondary-400 flex-shrink-0"></i>
+                    <span>偏好與鍵位：<code class="bg-secondary-500/20 px-2 py-0.5 rounded">/vim</code>、<code class="bg-secondary-500/20 px-2 py-0.5 rounded">/config</code></span>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-magic text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span><strong>強化 npm/nvm 衝突檢測與修復</strong></span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span>自動執行 delete-prefix 修復 npm 配置</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span>多 .npmrc 檔案檢測與清理</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span>完整支援 macOS 15.5+ 和 Apple Silicon (M1/M2)</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <i
-                      class="fas fa-check-circle text-secondary-400 flex-shrink-0"
-                    ></i>
-                    <span
-                      >完整日誌記錄：<code
-                        class="bg-secondary-500/20 px-2 py-1 rounded text-secondary-300"
-                        >/tmp/claude_setup_*.log</code
-                      ></span
-                    >
+                    <i class="fas fa-project-diagram text-secondary-400 flex-shrink-0"></i>
+                    <span>MCP 管理：<code class="bg-secondary-500/20 px-2 py-0.5 rounded">claude mcp add</code> / <code class="bg-secondary-500/20 px-2 py-0.5 rounded">claude mcp list</code></span>
                   </div>
                 </div>
               </div>
@@ -1618,8 +1335,7 @@
         </div>
         <!-- 更新最後更新時間戳記 -->
         <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-08-08T00:00:00+08:00 | start.sh v3.5.3 - 強化 npm/nvm
-          衝突檢測與修復功能
+          最後更新：2025-08-12T00:00:00+08:00 | 依官方文件統一為 npm 安裝與 Windows 原生方案
         </div>
 
         <!-- Installation Features -->
@@ -1715,7 +1431,7 @@
                     class="inline-flex items-center px-4 py-2 bg-primary-500/20 rounded-full text-primary-400 text-sm font-medium"
                   >
                     <i class="fas fa-terminal mr-2"></i>
-                    setup.bat
+                    npm install -g @anthropic-ai/claude-code
                   </div>
                 </div>
               </div>
@@ -1766,7 +1482,7 @@
                     class="inline-flex items-center px-4 py-2 bg-accent-500/20 rounded-full text-accent-400 text-sm font-medium"
                   >
                     <i class="fas fa-terminal mr-2"></i>
-                    start.sh
+                    npm install -g @anthropic-ai/claude-code
                   </div>
                 </div>
               </div>
@@ -1817,7 +1533,7 @@
                     class="inline-flex items-center px-4 py-2 bg-secondary-500/20 rounded-full text-secondary-400 text-sm font-medium"
                   >
                     <i class="fas fa-terminal mr-2"></i>
-                    start.sh
+                    npm install -g @anthropic-ai/claude-code
                   </div>
                 </div>
               </div>

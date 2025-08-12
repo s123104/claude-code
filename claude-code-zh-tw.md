@@ -141,14 +141,7 @@
 
 #### 官方推薦安裝方式
 
-**方式一：原生二進制安裝（推薦）：**
-
-```bash
-# 官方推薦的原生安裝腳本（平台自動檢測）
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-**方式二：標準 npm 安裝：**
+**方式一：標準 npm 安裝（推薦）：**
 
 ```bash
 # 透過 npm 全域安裝
@@ -157,9 +150,7 @@ npm install -g @anthropic-ai/claude-code
 
 **重要提醒**：
 
-- 官方強調**勿使用 sudo**
-- 如遇權限問題，使用 `claude migrate-installer`
-- 原生安裝支援：macOS、Linux、Windows (via WSL)
+- 官方建議勿使用 sudo
 - npm 安裝需要 Node.js 18.0+
 
 #### 手動安裝
@@ -182,13 +173,7 @@ nvm install --lts
 **步驟 2：安裝 Claude Code**
 
 ```bash
-# 方式一：原生安裝（推薦）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 方式二：npm 安裝
 npm install -g @anthropic-ai/claude-code
-
-# 驗證安裝
 claude --version
 ```
 
@@ -213,10 +198,6 @@ winget install --id OpenJS.NodeJS.LTS -e --source winget
 **步驟 3：安裝 Claude Code**
 
 ```powershell
-# 方式一：原生安裝（推薦，需 WSL）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 方式二：npm 安裝
 npm install -g @anthropic-ai/claude-code
 ```
 
@@ -233,10 +214,6 @@ npm install -g @anthropic-ai/claude-code
 #### macOS
 
 ```bash
-# 方式一：原生安裝（推薦）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 方式二：透過 npm
 brew install node
 npm install -g @anthropic-ai/claude-code
 ```
@@ -244,10 +221,6 @@ npm install -g @anthropic-ai/claude-code
 #### Linux (Ubuntu/Debian)
 
 ```bash
-# 方式一：原生安裝（推薦）
-curl -fsSL https://claude.ai/install.sh | bash
-
-# 方式二：透過 npm
 sudo apt update && sudo apt install -y nodejs npm
 npm install -g @anthropic-ai/claude-code
 ```
