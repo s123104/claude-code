@@ -81,7 +81,7 @@ Awesome Claude Code 是一份由社群協作維護的精選清單，收錄 Claud
 
 - **事件觸發點**：
   - `PreToolUse`：工具調用前執行
-  - `PostToolUse`：工具完成後執行  
+  - `PostToolUse`：工具完成後執行
   - `Notification`：需要用戶輸入或權限時觸發
   - `Stop`：主代理完成回應時執行
 
@@ -139,7 +139,7 @@ if [[ "$CLAUDE_TOOL" == "Edit" && "$CLAUDE_FILE" =~ \.(js|ts|tsx)$ ]]; then
     eslint --fix "$CLAUDE_FILE"
 fi
 
-# 自動測試執行 Hook  
+# 自動測試執行 Hook
 #!/bin/bash
 if [[ "$CLAUDE_TOOL" == "Edit" ]]; then
     npm run test:affected
@@ -153,23 +153,24 @@ fi
 
 ### 6.1 內建斜線命令（官方）
 
-| 命令分類 | 命令 | 功能說明 | 使用範例 |
-|----------|------|----------|----------|
-| **基礎控制** | `/help` | 顯示可用命令幫助 | `/help` |
-| | `/clear` | 清除對話歷史 | `/clear` |
-| | `/model` | 選擇或切換 AI 模型 | `/model claude-opus-4` |
-| **專案管理** | `/review` | 請求程式碼審查 | `/review src/` |
-| | `/init` | 初始化專案記憶體 | `/init` |
-| | `/memory` | 管理專案記憶體 | `/memory view` |
-| **配置管理** | `/config` | 查看/修改配置 | `/config list` |
-| | `/permissions` | 管理工具權限 | `/permissions` |
-| **診斷工具** | `/doctor` | 系統健康檢查 | `/doctor` |
-| | `/status` | 查看系統狀態 | `/status` |
-| **MCP 管理** | `/mcp` | 互動式 MCP 管理 | `/mcp` |
+| 命令分類     | 命令           | 功能說明           | 使用範例               |
+| ------------ | -------------- | ------------------ | ---------------------- |
+| **基礎控制** | `/help`        | 顯示可用命令幫助   | `/help`                |
+|              | `/clear`       | 清除對話歷史       | `/clear`               |
+|              | `/model`       | 選擇或切換 AI 模型 | `/model claude-opus-4` |
+| **專案管理** | `/review`      | 請求程式碼審查     | `/review src/`         |
+|              | `/init`        | 初始化專案記憶體   | `/init`                |
+|              | `/memory`      | 管理專案記憶體     | `/memory view`         |
+| **配置管理** | `/config`      | 查看/修改配置      | `/config list`         |
+|              | `/permissions` | 管理工具權限       | `/permissions`         |
+| **診斷工具** | `/doctor`      | 系統健康檢查       | `/doctor`              |
+|              | `/status`      | 查看系統狀態       | `/status`              |
+| **MCP 管理** | `/mcp`         | 互動式 MCP 管理    | `/mcp`                 |
 
 ### 6.2 社群精選斜線命令
 
 #### Git 與版本控制
+
 - `/commit` - 智能提交訊息生成
 - `/create-pr` - 自動建立 Pull Request
 - `/fix-issue` - 針對 Issue 進行修復
@@ -177,6 +178,7 @@ fi
 - `/update-branch-name` - 分支名稱標準化
 
 #### 測試與程式碼品質
+
 - `/check` - 全面程式碼檢查
 - `/clean` - 程式碼清理和重構
 - `/code_analysis` - 深度程式碼分析
@@ -184,6 +186,7 @@ fi
 - `/tdd` - 測試驅動開發輔助
 
 #### 專案脈絡與文件
+
 - `/context-prime` - 專案脈絡建立
 - `/prime` - 快速脈絡載入
 - `/rsi` - 重複性壓力傷害預防提醒
@@ -192,16 +195,19 @@ fi
 - `/update-docs` - 文件同步更新
 
 #### CI/CD 與部署
+
 - `/release` - 發布版本管理
 - `/run-ci` - CI 流程觸發
 
 #### 專案管理工具
+
 - `/create-command` - 自訂命令建立
 - `/todo` - 任務管理
 - `/create-jtbd` - Jobs-to-be-Done 分析
 - `/create-prd` - 產品需求文件生成
 
 #### 專業工具
+
 - `/act` - React 無障礙性檢查
 - `/five` - 五個為什麼分析法
 - `/mermaid` - 自動生成 ER 圖和流程圖
@@ -210,30 +216,36 @@ fi
 ### 6.3 自訂斜線命令建立
 
 #### 基本語法
+
 ```markdown
 # 命令名稱
 
 命令描述與用途說明
 
 ## Flags
+
 - --flag1: 旗標說明
 
 ## Examples
+
 /command --flag1 value
 ```
 
 #### 進階範例：專案特定命令
+
 ```markdown
 # security-audit
 
 對專案進行全面安全審計，包括依賴檢查、程式碼掃描和配置驗證
 
 ## Flags
+
 - --deep: 執行深度掃描
 - --fix: 自動修復發現的問題
 - --report: 生成詳細報告
 
 ## Examples
+
 /security-audit --deep --report
 /security-audit --fix
 ```
@@ -243,6 +255,7 @@ fi
 MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<prompt-name>`
 
 #### 常見 MCP 命令範例
+
 ```bash
 # GitHub 整合
 /mcp__github__list_prs
@@ -260,6 +273,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 ### 6.5 最佳實踐
 
 #### 命令組織結構
+
 ```
 .claude/commands/
 ├── git/
@@ -274,11 +288,13 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 ```
 
 #### 命令命名規範
+
 - 使用短橫線分隔：`create-component` 而非 `createComponent`
 - 動詞在前：`check-security` 而非 `security-check`
 - 保持簡潔：`deploy` 而非 `deploy-application`
 
 #### 參數設計原則
+
 - 提供合理預設值
 - 支援布林旗標：`--fix`、`--verbose`
 - 允許多重選項：`--include src tests docs`

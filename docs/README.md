@@ -1,7 +1,7 @@
 # Claude Code 文件索引
 
 > **目錄概覽**: 完整的 Claude Code 與 Cursor AI 整合說明書集合  
-> **更新時間**: 2025-08-15T00:43:00+08:00  
+> **更新時間**: 2025-08-15T00:48:00+08:00  
 > **文件語言**: 繁體中文
 
 ---
@@ -25,6 +25,10 @@
 | [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md)                           | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理   |
 | [bplustree3-zh-tw.md](bplustree3-zh-tw.md)                               | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優   |
 | [claude-code-security-review-zh-tw.md](claude-code-security-review-zh-tw.md) | 安全審查自動化  | `--security` `--audit` `--scan`    | 安全合規、漏洞檢測   |
+| [agents-zh-tw.md](agents-zh-tw.md)                                       | 專業代理集合    | `--agent` `--specialization`       | 專業領域、任務分工   |
+| [ccusage-zh-tw.md](ccusage-zh-tw.md)                                     | 用量分析工具    | `--analyze` `--cost` `--report`    | 成本分析、使用追蹤   |
+| [claude-agents-zh-tw.md](claude-agents-zh-tw.md)                         | 自訂代理系統    | `--custom-agent` `--workflow`      | 自訂工作流程、專案管理 |
+| [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)             | AI 驅動除錯     | `--debug` `--analyze` `--fix`      | 錯誤診斷、問題解決   |
 
 ---
 
@@ -45,6 +49,9 @@
 效能優化: bplustree3-zh-tw.md + claude-code-usage-monitor-zh-tw.md
 團隊協作: awesome-claude-code-zh-tw.md + claudecodeui-zh-tw.md
 安全審查: claude-code-security-review-zh-tw.md + claude-code-guide-zh-tw.md
+專業代理: agents-zh-tw.md + claude-agents-zh-tw.md
+用量分析: ccusage-zh-tw.md + claude-code-usage-monitor-zh-tw.md
+除錯輔助: claudecode-debugger-zh-tw.md + claude-code-guide-zh-tw.md
 ```
 
 ---
@@ -58,6 +65,9 @@
 | 部署上線 | `--build --deploy --monitor`   | guide + ui          |
 | 效能調優 | `--profile --optimize --cache` | bplustree + monitor |
 | 安全檢查 | `--security --audit --scan`    | security-review + awesome |
+| 專業代理 | `--agent --specialization`     | agents + claude-agents |
+| 用量分析 | `--analyze --cost --report`    | ccusage + monitor   |
+| 除錯輔助 | `--debug --analyze --fix`      | debugger + guide    |
 
 ---
 
@@ -70,6 +80,8 @@
 - **團隊領導**: monitor → awesome → ui
 - **架構師**: bplustree → guide → superclaude
 - **安全工程師**: security-review → guide → monitor
+- **專業開發者**: agents → claude-agents → debugger
+- **成本管理員**: ccusage → monitor → guide
 
 ### 按任務推薦
 
@@ -78,6 +90,9 @@
 - **部署管理**: monitor → ui → guide
 - **效能問題**: bplustree → monitor → guide
 - **安全審查**: security-review → guide → monitor
+- **專業任務**: agents → claude-agents → guide
+- **成本分析**: ccusage → monitor → guide
+- **錯誤除錯**: debugger → guide → monitor
 
 ---
 
@@ -125,12 +140,12 @@ chmod +x start.sh
 
 | 項目         | 數量 | 說明                         |
 | ------------ | ---- | ---------------------------- |
-| 核心文件     | 8    | 專業功能文件                 |
-| 支援旗標     | 50+  | 涵蓋所有常用操作             |
-| 使用場景     | 20+  | 從入門到企業級應用           |
-| 範例程式碼   | 100+ | 實用的指令與腳本範例         |
-| 最佳實踐     | 30+  | 社群驗證的經驗分享           |
-| 疑難排解     | 25+  | 常見問題與解決方案           |
+| 核心文件     | 12   | 專業功能文件                 |
+| 支援旗標     | 80+  | 涵蓋所有常用操作             |
+| 使用場景     | 30+  | 從入門到企業級應用           |
+| 範例程式碼   | 150+ | 實用的指令與腳本範例         |
+| 最佳實踐     | 40+  | 社群驗證的經驗分享           |
+| 疑難排解     | 35+  | 常見問題與解決方案           |
 
 ---
 
@@ -149,6 +164,9 @@ chmod +x start.sh
 - **效能優化**: B+Tree 資料結構與快取策略
 - **CI/CD 整合**: GitHub Actions 與自動化部署
 - **安全審查**: AI 驅動的自動化安全漏洞檢測
+- **專業代理**: 61 個專業領域代理
+- **用量分析**: 極速用量分析與成本追蹤
+- **AI 除錯**: 多語言錯誤分析與解決方案
 
 ### 開發者體驗
 
@@ -156,6 +174,8 @@ chmod +x start.sh
 - **PWA 支援**: 可安裝至桌面和行動裝置
 - **Hooks 系統**: 靈活的生命週期事件處理
 - **MCP 協作**: 多代理協作與擴展
+- **自訂代理**: 7 個專業自訂代理
+- **除錯助手**: AI 驅動的智能除錯
 
 ---
 
@@ -163,4 +183,4 @@ chmod +x start.sh
 
 ---
 
-*最後更新：2025-08-15T00:43:00+08:00 | 維護者：s123104*
+*最後更新：2025-08-15T00:48:00+08:00 | 維護者：s123104*

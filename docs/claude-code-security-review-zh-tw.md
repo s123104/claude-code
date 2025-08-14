@@ -81,7 +81,7 @@ Claude Code Security Reviewer 是一個使用 Claude 進行 AI 驅動安全審�
 name: Security Review
 
 permissions:
-  pull-requests: write  # 需要此權限來留下 PR 評論
+  pull-requests: write # 需要此權限來留下 PR 評論
   contents: read
 
 on:
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Security Review
         uses: anthropics/claude-code-security-review@v1
         with:
@@ -144,22 +144,22 @@ jobs:
             command: "review"
           - name: "Vulnerability Scan"
             command: "scan"
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 完整歷史記錄
-      
+          fetch-depth: 0 # 完整歷史記錄
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-      
+          node-version: "18"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run Security Review
         uses: anthropics/claude-code-security-review@v1
         with:
@@ -168,13 +168,13 @@ jobs:
           output_format: "detailed"
           include_patterns: "src/**,tests/**"
           exclude_patterns: "node_modules/**,dist/**"
-      
+
       - name: Upload Security Report
         uses: actions/upload-artifact@v3
         with:
           name: security-report-${{ matrix.command }}
           path: security-report-*.json
-      
+
       - name: Comment on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
@@ -182,7 +182,7 @@ jobs:
           script: |
             const fs = require('fs');
             const reportPath = `security-report-${context.job}.json`;
-            
+
             if (fs.existsSync(reportPath)) {
               const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
               
@@ -224,21 +224,21 @@ jobs:
     # 基本配置
     command: "review"
     output_format: "detailed"
-    
+
     # 檔案過濾
     include_patterns: "src/**,tests/**,config/**"
     exclude_patterns: "node_modules/**,dist/**,build/**"
-    
+
     # 掃描選項
     scan_depth: "deep"
     max_files: 1000
     timeout_minutes: 30
-    
+
     # 報告配置
     report_format: "json"
     include_recommendations: true
     include_examples: true
-    
+
     # 通知配置
     notify_on_failure: true
     notify_on_success: false
@@ -252,19 +252,21 @@ jobs:
 ### 5.1 觸發安全審查
 
 #### 自動觸發
+
 - **PR 開啟**：新 PR 時自動觸發
 - **PR 更新**：PR 內容變更時觸發
 - **分支推送**：推送到特定分支時觸發
 
 #### 手動觸發
+
 ```yaml
 on:
   workflow_dispatch:
     inputs:
       scan_type:
-        description: 'Scan Type'
+        description: "Scan Type"
         required: true
-        default: 'full'
+        default: "full"
         type: choice
         options:
           - quick
@@ -275,19 +277,24 @@ on:
 ### 5.2 查看結果
 
 #### PR 評論
+
 安全審查完成後，會在 PR 上自動添加評論，包含：
+
 - 發現的漏洞數量
 - 風險等級評估
 - 詳細的漏洞描述
 - 修復建議
 
 #### 工作流程摘要
+
 在 GitHub Actions 頁面查看：
+
 - 執行狀態
 - 掃描結果摘要
 - 詳細日誌
 
 #### 下載報告
+
 - JSON 格式的詳細報告
 - 可整合到其他安全工具
 - 支援自訂報告格式
@@ -295,6 +302,7 @@ on:
 ### 5.3 自訂掃描規則
 
 #### 專案特定規則
+
 ```yaml
 # .claude/security-rules.yml
 rules:
@@ -302,12 +310,12 @@ rules:
     pattern: "executeQuery"
     severity: "high"
     message: "Potential SQL injection vulnerability"
-    
+
   - name: "API Key Validation"
     pattern: "API_KEY"
     severity: "critical"
     message: "API key should not be hardcoded"
-    
+
   - name: "Input Validation"
     pattern: "userInput"
     severity: "medium"
@@ -315,15 +323,16 @@ rules:
 ```
 
 #### 忽略規則
+
 ```yaml
 # .claude/security-ignore.yml
 ignore:
   - file: "tests/**"
     reason: "Test files are safe to ignore"
-    
+
   - pattern: "TODO.*FIXME"
     reason: "Development notes"
-    
+
   - file: "docs/**"
     reason: "Documentation files"
 ```
@@ -335,6 +344,7 @@ ignore:
 ### 6.1 多環境配置
 
 #### 開發環境
+
 ```yaml
 - name: Development Security Review
   if: github.ref == 'refs/heads/develop'
@@ -347,6 +357,7 @@ ignore:
 ```
 
 #### 生產環境
+
 ```yaml
 - name: Production Security Review
   if: github.ref == 'refs/heads/main'
@@ -362,13 +373,14 @@ ignore:
 ### 6.2 整合其他安全工具
 
 #### SonarQube 整合
+
 ```yaml
 - name: SonarQube Analysis
   uses: sonarqube-quality-gate-action@master
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  
+
 - name: Security Review
   uses: anthropics/claude-code-security-review@v1
   with:
@@ -377,12 +389,13 @@ ignore:
 ```
 
 #### OWASP ZAP 整合
+
 ```yaml
 - name: OWASP ZAP Scan
   uses: zaproxy/action-full-scan@v0.8.0
   with:
-    target: 'https://example.com'
-    
+    target: "https://example.com"
+
 - name: Security Review
   uses: anthropics/claude-code-security-review@v1
   with:
@@ -393,6 +406,7 @@ ignore:
 ### 6.3 自訂通知
 
 #### Slack 通知
+
 ```yaml
 - name: Security Review
   uses: anthropics/claude-code-security-review@v1
@@ -404,6 +418,7 @@ ignore:
 ```
 
 #### 電子郵件通知
+
 ```yaml
 - name: Send Email Notification
   if: always()
@@ -417,10 +432,10 @@ ignore:
     to: ${{ secrets.SECURITY_TEAM_EMAIL }}
     body: |
       Security review completed for ${{ github.repository }}
-      
+
       Status: ${{ job.status }}
       Vulnerabilities: ${{ steps.security.outputs.vulnerability_count }}
-      
+
       View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 ```
 
@@ -431,6 +446,7 @@ ignore:
 ### 7.1 常見問題
 
 #### API 金鑰問題
+
 ```bash
 # 檢查 API 金鑰是否正確設定
 echo $ANTHROPIC_API_KEY
@@ -442,27 +458,30 @@ curl -H "x-api-key: $ANTHROPIC_API_KEY" \
 ```
 
 #### 權限問題
+
 ```yaml
 # 確保有足夠的權限
 permissions:
-  pull-requests: write  # 需要寫入 PR 評論
-  contents: read         # 需要讀取程式碼
+  pull-requests: write # 需要寫入 PR 評論
+  contents: read # 需要讀取程式碼
   security-events: write # 需要寫入安全事件
 ```
 
 #### 掃描超時
+
 ```yaml
 # 增加超時時間
 - name: Security Review
   uses: anthropics/claude-code-security-review@v1
   with:
-    timeout_minutes: 60  # 預設 30 分鐘
-    max_files: 500       # 減少掃描檔案數量
+    timeout_minutes: 60 # 預設 30 分鐘
+    max_files: 500 # 減少掃描檔案數量
 ```
 
 ### 7.2 效能優化
 
 #### 快取配置
+
 ```yaml
 - name: Cache dependencies
   uses: actions/cache@v3
@@ -474,6 +493,7 @@ permissions:
 ```
 
 #### 並行執行
+
 ```yaml
 jobs:
   security-review:
@@ -492,6 +512,7 @@ jobs:
 ### 7.3 除錯技巧
 
 #### 詳細日誌
+
 ```yaml
 - name: Security Review
   uses: anthropics/claude-code-security-review@v1
@@ -502,6 +523,7 @@ jobs:
 ```
 
 #### 本地測試
+
 ```bash
 # 在本地測試安全審查
 npm install -g @anthropic-ai/claude-code
