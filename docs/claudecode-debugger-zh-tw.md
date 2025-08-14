@@ -50,31 +50,37 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ### 2.1 v1.5.0 主要更新
 
 #### 🌐 擴展語言支援
+
 - **新增語言**：Shell/Bash、Docker、YAML/JSON、Kotlin、Swift、SQL
 - **總計支援**：10+ 種程式語言
 - **完整覆蓋**：從腳本語言到行動開發語言
 
 #### 🐳 Docker 與容器分析
+
 - **Dockerfile 分析**：全面的 Dockerfile 錯誤檢測
 - **Docker Compose**：Docker Compose 錯誤分析
 - **容器化除錯**：容器環境中的錯誤診斷
 
 #### 📄 配置檔案支援
+
 - **YAML/JSON 分析**：智能分析 CI/CD 管道和 Kubernetes 配置
 - **配置驗證**：自動檢測配置檔案中的錯誤
 - **最佳實踐**：提供配置最佳實踐建議
 
 #### 📱 行動開發支援
+
 - **Kotlin 支援**：完整的 Android 開發錯誤分析
 - **Swift 支援**：完整的 iOS 開發錯誤分析
 - **行動平台**：針對行動開發的特殊優化
 
 #### 🚀 效能提升
+
 - **60% 更快**：完全重寫的引擎提供更好效能
 - **模式匹配**：優化的錯誤模式匹配演算法
 - **記憶體優化**：減少記憶體使用和提高響應速度
 
 #### 🎯 增強模式識別
+
 - **新增模式**：每種語言 50+ 個新錯誤模式
 - **智能識別**：更準確的錯誤模式識別
 - **上下文分析**：考慮程式碼上下文的錯誤分析
@@ -86,6 +92,7 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ### 3.1 多語言支援
 
 #### 支援的語言
+
 - **Web 開發**：JavaScript、TypeScript、Python、Ruby
 - **系統開發**：Java、Go、C/C++
 - **腳本語言**：Shell/Bash、PowerShell
@@ -95,6 +102,7 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 - **資料庫**：SQL、MongoDB 查詢
 
 #### 國際化支援
+
 - **中文介面**：完整的中文使用者介面
 - **英文介面**：英文使用者介面
 - **多語言錯誤**：支援多語言錯誤訊息分析
@@ -102,16 +110,19 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ### 3.2 智能分析引擎
 
 #### 堆疊追蹤分析器
+
 - **錯誤追蹤**：分析完整的錯誤堆疊追蹤
 - **呼叫鏈分析**：追蹤函數呼叫鏈和錯誤傳播
 - **上下文重建**：重建錯誤發生時的程式碼上下文
 
 #### 模式分析器
+
 - **錯誤模式**：預配置的常見錯誤模式
 - **智能匹配**：使用 ML 技術匹配錯誤模式
 - **解決方案建議**：基於模式的解決方案建議
 
 #### 程式碼上下文分析器
+
 - **程式碼理解**：理解程式碼結構和邏輯
 - **依賴分析**：分析程式碼依賴關係
 - **最佳實踐檢查**：檢查程式碼是否符合最佳實踐
@@ -119,6 +130,7 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ### 3.3 Claude Code 整合
 
 #### 原生斜線命令
+
 ```bash
 # 使用 /ccdebug 命令進行除錯
 /ccdebug "分析這個錯誤並提供解決方案"
@@ -128,6 +140,7 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ```
 
 #### 工作流程整合
+
 - **無縫整合**：與 Claude Code 工作流程完全整合
 - **上下文保持**：保持對話上下文和程式碼狀態
 - **自動建議**：根據錯誤自動建議相關的 Claude Code 命令
@@ -139,6 +152,7 @@ ClaudeCode-Debugger 是一個專為 Claude Code 設計的 AI 驅動除錯助手�
 ### 4.1 安裝方式
 
 #### 使用 pip 安裝
+
 ```bash
 # 安裝最新版本
 pip install claudecode-debugger
@@ -151,6 +165,7 @@ pip install --upgrade claudecode-debugger
 ```
 
 #### 從原始碼安裝
+
 ```bash
 # 克隆專案
 git clone https://github.com/888wing/ClaudeCode-Debugger.git
@@ -166,17 +181,18 @@ pip install -e .
 ### 4.2 配置設定
 
 #### 基本配置
+
 ```yaml
 # ~/.claude/debugger.yml
 debugger:
   enabled: true
-  language: "zh-TW"  # 中文繁體
-  
+  language: "zh-TW" # 中文繁體
+
   analysis:
     stack_trace: true
     pattern: true
     context: true
-  
+
   claude_integration:
     enabled: true
     command: "/ccdebug"
@@ -184,17 +200,18 @@ debugger:
 ```
 
 #### 語言特定配置
+
 ```yaml
 # 語言特定設定
 languages:
   python:
     patterns: ["ImportError", "SyntaxError", "TypeError"]
     frameworks: ["Django", "Flask", "FastAPI"]
-  
+
   javascript:
     patterns: ["ReferenceError", "TypeError", "SyntaxError"]
     frameworks: ["React", "Vue", "Node.js"]
-  
+
   docker:
     patterns: ["build failed", "container error", "image not found"]
     compose: true
@@ -223,6 +240,7 @@ export DEBUGGER_CACHE_DIR="~/.cache/claudecode-debugger"
 ### 5.1 基本使用
 
 #### 命令列使用
+
 ```bash
 # 分析錯誤訊息
 ccdebug "ImportError: No module named 'requests'"
@@ -238,6 +256,7 @@ ccdebug --interactive
 ```
 
 #### Claude Code 整合使用
+
 ```bash
 # 在 Claude Code 中使用
 /ccdebug "分析這個 Python 錯誤：ModuleNotFoundError: No module named 'pandas'"
@@ -252,6 +271,7 @@ ccdebug --interactive
 ### 5.2 進階使用
 
 #### 多語言錯誤分析
+
 ```bash
 # Python 錯誤
 ccdebug "TypeError: 'NoneType' object is not subscriptable"
@@ -267,6 +287,7 @@ ccdebug "ERROR: syntax error at or near \"SELECT\""
 ```
 
 #### 配置檔案分析
+
 ```bash
 # YAML 配置分析
 ccdebug --yaml docker-compose.yml
@@ -281,6 +302,7 @@ ccdebug --files "*.yml" "*.json"
 ### 5.3 輸出格式
 
 #### 終端機輸出
+
 ```bash
 # 彩色輸出（預設）
 ccdebug "錯誤訊息"
@@ -296,6 +318,7 @@ ccdebug --verbose "錯誤訊息"
 ```
 
 #### 檔案輸出
+
 ```bash
 # 輸出到檔案
 ccdebug --output-file debug-report.txt "錯誤訊息"
@@ -314,6 +337,7 @@ ccdebug --output markdown --output-file report.md "錯誤訊息"
 ### 6.1 自訂錯誤模式
 
 #### 建立自訂模式
+
 ```yaml
 # ~/.claude/debugger/patterns/custom.yml
 custom_patterns:
@@ -322,7 +346,7 @@ custom_patterns:
     language: "python"
     solution: "安裝缺少的模組：pip install {1}"
     confidence: 0.9
-    
+
   - name: "Custom Docker Error"
     pattern: "Error: failed to (.*) container"
     language: "docker"
@@ -331,6 +355,7 @@ custom_patterns:
 ```
 
 #### 模式管理
+
 ```bash
 # 列出所有模式
 ccdebug --list-patterns
@@ -348,6 +373,7 @@ ccdebug --update-patterns
 ### 6.2 機器學習功能
 
 #### 智能建議引擎
+
 ```yaml
 # ML 配置
 machine_learning:
@@ -355,7 +381,7 @@ machine_learning:
   confidence_threshold: 0.7
   learning_rate: 0.01
   max_iterations: 1000
-  
+
   features:
     - "error_type"
     - "language"
@@ -364,6 +390,7 @@ machine_learning:
 ```
 
 #### 使用者回饋
+
 ```bash
 # 提供回饋
 ccdebug --feedback "這個解決方案很有用"
@@ -378,6 +405,7 @@ ccdebug --learn "新的錯誤模式"
 ### 6.3 整合與 API
 
 #### REST API
+
 ```bash
 # 啟動 API 伺服器
 ccdebug --api --port 8080
@@ -389,6 +417,7 @@ curl -X POST "http://localhost:8080/api/debug" \
 ```
 
 #### Webhook 整合
+
 ```yaml
 # webhook 配置
 webhooks:
@@ -405,6 +434,7 @@ webhooks:
 ### 7.1 常見問題
 
 #### 安裝問題
+
 ```bash
 # 檢查 Python 版本
 python --version  # 需要 Python 3.8+
@@ -420,6 +450,7 @@ pip install --force-reinstall claudecode-debugger
 ```
 
 #### 配置問題
+
 ```bash
 # 檢查配置檔案
 ccdebug --config-check
@@ -435,6 +466,7 @@ ccdebug --import-config config-backup.yml
 ```
 
 #### 效能問題
+
 ```bash
 # 檢查記憶體使用
 ccdebug --memory-check
@@ -452,6 +484,7 @@ ccdebug --debug-mode
 ### 7.2 除錯技巧
 
 #### 詳細日誌
+
 ```bash
 # 啟用詳細日誌
 ccdebug --log-level DEBUG "錯誤訊息"
@@ -464,6 +497,7 @@ ccdebug --show-timestamps "錯誤訊息"
 ```
 
 #### 測試模式
+
 ```bash
 # 測試模式
 ccdebug --test-mode "錯誤訊息"

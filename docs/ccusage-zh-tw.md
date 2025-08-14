@@ -126,6 +126,7 @@ npm start
 ### 4.1 基本使用
 
 #### 分析單一檔案
+
 ```bash
 # 分析指定的 JSONL 檔案
 ccusage path/to/your/file.jsonl
@@ -138,6 +139,7 @@ ccusage ./logs/
 ```
 
 #### 基本選項
+
 ```bash
 # 顯示詳細資訊
 ccusage --verbose
@@ -152,6 +154,7 @@ ccusage --start-date 2025-01-01 --end-date 2025-08-15
 ### 4.2 進階使用
 
 #### 成本分析
+
 ```bash
 # 按模型分析成本
 ccusage --group-by model
@@ -164,6 +167,7 @@ ccusage --group-by time --time-unit day
 ```
 
 #### 自訂報告
+
 ```bash
 # 生成 HTML 報告
 ccusage --output html --output-file report.html
@@ -178,13 +182,14 @@ ccusage --output json --output-file data.json
 ### 4.3 配置檔案
 
 #### 建立配置檔案
+
 ```yaml
 # .ccusage.yml
 input:
   files:
     - "./logs/*.jsonl"
     - "./claude-logs/*.jsonl"
-  
+
   filters:
     start_date: "2025-01-01"
     end_date: "2025-12-31"
@@ -203,6 +208,7 @@ analysis:
 ```
 
 #### 使用配置檔案
+
 ```bash
 # 使用配置檔案
 ccusage --config .ccusage.yml
@@ -218,6 +224,7 @@ ccusage --validate-config .ccusage.yml
 ### 5.1 資料過濾
 
 #### 時間過濾
+
 ```bash
 # 過濾特定日期範圍
 ccusage --start-date 2025-08-01 --end-date 2025-08-15
@@ -230,6 +237,7 @@ ccusage --workdays-only
 ```
 
 #### 模型過濾
+
 ```bash
 # 只分析特定模型
 ccusage --models claude-3-sonnet,claude-3-opus
@@ -242,6 +250,7 @@ ccusage --min-model-complexity medium
 ```
 
 #### 專案過濾
+
 ```bash
 # 只分析特定專案
 ccusage --projects "web-app,api-service"
@@ -256,6 +265,7 @@ ccusage --min-project-size 1000
 ### 5.2 成本分析
 
 #### 成本計算
+
 ```bash
 # 使用自訂匯率
 ccusage --exchange-rate 1.35
@@ -268,6 +278,7 @@ ccusage --min-cost 1.0 --max-cost 100.0
 ```
 
 #### 成本優化建議
+
 ```bash
 # 生成成本優化建議
 ccusage --optimization-suggestions
@@ -282,6 +293,7 @@ ccusage --cost-forecast --forecast-days 30
 ### 5.3 效能分析
 
 #### 使用模式分析
+
 ```bash
 # 分析使用頻率
 ccusage --usage-frequency
@@ -294,6 +306,7 @@ ccusage --usage-efficiency
 ```
 
 #### 效能指標
+
 ```bash
 # 計算平均回應時間
 ccusage --avg-response-time
@@ -312,6 +325,7 @@ ccusage --performance-report
 ### 6.1 ClaudeLog 整合
 
 #### 基本整合
+
 ```bash
 # 從 ClaudeLog 匯入資料
 ccusage --claudelog-import
@@ -324,13 +338,14 @@ ccusage --claudelog-export
 ```
 
 #### 進階整合
+
 ```yaml
 # claudelog 配置
 claudelog:
   enabled: true
   api_key: "${CLAUDELOG_API_KEY}"
   project_id: "your-project-id"
-  
+
   sync:
     auto: true
     interval: "1h"
@@ -340,6 +355,7 @@ claudelog:
 ### 6.2 API 整合
 
 #### REST API
+
 ```bash
 # 啟動 API 伺服器
 ccusage --api --port 3000
@@ -352,6 +368,7 @@ curl -X POST -F "file=@usage.jsonl" "http://localhost:3000/api/upload"
 ```
 
 #### Webhook 整合
+
 ```yaml
 # webhook 配置
 webhooks:
@@ -364,30 +381,31 @@ webhooks:
 ### 6.3 第三方工具整合
 
 #### CI/CD 整合
+
 ```yaml
 # GitHub Actions 範例
 name: Usage Analysis
 on:
   schedule:
-    - cron: "0 0 * * *"  # 每日執行
+    - cron: "0 0 * * *" # 每日執行
 
 jobs:
   analyze-usage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-      
+          node-version: "18"
+
       - name: Install ccusage
         run: npm install -g ccusage
-      
+
       - name: Analyze Usage
         run: ccusage --output html --output-file usage-report.html
-      
+
       - name: Upload Report
         uses: actions/upload-artifact@v3
         with:
@@ -396,6 +414,7 @@ jobs:
 ```
 
 #### 監控工具整合
+
 ```yaml
 # Prometheus 整合
 prometheus:
@@ -414,6 +433,7 @@ prometheus:
 ### 7.1 常見問題
 
 #### 檔案讀取問題
+
 ```bash
 # 檢查檔案格式
 ccusage --validate-file path/to/file.jsonl
@@ -426,6 +446,7 @@ file -i path/to/file.jsonl
 ```
 
 #### 記憶體問題
+
 ```bash
 # 限制記憶體使用
 ccusage --max-memory 512MB
@@ -438,6 +459,7 @@ ccusage --batch-size 1000
 ```
 
 #### 效能問題
+
 ```bash
 # 啟用快取
 ccusage --enable-cache
@@ -452,6 +474,7 @@ ccusage --optimize-queries
 ### 7.2 除錯技巧
 
 #### 詳細日誌
+
 ```bash
 # 啟用詳細日誌
 ccusage --verbose --debug
@@ -464,6 +487,7 @@ ccusage --show-timing
 ```
 
 #### 效能分析
+
 ```bash
 # 分析執行時間
 ccusage --profile

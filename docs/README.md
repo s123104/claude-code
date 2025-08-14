@@ -16,19 +16,19 @@
 
 ### 🔧 功能專門文件
 
-| 文件名稱                                                                 | 主要內容        | 關鍵旗標                           | 使用場景             |
-| ------------------------------------------------------------------------ | --------------- | ---------------------------------- | -------------------- |
-| [awesome-claude-code-zh-tw.md](awesome-claude-code-zh-tw.md)             | 社群最佳實踐    | `--hooks` `--workflow`             | 專案初始化、團隊協作 |
-| [superclaude-zh-tw.md](superclaude-zh-tw.md)                             | 高階旗標系統    | `--persona` `--advanced`           | 複雜任務自動化       |
-| [claude-code-guide-zh-tw.md](claude-code-guide-zh-tw.md)                 | 基礎 API 指南   | `--api` `--mcp` `--session`        | 日常開發、基礎操作   |
-| [claude-code-usage-monitor-zh-tw.md](claude-code-usage-monitor-zh-tw.md) | 用量監控與安全  | `--monitor` `--limit` `--audit`    | 生產環境、成本控制   |
-| [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md)                           | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理   |
-| [bplustree3-zh-tw.md](bplustree3-zh-tw.md)                               | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優   |
-| [claude-code-security-review-zh-tw.md](claude-code-security-review-zh-tw.md) | 安全審查自動化  | `--security` `--audit` `--scan`    | 安全合規、漏洞檢測   |
-| [agents-zh-tw.md](agents-zh-tw.md)                                       | 專業代理集合    | `--agent` `--specialization`       | 專業領域、任務分工   |
-| [ccusage-zh-tw.md](ccusage-zh-tw.md)                                     | 用量分析工具    | `--analyze` `--cost` `--report`    | 成本分析、使用追蹤   |
-| [claude-agents-zh-tw.md](claude-agents-zh-tw.md)                         | 自訂代理系統    | `--custom-agent` `--workflow`      | 自訂工作流程、專案管理 |
-| [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)             | AI 驅動除錯     | `--debug` `--analyze` `--fix`      | 錯誤診斷、問題解決   |
+| 文件名稱                                                                     | 主要內容        | 關鍵旗標                           | 使用場景               |
+| ---------------------------------------------------------------------------- | --------------- | ---------------------------------- | ---------------------- |
+| [awesome-claude-code-zh-tw.md](awesome-claude-code-zh-tw.md)                 | 社群最佳實踐    | `--hooks` `--workflow`             | 專案初始化、團隊協作   |
+| [superclaude-zh-tw.md](superclaude-zh-tw.md)                                 | 高階旗標系統    | `--persona` `--advanced`           | 複雜任務自動化         |
+| [claude-code-guide-zh-tw.md](claude-code-guide-zh-tw.md)                     | 基礎 API 指南   | `--api` `--mcp` `--session`        | 日常開發、基礎操作     |
+| [claude-code-usage-monitor-zh-tw.md](claude-code-usage-monitor-zh-tw.md)     | 用量監控與安全  | `--monitor` `--limit` `--audit`    | 生產環境、成本控制     |
+| [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md)                               | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理     |
+| [bplustree3-zh-tw.md](bplustree3-zh-tw.md)                                   | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優     |
+| [claude-code-security-review-zh-tw.md](claude-code-security-review-zh-tw.md) | 安全審查自動化  | `--security` `--audit` `--scan`    | 安全合規、漏洞檢測     |
+| [agents-zh-tw.md](agents-zh-tw.md)                                           | 專業代理集合    | `--agent` `--specialization`       | 專業領域、任務分工     |
+| [ccusage-zh-tw.md](ccusage-zh-tw.md)                                         | 用量分析工具    | `--analyze` `--cost` `--report`    | 成本分析、使用追蹤     |
+| [claude-agents-zh-tw.md](claude-agents-zh-tw.md)                             | 自訂代理系統    | `--custom-agent` `--workflow`      | 自訂工作流程、專案管理 |
+| [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)                 | AI 驅動除錯     | `--debug` `--analyze` `--fix`      | 錯誤診斷、問題解決     |
 
 ---
 
@@ -58,16 +58,16 @@
 
 ## 🎯 常用旗標快查
 
-| 動作     | 推薦旗標組合                   | 參考文件            |
-| -------- | ------------------------------ | ------------------- |
-| 建立專案 | `--create --template --mcp`    | superclaude + guide |
-| 修復錯誤 | `--scan --fix --lint --test`   | awesome + monitor   |
-| 部署上線 | `--build --deploy --monitor`   | guide + ui          |
-| 效能調優 | `--profile --optimize --cache` | bplustree + monitor |
+| 動作     | 推薦旗標組合                   | 參考文件                  |
+| -------- | ------------------------------ | ------------------------- |
+| 建立專案 | `--create --template --mcp`    | superclaude + guide       |
+| 修復錯誤 | `--scan --fix --lint --test`   | awesome + monitor         |
+| 部署上線 | `--build --deploy --monitor`   | guide + ui                |
+| 效能調優 | `--profile --optimize --cache` | bplustree + monitor       |
 | 安全檢查 | `--security --audit --scan`    | security-review + awesome |
-| 專業代理 | `--agent --specialization`     | agents + claude-agents |
-| 用量分析 | `--analyze --cost --report`    | ccusage + monitor   |
-| 除錯輔助 | `--debug --analyze --fix`      | debugger + guide    |
+| 專業代理 | `--agent --specialization`     | agents + claude-agents    |
+| 用量分析 | `--analyze --cost --report`    | ccusage + monitor         |
+| 除錯輔助 | `--debug --analyze --fix`      | debugger + guide          |
 
 ---
 
@@ -138,14 +138,14 @@ chmod +x start.sh
 
 ## 📊 文件統計資訊
 
-| 項目         | 數量 | 說明                         |
-| ------------ | ---- | ---------------------------- |
-| 核心文件     | 12   | 專業功能文件                 |
-| 支援旗標     | 80+  | 涵蓋所有常用操作             |
-| 使用場景     | 30+  | 從入門到企業級應用           |
-| 範例程式碼   | 150+ | 實用的指令與腳本範例         |
-| 最佳實踐     | 40+  | 社群驗證的經驗分享           |
-| 疑難排解     | 35+  | 常見問題與解決方案           |
+| 項目       | 數量 | 說明                 |
+| ---------- | ---- | -------------------- |
+| 核心文件   | 12   | 專業功能文件         |
+| 支援旗標   | 80+  | 涵蓋所有常用操作     |
+| 使用場景   | 30+  | 從入門到企業級應用   |
+| 範例程式碼 | 150+ | 實用的指令與腳本範例 |
+| 最佳實踐   | 40+  | 社群驗證的經驗分享   |
+| 疑難排解   | 35+  | 常見問題與解決方案   |
 
 ---
 
@@ -183,4 +183,4 @@ chmod +x start.sh
 
 ---
 
-*最後更新：2025-08-15T00:48:00+08:00 | 維護者：s123104*
+_最後更新：2025-08-15T00:48:00+08:00 | 維護者：s123104_
