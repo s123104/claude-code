@@ -7,7 +7,9 @@
 > - [Claude Code CLI 參考](https://docs.anthropic.com/en/docs/claude-code/cli-reference)
 > - [MCP 協議官方規範](https://docs.anthropic.com/en/docs/claude-code/mcp)
 > - [Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-07-15T14:16:31+08:00**
+> - **文件整理時間：2025-08-15T00:40:00+08:00**
+> - **專案最後更新：2025-08-10T23:24:41+02:00**
+> - **Claude Code 版本：v1.0.72**
 
 ---
 
@@ -30,8 +32,18 @@
 
 Claude Code 是 Anthropic 推出的 AI 編程助手，支援自然語言指令、程式碼自動修復、MCP 多代理協作、專案記憶體管理等功能，適用於 VSCode、Cursor、終端機與多種開發環境。
 
-- 官方文件：[Anthropic Claude Code Docs](https://docs.anthropic.com/en/docs/claude-code)
+### 1.1 最新版本特色
+
+- **Claude Code v1.0.72**：最新穩定版本
+- **完整命令參考**：涵蓋所有可發現的 Claude Code 命令
+- **進階功能文檔**：包含許多未廣泛知曉或基礎教程中未記錄的功能
+- **社群驅動**：持續更新和改進
+
+### 1.2 官方資源
+
+- 官方文件：[Anthropic Claude Code Docs](https://claude.ai/code)
 - 社群指南：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)
+- 狀態：Active（活躍維護中）
 
 ---
 
@@ -528,6 +540,8 @@ echo "✅ 架構分析完成！查看生成的報告文件。"
 
 ---
 
-> 本文件最後更新：2025-07-14T11:51:25+08:00
+> 本文件最後更新：2025-08-15T00:40:00+08:00
 >
 > 主要參考來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)、[Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+>
+> **專案版本**：Claude Code v1.0.72 | **專案更新**：2025-08-10T23:24:41+02:00

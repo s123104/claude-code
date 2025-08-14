@@ -61,3 +61,6 @@ Desktop.ini
 # ShellCheck
 shellcheck-stable/
 shellcheck-*.tar.xz 
+
+# 分析專案資料夾（克隆的專案）
+analysis-projects/ 

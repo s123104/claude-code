@@ -6,7 +6,8 @@
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
 > - [官方斜線命令文檔](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
 > - [官方 Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-07-15T14:16:31+08:00**
+> - **文件整理時間：2025-08-15T00:39:00+08:00**
+> - **專案最後更新：2025-08-12T15:50:52-04:00**
 
 ---
 
@@ -28,6 +29,13 @@
 ## 1. 專案簡介
 
 Awesome Claude Code 是一份由社群協作維護的精選清單，收錄 Claude Code 相關的指令、CLAUDE.md、workflow、hooks、MCP 整合、IDE 工具、最佳實踐與各類自動化資源，協助開發者提升生產力、優化 AI 代理開發流程。
+
+### 1.1 最新更新
+
+- **新增資源**：ccstatusline (#113) - 2025-08-12
+- **持續維護**：定期更新社群貢獻的資源
+- **品質保證**：嚴格的資源篩選標準
+- **社群驅動**：開放式貢獻模式
 
 ---
 
@@ -317,4 +325,6 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 ---
 
-> 本文件僅為社群整理，詳細內容與最新資源請參閱官方 GitHub 與文檔。
+> 本文件僅為社群整理版本，詳細內容與最新資源請參閱官方 GitHub 與文檔。
+>
+> **最後更新**：2025-08-15T00:39:00+08:00 | **專案更新**：2025-08-12T15:50:52-04:00

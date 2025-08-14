@@ -1,7 +1,7 @@
 # Claude Code 文件索引
 
 > **目錄概覽**: 完整的 Claude Code 與 Cursor AI 整合說明書集合  
-> **更新時間**: 2025-07-15T14:16:31+08:00  
+> **更新時間**: 2025-08-15T00:43:00+08:00  
 > **文件語言**: 繁體中文
 
 ---
@@ -24,6 +24,7 @@
 | [claude-code-usage-monitor-zh-tw.md](claude-code-usage-monitor-zh-tw.md) | 用量監控與安全  | `--monitor` `--limit` `--audit`    | 生產環境、成本控制   |
 | [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md)                           | Web UI 與視覺化 | `--ui` `--pwa` `--dashboard`       | 圖形介面、遠端管理   |
 | [bplustree3-zh-tw.md](bplustree3-zh-tw.md)                               | 效能優化策略    | `--cache` `--optimize` `--profile` | 大型專案、效能調優   |
+| [claude-code-security-review-zh-tw.md](claude-code-security-review-zh-tw.md) | 安全審查自動化  | `--security` `--audit` `--scan`    | 安全合規、漏洞檢測   |
 
 ---
 
@@ -43,6 +44,7 @@
 生產部署: claude-code-usage-monitor-zh-tw.md + claudecodeui-zh-tw.md
 效能優化: bplustree3-zh-tw.md + claude-code-usage-monitor-zh-tw.md
 團隊協作: awesome-claude-code-zh-tw.md + claudecodeui-zh-tw.md
+安全審查: claude-code-security-review-zh-tw.md + claude-code-guide-zh-tw.md
 ```
 
 ---
@@ -55,7 +57,7 @@
 | 修復錯誤 | `--scan --fix --lint --test`   | awesome + monitor   |
 | 部署上線 | `--build --deploy --monitor`   | guide + ui          |
 | 效能調優 | `--profile --optimize --cache` | bplustree + monitor |
-| 安全檢查 | `--security --audit --scan`    | monitor + awesome   |
+| 安全檢查 | `--security --audit --scan`    | security-review + awesome |
 
 ---
 
@@ -67,6 +69,7 @@
 - **開發者**: guide → superclaude → monitor
 - **團隊領導**: monitor → awesome → ui
 - **架構師**: bplustree → guide → superclaude
+- **安全工程師**: security-review → guide → monitor
 
 ### 按任務推薦
 
@@ -74,6 +77,7 @@
 - **維護專案**: guide → monitor → bplustree
 - **部署管理**: monitor → ui → guide
 - **效能問題**: bplustree → monitor → guide
+- **安全審查**: security-review → guide → monitor
 
 ---
 
@@ -121,7 +125,7 @@ chmod +x start.sh
 
 | 項目         | 數量 | 說明                         |
 | ------------ | ---- | ---------------------------- |
-| 核心文件     | 7    | 專業功能文件                 |
+| 核心文件     | 8    | 專業功能文件                 |
 | 支援旗標     | 50+  | 涵蓋所有常用操作             |
 | 使用場景     | 20+  | 從入門到企業級應用           |
 | 範例程式碼   | 100+ | 實用的指令與腳本範例         |
@@ -144,6 +148,7 @@ chmod +x start.sh
 - **安全控制**: 權限管理與安全掃描
 - **效能優化**: B+Tree 資料結構與快取策略
 - **CI/CD 整合**: GitHub Actions 與自動化部署
+- **安全審查**: AI 驅動的自動化安全漏洞檢測
 
 ### 開發者體驗
 
@@ -158,4 +163,4 @@ chmod +x start.sh
 
 ---
 
-*最後更新：2025-07-15T14:16:31+08:00 | 維護者：s123104*
+*最後更新：2025-08-15T00:43:00+08:00 | 維護者：s123104*

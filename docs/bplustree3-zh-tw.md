@@ -6,7 +6,8 @@
 > - [B+ Tree 學術資源](https://en.wikipedia.org/wiki/B%2B_tree)
 > - [資料庫系統實作參考](https://db-book.com/)
 > - [Claude Code 效能優化最佳實踐](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-07-15T14:16:31+08:00**
+> - **文件整理時間：2025-08-15T00:41:00+08:00**
+> - **專案最後更新：2025-08-13T21:24:19-07:00**
 
 ---
 
@@ -26,24 +27,34 @@
 
 ## 1. 專案簡介
 
-BPlusTree3 是 Kent Beck 所設計的 B+ Tree 資料結構實作，專為高效能索引、資料庫系統和檔案儲存而設計。在 Claude Code 生態系統中，此實作特別適用於大型程式碼庫的快速檢索和效能優化場景。
+BPlusTree3 是 Kent Beck 所設計的高效能 B+ Tree 資料結構實作，專為高效能索引、資料庫系統和檔案儲存而設計。在 Claude Code 生態系統中，此實作特別適用於大型程式碼庫的快速檢索和效能優化場景。
 
-### 1.1 核心特色
+### 1.1 雙語言實作特色
 
-- **自平衡結構**：自動維持樹的平衡，確保操作效能一致性
-- **範圍查詢優化**：支援高效的區間查詢和遍歷操作
-- **磁碟 I/O 友善**：節點大小可調整，適合不同儲存媒體
-- **併發安全**：提供線程安全的讀寫操作
-- **記憶體效率**：智能緩存機制，減少記憶體佔用
+- **🦀 Rust 實作**：零成本抽象、基於 Arena 的記憶體管理
+- **🐍 Python 實作**：與 SortedDict 競爭，針對特定使用案例優化
+- **跨平台支援**：完整的 Rust 和 Python 生態系統整合
 
-### 1.2 在 Claude Code 中的應用
+### 1.2 效能亮點
+
+#### Rust 實作
+- **刪除操作快 41%**：優化的重新平衡演算法
+- **混合工作負載提升 19-30%**：全面的效能優化
+- **完整 Rust 範圍語法支援**：`3..7`、`3..=7`、`5..` 等
+
+#### Python 實作
+- **部分範圍掃描快 2.5 倍**：相比 SortedDict
+- **中等範圍查詢快 1.4 倍**：針對特定查詢模式優化
+- **優秀的大資料集迭代縮放**：線性時間複雜度
+
+### 1.3 在 Claude Code 中的應用
 
 - **程式碼索引**：為大型專案建立快速檢索索引
 - **依賴分析**：追蹤和查詢模組間的依賴關係
 - **版本比較**：高效比較不同版本間的檔案變更
 - **語義搜尋**：支援基於內容的智能搜尋功能
 
-### 1.3 效能優勢
+### 1.4 效能優勢
 
 | 操作類型 | 時間複雜度 | 空間複雜度 | 適用場景 |
 |----------|------------|------------|----------|
@@ -64,6 +75,12 @@ BPlusTree3 是 Kent Beck 所設計的 B+ Tree 資料結構實作，專為高效�
 - 節點分裂與合併自動維持平衡。
 - 葉節點以鏈結串接，便於順序掃描。
 
+### 2.1 最新架構改進
+
+- **移除未使用的 Arena 實作**：整合到 CompactArena 以簡化架構
+- **記憶體管理優化**：更高效的記憶體分配和回收
+- **效能提升**：持續的演算法優化和基準測試改進
+
 ---
 
 ## 3. 安裝與快速開始
@@ -75,16 +92,58 @@ git clone https://github.com/KentBeck/BPlusTree3.git
 cd BPlusTree3
 ```
 
-### 3.2 編譯與執行
+### 3.2 Rust 實作
 
-- 依專案語言（如 Java/C++/Python）進行編譯或直接執行。
-- 詳細步驟請參閱專案內 README 或原始碼註解。
+```bash
+cd rust
+cargo build --release
+cargo test
+```
+
+### 3.3 Python 實作
+
+```bash
+cd python
+pip install -e .
+python -m pytest
+```
 
 ---
 
 ## 4. 核心 API 與用法
 
-### 4.1 主要操作
+### 4.1 Rust API
+
+```rust
+use bplustree::BPlusTree;
+
+let mut tree = BPlusTree::new();
+tree.insert(10, "A");
+tree.insert(20, "B");
+tree.insert(30, "C");
+
+// 範圍查詢
+for (key, value) in tree.range(10..=30) {
+    println!("{}: {}", key, value);
+}
+```
+
+### 4.2 Python API
+
+```python
+from bplustree import BPlusTree
+
+tree = BPlusTree()
+tree.insert(10, 'A')
+tree.insert(20, 'B')
+tree.insert(30, 'C')
+
+# 範圍查詢
+for key, value in tree.range(10, 30):
+    print(key, value)
+```
+
+### 4.3 主要操作
 
 - `insert(key, value)`：插入鍵值對
 - `delete(key)`：刪除指定鍵
@@ -92,7 +151,7 @@ cd BPlusTree3
 - `range_search(start, end)`：範圍查詢
 - `update(key, value)`：更新指定鍵值
 
-### 4.2 節點結構
+### 4.4 節點結構
 
 - 內部節點：僅儲存索引鍵與子節點指標
 - 葉節點：儲存實際資料與鏈結指標
@@ -101,17 +160,66 @@ cd BPlusTree3
 
 ## 5. 範例程式碼
 
-```python
-# 假設為 Python 實作範例
-from bplustree import BPlusTree
+### 5.1 Rust 完整範例
 
-tree = BPlusTree(order=4)
-tree.insert(10, 'A')
-tree.insert(20, 'B')
-tree.insert(30, 'C')
-print(tree.search(20))  # 輸出: 'B'
-for key, value in tree.range_search(10, 30):
-    print(key, value)
+```rust
+use bplustree::{BPlusTree, Config};
+
+fn main() {
+    // 建立配置
+    let config = Config::default()
+        .with_order(4)
+        .with_arena_size(1024 * 1024);
+    
+    // 建立樹
+    let mut tree = BPlusTree::with_config(config);
+    
+    // 插入資料
+    for i in 0..1000 {
+        tree.insert(i, format!("value_{}", i));
+    }
+    
+    // 範圍查詢
+    let range: Vec<_> = tree.range(100..200).collect();
+    println!("Found {} items in range 100..200", range.len());
+    
+    // 效能測試
+    let start = std::time::Instant::now();
+    for i in 0..1000 {
+        tree.search(&i);
+    }
+    let duration = start.elapsed();
+    println!("1000 searches took: {:?}", duration);
+}
+```
+
+### 5.2 Python 完整範例
+
+```python
+from bplustree import BPlusTree
+import time
+
+def main():
+    # 建立樹
+    tree = BPlusTree(order=4)
+    
+    # 插入資料
+    for i in range(1000):
+        tree.insert(i, f"value_{i}")
+    
+    # 範圍查詢
+    range_items = list(tree.range(100, 200))
+    print(f"Found {len(range_items)} items in range 100..200")
+    
+    # 效能測試
+    start_time = time.time()
+    for i in range(1000):
+        tree.search(i)
+    duration = time.time() - start_time
+    print(f"1000 searches took: {duration:.4f} seconds")
+
+if __name__ == "__main__":
+    main()
 ```
 
 ---
@@ -122,6 +230,38 @@ for key, value in tree.range_search(10, 30):
 - 大量資料批次插入時，建議先排序再批次寫入
 - 支援自訂比較器、序列化儲存（依專案語言）
 - 可用於資料庫索引、快取、檔案系統目錄等
+
+### 6.1 效能優化技巧
+
+#### Rust 優化
+```rust
+// 使用適當的 order 值
+let config = Config::default()
+    .with_order(64)  // 根據資料特性調整
+    .with_arena_size(1024 * 1024 * 10);  // 預分配記憶體
+
+// 批次操作
+let mut batch = Vec::new();
+for i in 0..10000 {
+    batch.push((i, format!("value_{}", i)));
+}
+tree.insert_batch(batch);
+```
+
+#### Python 優化
+```python
+# 使用生成器避免記憶體浪費
+def data_generator():
+    for i in range(10000):
+        yield (i, f"value_{i}")
+
+# 批次插入
+tree.insert_batch(data_generator())
+
+# 記憶體優化
+import gc
+gc.collect()  # 手動垃圾回收
+```
 
 ---
 
@@ -283,6 +423,36 @@ def track_code_changes(old_tree, new_tree):
 - 效能瓶頸：調整階數、優化磁碟 I/O、檢查鎖定機制
 - 編譯/執行錯誤：確認相依套件與語言版本
 
+### 8.1 常見效能問題
+
+#### 記憶體使用過高
+```python
+# 檢查記憶體使用
+import psutil
+process = psutil.Process()
+print(f"Memory usage: {process.memory_info().rss / 1024 / 1024:.2f} MB")
+
+# 優化記憶體配置
+tree = BPlusTree(order=64)  # 減少節點大小
+tree.set_memory_limit(1024 * 1024 * 100)  # 設定記憶體限制
+```
+
+#### 查詢效能下降
+```python
+# 檢查樹的平衡度
+def check_balance(tree):
+    depths = []
+    for leaf in tree.leaves():
+        depths.append(tree.depth(leaf))
+    
+    avg_depth = sum(depths) / len(depths)
+    max_depth = max(depths)
+    
+    print(f"Average depth: {avg_depth:.2f}")
+    print(f"Max depth: {max_depth}")
+    print(f"Balance ratio: {avg_depth / max_depth:.2f}")
+```
+
 ---
 
 ## 9. 社群資源與延伸閱讀
@@ -292,8 +462,24 @@ def track_code_changes(old_tree, new_tree):
 - [資料庫系統概論（B+ Tree 章節）](https://www.db-book.com/)
 - [B+ Tree 視覺化工具](https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html)
 
+### 9.1 相關研究與論文
+
+- **B+ Tree 效能分析**：各種實作方式的效能比較
+- **記憶體管理策略**：Arena 分配器的優化技術
+- **併發控制**：多執行緒環境下的 B+ Tree 操作
+- **持久化技術**：WAL 和檢查點機制的實作
+
+### 9.2 社群貢獻
+
+- **效能基準測試**：持續的效能改進和優化
+- **新功能開發**：支援更多資料類型和操作
+- **文檔改進**：更詳細的使用指南和範例
+- **測試覆蓋**：提高程式碼品質和穩定性
+
 ---
 
-> 本文件最後更新：2025-07-14T11:51:25+08:00
+> 本文件最後更新：2025-08-15T00:41:00+08:00
 >
 > 主要參考來源：[KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3)
+>
+> **專案更新**：2025-08-13T21:24:19-07:00 | **特色**：雙語言實作（Rust + Python）

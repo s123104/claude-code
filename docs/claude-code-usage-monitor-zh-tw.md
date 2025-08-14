@@ -5,7 +5,9 @@
 > - [GitHub 專案](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)
 > - [PyPI 套件頁面](https://pypi.org/project/claude-monitor/)
 > - [Docker Hub](https://hub.docker.com/r/maciek/claude-usage-monitor)
-> - **文件整理時間：2025-07-15T14:16:31+08:00**
+> - **文件整理時間：2025-08-15T00:37:00+08:00**
+> - **專案版本：v3.1.0（最新版本）**
+> - **專案最後更新：2025-07-24T00:21:42+02:00**
 
 ---
 
@@ -34,6 +36,7 @@ Claude Code Usage Monitor 是一套即時監控 Claude Code 令牌（token）用
 - **彈性警示**：可設定用量閾值和通知機制
 - **多重介面**：CLI、Web Dashboard、RESTful API
 - **跨平台支援**：Linux、macOS、Windows（WSL）
+- **機器學習預測**：LSTM、Prophet、Isolation Forest、XGBoost 等演算法
 
 ### 1.2 使用場景
 
@@ -46,21 +49,32 @@ Claude Code Usage Monitor 是一套即時監控 Claude Code 令牌（token）用
 
 ## 2. 安裝方式
 
-### 2.1 使用 uv（推薦）
+### 2.1 使用 uv（強烈推薦）
 
 ```bash
 # 安裝 uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # 安裝 Claude Monitor
 uv tool install claude-monitor
+
 # 執行
 claude-monitor
 ```
+
+**為什麼 uv 是最佳選擇：**
+
+- ✅ 自動創建隔離環境（無系統衝突）
+- ✅ 無 Python 版本問題
+- ✅ 無 "externally-managed-environment" 錯誤
+- ✅ 簡單的更新和卸載
+- ✅ 支援所有平台
 
 ### 2.2 使用 pip
 
 ```bash
 pip install claude-monitor
+
 # 若找不到指令，加入 PATH：
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
@@ -97,27 +111,27 @@ python claude_monitor.py
 
 ## 3. 啟動與基本用法
 
-- 預設方案（Pro）：
+- **預設方案（Pro）**：
   ```bash
   claude-monitor
   ```
-- 指定方案：
+- **指定方案**：
   ```bash
   claude-monitor --plan max5
   claude-monitor --plan max20
   claude-monitor --plan custom_max
   ```
-- 設定重置時刻與時區：
+- **設定重置時刻與時區**：
   ```bash
   claude-monitor --reset-hour 9 --timezone Asia/Taipei
   ```
-- 主題設定：
+- **主題設定**：
   ```bash
   claude-monitor --theme light
   claude-monitor --theme dark
   claude-monitor --theme auto
   ```
-- Web Dashboard（Docker）：
+- **Web Dashboard（Docker）**：
   ```bash
   docker run -p 8080:8080 maciek/claude-usage-monitor --web-mode
   ```
@@ -182,12 +196,14 @@ docker run -d -p 8080:8080 --name claude-monitor maciek/claude-usage-monitor --w
 ### 6.2 主要功能
 
 #### 視覺化面板
+
 - **即時用量儀表板**：顯示當前 token 使用量和剩餘額度
 - **歷史趨勢圖表**：日、週、月用量變化曲線
 - **Session 時間軸**：詳細的對話記錄和用量分布
 - **方案比較圖**：不同訂閱方案的使用效率分析
 
 #### 互動功能
+
 - **REST API 端點**：`/api/usage`、`/api/stats`、`/api/alerts`
 - **行動裝置支援**：響應式設計，支援手機和平板訪問
 - **即時更新**：WebSocket 連接，無需手動刷新
@@ -196,6 +212,7 @@ docker run -d -p 8080:8080 --name claude-monitor maciek/claude-usage-monitor --w
 ### 6.3 Docker 進階配置
 
 #### 環境變數設定
+
 ```bash
 # 方案與時區設定
 docker run -e PLAN=max5 -e RESET_HOUR=9 -e TIMEZONE=Asia/Taipei maciek/claude-usage-monitor
@@ -216,8 +233,9 @@ docker run -d \
 ```
 
 #### Docker Compose 範例
+
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   claude-monitor:
     image: maciek/claude-usage-monitor
@@ -237,16 +255,17 @@ services:
 
 ### 6.4 API 端點說明
 
-| 端點 | 方法 | 功能 | 回應格式 |
-|------|------|------|----------|
-| `/api/usage` | GET | 當前用量資訊 | JSON |
-| `/api/usage/history` | GET | 歷史用量記錄 | JSON |
-| `/api/stats` | GET | 統計資訊 | JSON |
-| `/api/alerts` | GET | 警示設定 | JSON |
-| `/api/alerts` | POST | 更新警示 | JSON |
-| `/api/export` | GET | 匯出資料 | CSV/JSON |
+| 端點                 | 方法 | 功能         | 回應格式 |
+| -------------------- | ---- | ------------ | -------- |
+| `/api/usage`         | GET  | 當前用量資訊 | JSON     |
+| `/api/usage/history` | GET  | 歷史用量記錄 | JSON     |
+| `/api/stats`         | GET  | 統計資訊     | JSON     |
+| `/api/alerts`        | GET  | 警示設定     | JSON     |
+| `/api/alerts`        | POST | 更新警示     | JSON     |
+| `/api/export`        | GET  | 匯出資料     | CSV/JSON |
 
 #### API 使用範例
+
 ```bash
 # 取得當前用量
 curl http://localhost:8080/api/usage
@@ -299,3 +318,6 @@ curl -X POST http://localhost:8080/api/alerts \
 ---
 
 > 如需更多細節、除錯指令、或參與開發，請參閱 [官方 GitHub](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor) 及專案內 README、TROUBLESHOOTING、DEVELOPMENT、CONTRIBUTING、RELEASE.md 文件。
+>
+> **版本資訊**：Claude Code Usage Monitor v3.1.0 - 最新版本  
+> **最後更新**：2025-08-15T00:37:00+08:00
