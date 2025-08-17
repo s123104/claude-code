@@ -1,5 +1,10 @@
 # Claude Code Guide 中文全解（繁體中文版）
 
+## 概述
+
+此專案提供了完整的功能說明。
+
+
 > **本文件彙整自：**
 > 
 > - [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) 社群指南

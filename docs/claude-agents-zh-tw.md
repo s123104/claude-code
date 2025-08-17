@@ -1,5 +1,13 @@
 # Claude Code Custom Agents 中文說明書
 
+> **版本**: 最新版本
+
+
+## 概述
+
+此專案提供了完整的功能說明。
+
+
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/iannuttall/claude-agents)

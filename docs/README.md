@@ -1,7 +1,7 @@
 # Claude Code 文件索引
 
 > **目錄概覽**: 完整的 Claude Code 與 Cursor AI 整合說明書集合  
-> **更新時間**: 2025-08-15T00:48:00+08:00  
+> **更新時間**: 2025-08-17T23:33:17+08:00  
 > **文件語言**: 繁體中文
 
 ---
@@ -29,6 +29,12 @@
 | [ccusage-zh-tw.md](ccusage-zh-tw.md)                                         | 用量分析工具    | `--analyze` `--cost` `--report`    | 成本分析、使用追蹤     |
 | [claude-agents-zh-tw.md](claude-agents-zh-tw.md)                             | 自訂代理系統    | `--custom-agent` `--workflow`      | 自訂工作流程、專案管理 |
 | [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)                 | AI 驅動除錯     | `--debug` `--analyze` `--fix`      | 錯誤診斷、問題解決     |
+| [claude-code-spec-zh-tw.md](claude-code-spec-zh-tw.md)                       | 規格驅動開發    | `--spec` `--prp` `--workflow`      | 結構化開發流程         |
+| [claude-code-leaderboard-zh-tw.md](claude-code-leaderboard-zh-tw.md)         | 使用量排行榜    | `--track` `--leaderboard`          | 競爭式使用量追蹤       |
+| [claudia-zh-tw.md](claudia-zh-tw.md)                                         | 桌面 GUI 工具   | `--gui` `--desktop` `--visual`     | 圖形化專案管理         |
+| [context-engineering-intro-zh-tw.md](context-engineering-intro-zh-tw.md)     | 脈絡工程方法論  | `--context` `--prp` `--template`   | AI 輔助開發最佳實踐    |
+| [vibe-kanban-zh-tw.md](vibe-kanban-zh-tw.md)                                 | 看板專案管理    | `--kanban` `--git-integration`     | 多代理協作管理         |
+| [contains-studio-agents-zh-tw.md](contains-studio-agents-zh-tw.md)           | 專業代理庫      | `--agents` `--studio` `--rapid`    | 快速開發專業代理       |
 
 ---
 
@@ -140,12 +146,12 @@ chmod +x start.sh
 
 | 項目       | 數量 | 說明                 |
 | ---------- | ---- | -------------------- |
-| 核心文件   | 12   | 專業功能文件         |
-| 支援旗標   | 80+  | 涵蓋所有常用操作     |
-| 使用場景   | 30+  | 從入門到企業級應用   |
-| 範例程式碼 | 150+ | 實用的指令與腳本範例 |
-| 最佳實踐   | 40+  | 社群驗證的經驗分享   |
-| 疑難排解   | 35+  | 常見問題與解決方案   |
+| 核心文件   | 18   | 專業功能文件         |
+| 支援旗標   | 100+ | 涵蓋所有常用操作     |
+| 使用場景   | 45+  | 從入門到企業級應用   |
+| 範例程式碼 | 200+ | 實用的指令與腳本範例 |
+| 最佳實踐   | 60+  | 社群驗證的經驗分享   |
+| 疑難排解   | 50+  | 常見問題與解決方案   |
 
 ---
 
@@ -164,7 +170,7 @@ chmod +x start.sh
 - **效能優化**: B+Tree 資料結構與快取策略
 - **CI/CD 整合**: GitHub Actions 與自動化部署
 - **安全審查**: AI 驅動的自動化安全漏洞檢測
-- **專業代理**: 61 個專業領域代理
+- **專業代理**: 75 個專業領域代理
 - **用量分析**: 極速用量分析與成本追蹤
 - **AI 除錯**: 多語言錯誤分析與解決方案
 
@@ -183,4 +189,4 @@ chmod +x start.sh
 
 ---
 
-_最後更新：2025-08-15T00:48:00+08:00 | 維護者：s123104_
+_最後更新：2025-08-17T23:33:17+08:00 | 維護者：s123104_

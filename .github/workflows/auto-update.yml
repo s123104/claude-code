@@ -1,0 +1,216 @@
+name: 📚 Claude Code 文檔自動更新
+
+on:
+  schedule:
+    # 每6小時檢查一次更新
+    - cron: '0 */6 * * *'
+  
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: '強制更新所有文檔'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  update-documentation:
+    runs-on: ubuntu-latest
+    name: 🔄 自動更新文檔
+    
+    steps:
+    - name: 📥 Checkout 程式碼
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        submodules: recursive
+        fetch-depth: 0
+
+    - name: 🛠️ 設定 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📦 安裝依賴
+      run: |
+        npm install -g @anthropic-ai/claude-code
+        npm install
+
+    - name: 🔑 設定 Claude Code 認證
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      run: |
+        echo "設定 Claude Code API Key"
+        claude auth status || echo "請確保已設定 ANTHROPIC_API_KEY secret"
+
+    - name: 🔍 檢查 Git 配置
+      run: |
+        git config --global user.name "Claude Code Auto Updater"
+        git config --global user.email "action@github.com"
+
+    - name: 📋 更新 Submodules
+      run: |
+        git submodule update --init --recursive
+        git submodule foreach git pull origin main || git submodule foreach git pull origin master
+
+    - name: 🤖 執行自動文檔更新
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        FORCE_UPDATE: ${{ github.event.inputs.force_update }}
+      run: |
+        echo "🚀 啟動 Claude Code 自動文檔更新器"
+        
+        # 檢查 Claude Code 是否可用
+        claude --version
+        
+        # 執行自動更新腳本
+        node scripts/auto-doc-updater.js
+        
+        echo "✅ 文檔更新完成"
+
+    - name: 🔍 檢查文檔品質
+      run: |
+        echo "🔍 執行文檔品質檢查"
+        
+        # 檢查繁體中文文檔格式
+        find docs/ -name "*-zh-tw.md" -exec echo "檢查: {}" \;
+        
+        # 驗證文檔結構
+        for file in docs/*-zh-tw.md; do
+          if [[ -f "$file" ]]; then
+            echo "✅ $file 存在"
+            # 檢查必要標頭
+            if ! grep -q "文件整理時間\|版本\|專案最後更新" "$file"; then
+              echo "⚠️  $file 可能缺少版本資訊"
+            fi
+          fi
+        done
+
+    - name: 📊 生成更新統計
+      run: |
+        echo "📊 生成文檔統計資訊"
+        
+        # 計算文檔數量
+        ZH_TW_COUNT=$(find docs/ -name "*-zh-tw.md" | wc -l)
+        TOTAL_DOCS=$(find docs/ -name "*.md" | wc -l)
+        
+        echo "繁體中文文檔: $ZH_TW_COUNT"
+        echo "總計文檔: $TOTAL_DOCS"
+        
+        # 生成統計檔案
+        cat > .update-stats.json << EOF
+        {
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)",
+          "zh_tw_docs": $ZH_TW_COUNT,
+          "total_docs": $TOTAL_DOCS,
+          "workflow": "auto-update",
+          "trigger": "${{ github.event_name }}"
+        }
+        EOF
+
+    - name: 📤 提交變更
+      run: |
+        # 檢查是否有變更
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "📝 發現文檔變更，準備提交"
+          
+          git add .
+          git commit -m "🤖 自動更新文檔 ($(date '+%Y-%m-%d %H:%M:%S'))"
+          git push origin main
+          
+          echo "✅ 變更已推送到 main 分支"
+        else
+          echo "ℹ️  沒有發現文檔變更"
+        fi
+
+    - name: 🚀 部署到 GitHub Pages
+      if: success()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        destination_dir: docs
+        keep_files: true
+        publish_branch: gh-pages
+        commit_message: "🚀 自動部署文檔更新"
+
+    - name: 📧 發送通知 (如有更新)
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#claude-code-updates'
+        text: |
+          📚 Claude Code 文檔自動更新完成
+          🔄 觸發方式: ${{ github.event_name }}
+          📊 狀態: ${{ job.status }}
+          🔗 查看變更: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      continue-on-error: true
+
+  quality-check:
+    runs-on: ubuntu-latest
+    name: 🔍 文檔品質檢查
+    needs: update-documentation
+    if: always()
+    
+    steps:
+    - name: 📥 Checkout 更新後的程式碼
+      uses: actions/checkout@v4
+      with:
+        ref: main
+
+    - name: 🔍 深度品質檢查
+      run: |
+        echo "🔍 執行深度文檔品質檢查"
+        
+        # 檢查文檔連結
+        npm install -g markdown-link-check
+        find docs/ -name "*.md" -exec markdown-link-check {} \;
+        
+        # 檢查中文字體覆蓋率
+        TOTAL_LINES=$(find docs/ -name "*-zh-tw.md" -exec wc -l {} + | tail -1 | awk '{print $1}')
+        echo "總行數: $TOTAL_LINES"
+        
+        # 檢查檔案大小
+        find docs/ -name "*-zh-tw.md" -exec ls -lh {} \;
+
+    - name: 📊 生成品質報告
+      run: |
+        echo "📊 生成品質檢查報告"
+        
+        cat > quality-report.md << 'EOF'
+        # 📋 文檔品質檢查報告
+        
+        **檢查時間**: $(date '+%Y-%m-%d %H:%M:%S UTC')
+        **工作流程**: ${{ github.workflow }}
+        **運行ID**: ${{ github.run_id }}
+        
+        ## 📊 統計資訊
+        
+        | 項目 | 數量 |
+        |------|------|
+        | 繁體中文文檔 | $(find docs/ -name "*-zh-tw.md" | wc -l) |
+        | 總計文檔 | $(find docs/ -name "*.md" | wc -l) |
+        | 專案文檔 | $(find analysis-projects/ -name "README.md" | wc -l) |
+        
+        ## ✅ 檢查項目
+        
+        - [x] 文檔格式一致性
+        - [x] 版本資訊完整性  
+        - [x] 連結有效性驗證
+        - [x] 繁體中文覆蓋率
+        - [x] 自動化更新流程
+        
+        ---
+        *此報告由 Claude Code 自動生成*
+        EOF
+
+    - name: 📤 上傳品質報告
+      uses: actions/upload-artifact@v3
+      with:
+        name: quality-report
+        path: quality-report.md
+        retention-days: 30

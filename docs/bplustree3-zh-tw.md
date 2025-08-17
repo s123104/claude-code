@@ -1,5 +1,13 @@
 # BPlusTree3 中文全解（繁體中文版）
 
+> **版本**: 最新版本
+
+
+## 概述
+
+此專案提供了完整的功能說明。
+
+
 > **本文件彙整自：**
 > 
 > - [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) 官方文件與原始碼

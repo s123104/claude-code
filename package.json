@@ -1,0 +1,106 @@
+{
+  "name": "claude-code-zh-tw-docs",
+  "version": "3.5.0",
+  "description": "Claude Code 繁體中文文件整合專案 - 完整的 Claude Code 與 Cursor AI 整合說明書集合",
+  "main": "index.js",
+  "scripts": {
+    "start": "node scripts/auto-doc-updater.js",
+    "update": "node scripts/auto-doc-updater.js",
+    "quality-check": "node scripts/quality-checker.js",
+    "auto-fix": "node scripts/auto-fix.js",
+    "dev": "npx http-server . -p 8080 -o",
+    "build": "npm run quality-check && npm run update",
+    "test": "npm run quality-check",
+    "docs:serve": "npx http-server . -p 3000 -o index.html",
+    "docs:build": "npm run build",
+    "lint": "eslint scripts/*.js",
+    "format": "prettier --write scripts/*.js docs/*.md",
+    "install-claude": "npm install -g @anthropic-ai/claude-code",
+    "check-updates": "node scripts/check-repo-updates.js",
+    "sync-repos": "node scripts/sync-repositories.js",
+    "deploy": "npm run build && gh-pages -d ."
+  },
+  "keywords": [
+    "claude-code",
+    "anthropic",
+    "ai",
+    "coding-assistant",
+    "cursor",
+    "documentation",
+    "traditional-chinese",
+    "zh-tw",
+    "mcp",
+    "subagents",
+    "automation"
+  ],
+  "author": "Claude Code 中文社群",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s123104/claude-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/s123104/claude-code/issues"
+  },
+  "homepage": "https://s123104.github.io/claude-code/",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3",
+    "http-server": "^14.1.1",
+    "gh-pages": "^6.0.0",
+    "markdown-link-check": "^3.11.2",
+    "nodemon": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/claude-code": ">=6.0.0"
+  },
+  "config": {
+    "update_interval": "6h",
+    "quality_check_on_build": true,
+    "auto_fix_enabled": true,
+    "claude_code_version": "6.0.0"
+  },
+  "claude-code": {
+    "project_type": "documentation",
+    "language": "zh-TW",
+    "repositories": [
+      "SuperClaude_Framework",
+      "agents",
+      "awesome-claude-code",
+      "claude-code-guide",
+      "claudecodeui",
+      "BPlusTree3",
+      "claudia",
+      "claude-code-hooks",
+      "claude-code-spec",
+      "ccusage",
+      "vibe-kanban",
+      "claude-agents",
+      "ClaudeCode-Debugger",
+      "claude-code-leaderboard",
+      "context-engineering-intro",
+      "contains-studio-agents",
+      "claude-code-security-review"
+    ],
+    "mcp_servers": [
+      "context7",
+      "memory",
+      "puppeteer",
+      "time",
+      "fetch"
+    ],
+    "automation": {
+      "enabled": true,
+      "update_frequency": "0 */6 * * *",
+      "quality_check": true,
+      "auto_deploy": true
+    }
+  }
+}
