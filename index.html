@@ -2589,114 +2589,164 @@
           <p class="text-sm text-neutral-400 mt-2">最後更新：2025-08-20 | v6.0.0 Subagents 版本 | 自動化 CI/CD 部署</p>
         </div>
 
+        <!-- Search Bar -->
+        <div class="flex justify-center mb-8">
+          <div class="relative w-full max-w-md">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-neutral-400"></i>
+            </div>
+            <input 
+              type="text" 
+              id="search-projects"
+              class="block w-full pl-10 pr-3 py-2 border border-neutral-600 rounded-lg bg-neutral-800 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
+              placeholder="搜尋專案名稱或功能..."
+            >
+          </div>
+        </div>
+
         <!-- Filter Tabs -->
         <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-tabs">
           <button class="filter-btn active px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-primary-500 text-white" data-filter="all">
-            🌟 全部項目 (29)
+            <i class="fas fa-globe mr-1"></i> 全部項目 (20)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="core">
-            📚 核心文檔 (3)
+            <i class="fas fa-book mr-1"></i> 核心文檔 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="framework">
-            🎨 增強框架 (2)
+            <i class="fas fa-magic mr-1"></i> 增強框架 (2)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="agents">
-            🤖 AI 代理 (3)
+            <i class="fas fa-robot mr-1"></i> AI 代理 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="monitoring">
-            📊 監控分析 (2)
+            <i class="fas fa-chart-line mr-1"></i> 監控分析 (2)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="interface">
-            🖥️ 介面工具 (3)
+            <i class="fas fa-desktop mr-1"></i> 介面工具 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="performance">
-            ⚡ 效能優化 (1)
+            <i class="fas fa-tachometer-alt mr-1"></i> 效能優化 (1)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="security">
-            🔒 安全審查 (1)
+            <i class="fas fa-shield-alt mr-1"></i> 安全審查 (1)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="guides">
-            📖 指南教學 (3)
+            <i class="fas fa-graduation-cap mr-1"></i> 指南教學 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="tools">
-            🔧 專業工具 (11)
+            <i class="fas fa-tools mr-1"></i> 專業工具 (2)
           </button>
         </div>
 
         <!-- Project Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="projects-grid">
-          <a
-            href="docs/cursor-claude-master-guide-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-primary-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                  clip-rule="evenodd"
-                /></svg
-              >綜合代理主控手冊
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              完整功能索引、需求解析、執行流程、錯誤處理、文件索引
-            </p>
-            <span class="text-xs text-neutral-400">必讀｜2025-07-15</span>
-          </a>
+          
+          <!-- 📚 核心文檔類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="core" data-tags="官方,必讀,基礎">
+            <a href="claude-code-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded-full">核心必讀</span>
+              </div>
+              <h3 class="text-lg font-bold text-primary-400 mb-2">
+                <i class="fas fa-book mr-2"></i>Claude Code 官方手冊
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 官方驗證的完整使用指南<br/>
+                <strong>場景</strong>: 安裝、配置、基礎操作、疑難排解<br/>
+                <strong>客群</strong>: 所有 Claude Code 用戶 (必讀文檔)
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v6.0.0 | 2025-08-10</span>
+                <span class="text-red-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/awesome-claude-code-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-secondary-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
-                /></svg
-              >社群最佳實踐
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              Workflow、Hooks、Slash-Commands、MCP 整合
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="core" data-tags="整合,主控,索引">
+            <a href="docs/cursor-claude-master-guide-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-primary-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-primary-500/20 text-primary-300 px-2 py-1 rounded-full">綜合整合</span>
+              </div>
+              <h3 class="text-lg font-bold text-primary-400 mb-2">
+                <i class="fas fa-sitemap mr-2"></i>綜合代理主控手冊
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 統一功能索引、需求解析引擎<br/>
+                <strong>場景</strong>: 複雜任務分解、多文檔協調工作<br/>
+                <strong>客群</strong>: 進階用戶、技術主管、系統整合者
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版 | 2025-08-20</span>
+                <span class="text-primary-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/superclaude-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-purple-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
-                /></svg
-              >高階功能系統
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              Persona、進階指令、全流程自動化
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="core" data-tags="文檔,導覽,索引">
+            <a href="docs/README.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-orange-500/20 text-orange-300 px-2 py-1 rounded-full">文檔索引</span>
+              </div>
+              <h3 class="text-lg font-bold text-orange-400 mb-2">
+                <i class="fas fa-list mr-2"></i>完整文檔導覽索引
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 完整文檔索引、分類導覽、快速參考<br/>
+                <strong>場景</strong>: 文檔查找、快速導覽、分類檢索<br/>
+                <strong>客群</strong>: 所有用戶、文檔管理員、新手導覽
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>索引版 | 2025-08-20</span>
+                <span class="text-orange-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 🎨 增強框架類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="framework" data-tags="社群,最佳實踐,範例">
+            <a href="docs/awesome-claude-code-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">社群資源</span>
+              </div>
+              <h3 class="text-lg font-bold text-green-400 mb-2">
+                <i class="fas fa-star mr-2"></i>Awesome Claude Code 資源集
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 實戰範例、Hooks、斜線指令、最佳實踐索引<br/>
+                <strong>場景</strong>: 專案啟動、流程範本查找、學習參考<br/>
+                <strong>客群</strong>: 所有開發者、技術寫作者、新手學習
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>社群版 | 2025-08-20</span>
+                <span class="text-green-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="framework" data-tags="高階,Persona,MCP">
+            <a href="docs/superclaude-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-secondary-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-secondary-500/20 text-secondary-300 px-2 py-1 rounded-full">專業框架</span>
+              </div>
+              <h3 class="text-lg font-bold text-secondary-400 mb-2">
+                <i class="fas fa-magic mr-2"></i>SuperClaude 專業框架
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 16 個專業指令、Persona 系統、MCP 整合<br/>
+                <strong>場景</strong>: 高階自動化開發、團隊規範落地<br/>
+                <strong>客群</strong>: 進階開發者、技術主管、團隊協作
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v3.0.0 | 2025-08-20</span>
+                <span class="text-secondary-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
           <a
             href="docs/claude-code-guide-zh-tw.md"
