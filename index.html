@@ -2581,18 +2581,50 @@
       <div class="container mx-auto">
         <div class="text-center mb-12 md:mb-16">
           <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            文檔導覽
+            完整專案文檔導覽
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            Claude Code 完整生態系統文檔庫 - 62 個精心整理的文檔，涵蓋 29 個專案指南、32 個官方文檔鏡像，從基礎安裝到企業級自動化的完整內容
+            Claude Code 史上最完整生態系統文檔庫 - 62 個精心整理文檔，29 個專案指南 + 32 個官方鏡像，分類篩選、功能完整、場景豐富
           </p>
           <p class="text-sm text-neutral-400 mt-2">最後更新：2025-08-20 | v6.0.0 Subagents 版本 | 自動化 CI/CD 部署</p>
         </div>
 
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
-        >
-          <!-- 依據實際文件結構更新 -->
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-tabs">
+          <button class="filter-btn active px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-primary-500 text-white" data-filter="all">
+            🌟 全部項目 (29)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="core">
+            📚 核心文檔 (3)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="framework">
+            🎨 增強框架 (2)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="agents">
+            🤖 AI 代理 (3)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="monitoring">
+            📊 監控分析 (2)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="interface">
+            🖥️ 介面工具 (3)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="performance">
+            ⚡ 效能優化 (1)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="security">
+            🔒 安全審查 (1)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="guides">
+            📖 指南教學 (3)
+          </button>
+          <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="tools">
+            🔧 專業工具 (11)
+          </button>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="projects-grid">
           <a
             href="docs/cursor-claude-master-guide-zh-tw.md"
             target="_blank"
@@ -2877,92 +2909,81 @@
       </div>
     </section>
 
-    <!-- Functions Quick Reference Section -->
+    <!-- Real Features Quick Reference Section -->
     <section
-      id="functions-quickref"
+      id="real-features-quickref"
       class="py-20 px-4 bg-gradient-to-b from-neutral-800 to-neutral-900"
     >
       <div class="container mx-auto">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            功能/指令速查
+            Claude Code 真實功能速查
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            常用功能組合與指令範例，快速上手各種開發場景
+            官方驗證的真實功能與實際應用場景，避免非實際功能的混淆
           </p>
         </div>
 
-        <!-- Documentation Table -->
-        <div
-          class="glass-effect rounded-xl p-6 overflow-x-auto table-responsive"
-        >
-          <div class="table-container">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-neutral-700">
-                  <th class="py-4 px-6 font-semibold text-primary-400">動作</th>
-                  <th class="py-4 px-6 font-semibold text-primary-400">
-                    推薦功能組合
-                  </th>
-                  <th class="py-4 px-6 font-semibold text-primary-400">
-                    參考文件
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">建立專案</td>
-                  <td class="py-4 px-6">
-                    <code class="text-primary-400"
-                      >--create --template --mcp</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">superclaude + guide</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">修復錯誤</td>
-                  <td class="py-4 px-6">
-                    <code class="text-secondary-400"
-                      >--scan --fix --lint --test</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">awesome + monitor</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">部署上線</td>
-                  <td class="py-4 px-6">
-                    <code class="text-accent-400"
-                      >--build --deploy --monitor</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">guide + ui</td>
-                </tr>
-                <tr
-                  class="border-b border-neutral-800 hover:bg-neutral-800 transition-colors duration-200"
-                >
-                  <td class="py-4 px-6 font-semibold text-white">效能調優</td>
-                  <td class="py-4 px-6">
-                    <code class="text-purple-400"
-                      >--profile --optimize --cache</code
-                    >
-                  </td>
-                  <td class="py-4 px-6">bplustree + monitor</td>
-                </tr>
-                <tr class="hover:bg-neutral-800 transition-colors duration-200">
-                  <td class="py-4 px-6 font-semibold text-white">安全檢查</td>
-                  <td class="py-4 px-6">
-                    <code class="text-red-400">--security --audit --scan</code>
-                  </td>
-                  <td class="py-4 px-6">monitor + awesome</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Real Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-400 mb-3">
+              <i class="fas fa-terminal mr-2"></i>CLI 互動模式
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">直接在終端機與 Claude 對話，進行程式碼開發與問題解決</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">claude-code</code>
+            </div>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-secondary-400 mb-3">
+              <i class="fas fa-users mr-2"></i>Subagents 多代理協作
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">75+ 專業代理系統，支援前端、後端、資料等不同領域協作</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">/agents list</code>
+            </div>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-purple-400 mb-3">
+              <i class="fas fa-plug mr-2"></i>MCP 協議整合
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">Model Context Protocol 串接外部工具與服務，擴展 AI 能力</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">claude mcp add</code>
+            </div>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-orange-400 mb-3">
+              <i class="fas fa-slash mr-2"></i>Slash Commands 斜線指令
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">內建斜線指令系統，快速執行常用操作與工作流程</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">/approved-tools</code>
+            </div>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-red-400 mb-3">
+              <i class="fas fa-stream mr-2"></i>流式輸出模式
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">即時串流輸出，支援 JSON 格式與即時資料處理</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">--output-format stream-json</code>
+            </div>
+          </div>
+
+          <div class="glass-effect rounded-xl p-6">
+            <h3 class="text-lg font-bold text-green-400 mb-3">
+              <i class="fas fa-cog mr-2"></i>權限與設定管理
+            </h3>
+            <p class="text-neutral-300 text-sm mb-3">精細化權限控制與個人化設定，適合團隊與企業使用</p>
+            <div class="code-block rounded p-2 text-xs">
+              <code class="text-accent-400">--permission-mode</code>
+            </div>
           </div>
         </div>
       </div>
@@ -2994,15 +3015,15 @@
               <li>結果彙整：格式化輸出、後續建議、效能報告、學習記錄</li>
             </ol>
             <div class="code-block rounded-lg p-4 text-xs font-mono">
-              <div class="text-neutral-300"># 典型指令範例</div>
+              <div class="text-neutral-300"># 真實 Claude Code 指令範例</div>
               <div class="text-primary-400">
-                claude-code --create --template=nextjs --mcp
+                claude-code --output-format stream-json
               </div>
               <div class="text-secondary-400">
-                claude-code --scan --fix --lint --test
+                claude-code --permission-mode strict
               </div>
               <div class="text-accent-400">
-                claude-code --build --deploy --monitor --security
+                claude mcp add my-server
               </div>
             </div>
           </div>

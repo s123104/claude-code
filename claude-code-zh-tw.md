@@ -26,7 +26,7 @@
 ### 依需求快速查找
 
 - 🔍 **查找指令** → [指令索引](#-指令索引)
-- 🚩 **查找旗標** → [旗標參考](#-旗標完整參考)
+- 🚩 **查找參數** → [參數參考](#-參數完整參考)
 - ❓ **解決問題** → [疑難排解](#-疑難排解)
 - 🌟 **學習進階** → [工作流程](#-工作流程大全)
 
@@ -54,7 +54,7 @@
 
 - [指令索引](#-指令索引)
 - [CLI 完整參考](#-cli-完整參考)
-- [旗標完整參考](#-旗標完整參考)
+- [參數完整參考](#-參數完整參考)
 - [斜線命令系統](#-斜線命令系統)
 - [常用指令速查](#-常用指令速查)
 
@@ -92,7 +92,7 @@
 
 ## 🎯 專案簡介
 
-本手冊是一份**經過官方文檔完整驗證**的 Claude Code 中文使用指南，所有功能、指令與旗標均已透過 Anthropic 官方文檔交叉比對確認。涵蓋從基礎安裝到進階功能、從日常開發到企業部署的完整流程。
+本手冊是一份**經過官方文檔完整驗證**的 Claude Code 中文使用指南，所有功能、指令與參數均已透過 Anthropic 官方文檔交叉比對確認。涵蓋從基礎安裝到進階功能、從日常開發到企業部署的完整流程。
 
 ### 📋 官方驗證說明
 
@@ -382,11 +382,11 @@ cat logs.txt | claude -p "explain"
 
 ---
 
-## 🚩 旗標完整參考
+## 🚩 參數完整參考
 
-### 基本控制旗標
+### 基本控制參數
 
-| 旗標         | 短參數 | 描述                   | 範例                             |
+| 參數         | 短參數 | 描述                   | 範例                             |
 | ------------ | ------ | ---------------------- | -------------------------------- |
 | `--print`    | `-p`   | 非互動模式，查詢後退出 | `claude -p "解釋程式碼"`         |
 | `--continue` | `-c`   | 繼續最近對話           | `claude -c "繼續討論"`           |
@@ -396,7 +396,7 @@ cat logs.txt | claude -p "explain"
 
 ### 模型與輸出控制
 
-| 旗標              | 描述       | 可用選項                                     | 範例                   |
+| 參數              | 描述       | 可用選項                                     | 範例                   |
 | ----------------- | ---------- | -------------------------------------------- | ---------------------- |
 | `--model`         | 指定模型   | `sonnet`, `opus`, `claude-sonnet-4-20250514` | `--model sonnet`       |
 | `--output-format` | 輸出格式   | `text`, `json`, `stream-json`                | `--output-format json` |
@@ -406,7 +406,7 @@ cat logs.txt | claude -p "explain"
 
 ### 安全與權限控制
 
-| 旗標                             | 描述            | 語法格式             | 範例                                         |
+| 參數                             | 描述            | 語法格式             | 範例                                         |
 | -------------------------------- | --------------- | -------------------- | -------------------------------------------- |
 | `--allowedTools`                 | 允許的工具      | 工具清單             | `--allowedTools "Edit" "View" "Bash(git:*)"` |
 | `--disallowedTools`              | 禁用的工具      | 工具清單             | `--disallowedTools "Bash"`                   |
@@ -416,20 +416,20 @@ cat logs.txt | claude -p "explain"
 
 ### 系統設定
 
-| 旗標                   | 描述                        | 範例                                 |
+| 參數                   | 描述                        | 範例                                 |
 | ---------------------- | --------------------------- | ------------------------------------ |
 | `--add-dir`            | 添加工作目錄                | `--add-dir ../apps ../lib`           |
 | `--settings`           | 從 JSON 檔載入設定          | `--settings ./project-settings.json` |
 | `--system-prompt-file` | 覆寫 print 模式的系統提示檔 | `--system-prompt-file ./sys.md`      |
 
-### SDK 專用旗標（僅限 Print Mode）
+### SDK 專用參數（僅限 Print Mode）
 
-| 旗標                     | 描述         | 範例                                             |
+| 參數                     | 描述         | 範例                                             |
 | ------------------------ | ------------ | ------------------------------------------------ |
 | `--system-prompt`        | 覆蓋系統提示 | `claude -p "查詢" --system-prompt "您是專家"`    |
 | `--append-system-prompt` | 附加系統提示 | `claude -p "查詢" --append-system-prompt "額外"` |
 
-**注意**：這些旗標僅在 SDK 的 print mode (`-p`) 中有效，不適用於互動模式。
+**注意**：這些參數僅在 SDK 的 print mode (`-p`) 中有效，不適用於互動模式。
 
 ### 流式輸出功能 (2025 年 8 月新增)
 
@@ -462,7 +462,7 @@ claude -p "優化這個檔案" --output-format stream-json | jq '.result'
 }
 ```
 
-### 旗標組合範例
+### 參數組合範例
 
 ```bash
 # 腳本化查詢
@@ -2288,7 +2288,7 @@ which claude
 - [docs/cursor-claude-master-guide-zh-tw.md](docs/cursor-claude-master-guide-zh-tw.md) — 綜合代理主控手冊（起點）
 - [docs/claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) — 基礎 API 與 CLI 指南
 - [docs/awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) — 社群最佳實踐與 Hooks
-- [docs/superclaude-zh-tw.md](docs/superclaude-zh-tw.md) — 高階旗標系統與進階工作流
+- [docs/superclaude-zh-tw.md](docs/superclaude-zh-tw.md) — 高階功能系統與進階工作流
 - [docs/claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) — 用量監控、安全與部署
 - [docs/claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) — Web UI 與 PWA 介面
 - [docs/bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) — 效能優化與 B+Tree 策略
@@ -2342,7 +2342,7 @@ which claude
 **內容更新**：
 
 - ✅ 完整官方文檔驗證與校正（v4.1.0 基礎）
-- ✅ 新增缺失的官方旗標：`--permission-mode`、`--permission-prompt-tool`
+- ✅ 新增缺失的官方參數：`--permission-mode`、`--permission-prompt-tool`
 - ✅ 正確分類 SDK 專用功能：`--system-prompt`、`--append-system-prompt`
 - ✅ 新增 Alpha 原生二進制安裝選項
 - ✅ 更新斜線命令清單，新增 `/pr_comments`
@@ -2366,7 +2366,7 @@ which claude
 
 - 📄 **文檔長度**：約 1000+ 行，完整覆蓋所有功能
 - 🔗 **交叉引用**：章節間相互連結，便於導航
-- 📋 **表格化資訊**：旗標、命令、設定選項系統性整理
+- 📋 **表格化資訊**：參數、命令、設定選項系統性整理
 - 🛡️ **安全性強調**：每個功能都包含安全考量說明
 
 ---
@@ -2421,7 +2421,7 @@ which claude
 
 - 1.0.61
 
-  - 新增 `--settings` 旗標以從 JSON 檔載入設定
+  - 新增 `--settings` 參數以從 JSON 檔載入設定
   - IDE（macOS）：支援貼上圖片 ⌘+V
   - 新增 `CLAUDE_CODE_SHELL_PREFIX`（包裝 Claude 與使用者提供的 shell 命令）
   - 新增 `CLAUDE_CODE_AUTO_CONNECT_IDE=false`（停用 IDE 自動連線）
@@ -2549,7 +2549,7 @@ which claude
 
 - 1.0.18
 
-  - 新增 `--add-dir` 旗標
+  - 新增 `--add-dir` 參數
   - 輸入流式（無須 `-p`）
   - 新增 `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR`
   - /mcp 顯示詳細工具清單
@@ -2574,7 +2574,7 @@ which claude
 
 ## 🎉 結語
 
-本手冊經過完整的官方文檔驗證，確保所有功能、指令與旗標均為 Anthropic 官方支援。透過深度結構化的組織方式，無論是 LLM 查詢還是人工閱讀，都能快速找到所需資訊。
+本手冊經過完整的官方文檔驗證，確保所有功能、指令與參數均為 Anthropic 官方支援。透過深度結構化的組織方式，無論是 LLM 查詢還是人工閱讀，都能快速找到所需資訊。
 
 ### 使用建議
 
