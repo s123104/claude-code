@@ -21,9 +21,9 @@
 - [1. 專案簡介](#1-專案簡介)
 - [2. 安裝與啟動](#2-安裝與啟動)
 - [2.1 v2 升級 v3 遷移指引](#21-v2-升級-v3-遷移指引)
-- [3. 指令分類與旗標](#3-指令分類與旗標)
+- [3. 指令分類與選項](#3-指令分類與選項)
 - [4. 代表性 Workflow 與範例](#4-代表性-workflow-與範例)
-- [5. MCP、Persona、旗標與最佳實踐](#5-mcppersona旗標與最佳實踐)
+- [5. MCP、Persona、選項與最佳實踐](#5-mcppersona選項與最佳實踐)
 - [6. 專案結構與自訂](#6-專案結構與自訂)
 - [7. 社群貢獻與參與](#7-社群貢獻與參與)
 - [8. 常見問題與延伸閱讀](#8-常見問題與延伸閱讀)
@@ -32,7 +32,7 @@
 
 ## 1. 專案簡介
 
-SuperClaude v3.0 是一套強化 Claude Code 的配置框架，結合專業 slash-commands、AI Persona、MCP 多代理協議、旗標控制與現代開發方法論，支援全端、架構、測試、維運、文件、CI/CD、AI 驅動分析等全流程自動化。
+SuperClaude v3.0 是一套強化 Claude Code 的配置框架，結合專業 slash-commands、AI Persona、MCP 多代理協議、參數控制與現代開發方法論，支援全端、架構、測試、維運、文件、CI/CD、AI 驅動分析等全流程自動化。
 
 ### v3.0 主要特色
 
@@ -189,7 +189,7 @@ A：v3 移除了 hooks 系統，將在 v4 回歸。
 
 ---
 
-## 3. 指令分類與旗標
+## 3. 指令分類與選項
 
 ### 核心指令（16 個）
 
@@ -221,7 +221,7 @@ A：v3 移除了 hooks 系統，將在 v4 回歸。
 - `/sc:load` - 載入與配置
 - `/sc:spawn` - 專案生成
 
-### 通用旗標
+### 通用選項
 
 **基本控制**：
 
@@ -402,7 +402,7 @@ A：v3 移除了 hooks 系統，將在 v4 回歸。
 
 ---
 
-## 5. MCP、Persona、旗標與最佳實踐
+## 5. MCP、Persona、選項與最佳實踐
 
 ### MCP 多代理系統
 
@@ -413,7 +413,7 @@ A：v3 移除了 hooks 系統，將在 v4 回歸。
 - **Magic** - 現代 UI 元件生成
 - **Playwright** - 瀏覽器自動化與測試
 
-**MCP 控制旗標**：
+**MCP 控制選項**：
 
 ```bash
 # 啟用特定 MCP
@@ -485,7 +485,7 @@ A：v3 移除了 hooks 系統，將在 v4 回歸。
 SuperClaude/
 ├── setup.py               # PyPI 安裝檔案
 ├── SuperClaude/           # 框架檔案
-│   ├── Core/              # 行為文檔 (COMMANDS.md, FLAGS.md, etc.)
+│   ├── Core/              # 行為文檔 (COMMANDS.md, OPTIONS.md, etc.)
 │   ├── Commands/          # 16 個 slash 指令定義
 │   └── Settings/          # 配置檔案
 ├── setup/                 # 安裝系統
@@ -502,7 +502,7 @@ SuperClaude/
 ├── PERSONAS.md           # Persona 系統
 ├── MCP.md                # MCP 配置
 ├── COMMANDS.md           # 指令說明
-├── FLAGS.md              # 旗標定義
+├── OPTIONS.md            # 選項定義
 ├── MODES.md              # 模式控制
 ├── ORCHESTRATOR.md       # 編排邏輯
 └── PRINCIPLES.md         # 核心原則
@@ -613,7 +613,7 @@ A：目前僅支援 Claude Code，但 v4 將有更廣泛的相容性。
 - [SuperClaude GitHub](https://github.com/NomenAK/SuperClaude)
 - [使用者指南](Docs/superclaude-user-guide.md)
 - [指令指南](Docs/commands-guide.md)
-- [旗標指南](Docs/flags-guide.md)
+- [選項指南](Docs/options-guide.md)
 - [Persona 指南](Docs/personas-guide.md)
 - [安裝指南](Docs/installation-guide.md)
 

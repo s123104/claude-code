@@ -17,7 +17,7 @@
 
 1. [核心架構與角色定義](#1-核心架構與角色定義)
 2. [模糊需求解析引擎](#2-模糊需求解析引擎)
-3. [統一旗標索引系統](#3-統一旗標索引系統)
+3. [統一功能索引系統](#3-統一功能索引系統)
 4. [Sequential-Thinking 執行流程](#4-sequential-thinking-執行流程)
 5. [安全控制與監控機制](#5-安全控制與監控機制)
 6. [自動化指令映射表](#6-自動化指令映射表)
@@ -38,7 +38,7 @@
 代理特性:
   語言解析: 模糊語句意圖抽取 + N-gram 語義向量
   知識整合: 6 個專業文件的即時索引與查詢
-  執行引擎: Sequential-Thinking + 自動旗標組合
+  執行引擎: Sequential-Thinking + 自動功能組合
   安全控制: 用量監控 + 風險評估 + 沙箱執行
   輸出標準: CLI 格式 + 程式碼區塊 + 繁體中文
 ```
@@ -53,7 +53,7 @@
 ├── docs/                                   # 專門文檔目錄
 │   ├── cursor-claude-master-guide-zh-tw.md # 主控手冊（本文件）
 │   ├── awesome-claude-code-zh-tw.md        # 社群最佳實踐與 Hooks
-│   ├── superclaude-zh-tw.md               # 高階旗標與工作流程
+│   ├── superclaude-zh-tw.md               # 高階功能與工作流程
 │   ├── claude-code-guide-zh-tw.md         # 基礎 API 與企業實踐
 │   ├── claude-code-usage-monitor-zh-tw.md # 用量監控與 Docker 部署
 │   ├── claudecodeui-zh-tw.md              # Web UI 與 PWA 開發
@@ -111,13 +111,13 @@ graph TD
     B --> C[意圖識別]
     C --> D[主體抽取]
     D --> E[限制條件解析]
-    E --> F[旗標映射]
+    E --> F[功能映射]
     F --> G[執行計畫生成]
 ```
 
 ### 2.2 核心意圖詞典
 
-| 動詞類別 | 關鍵詞                      | 對應旗標組合                   | 文件參考            |
+| 動詞類別 | 關鍵詞                      | 對應功能組合                   | 文件參考            |
 | -------- | --------------------------- | ------------------------------ | ------------------- |
 | **創建** | 建立, 生成, 新增, create    | `--create --init --template`   | superclaude + guide |
 | **修復** | 修復, 修正, 除錯, fix       | `--fix --lint --validate`      | awesome + monitor   |
@@ -137,13 +137,13 @@ graph TD
 
 ---
 
-## 3. 統一旗標索引系統
+## 3. 統一功能索引系統
 
-### 3.1 基礎旗標分類
+### 3.1 基礎功能分類
 
 ```yaml
 # 來源: superclaude-zh-tw.md
-核心操作旗標:
+核心操作功能:
   --create: 建立新專案或元件
   --fix: 自動修復程式碼問題
   --scan: 掃描專案結構與依賴
@@ -152,7 +152,7 @@ graph TD
   --test: 執行測試套件
 
 # 來源: claude-code-guide-zh-tw.md
-進階功能旗標:
+進階功能選項:
   --mcp: 啟用 MCP 多代理協作
   --memory: 使用 CLAUDE.md 記憶體
   --session: 管理 Claude Code Session
@@ -160,21 +160,21 @@ graph TD
   --hooks: Git Hooks 整合
 
 # 來源: claude-code-usage-monitor-zh-tw.md
-監控與安全旗標:
+監控與安全功能:
   --monitor: 啟用用量監控
   --limit: 設定 API 呼叫限制
   --security: 安全掃描與檢查
   --audit: 稽核日誌記錄
 
 # 來源: claudecodeui-zh-tw.md
-介面與輸出旗標:
+介面與輸出功能:
   --ui: 啟用 Web UI 介面
   --pwa: 產生 PWA 圖示與資源
   --format: 指定輸出格式
   --interactive: 互動式操作模式
 ```
 
-### 3.2 組合旗標策略
+### 3.2 組合功能策略
 
 ```bash
 # 完整專案初始化
@@ -203,7 +203,7 @@ claude-code --build --deploy --monitor --security --format=json
 階段二: 計畫拆解
   - 任務分解
   - 依賴關係分析
-  - 旗標組合優化
+  - 功能組合優化
   - 執行順序規劃
 
 階段三: 逐步執行
@@ -231,7 +231,7 @@ claude-code --build --deploy --monitor --security --format=json
     "subject": "nextjs project",
     "constraints": {}
   },
-  "flags": ["--create", "--template=nextjs", "--mcp"],
+  "options": ["--create", "--template=nextjs", "--mcp"],
   "execution": [
     {
       "step": 1,
@@ -289,7 +289,7 @@ claude-code --monitor --limit=$CLAUDE_DAILY_LIMIT --audit
 
 ### 6.1 常見場景對應表
 
-| 用戶描述          | 解析意圖               | 自動旗標                                    | 參考文件    |
+| 用戶描述          | 解析意圖               | 自動功能                                    | 參考文件    |
 | ----------------- | ---------------------- | ------------------------------------------- | ----------- |
 | "建立 React 專案" | create + react         | `--create --template=react --mcp`           | superclaude |
 | "修復所有錯誤"    | fix + all              | `--scan --fix --lint --test`                | awesome     |
@@ -297,16 +297,16 @@ claude-code --monitor --limit=$CLAUDE_DAILY_LIMIT --audit
 | "檢查效能問題"    | optimize + performance | `--scan --profile --cache --optimize`       | bplustree   |
 | "設定監控系統"    | setup + monitoring     | `--monitor --audit --ui --format=dashboard` | monitor     |
 
-### 6.2 智能旗標推論
+### 6.2 智能功能推論
 
 ```python
-def auto_flag_inference(user_input, context):
-    """自動推論最佳旗標組合"""
-    base_flags = extract_primary_intent(user_input)
-    context_flags = analyze_project_context(context)
-    safety_flags = assess_risk_level(base_flags)
+def auto_option_inference(user_input, context):
+    """自動推論最佳功能組合"""
+    base_options = extract_primary_intent(user_input)
+    context_options = analyze_project_context(context)
+    safety_options = assess_risk_level(base_options)
 
-    return combine_flags(base_flags, context_flags, safety_flags)
+    return combine_options(base_options, context_options, safety_options)
 ```
 
 ---
@@ -387,7 +387,7 @@ claude-code --create --template=nextjs --typescript --mcp
 ```
 ````
 
-### 推薦下一步旗標
+### 推薦下一步功能
 
 - `--test` - 設定測試環境
 - `--deploy` - 部署到 Vercel
@@ -432,7 +432,7 @@ claude-code --create --template=nextjs --typescript --mcp
   狀態管理: Zustand/Redux
   資料庫: PostgreSQL
 
-步驟三: 旗標組合
+步驟三: 功能組合
   基礎: --create --template=ecommerce
   進階: --mcp --database=postgresql
   監控: --monitor --security
@@ -470,32 +470,32 @@ claude-code --diagnose --export-logs
 ```yaml
 awesome-claude-code-zh-tw.md:
   核心功能: 社群最佳實踐, Hooks, 工作流程範本
-  主要旗標: --hooks, --workflow, --template
+  主要功能: --hooks, --workflow, --template
   適用場景: 專案初始化, 團隊協作, 標準化流程
 
 superclaude-zh-tw.md:
-  核心功能: 高階旗標系統, Personas, 命令參考
-  主要旗標: --persona, --advanced, --combine
+  核心功能: 高階功能系統, Personas, 命令參考
+  主要功能: --persona, --advanced, --combine
   適用場景: 複雜任務自動化, 角色導向開發
 
 claude-code-guide-zh-tw.md:
   核心功能: 基礎 API, 常用指令, MCP 整合
-  主要旗標: --api, --mcp, --session, --config
+  主要功能: --api, --mcp, --session, --config
   適用場景: 日常開發, 基礎操作, 多代理協作
 
 claude-code-usage-monitor-zh-tw.md:
   核心功能: 用量監控, 安全控制, 配額管理
-  主要旗標: --monitor, --limit, --security, --audit
+  主要功能: --monitor, --limit, --security, --audit
   適用場景: 生產環境, 團隊管理, 成本控制
 
 claudecodeui-zh-tw.md:
   核心功能: Web UI, PWA, 遠端管理, 視覺化輸出
-  主要旗標: --ui, --pwa, --dashboard, --remote
+  主要功能: --ui, --pwa, --dashboard, --remote
   適用場景: 圖形介面操作, 行動裝置管理
 
 bplustree3-zh-tw.md:
   核心功能: B+Tree 快取, 資料結構, 效能優化
-  主要旗標: --cache, --optimize, --profile, --index
+  主要功能: --cache, --optimize, --profile, --index
   適用場景: 大型專案, 效能調優, 資料處理
 ```
 
@@ -503,10 +503,10 @@ bplustree3-zh-tw.md:
 
 ```bash
 # 查詢特定功能
-claude-code --help --search="旗標名稱"
+claude-code --help --search="功能名稱"
 
-# 顯示所有可用旗標
-claude-code --list-flags --category=all
+# 顯示所有可用功能
+claude-code --list-options --category=all
 
 # 搜尋相關文件
 claude-code --docs --search="關鍵詞" --lang=zh-tw
@@ -516,11 +516,11 @@ claude-code --docs --search="關鍵詞" --lang=zh-tw
 
 ## 📚 附錄：開發者擴充指南
 
-### A.1 新增自定義旗標
+### A.1 新增自定義功能
 
 ```yaml
 # 在 superclaude-zh-tw.md 新增
-## Custom Flags
+## Custom Options
 
 --my-feature:
   description: "自定義功能描述"
@@ -548,7 +548,7 @@ manual_confirm_required: ["high", "critical"]
 **📝 文件維護說明**
 
 - **版本更新**: 當任一子文件更新時，需同步更新本索引
-- **旗標新增**: 新旗標需在此文件登記並分類
+- **功能新增**: 新功能需在此文件登記並分類
 - **安全規則**: 新的高風險操作需加入安全檢查清單
 - **範例補充**: 定期新增實戰使用案例與錯誤處理範例
 

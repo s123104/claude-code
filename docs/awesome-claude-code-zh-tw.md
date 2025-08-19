@@ -230,13 +230,13 @@ fi
 
 命令描述與用途說明
 
-## Flags
+## 參數與選項
 
-- --flag1: 旗標說明
+- --option1: 參數說明
 
 ## Examples
 
-/command --flag1 value
+/command --option1 value
 ```
 
 #### 進階範例：專案特定命令
@@ -246,7 +246,7 @@ fi
 
 對專案進行全面安全審計，包括依賴檢查、程式碼掃描和配置驗證
 
-## Flags
+## 參數與選項
 
 - --deep: 執行深度掃描
 - --fix: 自動修復發現的問題
@@ -304,7 +304,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 #### 參數設計原則
 
 - 提供合理預設值
-- 支援布林旗標：`--fix`、`--verbose`
+- 支援布林選項：`--fix`、`--verbose`
 - 允許多重選項：`--include src tests docs`
 - 驗證必要參數
 
