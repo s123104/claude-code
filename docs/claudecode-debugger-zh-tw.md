@@ -10,7 +10,7 @@
 > - [GitHub 專案](https://github.com/888wing/ClaudeCode-Debugger)
 > - [PyPI 套件頁面](https://pypi.org/project/claudecode-debugger/)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-08-15T00:47:00+08:00**
+> - **文件整理時間：2025-08-20T00:13:54+08:00**
 > - **專案版本：v1.5.0（最新版本）**
 > - **專案最後更新：2025-07-30T05:06:57+01:00**
 
@@ -542,5 +542,5 @@ ccdebug --validate "錯誤訊息"
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/888wing/ClaudeCode-Debugger) 與相關文檔。
 >
-> **版本資訊**：ClaudeCode-Debugger v1.5.0 - AI 驅動除錯助手  
-> **最後更新**：2025-08-15T00:47:00+08:00
+**版本資訊**：ClaudeCode-Debugger v1.5.0 - AI 驅動除錯助手  
+> **最後更新**：2025-08-20T00:13:54+08:00

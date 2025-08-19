@@ -10,7 +10,7 @@
 > - [GitHub 專案](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)
 > - [PyPI 套件頁面](https://pypi.org/project/claude-monitor/)
 > - [Docker Hub](https://hub.docker.com/r/maciek/claude-usage-monitor)
-> - **文件整理時間：2025-08-15T00:37:00+08:00**
+> - **文件整理時間：2025-08-19T23:52:25+08:00**
 > - **專案版本：v3.1.0（最新版本）**
 > - **專案最後更新：2025-07-24T00:21:42+02:00**
 
@@ -325,4 +325,4 @@ curl -X POST http://localhost:8080/api/alerts \
 > 如需更多細節、除錯指令、或參與開發，請參閱 [官方 GitHub](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor) 及專案內 README、TROUBLESHOOTING、DEVELOPMENT、CONTRIBUTING、RELEASE.md 文件。
 >
 > **版本資訊**：Claude Code Usage Monitor v3.1.0 - 最新版本  
-> **最後更新**：2025-08-15T00:37:00+08:00
+> **最後更新**：2025-08-19T23:52:25+08:00

@@ -10,8 +10,9 @@
 > - [GitHub 專案](https://github.com/ryoppippi/ccusage)
 > - [NPM 套件頁面](https://npmjs.com/package/ccusage)
 > - [ClaudeLog 整合](https://claudelog.com/)
-> - **文件整理時間：2025-08-15T00:45:00+08:00**
-> - **專案最後更新：2025-08-14T12:37:25+00:00**
+> - **文件整理時間：2025-08-19T23:52:25+08:00**
+> - **專案版本：v15.10.0**
+> - **專案最後更新：2025-08-19T16:00:22+01:00**
 
 ---
 
@@ -71,6 +72,13 @@ ccusage 是一個專為 Claude Code 設計的用量分析工具，能夠從本�
 - **ClaudeLog 整合**：與 ClaudeLog 知識庫系統整合
 - **JSONL 支援**：直接讀取 Claude Code 的 JSONL 日誌檔案
 - **API 整合**：提供 API 介面供其他工具整合
+
+### 2.4 新版本亮點（v15.10.0）
+
+- 新增 `config-schema.json`，提供完整設定 Schema 與 IDE 智能提示
+- 新增 `scripts/generate-json-schema.ts`，可自動產生與同步設定 Schema
+- 指令體驗增強：`blocks`、`daily`、`weekly`、`session`、`statusline`
+- `docs/guide/*` 文件擴充：`configuration.md`、`statusline.md` 等
 
 ---
 
@@ -431,6 +439,32 @@ prometheus:
     - "claude_tokens_total"
 ```
 
+### 6.4 狀態列整合（Statusline）
+
+#### 指令
+
+```bash
+# 互動顯示
+ccusage statusline
+
+# 極簡輸出（適合 shell prompt/tmux）
+ccusage statusline --minimal --refresh-interval 5s
+
+# 管線輸出到外部狀態列
+ccusage statusline --output plain | your-statusbar
+```
+
+#### 建議配置
+
+```yaml
+# .ccusage.yml（節錄）
+statusline:
+  enabled: true
+  refresh_interval: "5s"
+  theme: auto   # auto | dark | light
+  fields: [tokens, cost, model, cache]
+```
+
 ---
 
 ## 7. 疑難排解
@@ -531,5 +565,5 @@ ccusage --cpu-profile
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/ryoppippi/ccusage) 與相關文檔。
 >
-> **版本資訊**：ccusage - 極速 Claude Code 用量分析工具  
-> **最後更新**：2025-08-15T00:45:00+08:00
+> **版本資訊**：ccusage v15.10.0 - 極速 Claude Code 用量分析工具  
+> **最後更新**：2025-08-19T23:52:25+08:00

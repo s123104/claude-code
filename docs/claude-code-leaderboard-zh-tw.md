@@ -10,8 +10,8 @@
 > - [GitHub 專案](https://github.com/grp06/claude-code-leaderboard)
 > - [排行榜網站](https://claudecount.com)
 > - [NPM 套件](https://www.npmjs.com/package/claude-code-leaderboard)
-> - **文件整理時間：2025-08-17T23:45:00+08:00**
-> - **專案最後更新：v0.2.9**
+> - **文件整理時間：2025-08-20T00:13:54+08:00**
+> - **專案最後更新：v0.2.9（最後提交：2025-08-06T18:50:17-07:00）**
 
 ---
 
@@ -651,5 +651,5 @@ claude-code-leaderboard config --minimal-tracking on
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/grp06/claude-code-leaderboard) 與相關文檔。
 >
-> **版本資訊**：Claude Code Leaderboard CLI - 全球使用量追蹤與排行榜  
-> **最後更新**：2025-08-17T23:45:00+08:00
+**版本資訊**：Claude Code Leaderboard CLI - 全球使用量追蹤與排行榜  
+> **最後更新**：2025-08-20T00:13:54+08:00

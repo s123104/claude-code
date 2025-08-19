@@ -10,9 +10,9 @@
 > - [GitHub 專案](https://github.com/siteboon/claudecodeui)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Cursor CLI 文檔](https://docs.cursor.com/en/cli/overview)
-> - **文件整理時間：2025-08-15T00:38:00+08:00**
+> - **文件整理時間：2025-08-19T23:52:25+08:00**
 > - **專案版本：v1.7.0（最新版本）**
-> - **專案最後更新：2025-08-12T15:23:27+03:00**
+> - **專案最後更新：2025-08-16T00:18:14+03:00**
 
 ---
 
@@ -270,4 +270,4 @@ A：檢查本地儲存設定和瀏覽器權限
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/siteboon/claudecodeui) 與相關文檔。
 >
 > **版本資訊**：Claude Code UI v1.7.0 - 最新版本  
-> **最後更新**：2025-08-15T00:38:00+08:00
+> **最後更新**：2025-08-19T23:52:25+08:00

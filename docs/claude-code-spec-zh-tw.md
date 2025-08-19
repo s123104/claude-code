@@ -8,8 +8,8 @@
 > - [GitHub 專案](https://github.com/gotalab/claude-code-spec)
 > - [Zenn 文章](https://zenn.dev/gotalab/articles/3db0621ce3d6d2)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-08-17T23:40:00+08:00**
-> - **專案最後更新：2025-08-17T15:35:00+09:00**
+> - **文件整理時間：2025-08-20T00:13:54+08:00**
+> - **專案最後更新：2025-08-19T03:31:12+09:00**
 
 ---
 
@@ -122,6 +122,30 @@ claude
 # 執行初始化指令
 /kiro:spec-init "您的專案詳細描述"
 ```
+
+### 3.3 cc-sdd CLI（規格驅動工具鏈）
+
+本專案新增 `tools/cc-sdd`（TypeScript）工具鏈，提供規格驅動開發的命令列支援：
+
+#### 主要命令
+
+```bash
+# 以清單（manifest）產生整套規格與指令骨架
+npx cc-sdd apply --manifest tools/cc-sdd/templates/manifests/claude-code.json --dry-run
+
+# 列印將產生的規劃與差異
+npx cc-sdd plan --manifest tools/cc-sdd/templates/manifests/claude-code.json
+
+# 產生 Kiro 指令模板（OS 偏好）
+npx cc-sdd render --template agents/claude-code/commands/os-mac/spec-init.tpl.md
+```
+
+#### 能力總覽
+
+- 模板渲染器：支援 base 與 OS 專屬模板（mac/windows）
+- 規劃與列印：顯示將產生的檔案與目錄結構
+- 代理版型：包含 `steering`、`spec-init`、`spec-impl`、`spec-status`、`spec-tasks` 等
+
 
 ### 3.2 配置檔案
 
@@ -753,5 +777,5 @@ performance:
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/gotalab/claude-code-spec) 與相關文檔。
 >
-> **版本資訊**：Claude Code Spec-Driven Development - 規格驅動開發框架  
-> **最後更新**：2025-08-17T23:40:00+08:00
+**版本資訊**：Claude Code Spec-Driven Development - 規格驅動開發框架  
+> **最後更新**：2025-08-20T00:13:54+08:00

@@ -12,8 +12,8 @@
 >
 > - [GitHub 專案](https://github.com/coleam00/context-engineering-intro)
 > - [Context Engineering 方法論](https://contextengineering.dev)
-> - **文件整理時間：2025-08-17T23:55:00+08:00**
-> - **專案最後更新：2025-08-10T 最新版本**
+> - **文件整理時間：2025-08-20T00:13:54+08:00**
+> - **專案最後更新：2025-08-06T09:44:59-05:00**
 
 ---
 
@@ -681,5 +681,5 @@ PRPs/
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/coleam00/context-engineering-intro) 與相關文檔。
 >
-> **版本資訊**：Context Engineering - AI 輔助開發脈絡工程方法論  
-> **最後更新**：2025-08-17T23:55:00+08:00
+**版本資訊**：Context Engineering - AI 輔助開發脈絡工程方法論  
+> **最後更新**：2025-08-20T00:13:54+08:00

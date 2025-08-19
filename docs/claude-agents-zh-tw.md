@@ -551,5 +551,5 @@ claude --agent-config code-refactorer
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/iannuttall/claude-agents) 與相關文檔。
 >
-> **版本資訊**：Claude Code Custom Agents - 7 個專業代理  
-> **最後更新**：2025-08-15T00:46:00+08:00
+**版本資訊**：Claude Code Custom Agents - 7 個專業代理  
+> **最後更新**：2025-08-20T00:13:54+08:00
