@@ -1,0 +1,32 @@
+{
+  "name": "claude-code-doc-sync",
+  "version": "1.0.0",
+  "description": "Claude Code 文檔自動同步工具",
+  "type": "module",
+  "main": "auto-doc-sync.js",
+  "scripts": {
+    "sync": "node auto-doc-sync.js",
+    "sync:force": "node auto-doc-sync.js --force",
+    "sync:dry-run": "node auto-doc-sync.js --dry-run",
+    "sync:changelog": "node auto-doc-sync.js --changelog-only",
+    "sync:verbose": "node auto-doc-sync.js --verbose"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "claude-code",
+    "documentation",
+    "sync",
+    "anthropic"
+  ],
+  "author": "Claude Code Documentation Team",
+  "license": "MIT"
+}
