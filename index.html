@@ -2634,7 +2634,7 @@
             <i class="fas fa-graduation-cap mr-1"></i> 指南教學 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="tools">
-            <i class="fas fa-tools mr-1"></i> 專業工具 (2)
+            <i class="fas fa-tools mr-1"></i> 專業工具 (3)
           </button>
         </div>
 
@@ -2650,7 +2650,7 @@
               </div>
               <h3 class="text-lg font-bold text-primary-400 mb-2">
                 <i class="fas fa-book mr-2"></i>Claude Code 官方手冊
-              </h3>
+            </h3>
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: 官方驗證的完整使用指南<br/>
                 <strong>場景</strong>: 安裝、配置、基礎操作、疑難排解<br/>
@@ -2671,7 +2671,7 @@
               </div>
               <h3 class="text-lg font-bold text-primary-400 mb-2">
                 <i class="fas fa-sitemap mr-2"></i>綜合代理主控手冊
-              </h3>
+            </h3>
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: 統一功能索引、需求解析引擎<br/>
                 <strong>場景</strong>: 複雜任務分解、多文檔協調工作<br/>
@@ -2692,7 +2692,7 @@
               </div>
               <h3 class="text-lg font-bold text-orange-400 mb-2">
                 <i class="fas fa-list mr-2"></i>完整文檔導覽索引
-              </h3>
+            </h3>
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: 完整文檔索引、分類導覽、快速參考<br/>
                 <strong>場景</strong>: 文檔查找、快速導覽、分類檢索<br/>
@@ -2714,7 +2714,7 @@
               </div>
               <h3 class="text-lg font-bold text-green-400 mb-2">
                 <i class="fas fa-star mr-2"></i>Awesome Claude Code 資源集
-              </h3>
+            </h3>
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: 實戰範例、Hooks、斜線指令、最佳實踐索引<br/>
                 <strong>場景</strong>: 專案啟動、流程範本查找、學習參考<br/>
@@ -2748,128 +2748,348 @@
             </a>
           </div>
 
-          <a
-            href="docs/claude-code-guide-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-green-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                /></svg
-              >基礎 API 指南
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              CLI、MCP、常用指令、疑難排解
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <!-- 🤖 AI 代理類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="agents" data-tags="Subagents,75代理,專業">
+            <a href="docs/agents-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">75 代理</span>
+              </div>
+              <h3 class="text-lg font-bold text-blue-400 mb-2">
+                <i class="fas fa-robot mr-2"></i>Subagents 專業代理系統
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 75 個領域專家代理、智能任務分派<br/>
+                <strong>場景</strong>: 大型專案多角色協作、按任務自動選用代理<br/>
+                <strong>客群</strong>: 產品/工程團隊、專案負責人、Tech Lead
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v6.0.0 | 2025-08-20</span>
+                <span class="text-blue-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/claude-code-usage-monitor-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-yellow-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
-                /></svg
-              >用量監控與安全
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              即時監控、配額、Web Dashboard、常見問題
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="agents" data-tags="自訂代理,工作流程">
+            <a href="docs/claude-agents-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded-full">自訂代理</span>
+              </div>
+              <h3 class="text-lg font-bold text-indigo-400 mb-2">
+                <i class="fas fa-users mr-2"></i>Claude Agents 自訂系統
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 7 個自訂代理、工作流程自動化<br/>
+                <strong>場景</strong>: 專案流程自動化、團隊客製化協作<br/>
+                <strong>客群</strong>: 全端開發者、Tech Lead、流程設計師
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v1.0+ | 2025-08-20</span>
+                <span class="text-indigo-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/claudecodeui-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-pink-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"
-                  clip-rule="evenodd"
-                /></svg
-              >Web UI 與視覺化
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              PWA、遠端管理、CLI 整合、最佳實踐
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="agents" data-tags="Studio,專業代理">
+            <a href="docs/contains-studio-agents-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-teal-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-teal-500/20 text-teal-300 px-2 py-1 rounded-full">工作室代理</span>
+              </div>
+              <h3 class="text-lg font-bold text-teal-400 mb-2">
+                <i class="fas fa-building mr-2"></i>Contains Studio 代理集合
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 工作室級專業代理集合<br/>
+                <strong>場景</strong>: 商業專案、專業服務、團隊協作<br/>
+                <strong>客群</strong>: 設計師、產品經理、商業團隊
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版 | 2025-08-18</span>
+                <span class="text-teal-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/bplustree3-zh-tw.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-cyan-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                  clip-rule="evenodd"
-                /></svg
-              >效能優化策略
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              B+Tree 快取、資料結構、效能建議
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <!-- 📊 監控分析類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="monitoring" data-tags="用量監控,ML預測">
+            <a href="docs/claude-code-usage-monitor-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">進階監控</span>
+              </div>
+              <h3 class="text-lg font-bold text-yellow-400 mb-2">
+                <i class="fas fa-chart-line mr-2"></i>Usage Monitor 進階監控
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 即時用量監控、ML 預測、Docker 部署<br/>
+                <strong>場景</strong>: 生產環境成本監控、限額預警、趨勢預測<br/>
+                <strong>客群</strong>: 產品/技術主管、FinOps、SRE 工程師
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v3.1.0 | 2025-08-20</span>
+                <span class="text-yellow-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
 
-          <a
-            href="docs/README.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-orange-400 mb-2">
-              <svg
-                class="w-5 h-5 inline mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                  clip-rule="evenodd"
-                /></svg
-              >文件索引
-            </h3>
-            <p class="text-neutral-200 text-sm mb-2">
-              文件導覽、快速參考、分類索引
-            </p>
-            <span class="text-xs text-neutral-400">更新｜2025-07-15</span>
-          </a>
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="monitoring" data-tags="極速分析,狀態列">
+            <a href="docs/ccusage-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-orange-500/20 text-orange-300 px-2 py-1 rounded-full">極速分析</span>
+              </div>
+              <h3 class="text-lg font-bold text-orange-400 mb-2">
+                <i class="fas fa-tachometer-alt mr-2"></i>ccusage 極速分析工具
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 極速 CLI 分析、Statusline 狀態列、報表匯出<br/>
+                <strong>場景</strong>: 本地開發成本檢視、CI 產出報告<br/>
+                <strong>客群</strong>: 日常開發者、資料分析師、報表維護
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v15.10.0 | 2025-08-20</span>
+                <span class="text-orange-400">⭐⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 🖥️ 介面工具類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="interface" data-tags="Web UI,PWA">
+            <a href="docs/claudecodeui-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-pink-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-pink-500/20 text-pink-300 px-2 py-1 rounded-full">Web UI</span>
+              </div>
+              <h3 class="text-lg font-bold text-pink-400 mb-2">
+                <i class="fas fa-desktop mr-2"></i>ClaudeCodeUI Web 介面
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: PWA、遠端管理、CLI 整合、視覺化操作<br/>
+                <strong>場景</strong>: 圖形介面操作、行動裝置管理、團隊協作<br/>
+                <strong>客群</strong>: 非技術用戶、視覺化偏好者、行動用戶
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版 | 2025-08-20</span>
+                <span class="text-pink-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="interface" data-tags="GUI,桌面應用">
+            <a href="docs/claudia-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full">桌面應用</span>
+              </div>
+              <h3 class="text-lg font-bold text-purple-400 mb-2">
+                <i class="fas fa-window-maximize mr-2"></i>Claudia GUI 桌面應用
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 桌面 GUI 應用、視覺化 Claude Code 管理<br/>
+                <strong>場景</strong>: 桌面環境操作、會話管理、視覺化控制<br/>
+                <strong>客群</strong>: 桌面用戶、GUI 偏好者、會話管理需求
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v0.1.0 | 2025-08-20</span>
+                <span class="text-purple-400">⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="interface" data-tags="看板,專案管理">
+            <a href="docs/vibe-kanban-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-cyan-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">專案管理</span>
+              </div>
+              <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                <i class="fas fa-tasks mr-2"></i>Vibe Kanban 專案管理
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 視覺化看板、AI 代理整合、Git 工作流<br/>
+                <strong>場景</strong>: 專案管理、任務追蹤、團隊協作<br/>
+                <strong>客群</strong>: 專案經理、團隊領導、敏捷開發者
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v0.0.63 | 2025-08-20</span>
+                <span class="text-cyan-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- ⚡ 效能優化類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="performance" data-tags="B+Tree,快取,效能">
+            <a href="docs/bplustree3-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded-full">效能優化</span>
+              </div>
+              <h3 class="text-lg font-bold text-emerald-400 mb-2">
+                <i class="fas fa-tachometer-alt mr-2"></i>BPlusTree3 效能優化
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: B+Tree 快取、資料結構、效能建議<br/>
+                <strong>場景</strong>: 大型專案效能調優、資料處理最佳化<br/>
+                <strong>客群</strong>: 資深開發者、效能工程師、系統架構師
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>v3.0.0 | 2025-08-20</span>
+                <span class="text-emerald-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 🔒 安全審查類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="security" data-tags="安全審查,程式碼掃描">
+            <a href="docs/claude-code-security-review-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded-full">安全審查</span>
+              </div>
+              <h3 class="text-lg font-bold text-red-400 mb-2">
+                <i class="fas fa-shield-alt mr-2"></i>Claude Code 安全審查工具
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: AI 驅動安全分析、程式碼漏洞掃描<br/>
+                <strong>場景</strong>: 程式碼安全檢查、漏洞評估、合規檢驗<br/>
+                <strong>客群</strong>: 安全工程師、DevSecOps、合規團隊
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版 | 2025-08-20</span>
+                <span class="text-red-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 📖 指南教學類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="guides" data-tags="基礎API,指南">
+            <a href="docs/claude-code-guide-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">基礎指南</span>
+              </div>
+              <h3 class="text-lg font-bold text-green-400 mb-2">
+                <i class="fas fa-graduation-cap mr-2"></i>Claude Code 基礎 API 指南
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: CLI 操作、MCP 整合、常用指令、疑難排解<br/>
+                <strong>場景</strong>: 日常開發、基礎操作、多代理協作學習<br/>
+                <strong>客群</strong>: 初學者、日常開發者、新手入門
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版 | 2025-08-20</span>
+                <span class="text-green-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="guides" data-tags="Context工程,方法論">
+            <a href="docs/context-engineering-intro-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-amber-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full">方法論</span>
+              </div>
+              <h3 class="text-lg font-bold text-amber-400 mb-2">
+                <i class="fas fa-brain mr-2"></i>Context Engineering 方法論
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: AI 編程助手 Context 工程方法論<br/>
+                <strong>場景</strong>: 提升 AI 互動效果、優化提示工程<br/>
+                <strong>客群</strong>: AI 工程師、提示工程師、研究人員
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>教學版 | 2025-08-20</span>
+                <span class="text-amber-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="guides" data-tags="MCP設定,設定指南">
+            <a href="docs/mcp-setup-guide-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-violet-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-violet-500/20 text-violet-300 px-2 py-1 rounded-full">設定指南</span>
+              </div>
+              <h3 class="text-lg font-bold text-violet-400 mb-2">
+                <i class="fas fa-cogs mr-2"></i>MCP 設定指南
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: MCP 協議設定、伺服器配置、整合教學<br/>
+                <strong>場景</strong>: MCP 初始設定、伺服器整合、疑難排解<br/>
+                <strong>客群</strong>: 系統管理員、集成工程師、新手用戶
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>指南版 | 2025-08-18</span>
+                <span class="text-violet-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 🔧 專業工具類 -->
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="tools" data-tags="規格驗證,SDD">
+            <a href="docs/claude-code-spec-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-slate-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-slate-500/20 text-slate-300 px-2 py-1 rounded-full">規格驗證</span>
+              </div>
+              <h3 class="text-lg font-bold text-slate-400 mb-2">
+                <i class="fas fa-tools mr-2"></i>Claude Code Spec 規格驗證
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: Spec-Driven Development、規格驗證工具<br/>
+                <strong>場景</strong>: 規格驅動開發、文檔驗證、標準制定<br/>
+                <strong>客群</strong>: 架構師、技術寫作者、規格制定者
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>工具版 | 2025-08-20</span>
+                <span class="text-slate-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="tools" data-tags="競賽排行,追蹤工具">
+            <a href="docs/claude-code-leaderboard-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-yellow-600 rounded-full mr-2"></div>
+                <span class="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">競賽追蹤</span>
+              </div>
+              <h3 class="text-lg font-bold text-yellow-400 mb-2">
+                <i class="fas fa-trophy mr-2"></i>Claude Code 競賽排行榜
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 使用量追蹤、全球競賽排行、統計分析<br/>
+                <strong>場景</strong>: 使用競賽、團隊排名、成就追蹤<br/>
+                <strong>客群</strong>: 競賽愛好者、團隊比較、統計分析師
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>追蹤版 | 2025-08-20</span>
+                <span class="text-yellow-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="tools" data-tags="除錯工具,診斷">
+            <a href="docs/claudecode-debugger-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
+                <span class="text-xs bg-red-600/20 text-red-300 px-2 py-1 rounded-full">除錯工具</span>
+              </div>
+              <h3 class="text-lg font-bold text-red-400 mb-2">
+                <i class="fas fa-bug mr-2"></i>ClaudeCode Debugger 除錯器
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: Claude Code 專用除錯、問題診斷工具<br/>
+                <strong>場景</strong>: 問題排查、錯誤診斷、系統除錯<br/>
+                <strong>客群</strong>: 開發者、技術支援、系統維護員
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>除錯版 | 2025-08-20</span>
+                <span class="text-red-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
         </div>
 
         <!-- GitHub Repository Information -->
@@ -4578,10 +4798,72 @@ ${content}`;
         }, 100);
       }
 
+      // Project filtering functionality
+      function initProjectFiltering() {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const projectCards = document.querySelectorAll(".project-card");
+        const searchInput = document.getElementById("project-search");
+        
+        function filterProjects(category = "all", searchTerm = "") {
+          let visibleCount = 0;
+          projectCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const cardTags = card.dataset.tags?.toLowerCase() || "";
+            const cardText = card.textContent.toLowerCase();
+            
+            const matchesCategory = category === "all" || cardCategory === category;
+            const matchesSearch = !searchTerm || 
+              cardText.includes(searchTerm.toLowerCase()) || 
+              cardTags.includes(searchTerm.toLowerCase());
+            
+            if (matchesCategory && matchesSearch) {
+              card.style.display = "block";
+              visibleCount++;
+            } else {
+              card.style.display = "none";
+            }
+          });
+          
+          // Update filter button active states
+          filterButtons.forEach(btn => {
+            const btnCategory = btn.dataset.filter;
+            if (btnCategory === category) {
+              btn.classList.add("bg-primary-600", "text-white");
+              btn.classList.remove("bg-neutral-700", "text-neutral-300");
+            } else {
+              btn.classList.remove("bg-primary-600", "text-white");
+              btn.classList.add("bg-neutral-700", "text-neutral-300");
+            }
+          });
+          
+          return visibleCount;
+        }
+        
+        // Filter button event listeners
+        filterButtons.forEach(button => {
+          button.addEventListener("click", () => {
+            const category = button.dataset.filter;
+            filterProjects(category, searchInput?.value || "");
+          });
+        });
+        
+        // Search input event listener
+        if (searchInput) {
+          searchInput.addEventListener("input", (e) => {
+            const activeCategory = document.querySelector(".filter-btn.bg-primary-600")?.dataset.filter || "all";
+            filterProjects(activeCategory, e.target.value);
+          });
+        }
+        
+        // Initialize with all projects visible
+        filterProjects("all", "");
+      }
+
       // 頁面載入完成後初始化
       window.addEventListener("load", () => {
         initAdvancedLogoAnimations();
         setupCopyGuideContent();
+        initProjectFiltering();
       });
 
       console.log("🎉 Claude Code 展示頁面已載入完成！");
