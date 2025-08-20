@@ -2373,202 +2373,166 @@ which claude
 
 ### CHANGELOG 新功能摘錄（依版本，來源：GitHub CHANGELOG）
 
-- 1.0.71
+## 1.0.85
 
-  - 背景命令（Ctrl-b）可在背景執行 Bash（維持 Claude 持續工作）
-  - 可自訂狀態列（/statusline）
+- 狀態列輸入現在包含會話成本資訊
 
-- 1.0.70
+## 1.0.84
 
-  - 斜線指令參數支援 `@` 提及
-  - 效能：優化大型上下文的訊息渲染效能
-  - Windows：修復原生檔案搜尋、ripgrep 與子代理功能
+- 修復網路不穩定時 tool_use/tool_result ID 不匹配錯誤
+- 修復 Claude 在完成任務時有時忽略即時引導的問題
+- @-提及功能：新增 ~/.claude/* 檔案到建議清單，方便編輯代理、輸出樣式和斜線指令
+- 預設使用內建 ripgrep；若要停用此行為，請設定 USE_BUILTIN_RIPGREP=0
 
-- 1.0.69
+## 1.0.83
 
-  - 模型：將 Opus 升級至 4.1 版
+- @-提及功能：支援路徑中包含空格的檔案
+- 新增閃爍載入動畫
 
-- 1.0.68
+## 1.0.82
 
-  - /doctor 增強（加入 `CLAUDE.md` 與 MCP 工具上下文）
-  - SDK：`canUseTool` callback 支援工具確認
-  - 新增設定：`disableAllHooks`
-  - 修正部分指令（如 `/pr-comments`）使用錯誤模型名稱
-  - Windows：改善允許/拒絕工具與專案信任權限檢查；修正子程序啟動（解決 pnpm 無檔案錯誤）
-  - 大型倉庫檔案建議效能提升
+- SDK：新增請求取消支援
+- SDK：新增 additionalDirectories 選項用於搜尋自訂路徑，改善斜線指令處理
+- 設定：驗證機制防止 .claude/settings.json 檔案中出現無效欄位
+- MCP：改善工具名稱一致性
+- Bash：修復 Claude 嘗試自動讀取大型檔案時的當機問題
 
-- 1.0.65（穩定性修復）
+## 1.0.81
 
-  - IDE：修復診斷連線穩定性與錯誤處理
-  - Windows：在缺少 `.bashrc` 的環境修正 shell 初始化
+- 發布輸出樣式功能，包含新的內建教育輸出樣式「說明型」和「學習型」。文檔：https://docs.anthropic.com/en/docs/claude-code/output-styles
+- 代理：修復代理檔案無法解析時的自訂代理載入問題
 
-- 1.0.64
+## 1.0.80
 
-  - Agents：支援自訂每個代理所使用的模型
-  - Hooks：JSON 輸出新增 `systemMessage` 欄位（可顯示警告與上下文）
-  - SDK：修正多輪對話使用者輸入追蹤
-  - 檔案搜尋與 `@mention` 建議納入隱藏檔案
+- UI 改善：修復自訂子代理顏色的文字對比和載入動畫渲染問題
 
-- 1.0.63（穩定性修復）
+## 1.0.77
 
-  - Windows：修復檔案搜尋、`@agent` 提及與自訂斜線命令功能
+- Bash 工具：修復 heredoc 和多行字串跳脫，改善 stderr 重導向處理
+- SDK：新增會話支援和權限拒絕追蹤
+- 修復對話摘要中的 token 限制錯誤
+- Opus 計劃模式：在 `/model` 中新增設定，僅在計劃模式下執行 Opus，其他情況使用 Sonnet
 
-- 1.0.62
+## 1.0.73
 
-  - 自訂代理 `@mention` 與型別提前（typeahead）
-  - Hooks：新增 `SessionStart` 事件
-  - `/add-dir` 目錄路徑型別提前（typeahead）
+- MCP：支援多個設定檔，使用 `--mcp-config file1.json file2.json`
+- MCP：按 Esc 取消 OAuth 認證流程
+- Bash：改善指令驗證並減少錯誤的安全警告
+- UI：增強載入動畫和狀態列視覺層次
+- Linux：新增對 Alpine 和 musl-based 發行版的支援（需要單獨安裝 ripgrep）
 
-- 1.0.61
+## 1.0.72
 
-  - 新增 `--settings` 參數以從 JSON 檔載入設定
-  - IDE（macOS）：支援貼上圖片 ⌘+V
-  - 新增 `CLAUDE_CODE_SHELL_PREFIX`（包裝 Claude 與使用者提供的 shell 命令）
-  - 新增 `CLAUDE_CODE_AUTO_CONNECT_IDE=false`（停用 IDE 自動連線）
-  - Transcript 模式（Ctrl+R）：按 Esc 退出 transcript（不再中斷）
-  - 修正 symlink 設定檔路徑解析、OTEL 組織錯誤回報、Bash 允許工具權限檢查
+- 權限詢問：讓 Claude Code 在使用特定工具時總是要求確認，使用 /permissions
 
-- 1.0.60
+## 1.0.71
 
-  - 新增 `/agents` 建立自訂子代理（specialized subagents）
+- 背景指令：使用 (Ctrl-b) 在背景執行任何 Bash 指令，讓 Claude 可以繼續工作（適合開發伺服器、追蹤日誌等）
+- 可自訂狀態列：使用 /statusline 將您的終端提示加入 Claude Code
 
-- 1.0.59
+## 1.0.70
 
-  - SDK：新增工具確認（`canUseTool`）；支援為子程序指定 `env`
-  - Hooks：暴露 `PermissionDecision`（含 "ask"）；`UserPromptSubmit` 進階 JSON 支援 `additionalContext`
-  - 修正少數情境指定 Opus 仍回退 Sonnet 的問題
+- 效能：最佳化訊息渲染，在大型上下文中提供更好的效能
+- Windows：修復原生檔案搜尋、ripgrep 和子代理功能
+- 新增對斜線指令參數中 @-提及的支援
 
-- 1.0.58
+## 1.0.69
 
-  - 支援讀取 PDF
-  - Hooks：新增 `CLAUDE_PROJECT_DIR` 環境變數給 hook 命令
+- 升級 Opus 至 4.1 版本
 
-- 1.0.57
+## 1.0.68
 
-  - 斜線指令可在命令中指定模型
-  - 改善權限提示內容，協助 Claude 理解允許工具
-  - 修正 Bash 包裝輸出多餘換行
+- 修復特定指令（如 `/pr-comments`）使用錯誤模型名稱的問題
+- Windows：改善工具允許/拒絕和專案信任的權限檢查。這可能會在 `.claude.json` 中建立新的專案項目 - 如需要請手動合併歷史欄位
+- Windows：改善子程序生成，消除執行 pnpm 等指令時的「找不到檔案或目錄」錯誤
+- 增強 /doctor 指令，加入 CLAUDE.md 和 MCP 工具上下文以便自助除錯
+- SDK：新增 canUseTool 回調支援用於工具確認
+- 新增 `disableAllHooks` 設定
+- 改善大型程式庫中的檔案建議效能
 
-- 1.0.56（Windows/WSL 改善）
+## 1.0.65
 
-  - Windows：在支援 VT mode 的 Node.js 版本啟用 Shift+Tab 模式切換
-  - 修正 WSL IDE 偵測問題
-  - 修正 `awsRefreshHelper` 對 `.aws` 目錄變更未被偵測的問題
+- IDE：修復診斷的連線穩定性問題和錯誤處理
+- Windows：修復沒有 .bashrc 檔案的使用者的 shell 環境設定
 
-- 1.0.55
+## 1.0.64
 
-  - SDK：可擷取錯誤日誌（error logging）
-  - `--system-prompt-file` 支援在 print 模式覆寫系統提示
-  - Windows：修正 Ctrl+Z 當機
-  - 明確標注 Opus 4 與 Sonnet 4 的知識截止
+- 代理：新增模型自訂支援 - 您現在可以指定代理應使用的模型
+- 代理：修復對遞迴代理工具的意外存取
+- Hooks：在 hook JSON 輸出中新增 systemMessage 欄位，用於顯示警告和上下文
+- SDK：修復跨多輪對話的使用者輸入追蹤
+- 新增隱藏檔案到檔案搜尋和 @-提及建議
 
-- 1.0.54
+## 1.0.63
 
-  - Hooks：新增 `UserPromptSubmit` 事件；hook 輸入包含 CWD
-  - 自訂斜線指令：frontmatter 新增 `argument-hint`
-  - Windows：OAuth 使用 45454 連接埠並正確組合瀏覽器 URL；模式切換改為 Alt+M；計劃模式修正
-  - Shell：改用記憶體快照以修復檔案相關錯誤
+- Windows：修復檔案搜尋、@代理提及和自訂斜線指令功能
 
-- 1.0.53
+## 1.0.62
 
-  - `@mention` 檔案截斷上限由 100 行提升至 2000 行
-  - 新增 AWS Token 刷新腳本設定：`awsAuthRefresh`（前景，如 `aws sso login`）與 `awsCredentialExport`（背景，STS 類回應）
+- 新增自訂代理的 @-提及支援和預輸入功能。使用 @<your-custom-agent> 來調用
+- Hooks：新增 SessionStart hook 用於新會話初始化
+- /add-dir 指令現在支援目錄路徑的預輸入
+- 改善網路連線檢查可靠性
 
-- 1.0.52
+## 1.0.61
 
-  - 支援 MCP 伺服器 instructions
+- 文字記錄模式 (Ctrl+R)：改變 Esc 為退出文字記錄模式而非中斷
+- 設定：新增 `--settings` 參數從 JSON 檔案載入設定
+- 設定：修復符號連結設定檔案路徑的解析
+- OTEL：修復認證變更後錯誤組織的回報
+- 斜線指令：修復 Bash 允許工具的權限檢查
+- IDE：新增在 VSCode MacOS 中使用 ⌘+V 貼上圖片的支援
+- IDE：新增 `CLAUDE_CODE_AUTO_CONNECT_IDE=false` 用於停用 IDE 自動連線
+- 新增 `CLAUDE_CODE_SHELL_PREFIX` 用於包裝 Claude Code 執行的 Claude 和使用者提供的 shell 指令
 
-- 1.0.51
+## 1.0.60
 
-  - 原生 Windows 支援
-  - 透過 `AWS_BEARER_TOKEN_BEDROCK` 提供 Bedrock API key
-  - `--append-system-prompt` 可用於互動模式（不再限 `-p`）
-  - 設定：`/doctor` 可協助識別與修正不合法設定檔
-  - 自動壓縮警告閾值從 60% 提升至 80%
-  - 修正含空白使用者目錄的 shell 快照
-  - OTEL 資源新增 `os.type`、`os.version`、`host.arch`、`wsl.version`
-  - 自訂斜線命令：修正使用者層級子目錄命令
-  - 計劃模式：修正拒絕子任務計劃時的處理
+- 您現在可以建立專門任務的自訂子代理！執行 /agents 開始使用
 
-- 1.0.48
+## 1.0.59
 
-  - Bash 工具顯示進度訊息（基於最後 5 行輸出）
-  - MCP 伺服器設定支援變數展開
-  - Hooks：新增 `PreCompact` 事件
-  - Vim 模式新增 `c`、`f/F`、`t/T`
+- SDK：新增 canUseTool 回調的工具確認支援
+- SDK：允許為生成的程序指定環境變數
+- Hooks：向 hooks 暴露 PermissionDecision（包括「ask」）
+- Hooks：UserPromptSubmit 現在在進階 JSON 輸出中支援 additionalContext
+- 修復某些指定 Opus 的 Max 使用者仍會看到回退到 Sonnet 的問題
 
-- 1.0.45
+## 1.0.58
 
-  - 重新設計 Search（Grep）工具，新增輸入參數與能力
-  - 停用 Notebook 檔 diff 造成的 1000ms 逾時問題
-  - 設定檔採用原子寫入以避免損毀
-  - Prompt Undo 改為 `Ctrl+_`（避免與 `Ctrl+U` 衝突）
-  - Stop Hooks：修正 `/clear` 後 transcript 路徑與迴圈以工具結束時的觸發
-  - 自訂斜線命令：恢復子目錄命名空間（`.claude/commands/frontend/component.md` → `/frontend:component`）
+- 新增 PDF 讀取支援
+- MCP：改善「claude mcp list」中的伺服器健康狀態顯示
+- Hooks：為 hook 指令新增 CLAUDE_PROJECT_DIR 環境變數
 
-- 1.0.44
+## 1.0.57
 
-  - 新增 `/export` 指令
-  - MCP：支援 `resource_link` 結果；/mcp 檢視顯示工具註解與標題
-  - `Ctrl+Z` 改為暫停 Claude Code（以 `fg` 回復）；Prompt Undo 改為 `Ctrl+U`
+- 新增在斜線指令中指定模型的支援
+- 改善權限訊息以幫助 Claude 理解允許的工具
+- 修復：移除終端包裝中 bash 輸出的尾隨換行符
 
-- 1.0.42
+## 1.0.56
 
-  - `/add-dir` 支援 `~` 展開
+- Windows：在支援終端 VT 模式的 Node.js 版本上啟用 shift+tab 進行模式切換
+- 修復 WSL IDE 偵測
+- 修復導致 awsRefreshHelper 對 .aws 目錄的變更無法被檢測的問題
 
-- 1.0.41
+## 1.0.55
 
-  - Hooks：`Stop` 與 `SubagentStop` 分拆；每個命令可設定逾時
+- 澄清 Opus 4 和 Sonnet 4 模型的知識截止時間
+- Windows：修復 Ctrl+Z 當機
+- SDK：新增捕獲錯誤記錄的能力
+- 新增 --system-prompt-file 選項在列印模式中覆寫系統提示
 
-- 1.0.39
+## 1.0.54
 
-  - OTEL：新增 Active Time 指標
+- Hooks：新增 UserPromptSubmit hook 和當前工作目錄到 hook 輸入
+- 自訂斜線指令：在前言中新增 argument-hint
+- Windows：OAuth 使用連接埠 45454 並正確構建瀏覽器 URL
+- Windows：模式切換現在使用 alt + m，計劃模式正確渲染
+- Shell：切換到記憶體內 shell 快照以修復檔案相關錯誤
 
-- 1.0.35
-
-  - MCP OAuth Authorization Server discovery 支援
-
-- 1.0.33
-
-  - 輸入撤銷：`Ctrl+Z`、Vim `u`
-
-- 1.0.30
-
-  - 自訂斜線指令：支援輸出 bash 結果、`@mention` 檔案、thinking 關鍵字
-
-- 1.0.27
-
-  - 可串流 HTTP MCP 伺服器
-  - 遠端 MCP 伺服器支援 OAuth
-  - MCP 資源可 `@mention`
-  - 新增 `/resume` 指令
-
-- 1.0.23
-
-  - 發佈 TypeScript 與 Python SDK
-
-- 1.0.18
-
-  - 新增 `--add-dir` 參數
-  - 輸入流式（無須 `-p`）
-  - 新增 `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR`
-  - /mcp 顯示詳細工具清單
-  - MCP SSE 斷線自動重連
-
-- 1.0.10
-
-  - Markdown 表格支援
-
-- 1.0.8
-
-  - Thinking：支援非英文語言觸發
-
-- 1.0.6
-
-  - `@file` 型別提前支援符號連結（symlinks）
-
-- 1.0.1
-  - 新增 `DISABLE_INTERLEAVED_THINKING`（停用交錯思考）
+**📅 最後更新時間**: 2025-08-21  
+**📊 資料來源**: [GitHub CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)  
+**🔄 翻譯方式**: 人工高品質翻譯
 
 ---
 
