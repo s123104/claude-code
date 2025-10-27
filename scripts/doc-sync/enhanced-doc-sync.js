@@ -6,14 +6,14 @@
  * 功能：
  * 1. 智能爬取 Anthropic 官方文檔
  * 2. 高品質 HTML 到 Markdown 轉換
- * 3. 同步 CHANGELOG 內容並翻譯
+ * 3. 同步 CHANGELOG 內容並翻譯為完整繁體中文
  * 4. 檢測內容差異與版本變更
  * 5. 生成詳細同步報告
  * 
  * 技術特點：
  * - 使用 cheerio 進行精確的 HTML 解析
  * - 智能內容差異檢測
- * - 漸進式翻譯系統
+ * - 強化繁體中文翻譯系統
  * - 完整的錯誤處理與重試機制
  * 
  * 使用方式：
@@ -35,7 +35,10 @@ import { createWriteStream } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.join(__dirname, '..');
+const rootDir = path.join(__dirname, '..', '..');
+
+// 引入強化翻譯器
+const TranslatorPath = path.join(__dirname, 'zh-tw-translator-simple.cjs');
 
 class EnhancedClaudeCodeDocSync {
   constructor() {
@@ -130,8 +133,12 @@ class EnhancedClaudeCodeDocSync {
       errors: []
     };
 
-    // 翻譯映射表
-    this.translations = new Map([
+    // 初始化強化翻譯器（異步）
+    this.translator = null;
+    this.translatorReady = this.initializeTranslator();
+
+    // 基本翻譯映射表（作為備援）
+    this.basicTranslations = new Map([
       // 核心概念
       ['Claude Code', 'Claude Code'],
       ['subagents', '子代理'],
@@ -204,6 +211,31 @@ class EnhancedClaudeCodeDocSync {
       ['reference guide', '參考指南'],
       ['troubleshooting guide', '疑難排解指南']
     ]);
+  }
+
+  /**
+   * 初始化強化翻譯器
+   */
+  async initializeTranslator() {
+    try {
+      // 使用動態 import 來載入 CommonJS 模組
+      const { default: TraditionalChineseTranslator } = await import(`file://${TranslatorPath}`);
+      this.translator = new TraditionalChineseTranslator();
+      this.log('✅ 強化翻譯器初始化成功', 'SUCCESS');
+    } catch (error) {
+      try {
+        // 備用方法：直接使用 createRequire
+        const { createRequire } = await import('module');
+        const require = createRequire(import.meta.url);
+        const TraditionalChineseTranslator = require(TranslatorPath);
+        this.translator = new TraditionalChineseTranslator();
+        this.log('✅ 強化翻譯器初始化成功 (備用方法)', 'SUCCESS');
+      } catch (fallbackError) {
+        this.log(`⚠️ 無法載入強化翻譯器: ${error.message}`, 'WARNING');
+        this.log('將使用基本翻譯功能', 'INFO');
+        this.translator = null;
+      }
+    }
   }
 
   parseArgs() {
@@ -349,15 +381,29 @@ class EnhancedClaudeCodeDocSync {
   }
 
   translateChangelogEntry(text) {
+    if (!text || typeof text !== 'string') return text;
+
+    // 使用強化翻譯器（如果可用）
+    if (this.translator) {
+      try {
+        const translated = this.translator.translateChangelogItem(text);
+        this.log(`翻譯: "${text}" -> "${translated}"`, 'VERBOSE');
+        return translated;
+      } catch (error) {
+        this.log(`強化翻譯器錯誤: ${error.message}，回退到基本翻譯`, 'WARNING');
+      }
+    }
+
+    // 基本翻譯（作為備援）
     let translated = text;
     
-    // 應用翻譯映射
-    for (const [en, zh] of this.translations) {
+    // 應用基本翻譯映射
+    for (const [en, zh] of this.basicTranslations) {
       const regex = new RegExp(`\\b${en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
       translated = translated.replace(regex, zh);
     }
 
-    // 特殊處理
+    // 基本特殊處理
     translated = translated
       // 保持技術術語的格式
       .replace(/Ctrl\+([a-zA-Z])/g, 'Ctrl+$1')
@@ -365,34 +411,14 @@ class EnhancedClaudeCodeDocSync {
       .replace(/`([^`]+)`/g, '`$1`')
       .replace(/--([a-zA-Z-]+)/g, '--$1')
       
-      // 常見動詞翻譯
+      // 基本動詞翻譯
       .replace(/\bFixed\b/g, '修復')
       .replace(/\bAdded\b/g, '新增')
       .replace(/\bImproved\b/g, '改善')
       .replace(/\bEnhanced\b/g, '增強')
       .replace(/\bUpgraded\b/g, '升級')
       .replace(/\bEnabled\b/g, '啟用')
-      .replace(/\bDisabled\b/g, '停用')
       .replace(/\bSupport\b/g, '支援')
-      .replace(/\bsupport\b/g, '支援')
-      
-      // 技術術語本地化
-      .replace(/\bWindows\b/g, 'Windows')
-      .replace(/\bmacOS\b/g, 'macOS')
-      .replace(/\bLinux\b/g, 'Linux')
-      .replace(/\bNode\.js\b/g, 'Node.js')
-      .replace(/\bnpm\b/g, 'npm')
-      .replace(/\bpnpm\b/g, 'pnpm')
-      .replace(/\byarn\b/g, 'yarn')
-      .replace(/\bVS\s?Code\b/g, 'VS Code')
-      .replace(/\bGitHub\b/g, 'GitHub')
-      .replace(/\bGit\b/g, 'Git')
-      
-      // 檔案和路徑
-      .replace(/\.bashrc/g, '.bashrc')
-      .replace(/\.claude/g, '.claude')
-      .replace(/CLAUDE\.md/g, 'CLAUDE.md')
-      .replace(/package\.json/g, 'package.json')
       
       // 清理多餘空格
       .replace(/\s+/g, ' ')
@@ -939,6 +965,9 @@ ${changelogContent}
     try {
       // 0. 載入依賴
       await this.loadDependencies();
+      
+      // 0.1. 等待翻譯器初始化完成
+      await this.translatorReady;
 
       // 1. 獲取並更新 CHANGELOG
       this.log('📋 階段 1: 處理 CHANGELOG', 'INFO');
