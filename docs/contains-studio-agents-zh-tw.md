@@ -11,9 +11,10 @@
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/contains-studio/agents)
-> - [Claude Code Sub-Agents 文檔](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
-> - **文件整理時間：2025-08-18T00:00:00+08:00**
-> - **專案最後更新：2025-08-16T 最新版本**
+> - [Claude Code Subagents 官方文檔](https://docs.anthropic.com/en/docs/claude-code/subagents)
+> - **文件整理時間：2025-10-28T04:00:00+08:00**
+> - **專案版本：v1.2**
+> - **專案最後更新：2025-08-16**
 
 ---
 

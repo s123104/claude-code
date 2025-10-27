@@ -13,7 +13,8 @@
 > - [GitHub 專案](https://github.com/BloopAI/vibe-kanban)
 > - [官方網站](https://vibekanban.com)
 > - [NPM 套件](https://www.npmjs.com/package/vibe-kanban)
-> - **文件整理時間：2025-10-27T23:12:00+08:00**
+> - [多代理編排最佳實踐](https://docs.anthropic.com/en/docs/claude-code/subagents)
+> - **文件整理時間：2025-10-28T04:10:00+08:00**
 > - **專案版本：v0.0.111-20251023173202**
 > - **專案最後更新：2025-10-27**
 

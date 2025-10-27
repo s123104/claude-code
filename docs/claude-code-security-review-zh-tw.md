@@ -7,11 +7,13 @@
 
 > **資料來源：**
 >
-> - [GitHub 專案](https://github.com/anthropics/claude-code-security-review)
+> - [GitHub 專案](https://github.com/anthropics/claude-code-security-review)（Anthropic 官方）
 > - [官方部落格文章](https://www.anthropic.com/news/automate-security-reviews-with-claude-code)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案最後更新：2025-08-12T11:58:20-07:00**
+> - [GitHub Actions 官方文檔](https://docs.github.com/en/actions)
+> - **文件整理時間：2025-10-28T03:55:00+08:00**
+> - **專案版本：v1.0**
+> - **專案最後更新：2025-08-12**
 
 ---
 

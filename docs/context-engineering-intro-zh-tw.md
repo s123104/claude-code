@@ -11,9 +11,11 @@
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/coleam00/context-engineering-intro)
-> - [Context Engineering 方法論](https://contextengineering.dev)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案最後更新：2025-08-06T09:44:59-05:00**
+> - [Context Engineering 方法論網站](https://contextengineering.dev)
+> - [PRP 工作流程說明](https://github.com/coleam00/context-engineering-intro#prp-workflow)
+> - **文件整理時間：2025-10-28T04:05:00+08:00**
+> - **專案版本：v1.0**
+> - **專案最後更新：2025-08-06**
 
 ---
 

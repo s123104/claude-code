@@ -10,8 +10,10 @@
 > - [GitHub 專案](https://github.com/grp06/claude-code-leaderboard)
 > - [排行榜網站](https://claudecount.com)
 > - [NPM 套件](https://www.npmjs.com/package/claude-code-leaderboard)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案最後更新：v0.2.9（最後提交：2025-08-06T18:50:17-07:00）**
+> - [Claude Code Hooks 官方文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
+> - **文件整理時間：2025-10-28T03:50:00+08:00**
+> - **專案版本：v0.2.9**
+> - **專案最後更新：2025-08-06**
 
 ---
 
