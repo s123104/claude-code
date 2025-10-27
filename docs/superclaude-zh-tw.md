@@ -1,18 +1,21 @@
-# SuperClaude v3.0 中文專業說明書
+# 🚀 SuperClaude Framework 中文專業說明書
 
 ## 概述
 
-此專案提供了完整的功能說明。
+**Transform Claude Code into a Structured Development Platform**
 
+SuperClaude 是一套 **meta-programming 配置框架**，透過行為指令注入和元件編排，將 Claude Code 轉變為結構化開發平台。提供系統化工作流程自動化，配備強大工具和智能代理。
 
 > **資料來源：**
 >
-> - [GitHub 專案](https://github.com/NomenAK/SuperClaude)
-> - [SuperClaude 官方文檔](https://superclaude.dev/)
-> - [Claude Code 高階配置指南](https://docs.anthropic.com/en/docs/claude-code)
-> - [MCP 多代理協作協議](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-10-27T23:05:00+08:00**
-> - **版本：v4.1.6（最新穩定版本）**
+> - [GitHub 專案](https://github.com/SuperClaude-Org/SuperClaude_Framework)
+> - [SuperClaude 官方網站](https://superclaude.netlify.app/)
+> - [PyPI 套件](https://pypi.org/project/superclaude/)
+> - [npm 套件](https://www.npmjs.com/package/@bifrost_inc/superclaude)
+> - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+> - **文件整理時間：2025-10-28T03:00:00+08:00**
+> - **版本：v4.2.0（最新版本）**
+> - **專案最後更新：2025-10-27**
 
 ---
 
@@ -20,28 +23,112 @@
 
 - [1. 專案簡介](#1-專案簡介)
 - [2. 安裝與啟動](#2-安裝與啟動)
-- [2.1 v2 升級 v3 遷移指引](#21-v2-升級-v3-遷移指引)
-- [3. 指令分類與選項](#3-指令分類與選項)
-- [4. 代表性 Workflow 與範例](#4-代表性-workflow-與範例)
-- [5. MCP、Persona、選項與最佳實踐](#5-mcppersona選項與最佳實踐)
-- [6. 專案結構與自訂](#6-專案結構與自訂)
-- [7. 社群貢獻與參與](#7-社群貢獻與參與)
-- [8. 常見問題與延伸閱讀](#8-常見問題與延伸閱讀)
+- [3. v4.2 新功能：Deep Research 深度研究](#3-v42-新功能deep-research-深度研究)
+- [4. 指令分類與選項](#4-指令分類與選項)
+- [5. 代表性 Workflow 與範例](#5-代表性-workflow-與範例)
+- [6. MCP、Persona、選項與最佳實踐](#6-mcppersona選項與最佳實踐)
+- [7. 專案結構與自訂](#7-專案結構與自訂)
+- [8. 社群貢獻與參與](#8-社群貢獻與參與)
+- [9. 常見問題與延伸閱讀](#9-常見問題與延伸閱讀)
 
 ---
 
 ## 1. 專案簡介
 
-SuperClaude v4.1.6 是一套meta-programming配置框架，透過行為指令注入和元件編排，將 Claude Code 轉變為結構化開發平台。提供系統化工作流程自動化，配備強大工具和智能代理。
+SuperClaude v4.2.0 是一套 **meta-programming 配置框架**，透過行為指令注入和元件編排，將 Claude Code 轉變為結構化開發平台。提供系統化工作流程自動化，配備強大工具和智能代理。
 
-### v4.1 主要特色
+## 📊 框架統計
 
-- 🤖 **16 個專業代理**：領域專家系統（PM、Deep Research、Security、Frontend 等）
-- 📝 **26 個斜線指令**：完整生命週期覆蓋（使用 `/sc:` 前綴避免衝突）
-- 🔧 **8 個 MCP 伺服器**：Context7、Sequential、Magic、Playwright、Tavily、Serena、Morphllm、Chrome DevTools
-- 🎯 **7 種行為模式**：Brainstorming、Business Panel、Deep Research、Orchestration、Token-Efficiency、Task Management、Introspection
-- 🔬 **深度研究能力**：自主網路研究（最多 5 次迭代、品質評分、案例學習）
-- ⚡ **效能最佳化**：減少 30-50% token 使用、2-3 倍執行速度（使用 MCP 時）
+| **指令數** | **代理數** | **模式數** | **MCP 伺服器數** |
+|:----------:|:----------:|:----------:|:----------------:|
+| **26** | **16** | **7** | **8** |
+| 斜線指令 | 專業 AI | 行為模式 | 整合服務 |
+
+使用新的 `/sc:help` 指令查看所有可用指令的完整清單。
+
+### v4.2 主要特色
+
+<table>
+<tr>
+<td width="50%">
+
+#### 🤖 **更智能的代理系統**
+**16 個專業代理**，具備領域專業知識：
+- PM Agent 透過系統化文檔確保持續學習
+- Deep Research agent 進行自主網路研究
+- Security engineer 捕捉真實漏洞
+- Frontend architect 理解 UI 模式
+- 根據情境自動協調
+- 按需提供領域專業知識
+
+</td>
+<td width="50%">
+
+#### 📝 **改進的命名空間**
+**`/sc:` 前綴**用於所有指令：
+- 不與自定義指令衝突
+- 26 個指令覆蓋完整生命週期
+- 從腦力激盪到部署
+- 乾淨、有組織的指令結構
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 🔧 **MCP 伺服器整合**
+**8 個強大伺服器**協同工作：
+- **Context7** → 最新文檔
+- **Sequential** → 複雜分析
+- **Magic** → UI 元件生成
+- **Playwright** → 瀏覽器測試
+- **Morphllm** → 批量轉換
+- **Serena** → 會話持久化
+- **Tavily** → 深度研究的網路搜尋
+- **Chrome DevTools** → 效能分析
+
+</td>
+<td width="50%">
+
+#### 🎯 **行為模式**
+**7 種適應性模式**用於不同情境：
+- **Brainstorming** → 提出正確問題
+- **Business Panel** → 多專家策略分析
+- **Deep Research** → 自主網路研究
+- **Orchestration** → 高效工具協調
+- **Token-Efficiency** → 30-50% 情境節省
+- **Task Management** → 系統化組織
+- **Introspection** → 元認知分析
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### ⚡ **最佳化效能**
+**更小的框架，更大的專案：**
+- 減少框架足跡
+- 為您的程式碼提供更多情境
+- 可進行更長的對話
+- 啟用複雜操作
+
+</td>
+<td width="50%">
+
+#### 📚 **文檔全面改寫**
+**為開發者完整重寫：**
+- 真實範例和使用案例
+- 記錄常見陷阱
+- 包含實用工作流程
+- 更好的導航結構
+
+</td>
+</tr>
+</table>
+
+### 🔬 **v4.2 新功能：Deep Research 能力**
+
+SuperClaude v4.2 引入全面的 Deep Research 能力，實現自主、適應性和智能的網路研究。詳見 [第 3 章節](#3-v42-新功能deep-research-深度研究)。
 
 ### 目前狀態
 
@@ -154,9 +241,222 @@ rm -rf ~/.claude/commands/
 rm -f ~/.claude/CLAUDE.md
 ```
 
-### 步驟 3：安裝 v3
+### 步驟 3：安裝 v4.2
 
 按照上述「2. 安裝與啟動」步驟進行全新安裝。
+
+---
+
+## 3. v4.2 新功能：Deep Research 深度研究
+
+### 🔬 **自主網路研究對齊 DR Agent 架構**
+
+SuperClaude v4.2 引入全面的 Deep Research 能力，實現自主、適應性和智能的網路研究。
+
+<table>
+<tr>
+<td width="50%">
+
+#### 🎯 **適應性規劃**
+**三種智能策略：**
+- **Planning-Only**：針對明確查詢的直接執行
+- **Intent-Planning**：針對模糊請求的澄清
+- **Unified**：協作計劃優化（預設）
+
+</td>
+<td width="50%">
+
+#### 🔄 **Multi-Hop 推理**
+**最多 5 次迭代搜尋：**
+- 實體擴展（論文 → 作者 → 作品）
+- 概念深化（主題 → 細節 → 範例）
+- 時間進展（當前 → 歷史）
+- 因果鏈（效果 → 原因 → 預防）
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 📊 **品質評分**
+**基於信心度的驗證：**
+- 來源可信度評估（0.0-1.0）
+- 覆蓋完整性追蹤
+- 綜合一致性評估
+- 最低門檻：0.6，目標：0.8
+
+</td>
+<td width="50%">
+
+#### 🧠 **案例學習**
+**跨會話智能：**
+- 模式識別和重用
+- 策略隨時間優化
+- 儲存成功的查詢公式
+- 效能改進追蹤
+
+</td>
+</tr>
+</table>
+
+### 📝 **研究指令使用方式**
+
+#### 基本研究
+
+```bash
+# 自動深度的基本研究
+/sc:research "latest AI developments 2024"
+
+# 控制研究深度
+/sc:research "quantum computing breakthroughs" --depth exhaustive
+
+# 特定策略選擇
+/sc:research "market analysis" --strategy planning-only
+
+# 領域過濾研究
+/sc:research "React patterns" --domains "reactjs.org,github.com"
+```
+
+### 📊 **研究深度層級**
+
+| 深度 | 來源數 | Hops | 時間 | 最適合 |
+|:----:|:------:|:----:|:----:|----------|
+| **Quick** | 5-10 | 1 | ~2分鐘 | 快速事實、簡單查詢 |
+| **Standard** | 10-20 | 3 | ~5分鐘 | 一般研究（預設）|
+| **Deep** | 20-40 | 4 | ~8分鐘 | 全面分析 |
+| **Exhaustive** | 40+ | 5 | ~10分鐘 | 學術級研究 |
+
+### 🛠️ **整合工具編排**
+
+Deep Research 系統智能協調多個工具：
+
+- **Tavily MCP**：主要網路搜尋和發現
+- **Playwright MCP**：複雜內容提取
+- **Sequential MCP**：多步驟推理和綜合
+- **Serena MCP**：記憶和學習持久化
+- **Context7 MCP**：技術文檔查找
+
+### 📈 **使用範例**
+
+#### 快速研究
+
+```bash
+# 快速事實查找
+/sc:research "Python 3.12 new features" --depth quick
+
+# 結果：
+# - 5-10 個來源
+# - 1 次搜尋迭代
+# - ~2 分鐘完成
+# - 適合快速參考
+```
+
+#### 標準研究
+
+```bash
+# 一般研究（預設）
+/sc:research "best practices for React hooks"
+
+# 結果：
+# - 10-20 個來源
+# - 3 次搜尋迭代
+# - ~5 分鐘完成
+# - 全面概述
+```
+
+#### 深度研究
+
+```bash
+# 深入分析
+/sc:research "microservices architecture patterns" --depth deep
+
+# 結果：
+# - 20-40 個來源
+# - 4 次搜尋迭代
+# - ~8 分鐘完成
+# - 詳細分析和比較
+```
+
+#### 徹底研究
+
+```bash
+# 學術級研究
+/sc:research "quantum machine learning applications" --depth exhaustive
+
+# 結果：
+# - 40+ 個來源
+# - 5 次搜尋迭代
+# - ~10 分鐘完成
+# - 研究論文級別的綜合報告
+```
+
+### 🎓 **最佳實踐**
+
+#### 選擇正確的深度
+
+```bash
+# 快速參考
+/sc:research "What is JWT?" --depth quick
+
+# 學習新技術
+/sc:research "How to use Docker Compose?" --depth standard
+
+# 架構決策
+/sc:research "GraphQL vs REST for mobile apps" --depth deep
+
+# 研究報告
+/sc:research "State of AI in healthcare 2024" --depth exhaustive
+```
+
+#### 指定可信來源
+
+```bash
+# 限制為官方文檔
+/sc:research "Next.js 14 features" --domains "nextjs.org"
+
+# 學術研究
+/sc:research "climate change models" --domains "scholar.google.com,arxiv.org"
+
+# 技術社群
+/sc:research "Rust async patterns" --domains "rust-lang.org,github.com"
+```
+
+#### 策略選擇
+
+```bash
+# 明確問題，直接執行
+/sc:research "How to fix CORS errors?" --strategy planning-only
+
+# 需要澄清的模糊查詢
+/sc:research "improve my app performance" --strategy intent-planning
+
+# 複雜研究，協作規劃（預設）
+/sc:research "AI agent architecture patterns"  # 使用 unified 策略
+```
+
+### 💡 **進階功能**
+
+#### 跨會話學習
+
+Deep Research 系統會記住：
+- 您常用的研究模式
+- 成功的查詢公式
+- 偏好的來源和領域
+- 研究策略偏好
+
+這意味著它會隨時間變得更聰明，為您的特定需求提供更好的結果。
+
+#### 品質保證
+
+每個研究結果包含：
+- **信心分數**：0.0-1.0（目標 ≥ 0.8）
+- **來源評估**：可信度和相關性
+- **覆蓋分析**：主題覆蓋的完整性
+- **綜合品質**：報告的一致性和準確性
+
+---
+
+## 4. 指令分類與選項
 
 ### 重要指令變更對照表
 
@@ -630,7 +930,8 @@ A：目前僅支援 Claude Code，但 v4 將有更廣泛的相容性。
 
 ---
 
-> **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/NomenAK/SuperClaude) 與相關文檔。
+> **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/SuperClaude-Org/SuperClaude_Framework) 與相關文檔。
 >
-> **版本資訊**：SuperClaude v3.0.0 - 初始發布版本  
-> **最後更新**：2025-07-16T20:03:06+08:00
+> **版本資訊**：SuperClaude v4.2.0 - Deep Research 更新  
+> **最後更新**：2025-10-28T03:00:00+08:00  
+> **主要變更**：新增完整 Deep Research 章節、更新至 v4.2.0、補充研究深度層級說明
