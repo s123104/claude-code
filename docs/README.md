@@ -32,7 +32,7 @@
 | [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)                 | AI 驅動除錯、分析與修復           | 錯誤診斷、問題解決     | 開發者、維運工程師       |
 | [claude-code-spec-zh-tw.md](claude-code-spec-zh-tw.md)                       | 規格驅動開發、cc-sdd CLI          | 結構化開發流程         | 架構師、技術寫作者       |
 | [claude-code-leaderboard-zh-tw.md](claude-code-leaderboard-zh-tw.md)         | 使用量排行榜、競賽                | 競爭式使用量追蹤       | 社群、管理者             |
-| [claudia-zh-tw.md](claudia-zh-tw.md)                                         | 桌面 GUI、會話管理                | 圖形化專案管理         | 開發者、PM               |
+| [claudia-zh-tw.md](claudia-zh-tw.md)                                         | 桌面 GUI (opcode v0.2.0)、會話管理                | 圖形化專案管理         | 開發者、PM               |
 | [context-engineering-intro-zh-tw.md](context-engineering-intro-zh-tw.md)     | 脈絡工程與 PRP 方法論             | AI 輔助開發最佳實踐    | 架構師、研究者           |
 | [vibe-kanban-zh-tw.md](vibe-kanban-zh-tw.md)                                 | 看板專案管理、Git 整合            | 多代理協作管理         | 團隊、專案經理           |
 | [contains-studio-agents-zh-tw.md](contains-studio-agents-zh-tw.md)           | 專業代理庫（快速開發）            | 快速開發專業代理       | 開發者、研究者           |

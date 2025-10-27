@@ -253,8 +253,8 @@ Web UI、視覺化界面和開發者工具
 | 專案文件                                                                             | 專案描述        | 版本 | 最後更新   | 主要功能                     | 獨立性 |
 | ------------------------------------------------------------------------------------ | --------------- | ---- | ---------- | ---------------------------- | ------ |
 | [📊 claude-code-leaderboard-zh-tw.md](docs/claude-code-leaderboard-zh-tw.md)       | 使用量排行榜    | 最新 | 2025-08-06 | 競爭式用量追蹤、排行榜       | ⭐⭐⭐ |
-| [📋 claude-code-spec-zh-tw.md](docs/claude-code-spec-zh-tw.md)                     | 規格驅動開發    | 最新 | 2025-08-19 | cc-sdd CLI、規格驅動開發     | ⭐⭐⭐ |
-| [🖥️ claudia-zh-tw.md](docs/claudia-zh-tw.md)                                       | 桌面 GUI 工具   | v0.1.0 | 2025-08-14 | 桌面應用、會話管理、視覺化   | ⭐⭐⭐ |
+| [📋 claude-code-spec-zh-tw.md](docs/claude-code-spec-zh-tw.md)                     | 規格驅動開發    | v1.1.5 | 2025-10-27 | cc-sdd CLI、規格驅動開發、12 語言、8 平台     | ⭐⭐⭐ |
+| [🖥️ claudia-zh-tw.md](docs/claudia-zh-tw.md)                                       | 桌面 GUI (opcode)   | v0.2.0 | 2025-10-27 | 桌面應用、會話管理、視覺化 ⚠️ 已更名為 opcode   | ⭐⭐⭐ |
 | [🎓 context-engineering-intro-zh-tw.md](docs/context-engineering-intro-zh-tw.md)   | 脈絡工程方法論  | 最新 | 2025-08-06 | PRP 方法論、AI 輔助開發      | ⭐⭐   |
 | [📋 vibe-kanban-zh-tw.md](docs/vibe-kanban-zh-tw.md)                               | 看板專案管理    | v0.0.111 | 2025-10-27 | Git 整合、多代理協作管理     | ⭐⭐⭐ |
 | [🤖 contains-studio-agents-zh-tw.md](docs/contains-studio-agents-zh-tw.md)         | 專業代理庫      | 最新 | 2025-08-16 | 快速開發專業代理、Studio     | ⭐⭐⭐ |
@@ -262,8 +262,8 @@ Web UI、視覺化界面和開發者工具
 #### 適用客群與應用場景（專業工具類）
 
 - **Leaderboard**：功能：全球使用量排行榜、競爭式追蹤；應用場景：團隊競賽、使用量激勵；適用客群：團隊管理者、社群運營
-- **Spec (cc-sdd)**：功能：規格驅動開發工具鏈、cc-sdd CLI；應用場景：結構化開發流程、規格文檔自動化；適用客群：架構師、技術寫作者
-- **Claudia**：功能：桌面 GUI 應用、會話管理；應用場景：圖形化專案管理、非技術用戶；適用客群：PM、設計師
+- **Spec (cc-sdd v1.1.5)**：功能：規格驅動開發工具鏈、cc-sdd CLI、支援 8 個 AI 平台（Claude/Cursor/Gemini/Codex/Copilot/Qwen/Windsurf）、12 種語言、11 個 /kiro:* 斜線指令；應用場景：AI-DLC 開發流程、規格文檔自動化、跨平台 AI 協作；適用客群：架構師、技術寫作者、企業開發團隊
+- **opcode (原 Claudia v0.2.0)**：功能：桌面 GUI 應用、CC Agents、會話管理、背景代理執行；應用場景：圖形化專案管理、視覺化監控；適用客群：開發者、PM、設計師
 - **Context Engineering**：功能：PRP 方法論、脈絡工程；應用場景：AI 輔助開發最佳實踐、提示工程；適用客群：AI 工程師、研究者
 - **Vibe Kanban**：功能：看板管理、Git 整合、多代理協作；應用場景：專案管理、團隊協作；適用客群：專案經理、敏捷團隊
 - **Contains Studio Agents**：功能：專業代理庫、快速開發；應用場景：代理快速部署、專業場景定制；適用客群：企業開發者、解決方案架構師

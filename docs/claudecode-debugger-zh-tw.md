@@ -10,9 +10,9 @@
 > - [GitHub 專案](https://github.com/888wing/ClaudeCode-Debugger)
 > - [PyPI 套件頁面](https://pypi.org/project/claudecode-debugger/)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案版本：v1.5.0（最新版本）**
-> - **專案最後更新：2025-07-30T05:06:57+01:00**
+> - **文件整理時間：2025-10-27T23:50:00+08:00**
+> - **專案版本：v1.5.0**
+> - **專案最後更新：2025-07-30**
 
 ---
 
