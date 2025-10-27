@@ -1,36 +1,83 @@
 # Awesome Claude Code 中文精選資源總覽
 
-> **版本**: 最新版本
+[![Awesome](https://awesome.re/badge-flat2.svg)](https://awesome.re)
 
+> **版本**: 最新版本（2025-10-16 重大更新）
 
 ## 概述
 
-此專案提供了完整的功能說明。
+這是一份精選的 **斜線指令**、**CLAUDE.md 檔案**、**CLI 工具** 和其他資源與指南的清單，用於增強您的 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 工作流程、生產力和體驗。
 
+Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI 基礎編碼助手和代理，您可以在終端或 IDE 中訪問。這是一個快速發展的工具，提供許多強大的功能，並允許以多種不同方式進行大量配置。使用者正在積極探索最佳實踐和工作流程。希望此儲存庫能幫助社群分享知識並了解如何充分利用 Claude Code。
 
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/hesreallyhim/awesome-claude-code)
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
+> - [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
 > - [官方斜線命令文檔](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
 > - [官方 Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案最後更新：2025-08-18T22:09:25-04:00**
+> - **文件整理時間：2025-10-28T03:30:00+08:00**
+> - **專案最後更新：2025-10-16**
+
+---
+
+## 📢 重要公告
+
+### 🆕 2025-10-16 - **AGENT SKILLS 重大更新**
+
+**Claude Got Skills!** 
+
+自 Claude Code v2.0.20 起，我們獲得了一組**新功能**供使用者探索：[**Agent Skills**](https://docs.claude.com/en/docs/claude-code/skills)。
+
+> **Agent skills** 是模型控制的配置（檔案、腳本、資源等），使 Claude Code 能夠執行需要特定知識或能力的專業任務。
+
+---
+
+## 🆕 本週新增
+
+> 過去 7 天新增的資源
+
+### [`Codex Skill`](https://github.com/skills-directory/skill-codex)
+由 [klaudworks](https://github.com/klaudworks) 開發 | MIT 授權
+
+使用戶能夠從 claude code 中提示 codex。與原始 codex mcp 伺服器不同，此技能會從您的提示中推斷參數（如模型、推理努力、沙箱），或要求您指定它們。它還簡化了繼續先前 codex 會話的過程，以便 codex 可以繼續使用先前的情境。
+
+### [`claude-mem`](https://github.com/thedotmack/claude-mem)
+由 [Alex Newman](https://github.com/thedotmack) 開發
+
+持久化記憶壓縮系統，捕獲工具使用、生成 AI 驅動的會話摘要，並透過 SQLite 儲存和全文搜尋將相關情境注入未來的 Claude Code 會話中（無需額外成本依賴！）🦾
+
+### [`cc-sessions`](https://github.com/GWUDCAP/cc-sessions)
+由 [toastdev](https://github.com/satoastshi) 開發 | MIT 授權
+
+使用 Claude Code 進行生產開發的主觀方法。
+
+### [`fcakyon Collection`](https://github.com/fcakyon/claude-codex-settings/tree/main/.claude/hooks)
+由 [Fatih Akyon](https://github.com/fcakyon) 開發 | Apache-2.0 授權
+
+精心編寫的程式碼品質和工具使用管理 hooks 集合（例如強制使用 Tavily 而非 WebFetch 工具）。
+
+### [`/linux-desktop-slash-commands`](https://github.com/danielrosehill/Claude-Code-Linux-Desktop-Slash-Commands)
+由 [Daniel Rosehill](https://github.com/danielrosehill) 開發
+
+專為促進 Linux 桌面環境中常見和進階操作的斜線指令庫（儘管許多指令在 Linux 伺服器上也很有用）。指令組包括硬體基準測試、檔案系統組織和安全性態勢驗證。
 
 ---
 
 ## 目錄
 
 - [1. 專案簡介](#1-專案簡介)
-- [2. 目錄分類與重點資源](#2-目錄分類與重點資源)
-- [3. Workflow & Knowledge Guides](#3-workflow--knowledge-guides)
-- [4. Tooling & IDE 整合](#4-tooling--ide-整合)
-- [5. Hooks 實例](#5-hooks-實例)
-- [6. Slash-Commands 精選](#6-slash-commands-精選)
-- [7. CLAUDE.md 實戰範例](#7-claudemd-實戰範例)
-- [8. MCP/整合與自動化](#8-mcp整合與自動化)
-- [9. 社群貢獻與參與](#9-社群貢獻與參與)
-- [10. 官方文檔與延伸閱讀](#10-官方文檔與延伸閱讀)
+- [2. Agent Skills（代理技能）](#2-agent-skills代理技能) ⭐ 新增
+- [3. 目錄分類與重點資源](#3-目錄分類與重點資源)
+- [4. Workflow & Knowledge Guides](#4-workflow--knowledge-guides)
+- [5. Tooling & IDE 整合](#5-tooling--ide-整合)
+- [6. Hooks 實例](#6-hooks-實例)
+- [7. Slash-Commands 精選](#7-slash-commands-精選)
+- [8. CLAUDE.md 實戰範例](#8-claudemd-實戰範例)
+- [9. MCP/整合與自動化](#9-mcp整合與自動化)
+- [10. 社群貢獻與參與](#10-社群貢獻與參與)
+- [11. 官方文檔與延伸閱讀](#11-官方文檔與延伸閱讀)
 
 ---
 
@@ -38,16 +85,53 @@
 
 Awesome Claude Code 是一份由社群協作維護的精選清單，收錄 Claude Code 相關的指令、CLAUDE.md、workflow、hooks、MCP 整合、IDE 工具、最佳實踐與各類自動化資源，協助開發者提升生產力、優化 AI 代理開發流程。
 
-### 1.1 最新更新
+### 1.1 最新更新（2025-10-16）
 
-- **新增資源**：ccstatusline (#113) - 2025-08-12
+- **🆕 Agent Skills**：Claude Code v2.0.20 新功能
+- **新增工具**：claude-mem、cc-sessions、Codex Skill 等
 - **持續維護**：定期更新社群貢獻的資源
 - **品質保證**：嚴格的資源篩選標準
 - **社群驅動**：開放式貢獻模式
 
 ---
 
-## 2. 目錄分類與重點資源
+## 2. Agent Skills（代理技能）
+
+> **Agent skills** 是模型控制的配置（檔案、腳本、資源等），使 Claude Code 能夠執行需要特定知識或能力的專業任務。
+
+### 什麼是 Agent Skills？
+
+Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜線指令不同，Agent Skills 允許 Claude Code：
+
+- ✅ **執行專業任務**：需要特定領域知識或技術能力的任務
+- ✅ **模型控制**：由 AI 模型自主決定何時使用技能
+- ✅ **情境感知**：根據對話情境自動推斷參數
+- ✅ **可擴展性**：社群可以創建和分享自定義技能
+
+### 官方資源
+
+- 📚 [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
+- 🔗 [Agent Skills 規範](https://github.com/anthropics/skills/blob/main/agent_skills_spec.md)
+- 📁 [Skills Directory](https://github.com/skills-directory)
+
+### 可用的 Agent Skills
+
+#### [`Codex Skill`](https://github.com/skills-directory/skill-codex)
+**功能**：從 Claude Code 內部提示 Codex
+- 自動推斷模型、推理努力、沙箱參數
+- 簡化繼續先前 Codex 會話的過程
+- 保持情境連續性
+
+**使用場景**：
+- 需要多步驟推理的複雜程式設計任務
+- 需要深度思考的架構設計
+- 跨會話的程式碼生成和優化
+
+**目標使用者**：高級開發者、AI 研究人員、需要增強推理能力的專案
+
+---
+
+## 3. 目錄分類與重點資源
 
 - **Workflows & Knowledge Guides**：專案啟動、管理、知識導入、Context Priming、SDLC 全流程
 - **Tooling**：用量監控、Code Flow、IDE/編輯器整合、Webhooks、Swarm/多代理協作
