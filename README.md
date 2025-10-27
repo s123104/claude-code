@@ -14,7 +14,7 @@
   [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
   [![Stars](https://img.shields.io/github/stars/s123104/claude-code?style=social)](https://github.com/s123104/claude-code/stargazers)
   
-  > 最後更新：2025-08-20T01:27:23+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件
+  > 最後更新：2025-10-27T23:15:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案
 </div>
 
 ---
@@ -164,12 +164,12 @@ claude "測試連線成功"
 
 | 專案文件                                                             | 專案描述             | 版本     | 最後更新   | 主要功能                              | 獨立性 |
 | -------------------------------------------------------------------- | -------------------- | -------- | ---------- | ------------------------------------- | ------ |
-| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v3.0.0   | 2025-08-15 | 16 個專業指令、MCP 整合、Persona 系統 | ⭐⭐⭐ |
+| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v4.1.6   | 2025-10-27 | 26 指令、16 代理、8 MCP、Deep Research | ⭐⭐⭐ |
 | [⭐ awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐資源集合 | 社群版本 | 2025-08-17 | Hooks、斜線指令、CLAUDE.md 範例       | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（增強框架類）
 
-- **SuperClaude**：功能：Persona 系統、MCP 整合、16 組專業命令；應用場景：高階自動化開發、團隊規範落地；適用客群：進階開發者、技術主管、團隊協作
+- **SuperClaude v4.1.6**：功能：26 個斜線指令（`/sc:` 前綴）、16 個專業代理（PM、Deep Research、Security等）、8 個 MCP 伺服器整合、7 種行為模式、深度研究能力（最多 5 次迭代）；應用場景：企業級開發自動化、系統化工作流程、AI 驅動研究與分析、效能優化（減少 30-50% tokens）；適用客群：進階開發者、技術主管、研究團隊、企業開發團隊
 - **Awesome Claude Code**：功能：實戰範例與最佳實踐索引；應用場景：專案啟動、流程與 Hooks 實作範本查找；適用客群：所有開發者、技術寫作者
 ### 🤖 AI 代理類
 
@@ -191,12 +191,12 @@ claude "測試連線成功"
 | 專案文件                                                                         | 專案描述         | 版本   | 最後更新   | 主要功能                       | 獨立性 |
 | -------------------------------------------------------------------------------- | ---------------- | ------ | ---------- | ------------------------------ | ------ |
 | [📊 claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 進階用量監控工具 | v3.1.0 | 2025-07-24 | 即時監控、ML 預測、Docker 部署 | ⭐⭐⭐ |
-| [⚡ ccusage-zh-tw.md](docs/ccusage-zh-tw.md)                                     | 極速用量分析工具 | v15.10.0 | 2025-08-19 | 快速成本分析、狀態列整合       | ⭐⭐⭐ |
+| [⚡ ccusage-zh-tw.md](docs/ccusage-zh-tw.md)                                     | 極速用量分析工具 | v17.1.3 | 2025-10-27 | 快速成本分析、狀態列整合       | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（監控分析類）
 
 - **Usage Monitor**：功能：即時用量監控、ML 預測、Docker 部署；應用場景：生產成本監控、限額預警、趨勢預測；適用客群：產品/技術主管、FinOps、SRE
-- **ccusage (v15.10.0)**：功能：極速 CLI 分析、Statusline 狀態列、報表匯出；應用場景：本地開發成本檢視、CI 產出報告；適用客群：日常開發者、資料分析/報表維護
+- **ccusage (v17.1.3)**：功能：極速 CLI 分析、Statusline 狀態列、報表匯出；應用場景：本地開發成本檢視、CI 產出報告；適用客群：日常開發者、資料分析/報表維護
 ### 🖥️ 介面工具類
 
 Web UI、視覺化界面和開發者工具
@@ -256,7 +256,7 @@ Web UI、視覺化界面和開發者工具
 | [📋 claude-code-spec-zh-tw.md](docs/claude-code-spec-zh-tw.md)                     | 規格驅動開發    | 最新 | 2025-08-19 | cc-sdd CLI、規格驅動開發     | ⭐⭐⭐ |
 | [🖥️ claudia-zh-tw.md](docs/claudia-zh-tw.md)                                       | 桌面 GUI 工具   | v0.1.0 | 2025-08-14 | 桌面應用、會話管理、視覺化   | ⭐⭐⭐ |
 | [🎓 context-engineering-intro-zh-tw.md](docs/context-engineering-intro-zh-tw.md)   | 脈絡工程方法論  | 最新 | 2025-08-06 | PRP 方法論、AI 輔助開發      | ⭐⭐   |
-| [📋 vibe-kanban-zh-tw.md](docs/vibe-kanban-zh-tw.md)                               | 看板專案管理    | v0.0.63 | 2025-08-19 | Git 整合、多代理協作管理     | ⭐⭐⭐ |
+| [📋 vibe-kanban-zh-tw.md](docs/vibe-kanban-zh-tw.md)                               | 看板專案管理    | v0.0.111 | 2025-10-27 | Git 整合、多代理協作管理     | ⭐⭐⭐ |
 | [🤖 contains-studio-agents-zh-tw.md](docs/contains-studio-agents-zh-tw.md)         | 專業代理庫      | 最新 | 2025-08-16 | 快速開發專業代理、Studio     | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（專業工具類）

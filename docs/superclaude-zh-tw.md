@@ -11,8 +11,8 @@
 > - [SuperClaude 官方文檔](https://superclaude.dev/)
 > - [Claude Code 高階配置指南](https://docs.anthropic.com/en/docs/claude-code)
 > - [MCP 多代理協作協議](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-08-17T23:33:17+08:00**
-> - **版本：v3.0.0（穩定版本）**
+> - **文件整理時間：2025-10-27T23:05:00+08:00**
+> - **版本：v4.1.6（最新穩定版本）**
 
 ---
 
@@ -32,15 +32,16 @@
 
 ## 1. 專案簡介
 
-SuperClaude v3.0 是一套強化 Claude Code 的配置框架，結合專業 slash-commands、AI Persona、MCP 多代理協議、參數控制與現代開發方法論，支援全端、架構、測試、維運、文件、CI/CD、AI 驅動分析等全流程自動化。
+SuperClaude v4.1.6 是一套meta-programming配置框架，透過行為指令注入和元件編排，將 Claude Code 轉變為結構化開發平台。提供系統化工作流程自動化，配備強大工具和智能代理。
 
-### v3.0 主要特色
+### v4.1 主要特色
 
-- 🛠️ **16 個專門指令**：針對常見開發任務優化
-- 🎭 **智能 Persona 系統**：自動選擇適合的專家模式
-- 🔧 **MCP 伺服器整合**：Context7、Sequential、Magic、Playwright 等
-- 📋 **任務管理**：進度追蹤與工作流程管理
-- ⚡ **Token 優化**：支援長時間對話與複雜任務
+- 🤖 **16 個專業代理**：領域專家系統（PM、Deep Research、Security、Frontend 等）
+- 📝 **26 個斜線指令**：完整生命週期覆蓋（使用 `/sc:` 前綴避免衝突）
+- 🔧 **8 個 MCP 伺服器**：Context7、Sequential、Magic、Playwright、Tavily、Serena、Morphllm、Chrome DevTools
+- 🎯 **7 種行為模式**：Brainstorming、Business Panel、Deep Research、Orchestration、Token-Efficiency、Task Management、Introspection
+- 🔬 **深度研究能力**：自主網路研究（最多 5 次迭代、品質評分、案例學習）
+- ⚡ **效能最佳化**：減少 30-50% token 使用、2-3 倍執行速度（使用 MCP 時）
 
 ### 目前狀態
 

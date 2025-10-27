@@ -2373,166 +2373,390 @@ which claude
 
 ### CHANGELOG 新功能摘錄（依版本，來源：GitHub CHANGELOG）
 
-## 1.0.85
+## 2.0.27
 
-- 狀態列輸入現在包含會話成本資訊
+- 權限提示新增全新 UI 介面
+- 會話恢復畫面新增當前分支篩選和搜尋功能，方便導航
+- 修復目錄 @-提及導致「找不到助理訊息」錯誤的問題
+- VSCode 擴充套件：新增設定選項，可在檔案搜尋中包含 .gitignore 的檔案
+- VSCode 擴充套件：修復不相關的「Warmup」對話錯誤，以及設定偶爾被重置為預設值的問題
 
-## 1.0.84
+## 2.0.25
 
-- 修復網路不穩定時 tool_use/tool_result ID 不匹配錯誤
-- 修復 Claude 在完成任務時有時忽略即時引導的問題
-- @-提及功能：新增 ~/.claude/* 檔案到建議清單，方便編輯代理、輸出樣式和斜線指令
-- 預設使用內建 ripgrep；若要停用此行為，請設定 USE_BUILTIN_RIPGREP=0
+- 移除舊版 SDK 進入點。請遷移至 @anthropic-ai/claude-agent-sdk 以獲取未來的 SDK 更新：https://docs.claude.com/en/docs/claude-code/sdk/migration-guide
 
-## 1.0.83
+## 2.0.24
 
-- @-提及功能：支援路徑中包含空格的檔案
-- 新增閃爍載入動畫
+- 修復專案層級技能在指定 --setting-sources 'project' 時無法載入的錯誤
+- Claude Code Web：支援 Web -> CLI 傳送
+- 沙箱：在 Linux 和 Mac 上為 BashTool 發布沙箱模式
 
-## 1.0.82
+## 2.0.22
 
-- SDK：新增請求取消支援
-- SDK：新增 additionalDirectories 選項用於搜尋自訂路徑，改善斜線指令處理
-- 設定：驗證機制防止 .claude/settings.json 檔案中出現無效欄位
-- MCP：改善工具名稱一致性
-- Bash：修復 Claude 嘗試自動讀取大型檔案時的當機問題
+- 修復捲動斜線指令時的內容版面跳動問題
+- IDE：新增啟用/停用思考的切換開關
+- 修復平行工具呼叫時出現重複權限提示的錯誤
+- 新增對企業管理的 MCP 允許清單和拒絕清單的支援
 
-## 1.0.81
+## 2.0.21
 
-- 發布輸出樣式功能，包含新的內建教育輸出樣式「說明型」和「學習型」。文檔：https://docs.anthropic.com/en/docs/claude-code/output-styles
-- 代理：修復代理檔案無法解析時的自訂代理載入問題
+- 支援 MCP 工具回應中的 `structuredContent` 欄位
+- 新增互動式問題工具
+- Claude 現在在計劃模式下會更頻繁地向您提問
+- Pro 使用者新增 Haiku 4.5 作為模型選項
+- 修復佇列指令無法存取先前訊息輸出的問題
 
-## 1.0.80
+## 2.0.20
 
-- UI 改善：修復自訂子代理顏色的文字對比和載入動畫渲染問題
+- 新增對 Claude Skills 的支援
 
-## 1.0.77
+## 2.0.19
 
-- Bash 工具：修復 heredoc 和多行字串跳脫，改善 stderr 重導向處理
-- SDK：新增會話支援和權限拒絕追蹤
-- 修復對話摘要中的 token 限制錯誤
-- Opus 計劃模式：在 `/model` 中新增設定，僅在計劃模式下執行 Opus，其他情況使用 Sonnet
+- 長時間執行的 bash 指令現在會自動轉為背景執行，而非終止。可透過 BASH_DEFAULT_TIMEOUT_MS 自訂
+- 修復列印模式下不必要地呼叫 Haiku 的錯誤
 
-## 1.0.73
+## 2.0.17
 
-- MCP：支援多個設定檔，使用 `--mcp-config file1.json file2.json`
-- MCP：按 Esc 取消 OAuth 認證流程
-- Bash：改善指令驗證並減少錯誤的安全警告
-- UI：增強載入動畫和狀態列視覺層次
-- Linux：新增對 Alpine 和 musl-based 發行版的支援（需要單獨安裝 ripgrep）
+- 模型選擇器新增 Haiku 4.5！
+- Haiku 4.5 在計劃模式自動使用 Sonnet，執行時使用 Haiku（即預設為 SonnetPlan）
+- 第三方平台（Bedrock 和 Vertex）尚未自動升級。可透過設定 `ANTHROPIC_DEFAULT_HAIKU_MODEL` 手動升級
+- 推出 Explore 子代理。由 Haiku 驅動，將有效搜尋您的程式碼庫以節省上下文！
+- OTEL：支援 HTTP_PROXY 和 HTTPS_PROXY
+- `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 現在會停用版本資訊取得
 
-## 1.0.72
+## 2.0.15
 
-- 權限詢問：讓 Claude Code 在使用特定工具時總是要求確認，使用 /permissions
+- 修復恢復時需要重新讀取先前建立的檔案才能寫入的錯誤
+- 修復 `-p` 模式下需要重新讀取 @-提及的檔案才能寫入的錯誤
 
-## 1.0.71
+## 2.0.14
 
-- 背景指令：使用 (Ctrl-b) 在背景執行任何 Bash 指令，讓 Claude 可以繼續工作（適合開發伺服器、追蹤日誌等）
-- 可自訂狀態列：使用 /statusline 將您的終端提示加入 Claude Code
+- 修復 @-提及 MCP 伺服器以切換開關的功能
+- 改善帶有行內環境變數的 bash 權限檢查
+- 修復 ultrathink + 思考切換
+- 減少不必要的登入
+- 新增 --system-prompt 文件
+- 多項渲染改善
+- 外掛 UI 優化
 
-## 1.0.70
+## 2.0.13
 
-- 效能：最佳化訊息渲染，在大型上下文中提供更好的效能
-- Windows：修復原生檔案搜尋、ripgrep 和子代理功能
-- 新增對斜線指令參數中 @-提及的支援
+- 修復 `/plugin` 在原生建置版本無法運作的問題
 
-## 1.0.69
+## 2.0.12
 
-- 升級 Opus 至 4.1 版本
+- **外掛系統發布**：透過市集的自訂指令、代理、hooks 和 MCP 伺服器擴展 Claude Code
+- `/plugin install`、`/plugin enable/disable`、`/plugin marketplace` 指令用於外掛管理
+- 透過 `extraKnownMarketplaces` 進行儲存庫層級的外掛設定，以便團隊協作
+- `/plugin validate` 指令用於驗證外掛結構和設定
+- 外掛公告部落格文章：https://www.anthropic.com/news/claude-code-plugins
+- 外掛文件：https://docs.claude.com/en/docs/claude-code/plugins
+- 透過 `/doctor` 指令提供完整的錯誤訊息和診斷
+- 避免 `/model` 選擇器閃爍
+- `/help` 改善
+- 避免在 `/resume` 摘要中提及 hooks
+- `/config` 中的「verbose」設定變更現在會在會話間保持
 
-## 1.0.68
+## 2.0.11
 
-- 修復特定指令（如 `/pr-comments`）使用錯誤模型名稱的問題
-- Windows：改善工具允許/拒絕和專案信任的權限檢查。這可能會在 `.claude.json` 中建立新的專案項目 - 如需要請手動合併歷史欄位
-- Windows：改善子程序生成，消除執行 pnpm 等指令時的「找不到檔案或目錄」錯誤
-- 增強 /doctor 指令，加入 CLAUDE.md 和 MCP 工具上下文以便自助除錯
-- SDK：新增 canUseTool 回調支援用於工具確認
-- 新增 `disableAllHooks` 設定
-- 改善大型程式庫中的檔案建議效能
+- 系統提示大小減少 1.4k tokens
+- IDE：修復鍵盤快捷鍵和焦點問題，提供更流暢的互動
+- 修復 Opus 回退速率限制錯誤不正確顯示的問題
+- 修復 /add-dir 指令選擇錯誤預設分頁的問題
 
-## 1.0.65
+## 2.0.10
 
-- IDE：修復診斷的連線穩定性問題和錯誤處理
-- Windows：修復沒有 .bashrc 檔案的使用者的 shell 環境設定
+- 重寫終端渲染器，提供極致流暢的 UI
+- 透過 @-提及或在 /mcp 中啟用/停用 MCP 伺服器
+- bash 模式下新增 shell 指令的 tab 自動完成
+- PreToolUse hooks 現在可以修改工具輸入
+- 按 Ctrl-G 在系統設定的文字編輯器中編輯提示
+- 修復帶有環境變數的 bash 權限檢查
 
-## 1.0.64
+## 2.0.9
 
-- 代理：新增模型自訂支援 - 您現在可以指定代理應使用的模型
-- 代理：修復對遞迴代理工具的意外存取
-- Hooks：在 hook JSON 輸出中新增 systemMessage 欄位，用於顯示警告和上下文
-- SDK：修復跨多輪對話的使用者輸入追蹤
-- 新增隱藏檔案到檔案搜尋和 @-提及建議
+- 修復 bash 背景執行停止運作的問題
 
-## 1.0.63
+## 2.0.8
 
-- Windows：修復檔案搜尋、@代理提及和自訂斜線指令功能
+- 更新 Bedrock 預設 Sonnet 模型為 `global.anthropic.claude-sonnet-4-5-20250929-v1:0`
+- IDE：聊天中新增檔案和資料夾的拖放支援
+- /context：修復思考區塊的計數
+- 改善深色終端上淺色主題使用者的訊息渲染
+- 移除已棄用的 .claude.json 設定選項（allowedTools、ignorePatterns、env、todoFeatureEnabled），改為在 settings.json 中設定
 
-## 1.0.62
+## 2.0.5
 
-- 新增自訂代理的 @-提及支援和預輸入功能。使用 @<your-custom-agent> 來調用
-- Hooks：新增 SessionStart hook 用於新會話初始化
-- /add-dir 指令現在支援目錄路徑的預輸入
-- 改善網路連線檢查可靠性
+- IDE：修復使用 Enter 和 Tab 時 IME 意外提交訊息的問題
+- IDE：登入畫面新增「在終端開啟」連結
+- 修復未處理的 OAuth 過期 401 API 錯誤
+- SDK：新增 SDKUserMessageReplay.isReplay 以防止重複訊息
 
-## 1.0.61
+## 2.0.1
 
-- 文字記錄模式 (Ctrl+R)：改變 Esc 為退出文字記錄模式而非中斷
-- 設定：新增 `--settings` 參數從 JSON 檔案載入設定
-- 設定：修復符號連結設定檔案路徑的解析
-- OTEL：修復認證變更後錯誤組織的回報
-- 斜線指令：修復 Bash 允許工具的權限檢查
-- IDE：新增在 VSCode MacOS 中使用 ⌘+V 貼上圖片的支援
-- IDE：新增 `CLAUDE_CODE_AUTO_CONNECT_IDE=false` 用於停用 IDE 自動連線
-- 新增 `CLAUDE_CODE_SHELL_PREFIX` 用於包裝 Claude Code 執行的 Claude 和使用者提供的 shell 指令
+- Bedrock 和 Vertex 跳過 Sonnet 4.5 預設模型設定變更
+- 各種錯誤修復和呈現改善
 
-## 1.0.60
+## 2.0.0
 
-- 您現在可以建立專門任務的自訂子代理！執行 /agents 開始使用
+- 全新原生 VS Code 擴充套件
+- 整個應用程式全新外觀
+- /rewind 回退對話以撤銷程式碼變更
+- /usage 指令查看計劃限制
+- Tab 切換思考（跨會話保持）
+- Ctrl-R 搜尋歷史記錄
+- 未發布的 claude config 指令
+- Hooks：減少 PostToolUse 的 'tool_use' id 找不到 'tool_result' 區塊的錯誤
+- SDK：Claude Code SDK 現在是 Claude Agent SDK
+- 使用 `--agents` 參數動態新增子代理
 
-## 1.0.59
+## 1.0.126
 
-- SDK：新增 canUseTool 回調的工具確認支援
-- SDK：允許為生成的程序指定環境變數
-- Hooks：向 hooks 暴露 PermissionDecision（包括「ask」）
-- Hooks：UserPromptSubmit 現在在進階 JSON 輸出中支援 additionalContext
-- 修復某些指定 Opus 的 Max 使用者仍會看到回退到 Sonnet 的問題
+- 為 Bedrock 和 Vertex 啟用 /context 指令
+- 為基於 HTTP 的 OpenTelemetry 匯出器新增 mTLS 支援
 
-## 1.0.58
+## 1.0.124
 
-- 新增 PDF 讀取支援
-- MCP：改善「claude mcp list」中的伺服器健康狀態顯示
-- Hooks：為 hook 指令新增 CLAUDE_PROJECT_DIR 環境變數
+- 將 `CLAUDE_BASH_NO_LOGIN` 環境變數設為 1 或 true 以跳過 BashTool 的登入 shell
+- 修復 Bedrock 和 Vertex 環境變數將所有字串評估為真值的問題
+- 不再在權限被拒時通知 Claude 允許的工具清單
+- 修復 Bash 工具權限檢查中的安全漏洞
+- 改善 VSCode 擴充套件對大型檔案的效能
 
-## 1.0.57
+## 1.0.123
 
-- 新增在斜線指令中指定模型的支援
-- 改善權限訊息以幫助 Claude 理解允許的工具
-- 修復：移除終端包裝中 bash 輸出的尾隨換行符
+- Bash 權限規則現在在比對時支援輸出重導向（例如 `Bash(python:*)` 比對 `python script.py > output.txt`）
+- 修復否定片語（如「don't think」）觸發思考模式的問題
+- 修復 token 串流期間的渲染效能下降問題
+- 新增 SlashCommand 工具，讓 Claude 可以調用您的斜線指令。https://docs.claude.com/en/docs/claude-code/slash-commands#SlashCommand-tool
+- 增強 BashTool 環境快照記錄
+- 修復在無頭模式下恢復對話有時會不必要地啟用思考的錯誤
+- 將 --debug 記錄遷移到檔案，以便輕鬆追蹤和篩選
 
-## 1.0.56
+## 1.0.120
 
-- Windows：在支援終端 VT 模式的 Node.js 版本上啟用 shift+tab 進行模式切換
-- 修復 WSL IDE 偵測
-- 修復導致 awsRefreshHelper 對 .aws 目錄的變更無法被檢測的問題
+- 修復輸入時的延遲，在大型提示下特別明顯
+- 改善 VSCode 擴充套件指令註冊和會話對話框使用者體驗
+- 增強會話對話框回應能力和視覺回饋
+- 透過移除工作樹支援檢查修復 IDE 相容性問題
+- 修復可透過前綴比對繞過 Bash 工具權限檢查的安全漏洞
 
-## 1.0.55
+## 1.0.119
 
-- 澄清 Opus 4 和 Sonnet 4 模型的知識截止時間
-- Windows：修復 Ctrl+Z 當機
-- SDK：新增捕獲錯誤記錄的能力
-- 新增 --system-prompt-file 選項在列印模式中覆寫系統提示
+- 修復 Windows 上進入互動模式時程序視覺凍結的問題
+- 透過 headersHelper 設定支援 MCP 伺服器的動態標頭
+- 修復無頭會話中思考模式無法運作的問題
+- 修復斜線指令現在正確更新允許的工具而非替換它們
 
-## 1.0.54
+## 1.0.117
 
-- Hooks：新增 UserPromptSubmit hook 和當前工作目錄到 hook 輸入
-- 自訂斜線指令：在前言中新增 argument-hint
-- Windows：OAuth 使用連接埠 45454 並正確構建瀏覽器 URL
-- Windows：模式切換現在使用 alt + m，計劃模式正確渲染
-- Shell：切換到記憶體內 shell 快照以修復檔案相關錯誤
+- 新增 Ctrl-R 歷史記錄搜尋，像 bash/zsh 一樣回憶先前的指令
+- 修復輸入時的延遲，尤其是在 Windows 上
+- acceptEdits 模式下將 sed 指令新增到自動允許的指令
+- 修復 Windows PATH 比較，使磁碟機代號不區分大小寫
+- /add-dir 輸出新增權限管理提示
 
-**📅 最後更新時間**: 2025-08-21  
+## 1.0.115
+
+- 改善思考模式顯示，增強視覺效果
+- 在提示中輸入 /t 暫時停用思考模式
+- 改善 glob 和 grep 工具的路徑驗證
+- 顯示工具後 hooks 的簡潔輸出以減少視覺混亂
+- 修復載入狀態完成時的視覺回饋
+- 改善權限請求對話框的 UI 一致性
+
+## 2.0.22
+- Claude will now ask you questions more often 在 plan mode
+- 新增 Haiku 4.5 as a model option 用於 Pro users
+- 修復 an issue where queued commands don't have access to previous messages' output
+
+## 2.0.20
+
+- 新增 支援 Claude Skills
+
+## 2.0.19
+
+- Auto-background long-running bash commands instead of killing them. Customize 使用 BASH_DEFAULT_TIMEOUT_MS
+- 修復 a bug where Haiku was unnecessarily called 在 print mode
+
+## 2.0.17
+
+- 新增 Haiku 4.5 to model selector!
+- Haiku 4.5 automatically uses Sonnet 在 plan mode, and Haiku 用於 execution (i.e. SonnetPlan by default)
+- 3P (Bedrock and Vertex) are not automatically 升級 yet. Manual upgrading can be done through setting `ANTHROPIC_DEFAULT_HAIKU_MODEL`
+- Introducing the Explore subagent. Powered by Haiku it'll search through your codebase efficiently to save context!
+- OTEL: support HTTP_PROXY and HTTPS_PROXY
+- `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` now disables release notes fetching
+
+## 2.0.15
+
+- 修復 bug 使用 resuming where previously created files needed to be read again before writing
+- 修復 bug 使用 `-p` mode where @-mentioned files needed to be read again before writing
+
+## 2.0.14
+
+- Fix @-mentioning MCP servers to toggle them on/off
+- Improve permission checks 用於 bash 使用 inline env vars
+- Fix ultrathink + thinking toggle
+- Reduce unnecessary logins
+- Document --system-prompt
+- Several improvements to rendering
+- Plugins UI polish
+
+## 2.0.13
+
+- 修復 `/plugin` not working on native build
+
+## 2.0.12
+
+- **Plugin System 發布**: Extend Claude Code 使用 custom commands, agents, hooks, and MCP servers from marketplaces
+- `/plugin install`, `/plugin enable/disable`, `/plugin marketplace` commands 用於 plugin management
+- Repository-level plugin configuration via `extraKnownMarketplaces` 用於 team collaboration
+- `/plugin validate` command 用於 validating plugin structure and configuration
+- Plugin announcement blog post at https://www.anthropic.com/news/claude-code-plugins
+- Plugin documentation available at https://docs.claude.com/en/docs/claude-code/plugins
+- Comprehensive error messages and diagnostics via `/doctor` command
+- Avoid flickering 在 `/model` selector
+- Improvements to `/help`
+- Avoid mentioning hooks 在 `/resume` summaries
+- Changes to the "verbose" setting 在 `/config` now persist across sessions
+
+## 2.0.11
+
+- Reduced system prompt size by 1.4k tokens
+- IDE: 修復 keyboard shortcuts and focus issues 用於 smoother interaction
+- 修復 Opus fallback rate limit errors appearing incorrectly
+- 修復 /add-dir command selecting wrong default tab
+
+## 2.0.10
+
+- Rewrote terminal renderer 用於 buttery smooth UI
+- Enable/disable MCP servers by @mentioning, or 在 /mcp
+- 新增 tab completion 用於 shell commands 在 bash mode
+- PreToolUse hooks can now modify tool inputs
+- Press Ctrl-G to edit your prompt 在 your system's configured text editor
+- Fixes 用於 bash permission checks 使用 environment variables 在 the command
+
+## 2.0.9
+
+- Fix regression where bash backgrounding stopped working
+
+## 2.0.8
+
+- Update Bedrock default Sonnet model to `global.anthropic.claude-sonnet-4-5-20250929-v1:0`
+- IDE: Add drag-and-drop 支援 files and folders 在 chat
+- /context: Fix counting 用於 thinking blocks
+- Improve message rendering 用於 users 使用 light themes on dark terminals
+- Remove deprecated .claude.json allowedTools, ignorePatterns, env, and todoFeatureEnabled config options (instead, configure these 在 your settings.json)
+
+## 2.0.5
+
+- IDE: Fix IME unintended message submission 使用 Enter and Tab
+- IDE: Add "Open 在 Terminal" link 在 login screen
+- Fix unhandled OAuth expiration 401 API errors
+- SDK: 新增 SDKUserMessageReplay.isReplay to prevent duplicate messages
+
+## 2.0.1
+
+- Skip Sonnet 4.5 default model setting change 用於 Bedrock and Vertex
+- Various bug fixes and presentation improvements
+
+## 2.0.0
+
+- New native VS Code extension
+- Fresh coat of paint throughout the whole app
+- /rewind a conversation to undo code changes
+- /usage command to see plan limits
+- Tab to toggle thinking (sticky across sessions)
+- Ctrl-R to search history
+- Unshipped claude config command
+- Hooks: Reduced PostToolUse 'tool_use' ids were found without 'tool_result' blocks errors
+- SDK: The Claude Code SDK is now the Claude Agent SDK
+- Add subagents dynamically 使用 `--agents` flag
+
+## 1.0.126
+
+- Enable /context command 用於 Bedrock and Vertex
+- Add mTLS 支援 HTTP-based OpenTelemetry exporters
+
+## 1.0.124
+
+- Set `CLAUDE_BASH_NO_LOGIN` environment variable to 1 or true to to skip login shell 用於 BashTool
+- Fix Bedrock and Vertex environment variables evaluating all strings as truthy
+- No longer inform Claude of the list of allowed tools 當 permission is denied
+- 修復 security vulnerability 在 Bash tool permission checks
+- 改善 VSCode extension performance 用於 large files
+
+## 1.0.123
+
+- Bash permission rules now support output redirections 當 matching (e.g., `Bash(python:*)` matches `python script.py > output.txt`)
+- 修復 thinking mode triggering on negation phrases like "don't think"
+- 修復 rendering performance degradation during token streaming
+- 新增 SlashCommand tool, which enables Claude to invoke your slash commands. https://docs.claude.com/en/docs/claude-code/slash-commands#SlashCommand-tool
+- 增強 BashTool environment snapshot logging
+- 修復 a bug where resuming a conversation 在 headless mode would sometimes enable thinking unnecessarily
+- Migrated --debug logging to a file, to enable easy tailing & filtering
+
+## 1.0.120
+
+- Fix input lag during typing, especially noticeable 使用 large prompts
+- 改善 VSCode extension command registry and sessions dialog user experience
+- 增強 sessions dialog responsiveness and visual feedback
+- 修復 IDE compatibility issue by removing worktree support check
+- 修復 security vulnerability where Bash tool permission checks could be bypassed using prefix matching
+
+## 1.0.119
+
+- Fix Windows issue where process visually freezes on entering interactive mode
+- Support dynamic headers 用於 MCP servers via headersHelper configuration
+- Fix thinking mode not working 在 headless sessions
+- Fix slash commands now properly update allowed tools instead of replacing them
+
+## 1.0.117
+
+- Add Ctrl-R history search to recall previous commands like bash/zsh
+- Fix input lag while typing, especially on Windows
+- Add sed command to auto-allowed commands 在 acceptEdits mode
+- Fix Windows PATH comparison to be case-insensitive 用於 drive letters
+- Add permissions management hint to /add-dir output
+
+## 1.0.115
+
+- Improve thinking mode display 使用 增強 visual effects
+- Type /t to temporarily disable thinking mode 在 your prompt
+- Improve path validation 用於 glob and grep tools
+- Show condensed output 用於 post-tool hooks to reduce visual clutter
+- Fix visual feedback 當 loading state completes
+- Improve UI consistency 用於 permission request dialogs
+
+## 1.0.113
+
+- Deprecated piped input 在 interactive mode
+- Move Ctrl+R keybinding 用於 toggling transcript to Ctrl+O
+
+## 1.0.112
+
+- Transcript mode (Ctrl+R): 新增 the model used to generate each assistant message
+- Addressed issue where some Claude Max users were incorrectly recognized as Claude Pro users
+- Hooks: 新增 systemMessage 支援 SessionEnd hooks
+- 新增 `spinnerTipsEnabled` setting to disable spinner tips
+- IDE: Various improvements and bug fixes
+
+## 1.0.111
+
+- /model now validates provided model names
+- 修復 Bash tool crashes caused by malformed shell syntax parsing
+
+## 1.0.110
+
+- /terminal-setup command now supports WezTerm
+- MCP: OAuth tokens now proactively refresh before expiration
+- 修復 reliability issues 使用 background Bash processes
+
+**📅 最後更新時間**: 2025-10-27  
 **📊 資料來源**: [GitHub CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)  
-**🔄 翻譯方式**: 人工高品質翻譯
+**🔄 翻譯方式**: 人工高品質翻譯  
+**📌 版本範圍**: 1.0.115 - 2.0.27（最新）
 
 ---
 

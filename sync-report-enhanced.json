@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-08-20T16:54:39.171Z",
+  "duration_seconds": 2,
+  "changelog": {
+    "versions_processed": 100,
+    "latest_version": "1.0.85",
+    "versions_updated": 25
+  },
+  "docs": {
+    "updated": 0,
+    "skipped": 0,
+    "failed": 0,
+    "total_pages": 12,
+    "target_page": null
+  },
+  "options": {
+    "force": false,
+    "dryRun": false,
+    "changelogOnly": true,
+    "verbose": false,
+    "target": null,
+    "batchSize": 3
+  },
+  "stats": {
+    "startTime": 1755708877345,
+    "processed": 0,
+    "updated": 0,
+    "skipped": 0,
+    "failed": 0,
+    "errors": []
+  },
+  "errors": [],
+  "performance": {
+    "pages_per_second": "0",
+    "average_page_time": "N/A"
+  }
+}
