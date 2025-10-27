@@ -1,18 +1,24 @@
-# Claudia 中文說明書
+# opcode (原名 Claudia) 中文說明書
 
 ## 概述
 
-此專案提供了完整的功能說明。
+opcode 是 Claude Code 的強大圖形化應用程式和工具套件。創建自訂代理、管理互動式 Claude Code 會話、執行安全的背景代理等功能。
 
 
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/getAsterisk/claudia)
 > - [官方網站](https://claudiacode.com)
-> - [Discord 社群](https://discord.gg/G9g25nj9)
-> - **文件整理時間：2025-08-19T23:52:25+08:00**
-> - **專案版本：v0.1.0**
-> - **專案最後更新：2025-08-14T17:53:35+05:30**
+> - [Discord 社群](https://discord.com/invite/KYwhHVzUsY)
+> - **文件整理時間：2025-10-27T23:30:00+08:00**
+> - **專案版本：v0.2.0** ⚠️ 專案已更名為 **opcode**
+> - **專案最後更新：2025-10-13**
+
+---
+
+## 🔔 重要變更通知
+
+**專案更名**：Claudia 已正式更名為 **opcode**。所有功能和 API 保持不變，但品牌識別和專案名稱已更新。
 
 ---
 
@@ -33,7 +39,7 @@
 
 ## 1. 專案簡介
 
-Claudia 是一個功能強大的桌面應用程式，專為 Claude Code 使用者打造的圖形化界面工具。基於 Tauri 2 建構，它提供了美觀的 GUI 來管理 Claude Code 會話、創建自訂代理、追蹤使用量等功能。Claudia 就像是您的 Claude Code 指揮中心，橋接命令列工具與視覺化體驗之間的差距。
+**opcode**（原名 Claudia）是一個功能強大的桌面應用程式，專為 Claude Code 使用者打造的圖形化界面工具。基於 Tauri 2 建構，它提供了美觀的 GUI 來管理 Claude Code 會話、創建自訂代理、追蹤使用量等功能。opcode 就像是您的 Claude Code 指揮中心，橋接命令列工具與視覺化體驗之間的差距。
 
 ### 1.1 核心特色
 
