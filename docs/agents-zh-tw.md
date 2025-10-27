@@ -1,447 +1,983 @@
-# Agents 中文說明書
+# Claude Code Plugins 插件市場中文說明書
 
-> **版本**: 最新版本
-
+> **⚡ 已更新至 Sonnet 4.5 & Haiku 4.5** — 所有代理已針對最新模型優化，採用混合編排策略
+>
+> **🎯 代理技能已啟用** — 47 個專業技能透過漸進式揭露擴展 Claude 在插件中的能力
 
 ## 概述
 
-此專案提供了完整的功能說明。
-
+這是一個完整的生產就緒系統，結合了 **85 個專業 AI 代理**、**15 個多代理工作流編排器**、**47 個代理技能** 和 **44 個開發工具**，組織為 **63 個專注、單一用途的插件**，專為 [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) 設計。
 
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/wshobson/agents)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - [MCP 協議文檔](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-08-20T00:13:54+08:00**
-> - **專案最後更新：2025-08-15T22:34:11-04:00**
+> - [Plugins 官方指南](https://docs.claude.com/en/docs/claude-code/plugins)
+> - [Agent Skills 官方規範](https://github.com/anthropics/skills/blob/main/agent_skills_spec.md)
+> - **文件整理時間：2025-10-28T01:30:00+08:00**
+> - **專案最後更新：2025-08-15**
 
 ---
 
 ## 目錄
 
 - [1. 專案簡介](#1-專案簡介)
-- [2. 子代理分類](#2-子代理分類)
-- [3. 安裝與配置](#3-安裝與配置)
-- [4. 使用指南](#4-使用指南)
-- [5. 進階功能](#5-進階功能)
-- [6. 最佳實踐](#6-最佳實踐)
-- [7. 疑難排解](#7-疑難排解)
-- [8. 延伸閱讀](#8-延伸閱讀)
+- [2. 核心特色](#2-核心特色)
+- [3. 快速開始](#3-快速開始)
+- [4. 插件分類](#4-插件分類)
+- [5. 代理技能系統](#5-代理技能系統)
+- [6. 85 個專業代理總覽](#6-85-個專業代理總覽)
+- [7. 使用指南](#7-使用指南)
+- [8. 多代理工作流](#8-多代理工作流)
+- [9. 最佳實踐](#9-最佳實踐)
+- [10. 延伸閱讀](#10-延伸閱讀)
 
 ---
 
 ## 1. 專案簡介
 
-Agents 是一個包含 75 個專業子代理的 Claude Code 擴展專案，每個子代理都是特定領域的專家，能夠根據上下文自動調用或根據需要明確調用。所有代理都根據任務複雜性配置了特定的 Claude 模型，以實現最佳效能和成本效益。
+此統一儲存庫提供了現代軟體開發所需的智能自動化和多代理編排的完整解決方案：
 
-### 1.1 核心特色
+### 1.1 系統組成
 
-- **專業化分工**：75 個專業子代理，涵蓋開發、設計、測試等各個領域
-- **智能調度**：根據上下文自動選擇最適合的代理
-- **模型優化**：根據任務複雜性選擇最適合的 Claude 模型
-- **成本控制**：優化 API 使用，降低開發成本
-- **無縫整合**：與 Claude Code 完全相容
+- **63 個專注插件** - 細粒度、單一用途的插件，優化最小 token 使用和可組合性
+- **85 個專業代理** - 涵蓋架構、語言、基礎設施、品質、資料/AI、文檔、業務營運和 SEO 的領域專家
+- **47 個代理技能** - 模組化知識套件，採用漸進式揭露的專業知識
+- **15 個工作流編排器** - 用於複雜操作的多代理協調系統，如全端開發、安全加固、ML 管道和事件響應
+- **44 個開發工具** - 優化的工具，包括專案腳手架、安全掃描、測試自動化和基礎設施設定
 
-### 1.2 使用場景
+### 1.2 核心理念
 
-- **大型專案開發**：多領域協作開發
-- **專業任務處理**：特定領域的專業化任務
-- **團隊協作**：不同角色的開發者使用對應代理
-- **學習與培訓**：學習特定技術領域的最佳實踐
+**插件市場架構**：每個插件完全獨立，擁有自己的代理、命令和技能：
 
----
+- **只安裝需要的** - 每個插件只載入其特定的代理、命令和技能
+- **最小 token 使用** - 不載入不必要的資源到上下文
+- **混合搭配** - 組合多個插件以實現複雜工作流
+- **清晰邊界** - 每個插件都有單一、專注的目的
+- **漸進式揭露** - 技能只在啟動時載入知識
 
-## 2. 子代理分類
+**範例**：安裝 `python-development` 載入 3 個 Python 代理、1 個腳手架工具，並使 5 個技能可用（~300 tokens），而不是整個市場。
 
-### 2.1 開發與架構
+### 1.3 使用場景
 
-#### 後端開發
-
-- **[backend-architect](backend-architect.md)** - 設計 RESTful API、微服務邊界和資料庫架構
-- **[graphql-architect](graphql-architect.md)** - 設計 GraphQL 架構、解析器和聯邦
-- **[architect-reviewer](architect-review.md)** - 審查程式碼變更的架構一致性和模式
-
-#### 前端開發
-
-- **[frontend-developer](frontend-developer.md)** - 建構 React 元件、實作響應式佈局和處理客戶端狀態管理
-- **[ui-ux-designer](ui-ux-designer.md)** - 創建介面設計、線框圖和設計系統
-- **[mobile-developer](mobile-developer.md)** - 開發 React Native 或 Flutter 應用程式，整合原生功能
-
-### 2.2 語言專家
-
-#### 程式語言
-
-- **[python-pro](python-pro.md)** - 撰寫慣用 Python 程式碼，包含進階功能和優化
-- **[ruby-pro](ruby-pro.md)** - 撰寫慣用 Ruby 程式碼，包含元程式設計、Rails 模式、gem 開發和測試框架
-- **[golang-pro](golang-pro.md)** - 撰寫慣用 Go 程式碼，包含 goroutines、channels 和介面
-- **[rust-pro](rust-pro.md)** - 撰寫慣用 Rust，包含所有權模式、生命週期和特徵實作
-- **[c-pro](c-pro.md)** - 撰寫高效 C 程式碼，包含適當的記憶體管理和系統呼叫
-- **[cpp-pro](cpp-pro.md)** - 撰寫慣用 C++ 程式碼，包含現代功能、RAII、智能指標和 STL 演算法
-
-#### 腳本語言
-
-- **[javascript-pro](javascript-pro.md)** - 撰寫現代 JavaScript/TypeScript，包含 ES6+ 功能和最佳實踐
-- **[php-pro](php-pro.md)** - 撰寫慣用 PHP，包含 Laravel 模式、Composer 和測試
-- **[java-pro](java-pro.md)** - 撰寫慣用 Java，包含 Spring Boot、JUnit 和設計模式
-- **[csharp-pro](csharp-pro.md)** - 撰寫慣用 C#，包含 .NET Core、Entity Framework 和 LINQ
-
-### 2.3 資料與基礎設施
-
-#### 資料庫與儲存
-
-- **[database-architect](database-architect.md)** - 設計資料庫架構、索引策略和查詢優化
-- **[data-engineer](data-engineer.md)** - 建構資料管道、ETL 流程和資料倉儲
-- **[ml-engineer](ml-engineer.md)** - 實作機器學習模型、特徵工程和模型部署
-
-#### 雲端與 DevOps
-
-- **[cloud-architect](cloud-architect.md)** - 設計雲端架構、微服務和容器化策略
-- **[devops-engineer](devops-engineer.md)** - 實作 CI/CD 流程、基礎設施即程式碼和監控
-- **[security-engineer](security-engineer.md)** - 實作安全最佳實踐、漏洞掃描和合規檢查
-
-### 2.4 測試與品質
-
-#### 測試專家
-
-- **[test-engineer](test-engineer.md)** - 設計測試策略、自動化測試和測試覆蓋率
-- **[qa-engineer](qa-engineer.md)** - 實作品質保證流程、手動測試和測試計劃
-- **[performance-engineer](performance-engineer.md)** - 優化應用程式效能、負載測試和瓶頸分析
-
-#### 品質管理
-
-- **[code-reviewer](code-reviewer.md)** - 進行程式碼審查、品質檢查和最佳實踐建議
-- **[documentation-writer](documentation-writer.md)** - 撰寫技術文件、API 文件和用戶指南
+- **大型專案開發**：使用插件組合處理複雜的全端專案
+- **專業化任務**：針對特定領域使用專門的代理和技能
+- **團隊協作**：不同角色的開發者安裝對應的插件
+- **學習與培訓**：透過技能系統學習特定技術領域的最佳實踐
+- **DevOps 自動化**：使用基礎設施和 CI/CD 插件自動化部署
+- **安全加固**：使用安全插件進行全面的安全審查
 
 ---
 
-## 3. 安裝與配置
+## 2. 核心特色
 
-### 3.1 前置需求
+### 2.1 細粒度插件架構
 
-- Claude Code CLI 已安裝
-- Anthropic API 金鑰已設定
-- 適當的權限設定
+- **單一職責**：每個插件做好一件事
+- **最小 token 使用**：平均每個插件 3.4 個元件（遵循 Anthropic 的 2-8 模式）
+- **可組合性**：混合搭配複雜工作流
+- **100% 覆蓋**：所有 85 個代理可透過插件存取
 
-### 3.2 安裝步驟
+### 2.2 漸進式揭露（技能）
+
+三層架構實現 token 效率：
+
+1. **元資料** - 名稱和啟動條件（始終載入）
+2. **指令** - 核心指導（啟動時載入）
+3. **資源** - 範例和模板（按需載入）
+
+### 2.3 混合模型編排
+
+策略性模型分配，實現最佳效能和成本：
+
+- **47 個 Haiku 代理** - 確定性任務的快速執行
+- **97 個 Sonnet 代理** - 複雜推理和架構設計
+- **編排模式**：`Sonnet（規劃）→ Haiku（執行）→ Sonnet（審查）`
+
+### 2.4 完整工具鏈
+
+- **44 個開發工具**：專案腳手架、安全掃描、測試自動化
+- **44 個斜線命令**：Git 工作流、測試生成、部署自動化
+- **15 個編排器**：多代理協調處理複雜操作
+
+---
+
+## 3. 快速開始
+
+### 3.1 步驟一：新增市場
+
+將此市場新增到 Claude Code：
 
 ```bash
-# 克隆專案
-git clone https://github.com/wshobson/agents.git
-cd agents
-
-# 安裝依賴（如果有的話）
-npm install  # 或 pip install -r requirements.txt
-
-# 設定環境變數
-export ANTHROPIC_API_KEY="your-api-key-here"
+/plugin marketplace add wshobson/agents
 ```
 
-### 3.3 配置設定
+這使所有 63 個插件可供安裝，但 **不會載入任何代理或工具** 到您的上下文。
 
-#### 基本配置
+### 3.2 步驟二：安裝插件
 
-```yaml
-# .claude/config.yml
-agents:
-  enabled: true
-  auto_select: true
-  model_mapping:
-    simple: "claude-3-haiku-20240307"
-    medium: "claude-3-sonnet-20240229"
-    complex: "claude-3-opus-20240229"
+瀏覽可用插件：
 
-  specializations:
-    backend: "backend-architect"
-    frontend: "frontend-developer"
-    database: "database-architect"
-    security: "security-engineer"
+```bash
+/plugin
 ```
 
-#### 代理權限設定
+安裝您需要的插件：
 
-```yaml
-# .claude/permissions.yml
-permissions:
-  backend-architect:
-    tools: ["Edit", "Bash", "Read"]
-    file_patterns: ["src/backend/**", "api/**", "database/**"]
+```bash
+# 基本開發插件
+/plugin install python-development          # Python，含 5 個專業技能
+/plugin install javascript-typescript       # JS/TS，含 4 個專業技能
+/plugin install backend-development         # 後端 API，含 3 個架構技能
 
-  frontend-developer:
-    tools: ["Edit", "Read"]
-    file_patterns: ["src/frontend/**", "public/**", "components/**"]
+# 基礎設施與維運
+/plugin install kubernetes-operations       # K8s，含 4 個部署技能
+/plugin install cloud-infrastructure        # AWS/Azure/GCP，含 4 個雲端技能
 
-  security-engineer:
-    tools: ["Read", "Bash"]
-    file_patterns: ["**/*"]
-    restricted_operations: ["Edit"]
+# 安全與品質
+/plugin install security-scanning           # SAST，含安全技能
+/plugin install code-review-ai             # AI 驅動的程式碼審查
+
+# 全端編排
+/plugin install full-stack-orchestration   # 多代理工作流
+```
+
+每個安裝的插件只載入 **其特定的代理、命令和技能** 到 Claude 的上下文中。
+
+### 3.3 步驟三：使用插件
+
+#### 透過斜線命令
+
+```bash
+# 生成 FastAPI 專案
+/python-development:python-scaffold fastapi-microservice
+
+# 進行安全掃描
+/security-scanning:security-hardening --level comprehensive
+
+# 全端功能開發
+/full-stack-orchestration:full-stack-feature "使用者認證與 OAuth2"
+```
+
+#### 透過自然語言
+
+```
+"使用 backend-architect 設計一個 RESTful API"
+"讓 kubernetes-architect 建立生產級 Kubernetes 部署"
+"請 security-auditor 進行 OWASP 合規檢查"
 ```
 
 ---
 
-## 4. 使用指南
+## 4. 插件分類
 
-### 4.1 基本使用
+**23 個類別，63 個插件：**
 
-#### 自動代理選擇
+### 🎨 開發類（4 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **debugging-toolkit** | 互動式除錯和開發者體驗優化 | `/plugin install debugging-toolkit` |
+| **backend-development** | 後端 API 設計與 GraphQL、TDD | `/plugin install backend-development` |
+| **frontend-mobile-development** | 前端 UI 和行動應用開發 | `/plugin install frontend-mobile-development` |
+| **multi-platform-apps** | 跨平台應用協調（web/iOS/Android） | `/plugin install multi-platform-apps` |
+
+### 📚 文檔類（2 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **code-documentation** | 文檔生成和程式碼說明 | `/plugin install code-documentation` |
+| **documentation-generation** | OpenAPI 規格、Mermaid 圖表、教學 | `/plugin install documentation-generation` |
+
+### 🔄 工作流類（3 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **git-pr-workflows** | Git 自動化和 PR 增強 | `/plugin install git-pr-workflows` |
+| **full-stack-orchestration** | 端到端功能編排 | `/plugin install full-stack-orchestration` |
+| **tdd-workflows** | 測試驅動開發方法論 | `/plugin install tdd-workflows` |
+
+### ✅ 測試類（2 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **unit-testing** | 自動單元測試生成（Python/JavaScript） | `/plugin install unit-testing` |
+| **tdd-workflows** | 測試驅動開發方法論 | `/plugin install tdd-workflows` |
+
+### 🔍 品質類（3 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **code-review-ai** | AI 驅動的程式碼審查 | `/plugin install code-review-ai` |
+| **comprehensive-review** | 多角度分析（架構/安全/效能） | `/plugin install comprehensive-review` |
+| **application-performance** | 應用程式效能分析和優化 | `/plugin install application-performance` |
+
+### 🤖 AI & ML 類（4 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **llm-application-dev** | LLM 應用、RAG、提示工程 | `/plugin install llm-application-dev` |
+| **agent-orchestration** | 多代理系統和協調 | `/plugin install agent-orchestration` |
+| **context-engineering** | 上下文優化和提示設計 | `/plugin install context-engineering` |
+| **machine-learning-ops** | MLOps 管道和模型服務 | `/plugin install machine-learning-ops` |
+
+### 📊 資料類（2 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **data-engineering** | ETL 管道、資料倉儲 | `/plugin install data-engineering` |
+| **data-validation-suite** | 資料品質和驗證 | `/plugin install data-validation-suite` |
+
+### 🗄️ 資料庫類（2 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **database-design** | 資料庫架構和設計 | `/plugin install database-design` |
+| **database-migrations** | Schema 遷移和版本控制 | `/plugin install database-migrations` |
+
+### 🚨 維運類（4 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **incident-response** | 生產事件管理 | `/plugin install incident-response` |
+| **error-diagnostics** | 錯誤診斷和分析 | `/plugin install error-diagnostics` |
+| **distributed-debugging** | 分散式系統追蹤 | `/plugin install distributed-debugging` |
+| **observability-monitoring** | 監控、追蹤、SLO | `/plugin install observability-monitoring` |
+
+### ⚡ 效能類（2 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **application-performance** | 應用程式效能優化 | `/plugin install application-performance` |
+| **database-cloud-optimization** | 資料庫和雲端成本優化 | `/plugin install database-cloud-optimization` |
+
+### ☁️ 基礎設施類（5 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **deployment-automation** | 部署自動化和 CI/CD | `/plugin install deployment-automation` |
+| **infrastructure-validation** | IaC 驗證和測試 | `/plugin install infrastructure-validation` |
+| **kubernetes-operations** | K8s 操作和 GitOps | `/plugin install kubernetes-operations` |
+| **cloud-infrastructure** | AWS/Azure/GCP 架構 | `/plugin install cloud-infrastructure` |
+| **ci-cd-automation** | GitHub Actions、GitLab CI | `/plugin install ci-cd-automation` |
+
+### 🔒 安全類（4 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **security-scanning** | SAST、依賴掃描 | `/plugin install security-scanning` |
+| **security-compliance** | SOC2、HIPAA、GDPR | `/plugin install security-compliance` |
+| **backend-api-security** | 後端/API 安全 | `/plugin install backend-api-security` |
+| **frontend-mobile-security** | 前端/行動安全 | `/plugin install frontend-mobile-security` |
+
+### 💻 程式語言類（7 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **python-development** | Python 專案腳手架（含 5 技能） | `/plugin install python-development` |
+| **javascript-typescript** | JS/TS 腳手架（含 4 技能） | `/plugin install javascript-typescript` |
+| **systems-programming** | C、C++、Rust、Go | `/plugin install systems-programming` |
+| **jvm-languages** | Java、Scala、C# | `/plugin install jvm-languages` |
+| **web-scripting** | Ruby、PHP | `/plugin install web-scripting` |
+| **functional-programming** | Elixir、Haskell | `/plugin install functional-programming` |
+| **embedded-systems** | ARM Cortex-M、嵌入式 | `/plugin install embedded-systems` |
+
+### 🔗 區塊鏈類（1 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **blockchain-web3** | 智能合約、DeFi、Web3（含 4 技能） | `/plugin install blockchain-web3` |
+
+### 💰 金融類（1 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **quantitative-trading** | 量化交易、風險管理 | `/plugin install quantitative-trading` |
+
+### 💳 支付類（1 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **payment-processing** | Stripe、PayPal、帳單（含 4 技能） | `/plugin install payment-processing` |
+
+### 🎮 遊戲類（1 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **game-development** | Unity、Minecraft 插件 | `/plugin install game-development` |
+
+### 📢 行銷類（4 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **seo-content-creation** | SEO 內容創作 | `/plugin install seo-content-creation` |
+| **seo-technical-optimization** | 技術 SEO 優化 | `/plugin install seo-technical-optimization` |
+| **seo-analysis-monitoring** | SEO 分析監控 | `/plugin install seo-analysis-monitoring` |
+| **content-marketing** | 內容行銷策略 | `/plugin install content-marketing` |
+
+### 💼 業務類（3 個插件）
+
+| 插件 | 描述 | 安裝指令 |
+|------|------|----------|
+| **business-analytics** | 業務分析和報告 | `/plugin install business-analytics` |
+| **hr-legal-compliance** | HR 和法律合規 | `/plugin install hr-legal-compliance` |
+| **customer-sales-automation** | 客戶支援和銷售 | `/plugin install customer-sales-automation` |
+
+**完整插件清單**: 共 23 個類別、63 個插件。查看 [完整插件目錄](https://github.com/wshobson/agents/blob/main/docs/plugins.md)。
+
+---
+
+## 5. 代理技能系統
+
+### 5.1 什麼是代理技能？
+
+代理技能是由模型控制的配置（檔案、腳本、資源等），使 Claude Code 能夠執行需要特定知識或能力的專業任務。遵循 Anthropic 的 [Agent Skills 規範](https://github.com/anthropics/skills/blob/main/agent_skills_spec.md)。
+
+### 5.2 技能運作方式
+
+#### 自動啟動
+
+技能會在 Claude 檢測到您請求中的匹配模式時自動啟動：
+
+```
+"建立生產級 Kubernetes 部署與 Helm chart"
+→ 自動啟動：k8s-manifest-generator、helm-chart-scaffolding
+```
+
+#### 漸進式載入
+
+```
+階段 1：元資料（始終載入）→ 技能名稱、啟動條件
+階段 2：指令（啟動時）→ 核心知識和指導
+階段 3：資源（按需）→ 範例、模板、參考
+```
+
+### 5.3 47 個技能分類
+
+#### Kubernetes 操作（4 個技能）
+
+- **k8s-manifest-generator** - 生產級 Kubernetes manifests
+- **helm-chart-scaffolding** - Helm charts 設計和管理
+- **gitops-workflow** - ArgoCD 和 Flux GitOps 工作流
+- **k8s-security-policies** - NetworkPolicy、RBAC
+
+#### LLM 應用開發（4 個技能）
+
+- **langchain-architecture** - LangChain 框架設計
+- **prompt-engineering-patterns** - 進階提示工程技術
+- **rag-implementation** - RAG 系統與向量資料庫
+- **llm-evaluation** - LLM 評估策略和基準測試
+
+#### 後端開發（3 個技能）
+
+- **api-design-principles** - REST 和 GraphQL API 設計
+- **architecture-patterns** - Clean Architecture、DDD
+- **microservices-patterns** - 微服務邊界和事件驅動
+
+#### Python 開發（5 個技能）
+
+- **async-python-patterns** - AsyncIO 和並發程式設計
+- **python-testing-patterns** - pytest 和 fixtures
+- **python-packaging** - PyPI 套件發布
+- **python-performance-optimization** - 效能優化
+- **uv-package-manager** - UV 快速依賴管理
+
+#### JavaScript/TypeScript（4 個技能）
+
+- **typescript-advanced-types** - 進階型別系統
+- **nodejs-backend-patterns** - Node.js 服務開發
+- **javascript-testing-patterns** - Jest、Vitest 測試
+- **modern-javascript-patterns** - ES6+ 功能程式設計
+
+#### CI/CD 自動化（4 個技能）
+
+- **deployment-pipeline-design** - 多階段 CI/CD 管道
+- **github-actions-templates** - GitHub Actions 工作流
+- **gitlab-ci-patterns** - GitLab CI/CD 管道
+- **secrets-management** - Vault、AWS Secrets Manager
+
+#### 雲端基礎設施（4 個技能）
+
+- **terraform-module-library** - 可重用 Terraform 模組
+- **multi-cloud-architecture** - 多雲架構設計
+- **hybrid-cloud-networking** - 混合雲網路配置
+- **cost-optimization** - 雲端成本優化
+
+#### 區塊鏈 & Web3（4 個技能）
+
+- **defi-protocol-templates** - DeFi 協議模板
+- **nft-standards** - ERC-721、ERC-1155 標準
+- **solidity-security** - 智能合約安全
+- **web3-testing** - Hardhat、Foundry 測試
+
+#### 支付處理（4 個技能）
+
+- **stripe-integration** - Stripe 付款整合
+- **paypal-integration** - PayPal 付款整合
+- **pci-compliance** - PCI DSS 合規
+- **billing-automation** - 自動化帳單系統
+
+#### 其他技能
+
+- **可觀測性與監控**（4 個）：Prometheus、Grafana、分散式追蹤、SLO
+- **框架遷移**（4 個）：React、Angular、資料庫、依賴升級
+- **開發者必備**（8 個）：Git 進階、SQL 優化、錯誤處理、程式碼審查、E2E 測試、認證、除錯、Monorepo
+- **機器學習操作**（1 個）：ML 管道工作流
+- **API 腳手架**（1 個）：FastAPI 模板
+- **安全掃描**（1 個）：SAST 配置
+
+**完整技能文檔**: [Agent Skills 指南](https://github.com/wshobson/agents/blob/main/docs/agent-skills.md)
+
+---
+
+## 6. 85 個專業代理總覽
+
+### 6.1 架構與系統設計（12 個代理）
+
+#### 核心架構
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **backend-architect** | Opus | RESTful API 設計、微服務邊界、資料庫 schema |
+| **frontend-developer** | Sonnet | React 元件、響應式佈局、客戶端狀態管理 |
+| **graphql-architect** | Opus | GraphQL schema、resolvers、federation 架構 |
+| **architect-reviewer** | Opus | 架構一致性分析和模式驗證 |
+| **cloud-architect** | Opus | AWS/Azure/GCP 基礎設施設計和成本優化 |
+| **hybrid-cloud-architect** | Opus | 跨雲端和本地環境的多雲策略 |
+| **kubernetes-architect** | Opus | 雲原生基礎設施與 Kubernetes、GitOps |
+
+#### UI/UX 與行動
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **ui-ux-designer** | Sonnet | 介面設計、線框圖、設計系統 |
+| **ui-visual-validator** | Sonnet | 視覺回歸測試和 UI 驗證 |
+| **mobile-developer** | Sonnet | React Native 和 Flutter 應用開發 |
+| **ios-developer** | Sonnet | Swift/SwiftUI 原生 iOS 開發 |
+| **flutter-expert** | Sonnet | 進階 Flutter 開發與狀態管理 |
+
+### 6.2 程式語言專家（25 個代理）
+
+#### 系統與低階
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **c-pro** | Sonnet | 系統程式設計與記憶體管理 |
+| **cpp-pro** | Sonnet | 現代 C++（RAII、智能指標、STL） |
+| **rust-pro** | Sonnet | 記憶體安全系統程式設計 |
+| **golang-pro** | Sonnet | 並發程式設計（goroutines、channels） |
+
+#### Web 與應用
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **javascript-pro** | Sonnet | 現代 JavaScript（ES6+、async、Node.js） |
+| **typescript-pro** | Sonnet | 進階 TypeScript 型別系統 |
+| **python-pro** | Sonnet | Python 開發與進階功能 |
+| **ruby-pro** | Sonnet | Ruby 元程式設計、Rails、gem 開發 |
+| **php-pro** | Sonnet | 現代 PHP 框架和效能優化 |
+
+#### 企業與 JVM
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **java-pro** | Sonnet | 現代 Java（streams、並發、JVM 優化） |
+| **scala-pro** | Sonnet | 企業 Scala 函數式程式設計 |
+| **csharp-pro** | Sonnet | C# 開發與 .NET 框架 |
+
+#### 專業平台（12 個）
+
+- **elixir-pro**、**django-pro**、**fastapi-pro**、**unity-developer**、**minecraft-bukkit-pro**、**sql-pro** 等
+
+### 6.3 基礎設施與維運（15 個代理）
+
+#### DevOps 與部署
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **devops-troubleshooter** | Sonnet | 生產除錯、日誌分析 |
+| **deployment-engineer** | Sonnet | CI/CD 管道、容器化、雲端部署 |
+| **terraform-specialist** | Sonnet | Terraform IaC 和狀態管理 |
+| **dx-optimizer** | Sonnet | 開發者體驗優化 |
+
+#### 資料庫管理
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **database-optimizer** | Sonnet | 查詢優化、索引設計 |
+| **database-admin** | Sonnet | 資料庫操作、備份、複製 |
+| **database-architect** | Opus | 從零開始的資料庫設計 |
+
+#### 事件響應與網路
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **incident-responder** | Opus | 生產事件管理和解決 |
+| **network-engineer** | Sonnet | 網路除錯、負載平衡 |
+
+### 6.4 品質保證與安全（13 個代理）
+
+#### 程式碼品質與審查
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **code-reviewer** | Opus | 程式碼審查（安全和可靠性） |
+| **security-auditor** | Opus | 漏洞評估和 OWASP 合規 |
+| **backend-security-coder** | Opus | 安全後端編碼實踐 |
+| **frontend-security-coder** | Opus | XSS 防護、CSP 實作 |
+| **mobile-security-coder** | Opus | 行動安全模式 |
+
+#### 測試與除錯
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **test-automator** | Sonnet | 全面測試套件建立 |
+| **tdd-orchestrator** | Sonnet | TDD 方法論指導 |
+| **debugger** | Sonnet | 錯誤解決和測試失敗分析 |
+| **error-detective** | Sonnet | 日誌分析和錯誤模式識別 |
+
+#### 效能與可觀測性
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **performance-engineer** | Opus | 應用程式分析和優化 |
+| **observability-engineer** | Opus | 生產監控、分散式追蹤、SLI/SLO |
+| **search-specialist** | Haiku | 進階網路研究和資訊綜合 |
+
+### 6.5 資料與 AI（7 個代理）
+
+#### 資料工程與分析
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **data-scientist** | Opus | 資料分析、SQL 查詢、BigQuery |
+| **data-engineer** | Sonnet | ETL 管道、資料倉儲、串流架構 |
+
+#### 機器學習與 AI
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **ai-engineer** | Opus | LLM 應用、RAG 系統、提示管道 |
+| **ml-engineer** | Opus | ML 管道、模型服務、特徵工程 |
+| **mlops-engineer** | Opus | ML 基礎設施、實驗追蹤、模型註冊 |
+| **prompt-engineer** | Opus | LLM 提示優化和工程 |
+| **context-engineer** | Opus | 上下文優化和 token 效率 |
+
+### 6.6 文檔與技術寫作（5 個代理）
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **docs-architect** | Opus | 全面的技術文檔生成 |
+| **api-documenter** | Sonnet | OpenAPI/Swagger 規格 |
+| **reference-builder** | Haiku | 技術參考和 API 文檔 |
+| **tutorial-engineer** | Sonnet | 逐步教學和教育內容 |
+| **mermaid-expert** | Sonnet | 圖表建立（流程圖、序列圖、ERD） |
+
+### 6.7 業務與營運（13 個代理）
+
+#### 業務分析與金融
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **business-analyst** | Sonnet | 指標分析、報告、KPI 追蹤 |
+| **quant-analyst** | Opus | 金融建模、交易策略 |
+| **risk-manager** | Sonnet | 投資組合風險監控 |
+
+#### 行銷與銷售（10 個 SEO 和內容代理）
+
+- **seo-content-auditor**、**seo-meta-optimizer**、**seo-keyword-strategist** 等
+- **content-marketer**、**sales-automator**
+
+#### 支援與法律
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **customer-support** | Sonnet | 支援工單、FAQ、客戶溝通 |
+| **hr-pro** | Opus | HR 營運、政策、員工關係 |
+| **legal-advisor** | Opus | 隱私政策、服務條款 |
+
+### 6.8 專業領域（5 個代理）
+
+| 代理 | 模型 | 描述 |
+|------|------|------|
+| **arm-cortex-expert** | Sonnet | ARM Cortex-M 韌體開發 |
+| **blockchain-developer** | Sonnet | Web3、智能合約、DeFi |
+| **payment-integration** | Sonnet | Stripe、PayPal 整合 |
+| **seo-analyst** | Sonnet | 全面 SEO 審計 |
+| **compliance-auditor** | Opus | SOC2、HIPAA、GDPR 合規 |
+
+**完整代理參考**: [85 個代理完整清單](https://github.com/wshobson/agents/blob/main/docs/agents.md)
+
+---
+
+## 7. 使用指南
+
+### 7.1 插件管理
+
+#### 安裝和移除
 
 ```bash
-# Claude Code 會根據上下文自動選擇最適合的代理
-claude "設計一個 RESTful API 架構"
-# 會自動調用 backend-architect
+# 安裝插件
+/plugin install python-development
 
-claude "優化這個 React 元件的效能"
-# 會自動調用 frontend-developer
+# 移除插件
+/plugin remove python-development
+
+# 列出已安裝的插件
+/plugin list
+
+# 搜尋插件
+/plugin search kubernetes
 ```
 
-#### 明確代理調用
+#### 更新插件
 
 ```bash
-# 明確指定使用特定代理
-claude --agent backend-architect "設計微服務架構"
-claude --agent security-engineer "檢查程式碼安全漏洞"
-claude --agent test-engineer "為這個功能撰寫測試"
+# 更新單一插件
+/plugin update python-development
+
+# 更新所有插件
+/plugin update --all
 ```
 
-### 4.2 進階使用
+### 7.2 斜線命令使用
 
-#### 多代理協作
+#### 基本語法
 
 ```bash
-# 讓多個代理協作完成複雜任務
-claude "請 backend-architect 和 frontend-developer 協作設計一個完整的用戶認證系統"
+/插件名稱:命令名稱 [參數]
 ```
 
-#### 代理鏈式調用
+#### 常用命令範例
 
 ```bash
-# 一個代理完成後自動調用下一個代理
-claude "請 backend-architect 設計 API，然後讓 test-engineer 為其撰寫測試"
+# Python 專案腳手架
+/python-development:python-scaffold fastapi-microservice
+
+# 安全加固
+/security-scanning:security-hardening --level comprehensive
+
+# 全端功能開發
+/full-stack-orchestration:full-stack-feature "使用者認證"
+
+# 生成單元測試
+/unit-testing:test-generate src/auth.py
+
+# Git PR 工作流
+/git-pr-workflows:git-pr "修復使用者登入 bug"
+
+# Kubernetes 部署
+/kubernetes-operations:k8s-deploy production
 ```
 
-### 4.3 代理配置自訂
+### 7.3 自然語言調用
 
-#### 自訂代理行為
+Claude 會自動選擇和協調適當的代理：
 
-```yaml
-# .claude/agents/custom-backend-architect.yml
-name: "custom-backend-architect"
-base_agent: "backend-architect"
-customizations:
-  preferred_patterns:
-    - "microservices"
-    - "event-driven"
-    - "CQRS"
+```
+"使用 backend-architect 設計認證 API"
+→ 啟動：backend-architect 代理
 
-  model_preference: "claude-3-opus-20240229"
-  response_format: "markdown"
-  include_examples: true
+"建立生產級 Kubernetes 部署與 Helm chart 和 GitOps"
+→ 啟動：kubernetes-architect 代理
+→ 技能：k8s-manifest-generator、helm-chart-scaffolding、gitops-workflow
+
+"進行全面的安全審查"
+→ 啟動：security-auditor、code-reviewer、security-scanner
 ```
 
-#### 代理組合
+### 7.4 技能啟動
 
-```yaml
-# .claude/agent-groups.yml
-groups:
-  full_stack:
-    name: "Full Stack Development"
-    agents:
-      - "backend-architect"
-      - "frontend-developer"
-      - "database-architect"
-      - "test-engineer"
+#### 自動啟動
 
-  security_focused:
-    name: "Security-First Development"
-    agents:
-      - "security-engineer"
-      - "backend-architect"
-      - "code-reviewer"
+技能會根據您的請求自動啟動：
+
+```
+"建立 FastAPI 微服務，包含非同步模式"
+→ 自動啟動技能：
+  - fastapi-templates
+  - async-python-patterns
+  - python-testing-patterns
+```
+
+#### 手動參考技能
+
+```
+"使用 terraform-module-library 技能建立 AWS VPC 模組"
 ```
 
 ---
 
-## 5. 進階功能
+## 8. 多代理工作流
 
-### 5.1 代理學習與適應
+### 8.1 全端功能開發
 
-#### 使用模式學習
-
-```yaml
-# 代理會學習您的偏好和專案模式
-learning:
-  enabled: true
-  patterns:
-    - "preferred_architecture_style"
-    - "coding_standards"
-    - "testing_approaches"
-    - "deployment_strategies"
+```bash
+/full-stack-orchestration:full-stack-feature "使用者認證與 OAuth2"
 ```
 
-#### 自訂知識庫
-
-```yaml
-# 為特定代理添加專案特定的知識
-custom_knowledge:
-  backend-architect:
-    - "company_api_standards.md"
-    - "microservices_patterns.md"
-    - "database_conventions.md"
+**協調 7+ 代理**：
+```
+backend-architect → database-architect → frontend-developer 
+→ test-automator → security-auditor → deployment-engineer 
+→ observability-engineer
 ```
 
-### 5.2 效能優化
+### 8.2 安全加固
 
-#### 模型選擇策略
-
-```yaml
-# 根據任務複雜性自動選擇最適合的模型
-model_selection:
-  simple_tasks:
-    - "claude-3-haiku-20240307"
-    - "claude-3-sonnet-20240229"
-
-  complex_tasks:
-    - "claude-3-opus-20240229"
-
-  cost_optimization: true
-  performance_threshold: 0.8
+```bash
+/security-scanning:security-hardening --level comprehensive
 ```
 
-#### 快取與重用
+**多代理安全評估**：
+- SAST 掃描
+- 依賴漏洞掃描
+- 程式碼審查
+- 合規檢查
 
-```yaml
-# 快取代理回應以提高效能
-caching:
-  enabled: true
-  ttl: 3600 # 1 小時
-  max_size: 1000
-  include_context: true
+### 8.3 ML 管道開發
+
+```bash
+/machine-learning-ops:ml-pipeline "推薦系統"
+```
+
+**協調**：
+```
+data-engineer → ml-engineer → mlops-engineer → observability-engineer
+```
+
+### 8.4 事件響應
+
+```bash
+/incident-response:incident-response "API 伺服器回應緩慢"
+```
+
+**快速分類和解決**：
+```
+incident-responder → devops-troubleshooter → performance-engineer
+→ database-optimizer → observability-engineer
+```
+
+### 8.5 基礎設施設定
+
+```bash
+/cloud-infrastructure:terraform-scaffold aws-infrastructure
+```
+
+**協調**：
+```
+cloud-architect → terraform-specialist → security-auditor 
+→ deployment-engineer
+```
+
+**完整工作流範例**: [多代理工作流文檔](https://github.com/wshobson/agents/blob/main/docs/usage.md#multi-agent-workflow-examples)
+
+---
+
+## 9. 最佳實踐
+
+### 9.1 插件選擇策略
+
+#### 根據專案類型
+
+**全端 Web 應用**：
+```bash
+/plugin install backend-development
+/plugin install frontend-mobile-development
+/plugin install full-stack-orchestration
+/plugin install security-scanning
+```
+
+**資料科學專案**：
+```bash
+/plugin install python-development
+/plugin install data-engineering
+/plugin install machine-learning-ops
+```
+
+**雲端基礎設施**：
+```bash
+/plugin install cloud-infrastructure
+/plugin install kubernetes-operations
+/plugin install observability-monitoring
+```
+
+#### 根據團隊角色
+
+**後端工程師**：
+```bash
+/plugin install backend-development
+/plugin install database-design
+/plugin install api-scaffolding
+```
+
+**DevOps 工程師**：
+```bash
+/plugin install cloud-infrastructure
+/plugin install ci-cd-automation
+/plugin install incident-response
+```
+
+**安全工程師**：
+```bash
+/plugin install security-scanning
+/plugin install security-compliance
+/plugin install backend-api-security
+```
+
+### 9.2 效能優化
+
+#### Token 效率
+
+- **只安裝需要的插件**：減少上下文大小
+- **使用斜線命令**：直接調用，避免自然語言推理開銷
+- **技能自動啟動**：讓 Claude 按需載入專業知識
+
+#### 成本控制
+
+- **混合模型策略**：Haiku 用於確定性任務，Sonnet 用於複雜推理
+- **批次操作**：組合多個命令減少 API 呼叫
+- **快取利用**：重複使用已載入的技能和代理
+
+### 9.3 工作流組織
+
+#### 專案結構
+
+```
+your-project/
+├── .claude/
+│   └── config.json          # 已安裝的插件列表
+├── src/
+├── tests/
+└── README.md
+```
+
+#### 插件配置
+
+```json
+{
+  "plugins": [
+    "python-development",
+    "backend-development",
+    "security-scanning",
+    "unit-testing"
+  ],
+  "preferences": {
+    "model_strategy": "hybrid",
+    "skill_disclosure": "progressive"
+  }
+}
+```
+
+### 9.4 團隊協作
+
+#### 統一插件配置
+
+```bash
+# 團隊成員共享相同的插件設定
+cat .claude/config.json
+
+# 所有成員安裝相同插件
+/plugin install-from-config .claude/config.json
+```
+
+#### 自訂團隊技能
+
+```bash
+# 建立團隊特定技能
+mkdir -p .claude/skills/
+cp team-specific-skills/*.md .claude/skills/
 ```
 
 ---
 
-## 6. 最佳實踐
+## 10. 延伸閱讀
 
-### 6.1 代理使用策略
-
-#### 任務分解
-
-```bash
-# 將複雜任務分解為多個子任務，使用不同代理
-claude "請 backend-architect 設計資料庫架構"
-claude "請 frontend-developer 設計用戶介面"
-claude "請 test-engineer 設計測試策略"
-```
-
-#### 代理組合
-
-```bash
-# 使用代理組合處理複雜專案
-claude "請使用 full-stack 代理組合設計一個電商平台"
-```
-
-### 6.2 效能優化
-
-#### 模型選擇
-
-- **簡單任務**：使用 Haiku 模型，快速且成本低
-- **中等任務**：使用 Sonnet 模型，平衡效能和成本
-- **複雜任務**：使用 Opus 模型，最高品質
-
-#### 上下文管理
-
-```yaml
-# 優化上下文長度
-context_optimization:
-  max_tokens: 4000
-  include_relevant_only: true
-  compress_history: true
-```
-
-### 6.3 成本控制
-
-#### API 使用優化
-
-```yaml
-# 監控和控制 API 使用
-cost_control:
-  daily_limit: 1000
-  model_usage_tracking: true
-  cost_alerts: true
-  preferred_models: ["haiku", "sonnet"]
-```
-
----
-
-## 7. 疑難排解
-
-### 7.1 常見問題
-
-#### 代理無法調用
-
-```bash
-# 檢查代理配置
-claude --list-agents
-
-# 檢查權限設定
-claude --check-permissions
-
-# 重新載入代理
-claude --reload-agents
-```
-
-#### 效能問題
-
-```yaml
-# 檢查模型選擇
-model_diagnostics:
-  enabled: true
-  log_performance: true
-  suggest_optimizations: true
-```
-
-### 7.2 除錯技巧
-
-#### 詳細日誌
-
-```bash
-# 啟用詳細日誌
-claude --verbose --debug --agent backend-architect "設計 API"
-```
-
-#### 代理狀態檢查
-
-```bash
-# 檢查代理狀態
-claude --agent-status
-claude --agent-health backend-architect
-```
-
----
-
-## 8. 延伸閱讀
-
-### 8.1 官方資源
+### 10.1 官方資源
 
 - [Agents GitHub 專案](https://github.com/wshobson/agents)
-- [Claude Code 文檔](https://docs.anthropic.com/en/docs/claude-code)
-- [MCP 協議文檔](https://docs.anthropic.com/en/docs/claude-code/mcp)
+- [插件參考文檔](https://github.com/wshobson/agents/blob/main/docs/plugins.md)
+- [代理參考文檔](https://github.com/wshobson/agents/blob/main/docs/agents.md)
+- [代理技能指南](https://github.com/wshobson/agents/blob/main/docs/agent-skills.md)
+- [使用指南](https://github.com/wshobson/agents/blob/main/docs/usage.md)
+- [架構文檔](https://github.com/wshobson/agents/blob/main/docs/architecture.md)
 
-### 8.2 相關專案
+### 10.2 Claude Code 官方文檔
+
+- [Claude Code 概覽](https://docs.claude.com/en/docs/claude-code/overview)
+- [Plugins 指南](https://docs.claude.com/en/docs/claude-code/plugins)
+- [Subagents 指南](https://docs.claude.com/en/docs/claude-code/sub-agents)
+- [Agent Skills 指南](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
+- [Slash Commands 參考](https://docs.claude.com/en/docs/claude-code/slash-commands)
+
+### 10.3 相關專案
 
 - [SuperClaude Framework](https://github.com/SuperClaude-Org/SuperClaude_Framework)
-- [Claude Code Hooks](https://github.com/aliceric27/claude-code-hooks)
 - [Claude Code Spec](https://github.com/gotalab/claude-code-spec)
+- [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code)
 
-### 8.3 學習資源
+### 10.4 學習資源
 
 - [代理架構設計模式](https://en.wikipedia.org/wiki/Software_agent)
 - [微服務架構最佳實踐](https://microservices.io/)
-- [測試驅動開發](https://en.wikipedia.org/wiki/Test-driven_development)
+- [Kubernetes 官方文檔](https://kubernetes.io/docs/)
+- [Terraform 最佳實踐](https://www.terraform.io/docs/cloud/guides/recommended-practices/index.html)
+
+---
+
+## 11. 架構亮點
+
+### 11.1 儲存庫結構
+
+```
+claude-agents/
+├── .claude-plugin/
+│   └── marketplace.json          # 63 個插件定義
+├── plugins/
+│   ├── python-development/
+│   │   ├── agents/               # 3 個 Python 專家
+│   │   ├── commands/             # 腳手架工具
+│   │   └── skills/               # 5 個專業技能
+│   ├── kubernetes-operations/
+│   │   ├── agents/               # K8s 架構師
+│   │   ├── commands/             # 部署工具
+│   │   └── skills/               # 4 個 K8s 技能
+│   └── ... (61 個更多插件)
+├── docs/                          # 完整文檔
+└── README.md
+```
+
+### 11.2 設計原則
+
+- **細粒度設計**：每個插件做一件事，做好它
+- **最小 token 使用**：平均每個插件 3.4 個元件
+- **可組合性**：混合搭配複雜工作流
+- **100% 覆蓋**：所有 85 個代理可跨插件存取
+
+### 11.3 貢獻
+
+要新增代理、技能或命令：
+
+1. 在 `plugins/` 中識別或建立適當的插件目錄
+2. 在適當的子目錄中建立 `.md` 檔案：
+   - `agents/` - 專業代理
+   - `commands/` - 工具和工作流
+   - `skills/` - 模組化知識套件
+3. 遵循命名規範（小寫、短橫線分隔）
+4. 撰寫清晰的啟動條件和全面的內容
+5. 更新 `.claude-plugin/marketplace.json` 中的插件定義
+
+詳見 [架構文檔](https://github.com/wshobson/agents/blob/main/docs/architecture.md)。
+
+---
+
+## 授權
+
+MIT License - 詳見 [LICENSE](https://github.com/wshobson/agents/blob/main/LICENSE) 檔案。
 
 ---
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/wshobson/agents) 與相關文檔。
 >
-> **版本資訊**：Agents - 75 個專業子代理  
-> **最後更新**：2025-08-20T00:13:54+08:00
+> **版本資訊**：Claude Code Plugins - 85 個專業代理 + 63 個插件 + 47 個技能  
+> **最後更新**：2025-10-28T01:30:00+08:00
