@@ -10,11 +10,14 @@
 > - [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) 社群指南
 > - [Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Claude Code CLI 參考](https://docs.anthropic.com/en/docs/claude-code/cli-reference)
+> - [Subagents 官方文檔](https://docs.anthropic.com/en/docs/claude-code/subagents)
+> - [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
 > - [MCP 協議官方規範](https://docs.anthropic.com/en/docs/claude-code/mcp)
 > - [Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-08-15T00:40:00+08:00**
-> - **專案最後更新：2025-08-10T23:24:41+02:00**
-> - **Claude Code 版本：v1.0.72**
+> - **文件整理時間：2025-10-28T04:35:00+08:00**
+> - **專案版本：v1.5**
+> - **專案最後更新：2025-08-10**
+> - **Claude Code 版本：v2.0+ (支援 Subagents + Agent Skills)**
 
 ---
 

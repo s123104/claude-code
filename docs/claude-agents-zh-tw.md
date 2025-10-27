@@ -11,10 +11,11 @@
 > **資料來源：**
 >
 > - [GitHub 專案](https://github.com/iannuttall/claude-agents)
-> - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+> - [Claude Code Subagents 官方文檔](https://docs.anthropic.com/en/docs/claude-code/subagents)
 > - [MCP 協議文檔](https://docs.anthropic.com/en/docs/claude-code/mcp)
-> - **文件整理時間：2025-08-15T00:46:00+08:00**
-> - **專案最後更新：2025-07-25T12:08:37+01:00**
+> - **文件整理時間：2025-10-28T04:20:00+08:00**
+> - **專案版本：v1.0**
+> - **專案最後更新：2025-07-25**
 
 ---
 

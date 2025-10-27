@@ -6,9 +6,16 @@
 
 
 > **基於官方文檔的完整 MCP 配置指南**  
-> 最後更新時間：2025-07-20T10:45:00+08:00  
-> 文件語言：繁體中文  
-> 版本：v1.0.0
+>
+> **資料來源：**
+> - [MCP 官方文檔](https://docs.anthropic.com/en/docs/claude-code/mcp)
+> - [MCP 伺服器目錄](https://github.com/modelcontextprotocol/servers)
+> - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
+>
+> **文件整理時間**：2025-10-28T04:30:00+08:00  
+> **文件語言**：繁體中文  
+> **版本**：v2.0.0  
+> **最後更新**：2025-10-28
 
 ---
 
