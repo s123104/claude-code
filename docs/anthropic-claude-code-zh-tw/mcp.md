@@ -1,383 +1,1073 @@
 ---
-source: "https://docs.anthropic.com/en/docs/claude-code/mcp"
-fetched_at: "2025-08-20T01:40:00+08:00"
-updated_features: "2025-08-20 - 新增 SSE/HTTP 傳輸、OAuth 認證、企業級 MCP 伺服器整合"
+source: "https://docs.anthropic.com/zh-TW/docs/claude-code/mcp.md"
+fetched_at: "2025-10-28T19:17:52+08:00"
 ---
 
-[原始文件連結](https://docs.anthropic.com/en/docs/claude-code/mcp)
+# 透過 MCP 將 Claude Code 連接到工具
 
-# Model Context Protocol (MCP) 完整指南
+> 了解如何使用 Model Context Protocol 將 Claude Code 連接到您的工具。
 
-模型上下文協議 (MCP) 是 Claude Code 的強大擴展系統，讓 AI 能夠連接外部工具、服務和資料源。本指南涵蓋 MCP 伺服器設定、範圍管理、OAuth 認證、企業級整合，以及如何將 Claude Code 作為 MCP 伺服器使用。
+export const MCPServersTable = ({platform = "all"}) => {
+  const generateClaudeCodeCommand = server => {
+    if (server.customCommands && server.customCommands.claudeCode) {
+      return server.customCommands.claudeCode;
+    }
+    if (server.urls.http) {
+      return `claude mcp add --transport http ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')} ${server.urls.http}`;
+    }
+    if (server.urls.sse) {
+      return `claude mcp add --transport sse ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')} ${server.urls.sse}`;
+    }
+    if (server.urls.stdio) {
+      const envFlags = server.authentication && server.authentication.envVars ? server.authentication.envVars.map(v => `--env ${v}=YOUR_${v.split('_').pop()}`).join(' ') : '';
+      const baseCommand = `claude mcp add --transport stdio ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      return envFlags ? `${baseCommand} ${envFlags} -- ${server.urls.stdio}` : `${baseCommand} -- ${server.urls.stdio}`;
+    }
+    return null;
+  };
+  const servers = [{
+    name: "Airtable",
+    category: "Databases & Data Management",
+    description: "Read/write records, manage bases and tables",
+    documentation: "https://github.com/domdomegg/airtable-mcp-server",
+    urls: {
+      stdio: "npx -y airtable-mcp-server"
+    },
+    authentication: {
+      type: "api_key",
+      envVars: ["AIRTABLE_API_KEY"]
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: true
+    }
+  }, {
+    name: "Figma",
+    category: "Design & Media",
+    description: "Generate better code by bringing in full Figma context",
+    documentation: "https://developers.figma.com",
+    urls: {
+      http: "https://mcp.figma.com/mcp"
+    },
+    customCommands: {
+      claudeCode: "claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: false
+    },
+    notes: "Visit developers.figma.com for local server setup."
+  }, {
+    name: "Asana",
+    category: "Project Management & Documentation",
+    description: "Interact with your Asana workspace to keep projects on track",
+    documentation: "https://developers.asana.com/docs/using-asanas-model-control-protocol-mcp-server",
+    urls: {
+      sse: "https://mcp.asana.com/sse"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Atlassian",
+    category: "Project Management & Documentation",
+    description: "Manage your Jira tickets and Confluence docs",
+    documentation: "https://www.atlassian.com/platform/remote-mcp-server",
+    urls: {
+      sse: "https://mcp.atlassian.com/v1/sse"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "ClickUp",
+    category: "Project Management & Documentation",
+    description: "Task management, project tracking",
+    documentation: "https://github.com/hauptsacheNet/clickup-mcp",
+    urls: {
+      stdio: "npx -y @hauptsache.net/clickup-mcp"
+    },
+    authentication: {
+      type: "api_key",
+      envVars: ["CLICKUP_API_KEY", "CLICKUP_TEAM_ID"]
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: true
+    }
+  }, {
+    name: "Cloudflare",
+    category: "Infrastructure & DevOps",
+    description: "Build applications, analyze traffic, monitor performance, and manage security settings through Cloudflare",
+    documentation: "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
+    urls: {},
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    },
+    notes: "Multiple services available. See documentation for specific server URLs. Claude Code can use the Cloudflare CLI if installed."
+  }, {
+    name: "Cloudinary",
+    category: "Design & Media",
+    description: "Upload, manage, transform, and analyze your media assets",
+    documentation: "https://cloudinary.com/documentation/cloudinary_llm_mcp#mcp_servers",
+    urls: {},
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    },
+    notes: "Multiple services available. See documentation for specific server URLs."
+  }, {
+    name: "Intercom",
+    category: "Project Management & Documentation",
+    description: "Access real-time customer conversations, tickets, and user data",
+    documentation: "https://developers.intercom.com/docs/guides/mcp",
+    urls: {
+      http: "https://mcp.intercom.com/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "invideo",
+    category: "Design & Media",
+    description: "Build video creation capabilities into your applications",
+    documentation: "https://invideo.io/ai/mcp",
+    urls: {
+      sse: "https://mcp.invideo.io/sse"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Linear",
+    category: "Project Management & Documentation",
+    description: "Integrate with Linear's issue tracking and project management",
+    documentation: "https://linear.app/docs/mcp",
+    urls: {
+      http: "https://mcp.linear.app/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Notion",
+    category: "Project Management & Documentation",
+    description: "Read docs, update pages, manage tasks",
+    documentation: "https://developers.notion.com/docs/mcp",
+    urls: {
+      http: "https://mcp.notion.com/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: false
+    }
+  }, {
+    name: "PayPal",
+    category: "Payments & Commerce",
+    description: "Integrate PayPal commerce capabilities, payment processing, transaction management",
+    documentation: "https://www.paypal.ai/",
+    urls: {
+      http: "https://mcp.paypal.com/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Plaid",
+    category: "Payments & Commerce",
+    description: "Analyze, troubleshoot, and optimize Plaid integrations. Banking data, financial account linking",
+    documentation: "https://plaid.com/blog/plaid-mcp-ai-assistant-claude/",
+    urls: {
+      sse: "https://api.dashboard.plaid.com/mcp/sse"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Sentry",
+    category: "Development & Testing Tools",
+    description: "Monitor errors, debug production issues",
+    documentation: "https://docs.sentry.io/product/sentry-mcp/",
+    urls: {
+      http: "https://mcp.sentry.dev/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Square",
+    category: "Payments & Commerce",
+    description: "Use an agent to build on Square APIs. Payments, inventory, orders, and more",
+    documentation: "https://developer.squareup.com/docs/mcp",
+    urls: {
+      sse: "https://mcp.squareup.com/sse"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Socket",
+    category: "Development & Testing Tools",
+    description: "Security analysis for dependencies",
+    documentation: "https://github.com/SocketDev/socket-mcp",
+    urls: {
+      http: "https://mcp.socket.dev/"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: false,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Stripe",
+    category: "Payments & Commerce",
+    description: "Payment processing, subscription management, and financial transactions",
+    documentation: "https://docs.stripe.com/mcp",
+    urls: {
+      http: "https://mcp.stripe.com"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Workato",
+    category: "Automation & Integration",
+    description: "Access any application, workflows or data via Workato, made accessible for AI",
+    documentation: "https://docs.workato.com/mcp.html",
+    urls: {},
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    },
+    notes: "MCP servers are programmatically generated"
+  }, {
+    name: "Zapier",
+    category: "Automation & Integration",
+    description: "Connect to nearly 8,000 apps through Zapier's automation platform",
+    documentation: "https://help.zapier.com/hc/en-us/articles/36265392843917",
+    urls: {},
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    },
+    notes: "Generate a user-specific URL at mcp.zapier.com"
+  }, {
+    name: "Box",
+    category: "Project Management & Documentation",
+    description: "Ask questions about your enterprise content, get insights from unstructured data, automate content workflows",
+    documentation: "https://box.dev/guides/box-mcp/remote/",
+    urls: {
+      http: "https://mcp.box.com/"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Canva",
+    category: "Design & Media",
+    description: "Browse, summarize, autofill, and even generate new Canva designs directly from Claude",
+    documentation: "https://www.canva.dev/docs/connect/canva-mcp-server-setup/",
+    urls: {
+      http: "https://mcp.canva.com/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Daloopa",
+    category: "Databases & Data Management",
+    description: "Supplies high quality fundamental financial data sourced from SEC Filings, investor presentations",
+    documentation: "https://docs.daloopa.com/docs/daloopa-mcp",
+    urls: {
+      http: "https://mcp.daloopa.com/server/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Fireflies",
+    category: "Project Management & Documentation",
+    description: "Extract valuable insights from meeting transcripts and summaries",
+    documentation: "https://guide.fireflies.ai/articles/8272956938-learn-about-the-fireflies-mcp-server-model-context-protocol",
+    urls: {
+      http: "https://api.fireflies.ai/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "HubSpot",
+    category: "Databases & Data Management",
+    description: "Access and manage HubSpot CRM data by fetching contacts, companies, and deals, and creating and updating records",
+    documentation: "https://developers.hubspot.com/mcp",
+    urls: {
+      http: "https://mcp.hubspot.com/anthropic"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Hugging Face",
+    category: "Development & Testing Tools",
+    description: "Provides access to Hugging Face Hub information and Gradio AI Applications",
+    documentation: "https://huggingface.co/settings/mcp",
+    urls: {
+      http: "https://huggingface.co/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Jam",
+    category: "Development & Testing Tools",
+    description: "Debug faster with AI agents that can access Jam recordings like video, console logs, network requests, and errors",
+    documentation: "https://jam.dev/docs/debug-a-jam/mcp",
+    urls: {
+      http: "https://mcp.jam.dev/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Monday",
+    category: "Project Management & Documentation",
+    description: "Manage monday.com boards by creating items, updating columns, assigning owners, setting timelines, adding CRM activities, and writing summaries",
+    documentation: "https://developer.monday.com/apps/docs/mondaycom-mcp-integration",
+    urls: {
+      http: "https://mcp.monday.com/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Netlify",
+    category: "Infrastructure & DevOps",
+    description: "Create, deploy, and manage websites on Netlify. Control all aspects of your site from creating secrets to enforcing access controls to aggregating form submissions",
+    documentation: "https://docs.netlify.com/build/build-with-ai/netlify-mcp-server/",
+    urls: {
+      http: "https://netlify-mcp.netlify.app/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Stytch",
+    category: "Infrastructure & DevOps",
+    description: "Configure and manage Stytch authentication services, redirect URLs, email templates, and workspace settings",
+    documentation: "https://stytch.com/docs/workspace-management/stytch-mcp",
+    urls: {
+      http: "http://mcp.stytch.dev/mcp"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }, {
+    name: "Vercel",
+    category: "Infrastructure & DevOps",
+    description: "Vercel's official MCP server, allowing you to search and navigate documentation, manage projects and deployments, and analyze deployment logs—all in one place",
+    documentation: "https://vercel.com/docs/mcp/vercel-mcp",
+    urls: {
+      http: "https://mcp.vercel.com/"
+    },
+    authentication: {
+      type: "oauth"
+    },
+    availability: {
+      claudeCode: true,
+      mcpConnector: true,
+      claudeDesktop: false
+    }
+  }];
+  const filteredServers = servers.filter(server => {
+    if (platform === "claudeCode") {
+      return server.availability.claudeCode;
+    } else if (platform === "mcpConnector") {
+      return server.availability.mcpConnector;
+    } else if (platform === "claudeDesktop") {
+      return server.availability.claudeDesktop;
+    } else if (platform === "all") {
+      return true;
+    } else {
+      throw new Error(`Unknown platform: ${platform}`);
+    }
+  });
+  const serversByCategory = filteredServers.reduce((acc, server) => {
+    if (!acc[server.category]) {
+      acc[server.category] = [];
+    }
+    acc[server.category].push(server);
+    return acc;
+  }, {});
+  const categoryOrder = ["Development & Testing Tools", "Project Management & Documentation", "Databases & Data Management", "Payments & Commerce", "Design & Media", "Infrastructure & DevOps", "Automation & Integration"];
+  return <>
+      <style jsx>{`
+        .cards-container {
+          display: grid;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        .server-card {
+          border: 1px solid var(--border-color, #e5e7eb);
+          border-radius: 6px;
+          padding: 1rem;
+        }
+        .command-row {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .command-row code {
+          font-size: 0.75rem;
+          overflow-x: auto;
+        }
+      `}</style>
+      
+      {categoryOrder.map(category => {
+    if (!serversByCategory[category]) return null;
+    return <div key={category}>
+            <h3>{category}</h3>
+            <div className="cards-container">
+              {serversByCategory[category].map(server => {
+      const claudeCodeCommand = generateClaudeCodeCommand(server);
+      const mcpUrl = server.urls.http || server.urls.sse;
+      const commandToShow = platform === "claudeCode" ? claudeCodeCommand : mcpUrl;
+      return <div key={server.name} className="server-card">
+                    <div>
+                      {server.documentation ? <a href={server.documentation}>
+                          <strong>{server.name}</strong>
+                        </a> : <strong>{server.name}</strong>}
+                    </div>
+                    
+                    <p style={{
+        margin: '0.5rem 0',
+        fontSize: '0.9rem'
+      }}>
+                      {server.description}
+                      {server.notes && <span style={{
+        display: 'block',
+        marginTop: '0.25rem',
+        fontSize: '0.8rem',
+        fontStyle: 'italic',
+        opacity: 0.7
+      }}>
+                          {server.notes}
+                        </span>}
+                    </p>
+                    
+                    {commandToShow && <>
+                      <p style={{
+        display: 'block',
+        fontSize: '0.75rem',
+        fontWeight: 500,
+        minWidth: 'fit-content',
+        marginTop: '0.5rem',
+        marginBottom: 0
+      }}>
+                        {platform === "claudeCode" ? "Command" : "URL"}
+                      </p>
+                      <div className="command-row">
+                        <code>
+                          {commandToShow}
+                        </code>
+                      </div>
+                    </>}
+                  </div>;
+    })}
+            </div>
+          </div>;
+  })}
+    </>;
+};
 
-## 什麼是 MCP？
+Claude Code 可以透過 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) 連接到數百個外部工具和資料來源，MCP 是一個開源標準，用於 AI 工具整合。MCP 伺服器讓 Claude Code 能夠存取您的工具、資料庫和 API。
 
-MCP 允許 Claude Code 存取：
-- **問題追蹤系統**：從 JIRA 問題實現功能並在 GitHub 上創建 PR
-- **監控資料**：檢查 Sentry 和 Statsig 的功能使用情況
-- **資料庫查詢**：基於 Postgres 資料庫尋找使用者
-- **設計整合**：根據 Slack 中發佈的新 Figma 設計更新範本
-- **工作流程自動化**：建立 Gmail 草稿邀請使用者參與意見回饋會議
+## 您可以使用 MCP 做什麼
 
-## MCP 伺服器類型
+連接 MCP 伺服器後，您可以要求 Claude Code：
 
-### 1. Stdio 伺服器（本地指令）
-本地執行的指令行工具：
+* **從問題追蹤器實現功能**："新增 JIRA 問題 ENG-4521 中描述的功能，並在 GitHub 上建立 PR。"
+* **分析監控資料**："檢查 Sentry 和 Statsig 以檢查 ENG-4521 中描述的功能使用情況。"
+* **查詢資料庫**："根據我們的 Postgres 資料庫，找到 10 個使用功能 ENG-4521 的隨機使用者的電子郵件。"
+* **整合設計**："根據在 Slack 中發佈的新 Figma 設計更新我們的標準電子郵件範本"
+* **自動化工作流程**："建立 Gmail 草稿，邀請這 10 個使用者參加關於新功能的回饋會議。"
 
-```bash
-# 基本語法
-claude mcp add <name> <command> [args...]
+## 熱門 MCP 伺服器
 
-# 範例：新增本地伺服器
-claude mcp add my-server -e API_KEY=123 -- /path/to/server arg1 arg2
-```
+以下是一些您可以連接到 Claude Code 的常用 MCP 伺服器：
 
-### 2. SSE 伺服器（即時串流）
-使用 Server-Sent Events 的遠程伺服器：
+<Warning>
+  使用第三方 MCP 伺服器需自行承擔風險 - Anthropic 尚未驗證
+  所有這些伺服器的正確性或安全性。
+  請確保您信任要安裝的 MCP 伺服器。
+  使用可能會取得不受信任內容的 MCP 伺服器時要特別小心，
+  因為這些可能會讓您面臨提示注入風險。
+</Warning>
 
-```bash
-# 基本語法
-claude mcp add --transport sse <name> <url>
+<MCPServersTable platform="claudeCode" />
 
-# 範例：Linear 整合
-claude mcp add --transport sse linear https://mcp.linear.app/sse
+<Note>
+  **需要特定的整合？** [在 GitHub 上找到數百個更多 MCP 伺服器](https://github.com/modelcontextprotocol/servers)，或使用 [MCP SDK](https://modelcontextprotocol.io/quickstart/server) 建立您自己的伺服器。
+</Note>
 
-# 含認證標頭
-claude mcp add --transport sse private-api https://api.company.com/mcp \
-  --header "X-API-Key: your-key-here"
-```
+## 安裝 MCP 伺服器
 
-### 3. HTTP 伺服器（RESTful API）
-使用 HTTP 的伺服器：
+MCP 伺服器可以根據您的需求以三種不同的方式進行配置：
 
-```bash
+### 選項 1：新增遠端 HTTP 伺服器
+
+HTTP 伺服器是連接到遠端 MCP 伺服器的建議選項。這是雲端服務最廣泛支援的傳輸方式。
+
+```bash  theme={null}
 # 基本語法
 claude mcp add --transport http <name> <url>
 
-# 範例：HTTP 伺服器
-claude mcp add --transport http http-server https://example.com/mcp
-
-# 含認證
-claude mcp add --transport http secure-server https://api.example.com/mcp \
-  -e Authorization="Bearer your-token"
-```
-
-## 企業級 MCP 伺服器整合
-
-### 主流服務整合
-
-#### 專案管理與協作
-```bash
-# Linear - 問題追蹤
-claude mcp add --transport sse linear https://mcp.linear.app/sse
-
-# Asana - 專案管理
-claude mcp add --transport sse asana https://mcp.asana.com/sse
-
-# Atlassian - Jira & Confluence
-claude mcp add --transport sse atlassian https://mcp.atlassian.com/v1/sse
-
-# ClickUp - 任務管理
-claude mcp add --env CLICKUP_API_KEY=YOUR_KEY --env CLICKUP_TEAM_ID=YOUR_ID -- npx -y @hauptsache.net/clickup-mcp
-```
-
-#### 監控與分析
-```bash
-# Sentry - 錯誤監控與除錯
-claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
-
-# 使用 /mcp 進行認證
-> /mcp
-
-# 除錯生產問題範例
-> "What are the most common errors in the last 24 hours?"
-> "Show me the stack trace for error ID abc123"
-> "Which deployment introduced these new errors?"
-```
-
-#### 支付與商務
-```bash
-# Stripe - 支付處理
-claude mcp add --transport http stripe https://mcp.stripe.com
-
-# PayPal - 交易管理
-claude mcp add --transport http paypal https://mcp.paypal.com/mcp
-
-# Square - 支付與庫存管理
-claude mcp add --transport sse square https://mcp.squareup.com/sse
-```
-
-#### 設計與內容
-```bash
-# Figma - 設計整合（需要 Desktop 版本在本地運行）
-claude mcp add --transport sse figma http://127.0.0.1:3845/sse
-
-# Notion - 文檔與頁面管理
+# 實際範例：連接到 Notion
 claude mcp add --transport http notion https://mcp.notion.com/mcp
 
-# Invideo - 影片創作
-claude mcp add --transport sse invideo https://mcp.invideo.io/sse
+# 使用 Bearer 令牌的範例
+claude mcp add --transport http secure-api https://api.example.com/mcp \
+  --header "Authorization: Bearer your-token"
 ```
 
-#### 客戶服務與通訊
-```bash
-# Intercom - 即時客戶對話與票券
-claude mcp add --transport http intercom https://mcp.intercom.com/mcp
+### 選項 2：新增遠端 SSE 伺服器
+
+<Warning>
+  SSE (Server-Sent Events) 傳輸已被棄用。請改用 HTTP 伺服器（如果可用）。
+</Warning>
+
+```bash  theme={null}
+# 基本語法
+claude mcp add --transport sse <name> <url>
+
+# 實際範例：連接到 Asana
+claude mcp add --transport sse asana https://mcp.asana.com/sse
+
+# 使用驗證標頭的範例
+claude mcp add --transport sse private-api https://api.company.com/sse \
+  --header "X-API-Key: your-key-here"
 ```
 
-#### 安全與依賴管理
-```bash
-# Socket - 依賴安全分析
-claude mcp add --transport http socket https://mcp.socket.dev/
+### 選項 3：新增本機 stdio 伺服器
+
+Stdio 伺服器在您的機器上作為本機程序執行。它們非常適合需要直接系統存取或自訂指令碼的工具。
+
+```bash  theme={null}
+# 基本語法
+claude mcp add --transport stdio <name> <command> [args...]
+
+# 實際範例：新增 Airtable 伺服器
+claude mcp add --transport stdio airtable --env AIRTABLE_API_KEY=YOUR_KEY \
+  -- npx -y airtable-mcp-server
 ```
 
-#### 自動化與整合平台
-```bash
-# Zapier - 連接數千個應用程式
-# 在 mcp.zapier.com 生成用戶特定 URL
+<Note>
+  **了解 "--" 參數：**
+  `--`（雙破折號）將 Claude 自己的 CLI 旗標與傳遞給 MCP 伺服器的命令和引數分開。`--` 之前的所有內容都是 Claude 的選項（如 `--env`、`--scope`），`--` 之後的所有內容都是執行 MCP 伺服器的實際命令。
 
-# Workato - 企業級自動化
-# 程式化生成 MCP 伺服器，提供廣泛應用程式與工作流程存取
+  例如：
 
-# Airtable - 雲端資料庫
-claude mcp add airtable --env AIRTABLE_API_KEY=YOUR_KEY -- npx -y airtable-mcp-server
+  * `claude mcp add --transport stdio myserver -- npx server` → 執行 `npx server`
+  * `claude mcp add --transport stdio myserver --env KEY=value -- python server.py --port 8080` → 執行 `python server.py --port 8080`，環境中設定 `KEY=value`
+
+  這可以防止 Claude 的旗標與伺服器旗標之間的衝突。
+</Note>
+
+### 管理您的伺服器
+
+配置後，您可以使用這些命令管理您的 MCP 伺服器：
+
+```bash  theme={null}
+# 列出所有已配置的伺服器
+claude mcp list
+
+# 取得特定伺服器的詳細資訊
+claude mcp get github
+
+# 移除伺服器
+claude mcp remove github
+
+# （在 Claude Code 中）檢查伺服器狀態
+/mcp
 ```
 
-### 雲端平台整合
-```bash
-# Cloudflare - DevOps 服務
-# 功能：建置應用程式、流量分析、效能監控、安全設定管理
-# 特定伺服器 URL 因服務而異，請參閱 Cloudflare 文檔
+<Tip>
+  提示：
+
+  * 使用 `--scope` 旗標指定配置的儲存位置：
+    * `local`（預設）：僅在目前專案中對您可用（在較舊版本中稱為 `project`）
+    * `project`：透過 `.mcp.json` 檔案與專案中的所有人共享
+    * `user`：在所有專案中對您可用（在較舊版本中稱為 `global`）
+  * 使用 `--env` 旗標設定環境變數（例如 `--env KEY=value`）
+  * 使用 MCP\_TIMEOUT 環境變數配置 MCP 伺服器啟動逾時（例如 `MCP_TIMEOUT=10000 claude` 設定 10 秒逾時）
+  * 當 MCP 工具輸出超過 10,000 個令牌時，Claude Code 將顯示警告。若要增加此限制，請設定 `MAX_MCP_OUTPUT_TOKENS` 環境變數（例如 `MAX_MCP_OUTPUT_TOKENS=50000`）
+  * 使用 `/mcp` 向需要 OAuth 2.0 驗證的遠端伺服器進行驗證
+</Tip>
+
+<Warning>
+  **Windows 使用者**：在原生 Windows（不是 WSL）上，使用 `npx` 的本機 MCP 伺服器需要 `cmd /c` 包裝器以確保正確執行。
+
+  ```bash  theme={null}
+  # 這會建立 Windows 可以執行的 command="cmd"
+  claude mcp add --transport stdio my-server -- cmd /c npx -y @some/package
+  ```
+
+  沒有 `cmd /c` 包裝器，您會遇到「連接已關閉」錯誤，因為 Windows 無法直接執行 `npx`。（請參閱上面的注意以了解 `--` 參數的說明。）
+</Warning>
+
+### 外掛程式提供的 MCP 伺服器
+
+[外掛程式](/zh-TW/docs/claude-code/plugins) 可以捆綁 MCP 伺服器，在啟用外掛程式時自動提供工具和整合。外掛程式 MCP 伺服器的工作方式與使用者配置的伺服器相同。
+
+**外掛程式 MCP 伺服器的工作方式**：
+
+* 外掛程式在外掛程式根目錄的 `.mcp.json` 中或 `plugin.json` 中內聯定義 MCP 伺服器
+* 啟用外掛程式時，其 MCP 伺服器會自動啟動
+* 外掛程式 MCP 工具與手動配置的 MCP 工具一起出現
+* 外掛程式伺服器透過外掛程式安裝進行管理（不是 `/mcp` 命令）
+
+**外掛程式 MCP 配置範例**：
+
+在外掛程式根目錄的 `.mcp.json` 中：
+
+```json  theme={null}
+{
+  "database-tools": {
+    "command": "${CLAUDE_PLUGIN_ROOT}/servers/db-server",
+    "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/config.json"],
+    "env": {
+      "DB_URL": "${DB_URL}"
+    }
+  }
+}
 ```
 
-## 資料庫整合
+或在 `plugin.json` 中內聯：
 
-### PostgreSQL 設定
-```bash
-claude mcp add postgres-server /path/to/postgres-mcp-server \
-  --connection-string "postgresql://user:pass@localhost:5432/mydb"
+```json  theme={null}
+{
+  "name": "my-plugin",
+  "mcpServers": {
+    "plugin-api": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/servers/api-server",
+      "args": ["--port", "8080"]
+    }
+  }
+}
 ```
 
-### 自然語言資料庫查詢
-```bash
-> describe the schema of our users table
-> what are the most recent orders in the system?
-> show me the relationship between customers and invoices
-> find emails of 10 random users who used feature ENG-4521
+**外掛程式 MCP 功能**：
+
+* **自動生命週期**：伺服器在外掛程式啟用時啟動，但您必須重新啟動 Claude Code 以套用 MCP 伺服器變更（啟用或停用）
+* **環境變數**：使用 `${CLAUDE_PLUGIN_ROOT}` 表示外掛程式相對路徑
+* **使用者環境存取**：存取與手動配置伺服器相同的環境變數
+* **多種傳輸類型**：支援 stdio、SSE 和 HTTP 傳輸（傳輸支援可能因伺服器而異）
+
+**檢視外掛程式 MCP 伺服器**：
+
+```bash  theme={null}
+# 在 Claude Code 中，查看所有 MCP 伺服器，包括外掛程式伺服器
+/mcp
 ```
 
-## MCP 伺服器範圍管理
+外掛程式伺服器在列表中出現，並帶有指示器顯示它們來自外掛程式。
 
-### 三層範圍系統（優先順序：高→低）
+**外掛程式 MCP 伺服器的優點**：
 
-#### 1. 本地範圍（Local）- 預設
-專案私有，不共享：
-```bash
-# 預設為本地範圍
-claude mcp add my-private-server /path/to/server
+* **捆綁分發**：工具和伺服器一起打包
+* **自動設定**：無需手動 MCP 配置
+* **團隊一致性**：安裝外掛程式時，每個人都會獲得相同的工具
 
-# 明確指定本地範圍
-claude mcp add my-private-server --scope local /path/to/server
+請參閱[外掛程式元件參考](/zh-TW/docs/claude-code/plugins-reference#mcp-servers)以了解有關使用外掛程式捆綁 MCP 伺服器的詳細資訊。
+
+## MCP 安裝範圍
+
+MCP 伺服器可以在三個不同的範圍級別進行配置，每個級別都服務於管理伺服器可存取性和共享的不同目的。了解這些範圍可以幫助您確定為特定需求配置伺服器的最佳方式。
+
+### 本機範圍
+
+本機範圍伺服器代表預設配置級別，儲存在您的專案特定使用者設定中。這些伺服器對您保持私密，只有在目前專案目錄中工作時才可存取。此範圍非常適合個人開發伺服器、實驗配置或包含不應共享的敏感認證的伺服器。
+
+```bash  theme={null}
+# 新增本機範圍伺服器（預設）
+claude mcp add --transport http stripe https://mcp.stripe.com
+
+# 明確指定本機範圍
+claude mcp add --transport http stripe --scope local https://mcp.stripe.com
 ```
 
-#### 2. 專案範圍（Project）
-團隊共享，儲存於 `.mcp.json`：
-```bash
-claude mcp add shared-server --scope project /path/to/server
+### 專案範圍
+
+專案範圍伺服器透過將配置儲存在專案根目錄的 `.mcp.json` 檔案中來啟用團隊協作。此檔案設計為簽入版本控制，確保所有團隊成員都能存取相同的 MCP 工具和服務。新增專案範圍伺服器時，Claude Code 會自動建立或更新此檔案，使用適當的配置結構。
+
+```bash  theme={null}
+# 新增專案範圍伺服器
+claude mcp add --transport http paypal --scope project https://mcp.paypal.com/mcp
 ```
 
-#### 3. 使用者範圍（User）
-跨專案全域可用：
-```bash
-claude mcp add my-user-server --scope user /path/to/server
-```
+產生的 `.mcp.json` 檔案遵循標準化格式：
 
-### 專案級配置檔案
-`.mcp.json` 範例：
-```json
+```json  theme={null}
 {
   "mcpServers": {
     "shared-server": {
       "command": "/path/to/server",
       "args": [],
       "env": {}
-    },
-    "team-database": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      "env": {"DB_CONNECTION_STRING": "postgresql://..."}
     }
   }
 }
 ```
 
-### 範圍重置與管理
-```bash
-# 重置專案選擇，重新提示批准
-claude mcp reset-project-choices
+出於安全原因，Claude Code 在使用來自 `.mcp.json` 檔案的專案範圍伺服器之前會提示批准。如果您需要重設這些批准選擇，請使用 `claude mcp reset-project-choices` 命令。
+
+### 使用者範圍
+
+使用者範圍伺服器提供跨專案可存取性，使其在您的機器上的所有專案中可用，同時對您的使用者帳戶保持私密。此範圍非常適合個人實用程式伺服器、開發工具或您在不同專案中經常使用的服務。
+
+```bash  theme={null}
+# 新增使用者伺服器
+claude mcp add --transport http hubspot --scope user https://mcp.hubspot.com/anthropic
 ```
 
-## OAuth 認證與安全管理
+### 選擇正確的範圍
 
-### 互動式認證管理
-```bash
-# 開啟 MCP 管理介面
-> /mcp
-```
+根據以下條件選擇您的範圍：
 
-**管理介面功能**：
-- 🔍 查看所有配置的伺服器
-- 🔌 檢查連接狀態
-- 🔐 OAuth 伺服器認證
-- 🧹 清除認證令牌
-- 🛠️ 查看可用工具和提示
+* **本機範圍**：個人伺服器、實驗配置或特定於一個專案的敏感認證
+* **專案範圍**：團隊共享伺服器、專案特定工具或協作所需的服務
+* **使用者範圍**：跨多個專案所需的個人實用程式、開發工具或經常使用的服務
 
-### 認證令牌管理
-```bash
-# 清除所有認證令牌
-claude mcp clear-auth
+### 範圍階層和優先順序
 
-# 清除特定範圍的認證
-claude mcp clear-auth --scope user
-claude mcp clear-auth --scope project
-```
+MCP 伺服器配置遵循清晰的優先順序階層。當具有相同名稱的伺服器存在於多個範圍時，系統透過優先考慮本機範圍伺服器、其次是專案範圍伺服器，最後是使用者範圍伺服器來解決衝突。此設計確保個人配置可以在需要時覆蓋共享配置。
 
-### 安全最佳實踐
-- ✅ **信任來源**：僅使用來自信任提供者的 MCP 伺服器
-- 🔄 **定期審查**：定期檢查和更新伺服器權限
-- 🔒 **環境變數**：使用環境變數管理敏感資訊
-- 🧹 **定期清理**：定期清理未使用的認證令牌
-- 📋 **權限控制**：為每個伺服器配置適當的工具權限
+### `.mcp.json` 中的環境變數擴展
 
-## 從 Claude Desktop 匯入
+Claude Code 支援 `.mcp.json` 檔案中的環境變數擴展，允許團隊共享配置，同時保持機器特定路徑和 API 金鑰等敏感值的靈活性。
 
-### 自動匯入現有配置
-```bash
-# 互動式匯入流程
-claude mcp add-from-claude-desktop
+**支援的語法：**
 
-# 驗證匯入結果
-claude mcp list
-```
+* `${VAR}` - 擴展為環境變數 `VAR` 的值
+* `${VAR:-default}` - 如果設定，擴展為 `VAR`，否則使用 `default`
 
-**支援平台**：
-- ✅ macOS
-- ✅ Windows Subsystem for Linux (WSL)
+**擴展位置：**
+環境變數可以在以下位置擴展：
 
-**匯入內容**：
-- 所有已配置的 MCP 伺服器
-- 環境變數與認證設定
-- 伺服器範圍偏好
+* `command` - 伺服器可執行檔路徑
+* `args` - 命令列引數
+* `env` - 傳遞給伺服器的環境變數
+* `url` - 對於 HTTP 伺服器類型
+* `headers` - 對於 HTTP 伺服器驗證
 
-## JSON 配置進階設定
+**使用變數擴展的範例：**
 
-### 複雜伺服器配置
-```bash
-# 基本語法
-claude mcp add-json <name> '<json>'
-
-# 範例：天氣 API 伺服器
-claude mcp add-json weather-api '{
-  "type":"stdio",
-  "command":"/path/to/weather-cli",
-  "args":["--api-key","abc123"],
-  "env":{"CACHE_DIR":"/tmp"}
-}'
-
-# 驗證配置
-claude mcp get weather-api
-```
-
-### SDK 配置檔案範例
-```json
+```json  theme={null}
 {
   "mcpServers": {
-    "slack": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-slack"],
-      "env": {"SLACK_TOKEN": "your-slack-token"}
-    },
-    "jira": {
-      "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-jira"],
-      "env": {"JIRA_TOKEN": "your-jira-token"}
-    },
-    "database": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      "env": {"DB_CONNECTION_STRING": "your-db-url"}
+    "api-server": {
+      "type": "http",
+      "url": "${API_BASE_URL:-https://api.example.com}/mcp",
+      "headers": {
+        "Authorization": "Bearer ${API_KEY}"
+      }
     }
   }
 }
 ```
 
-## MCP 斜線指令系統
+如果未設定必需的環境變數且沒有預設值，Claude Code 將無法解析配置。
 
-### 動態提示發現與執行
-MCP 伺服器暴露的自訂提示會自動轉換為斜線指令：
+## 實際範例
 
-**格式**：`/mcp__<伺服器名稱>__<提示名稱>`
+{/* ### 範例：使用 Playwright 自動化瀏覽器測試
 
-```bash
-# 無參數提示
-> /mcp__github__list_prs
+  ```bash
+  # 1. 新增 Playwright MCP 伺服器
+  claude mcp add --transport stdio playwright -- npx -y @playwright/mcp@latest
 
-# 含參數提示（空格分隔）
-> /mcp__github__pr_review 456
-> /mcp__jira__create_issue "Bug in login flow" high
+  # 2. 編寫並執行瀏覽器測試
+  > "Test if the login flow works with test@example.com"
+  > "Take a screenshot of the checkout page on mobile"
+  > "Verify that the search feature returns results"
+  ``` */}
+
+### 範例：使用 Sentry 監控錯誤
+
+```bash  theme={null}
+# 1. 新增 Sentry MCP 伺服器
+claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
+
+# 2. 使用 /mcp 向您的 Sentry 帳戶進行驗證
+> /mcp
+
+# 3. 除錯生產問題
+> "過去 24 小時內最常見的錯誤是什麼？"
+> "顯示錯誤 ID abc123 的堆疊追蹤"
+> "哪個部署引入了這些新錯誤？"
 ```
 
-### 命名規範化
-- 伺服器和提示名稱自動正規化
-- 空格和特殊字符轉換為底線
-- 所有名稱轉換為小寫保持一致性
+### 範例：連接到 GitHub 進行程式碼審查
 
-### 斜線指令特性
-- 🔄 **動態發現**：從連接的 MCP 伺服器自動發現
-- 📝 **參數處理**：支援多種參數類型
-- 🎯 **結果注入**：結果直接注入對話中
+```bash  theme={null}
+# 1. 新增 GitHub MCP 伺服器
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
 
-## 資源引用系統
+# 2. 在 Claude Code 中，如果需要進行驗證
+> /mcp
+# 為 GitHub 選擇「驗證」
 
-### @ 符號引用語法
-在 Claude Code 提示中引用外部資源：
-
-```bash
-# GitHub 問題分析
-> Can you analyze @github:issue://123 and suggest a fix?
-
-# API 文檔引用
-> Please review the API documentation at @docs:file://api/authentication
-
-# 資料庫架構比較
-> Compare @postgres:schema://users with @docs:file://database/user-model
-
-# 設計資源整合
-> Update our standard email template based on @figma:design://template-id
+# 3. 現在您可以要求 Claude 使用 GitHub
+> "審查 PR #456 並建議改進"
+> "為我們剛發現的錯誤建立新問題"
+> "顯示所有分配給我的開放 PR"
 ```
 
-**支援的資源類型**：
-- `@github:issue://` - GitHub 問題
-- `@docs:file://` - 文檔檔案
-- `@postgres:schema://` - 資料庫架構
-- `@figma:design://` - Figma 設計
-- 以及更多 MCP 伺服器特定的資源類型
+### 範例：查詢您的 PostgreSQL 資料庫
 
-## 將 Claude Code 作為 MCP 伺服器
+```bash  theme={null}
+# 1. 使用您的連接字串新增資料庫伺服器
+claude mcp add --transport stdio db -- npx -y @bytebase/dbhub \
+  --dsn "postgresql://readonly:pass@prod.db.com:5432/analytics"
 
-### 啟動 Claude Code MCP 服務
-```bash
-# 啟動 stdio MCP 伺服器
+# 2. 自然地查詢您的資料庫
+> "本月我們的總收入是多少？"
+> "顯示訂單表的架構"
+> "找到 90 天內未進行購買的客戶"
+```
+
+## 向遠端 MCP 伺服器進行驗證
+
+許多雲端 MCP 伺服器需要驗證。Claude Code 支援 OAuth 2.0 以進行安全連接。
+
+<Steps>
+  <Step title="新增需要驗證的伺服器">
+    例如：
+
+    ```bash  theme={null}
+    claude mcp add --transport http sentry https://mcp.sentry.dev/mcp
+    ```
+  </Step>
+
+  <Step title="在 Claude Code 中使用 /mcp 命令">
+    在 Claude Code 中，使用命令：
+
+    ```
+    > /mcp
+    ```
+
+    然後按照瀏覽器中的步驟登入。
+  </Step>
+</Steps>
+
+<Tip>
+  提示：
+
+  * 驗證令牌安全儲存並自動重新整理
+  * 在 `/mcp` 功能表中使用「清除驗證」撤銷存取
+  * 如果您的瀏覽器未自動開啟，請複製提供的 URL
+  * OAuth 驗證適用於 HTTP 伺服器
+</Tip>
+
+## 從 JSON 配置新增 MCP 伺服器
+
+如果您有 MCP 伺服器的 JSON 配置，您可以直接新增它：
+
+<Steps>
+  <Step title="從 JSON 新增 MCP 伺服器">
+    ```bash  theme={null}
+    # 基本語法
+    claude mcp add-json <name> '<json>'
+
+    # 範例：使用 JSON 配置新增 HTTP 伺服器
+    claude mcp add-json weather-api '{"type":"http","url":"https://api.weather.com/mcp","headers":{"Authorization":"Bearer token"}}'
+
+    # 範例：使用 JSON 配置新增 stdio 伺服器
+    claude mcp add-json local-weather '{"type":"stdio","command":"/path/to/weather-cli","args":["--api-key","abc123"],"env":{"CACHE_DIR":"/tmp"}}'
+    ```
+  </Step>
+
+  <Step title="驗證伺服器已新增">
+    ```bash  theme={null}
+    claude mcp get weather-api
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  提示：
+
+  * 確保 JSON 在您的 shell 中正確轉義
+  * JSON 必須符合 MCP 伺服器配置架構
+  * 您可以使用 `--scope user` 將伺服器新增到您的使用者配置，而不是專案特定配置
+</Tip>
+
+## 從 Claude Desktop 匯入 MCP 伺服器
+
+如果您已在 Claude Desktop 中配置了 MCP 伺服器，您可以匯入它們：
+
+<Steps>
+  <Step title="從 Claude Desktop 匯入伺服器">
+    ```bash  theme={null}
+    # 基本語法 
+    claude mcp add-from-claude-desktop 
+    ```
+  </Step>
+
+  <Step title="選擇要匯入的伺服器">
+    執行命令後，您將看到一個互動式對話框，允許您選擇要匯入的伺服器。
+  </Step>
+
+  <Step title="驗證伺服器已匯入">
+    ```bash  theme={null}
+    claude mcp list 
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  提示：
+
+  * 此功能僅適用於 macOS 和 Windows Subsystem for Linux (WSL)
+  * 它從這些平台上的標準位置讀取 Claude Desktop 配置檔案
+  * 使用 `--scope user` 旗標將伺服器新增到您的使用者配置
+  * 匯入的伺服器將具有與 Claude Desktop 中相同的名稱
+  * 如果已存在具有相同名稱的伺服器，它們將獲得數字尾碼（例如 `server_1`）
+</Tip>
+
+## 使用 Claude Code 作為 MCP 伺服器
+
+您可以使用 Claude Code 本身作為其他應用程式可以連接到的 MCP 伺服器：
+
+```bash  theme={null}
+# 啟動 Claude 作為 stdio MCP 伺服器
 claude mcp serve
 ```
 
-### 外部客戶端連接
-其他 MCP 客戶端（如 Claude Desktop）可以連接到 Claude Code：
+您可以透過將此配置新增到 claude\_desktop\_config.json 在 Claude Desktop 中使用它：
 
-```json
+```json  theme={null}
 {
   "mcpServers": {
     "claude-code": {
+      "type": "stdio",
       "command": "claude",
       "args": ["mcp", "serve"],
       "env": {}
@@ -386,89 +1076,200 @@ claude mcp serve
 }
 ```
 
-**提供功能**：
-- Claude Code 的整合工具
-- 檔案操作功能
-- 程式碼執行能力
-- Git 工作流程
-- 專案管理功能
+<Tip>
+  提示：
 
-## MCP 伺服器管理指令
+  * 伺服器提供對 Claude 工具（如 View、Edit、LS 等）的存取
+  * 在 Claude Desktop 中，嘗試要求 Claude 讀取目錄中的檔案、進行編輯等。
+  * 請注意，此 MCP 伺服器只是將 Claude Code 的工具公開給您的 MCP 用戶端，因此您自己的用戶端負責為個別工具呼叫實現使用者確認。
+</Tip>
 
-### 核心管理指令
-```bash
-# 列出所有配置的伺服器
-claude mcp list
+## MCP 輸出限制和警告
 
-# 獲取特定伺服器詳情
-claude mcp get <server-name>
+當 MCP 工具產生大型輸出時，Claude Code 可幫助管理令牌使用，以防止淹沒您的對話內容：
 
-# 移除伺服器
-claude mcp remove <server-name>
+* **輸出警告閾值**：當任何 MCP 工具輸出超過 10,000 個令牌時，Claude Code 會顯示警告
+* **可配置限制**：您可以使用 `MAX_MCP_OUTPUT_TOKENS` 環境變數調整最大允許 MCP 輸出令牌
+* **預設限制**：預設最大值為 25,000 個令牌
 
-# 檢查伺服器狀態（在 Claude Code 內）
-> /mcp
+若要增加產生大型輸出的工具的限制：
+
+```bash  theme={null}
+# 為 MCP 工具輸出設定更高的限制
+export MAX_MCP_OUTPUT_TOKENS=50000
+claude
 ```
 
-### 環境配置
-```bash
-# 設定伺服器啟動逾時
-export MCP_TIMEOUT=30
+這在使用以下 MCP 伺服器時特別有用：
 
-# Windows 特殊配置（使用 cmd /c 包裝 npx 指令）
-claude mcp add my-server -- cmd /c npx -y @some/package
+* 查詢大型資料集或資料庫
+* 產生詳細報告或文件
+* 處理廣泛的日誌檔案或除錯資訊
+
+<Warning>
+  如果您經常遇到特定 MCP 伺服器的輸出警告，請考慮增加限制或配置伺服器以分頁或篩選其回應。
+</Warning>
+
+## 使用 MCP 資源
+
+MCP 伺服器可以公開資源，您可以使用 @ 提及來參考，類似於您參考檔案的方式。
+
+### 參考 MCP 資源
+
+<Steps>
+  <Step title="列出可用資源">
+    在您的提示中輸入 `@` 以查看來自所有連接 MCP 伺服器的可用資源。資源與檔案一起出現在自動完成功能表中。
+  </Step>
+
+  <Step title="參考特定資源">
+    使用格式 `@server:protocol://resource/path` 來參考資源：
+
+    ```
+    > 您能分析 @github:issue://123 並建議修復嗎？
+    ```
+
+    ```
+    > 請審查 @docs:file://api/authentication 上的 API 文件
+    ```
+  </Step>
+
+  <Step title="多個資源參考">
+    您可以在單個提示中參考多個資源：
+
+    ```
+    > 比較 @postgres:schema://users 與 @docs:file://database/user-model
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  提示：
+
+  * 參考時會自動擷取資源並作為附件包含
+  * 資源路徑在 @ 提及自動完成中可進行模糊搜尋
+  * Claude Code 在伺服器支援時自動提供列出和讀取 MCP 資源的工具
+  * 資源可以包含 MCP 伺服器提供的任何類型的內容（文字、JSON、結構化資料等）
+</Tip>
+
+## 使用 MCP 提示作為斜線命令
+
+MCP 伺服器可以公開提示，這些提示在 Claude Code 中作為斜線命令可用。
+
+### 執行 MCP 提示
+
+<Steps>
+  <Step title="發現可用提示">
+    輸入 `/` 以查看所有可用命令，包括來自 MCP 伺服器的命令。MCP 提示以 `/mcp__servername__promptname` 格式出現。
+  </Step>
+
+  <Step title="執行不帶引數的提示">
+    ```
+    > /mcp__github__list_prs
+    ```
+  </Step>
+
+  <Step title="執行帶引數的提示">
+    許多提示接受引數。在命令後以空格分隔的方式傳遞它們：
+
+    ```
+    > /mcp__github__pr_review 456
+    ```
+
+    ```
+    > /mcp__jira__create_issue "登入流程中的錯誤" high
+    ```
+  </Step>
+</Steps>
+
+<Tip>
+  提示：
+
+  * MCP 提示從連接的伺服器動態發現
+  * 引數根據提示的定義參數進行解析
+  * 提示結果直接注入到對話中
+  * 伺服器和提示名稱已標準化（空格變為底線）
+</Tip>
+
+## 企業 MCP 配置
+
+對於需要集中控制 MCP 伺服器的組織，Claude Code 支援企業管理的 MCP 配置。這允許 IT 管理員：
+
+* **控制員工可以存取哪些 MCP 伺服器**：在整個組織中部署一組標準化的已批准 MCP 伺服器
+* **防止未授權的 MCP 伺服器**：可選地限制使用者新增自己的 MCP 伺服器
+* **完全停用 MCP**：如果需要，完全移除 MCP 功能
+
+### 設定企業 MCP 配置
+
+系統管理員可以在管理設定檔案旁邊部署企業 MCP 配置檔案：
+
+* **macOS**：`/Library/Application Support/ClaudeCode/managed-mcp.json`
+* **Windows**：`C:\ProgramData\ClaudeCode\managed-mcp.json`
+* **Linux**：`/etc/claude-code/managed-mcp.json`
+
+`managed-mcp.json` 檔案使用與標準 `.mcp.json` 檔案相同的格式：
+
+```json  theme={null}
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "company-internal": {
+      "type": "stdio",
+      "command": "/usr/local/bin/company-mcp-server",
+      "args": ["--config", "/etc/company/mcp-config.json"],
+      "env": {
+        "COMPANY_API_URL": "https://internal.company.com"
+      }
+    }
+  }
+}
 ```
 
-## 實戰使用案例
+### 使用允許清單和拒絕清單限制 MCP 伺服器
 
-### 案例 1：全端開發工作流程
-```bash
-# 1. 設定開發環境
-claude mcp add --transport sse github https://api.github.com/mcp
-claude mcp add --transport sse linear https://mcp.linear.app/sse
-claude mcp add postgres-db /path/to/postgres-server --connection-string "postgresql://..."
+除了提供企業管理的伺服器外，管理員還可以使用 `managed-settings.json` 檔案中的 `allowedMcpServers` 和 `deniedMcpServers` 控制使用者允許配置哪些 MCP 伺服器：
 
-# 2. 實現功能
-> "Add the feature described in JIRA issue ENG-4521 and create a PR on GitHub"
+* **macOS**：`/Library/Application Support/ClaudeCode/managed-settings.json`
+* **Windows**：`C:\ProgramData\ClaudeCode\managed-settings.json`
+* **Linux**：`/etc/claude-code/managed-settings.json`
 
-# 3. 分析使用情況
-> "Check Sentry and Statsig to check the usage of the feature described in ENG-4521"
-
-# 4. 使用者研究
-> "Find emails of 10 random users who used feature ENG-4521, based on our Postgres database"
+```json  theme={null}
+{
+  "allowedMcpServers": [
+    { "serverName": "github" },
+    { "serverName": "sentry" },
+    { "serverName": "company-internal" }
+  ],
+  "deniedMcpServers": [
+    { "serverName": "filesystem" }
+  ]
+}
 ```
 
-### 案例 2：設計到實現工作流程
-```bash
-# 1. 設定設計工具
-claude mcp add --transport sse figma http://127.0.0.1:3845/sse
-claude mcp add slack-server /path/to/slack-server
+**允許清單行為 (`allowedMcpServers`)**：
 
-# 2. 根據設計更新程式碼
-> "Update our standard email template based on the new Figma designs that were posted in Slack"
-```
+* `undefined`（預設）：無限制 - 使用者可以配置任何 MCP 伺服器
+* 空陣列 `[]`：完全鎖定 - 使用者無法配置任何 MCP 伺服器
+* 伺服器名稱清單：使用者只能配置指定的伺服器
 
-### 案例 3：客戶回饋自動化
-```bash
-# 1. 設定客戶工具
-claude mcp add airtable --env AIRTABLE_API_KEY=YOUR_KEY -- npx -y airtable-mcp-server
+**拒絕清單行為 (`deniedMcpServers`)**：
 
-# 2. 自動化邀請流程
-> "Create Gmail drafts inviting these 10 users to a feedback session about the new feature"
-```
+* `undefined`（預設）：沒有伺服器被阻止
+* 空陣列 `[]`：沒有伺服器被阻止
+* 伺服器名稱清單：指定的伺服器在所有範圍內被明確阻止
 
-## 開發與自訂 MCP 伺服器
+**重要注意事項**：
 
-### MCP SDK 資源
-- **官方 SDK**：https://modelcontextprotocol.io/quickstart/server
-- **社群伺服器**：https://github.com/modelcontextprotocol/servers
+* 這些限制適用於所有範圍：使用者、專案、本機，甚至來自 `managed-mcp.json` 的企業伺服器
+* **拒絕清單具有絕對優先順序**：如果伺服器同時出現在兩個清單中，它將被阻止
 
-### 建置自訂伺服器
-1. 使用 MCP SDK 開發自訂功能
-2. 發布為 npm 包或獨立執行檔
-3. 透過 `claude mcp add` 整合到工作流程
+<Note>
+  **企業配置優先順序**：企業 MCP 配置具有最高優先順序，當啟用 `useEnterpriseMcpConfigOnly` 時無法被使用者、本機或專案配置覆蓋。
+</Note>
 
-### 社群生態系統
-- 數百個社群開發的 MCP 伺服器
-- 涵蓋各種 API 和服務整合
-- 持續擴大的生態系統

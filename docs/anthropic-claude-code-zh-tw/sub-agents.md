@@ -1,237 +1,223 @@
 ---
-source: "https://docs.anthropic.com/en/docs/claude-code/sub-agents"
-fetched_at: "2025-08-20T01:40:00+08:00"
-updated_features: "2025-08-20 - 新增顯式子代理調用、代理鏈接、實戰範例"
+source: "https://docs.anthropic.com/zh-TW/docs/claude-code/sub-agents.md"
+fetched_at: "2025-10-28T19:19:17+08:00"
 ---
 
-[原始文件連結](https://docs.anthropic.com/zh-TW/docs/claude-code/sub-agents)
+# 子代理
 
-Claude Code 中的自定義子代理是專門的 AI 助手，可以被調用來處理特定類型的任務。它們通過提供具有自定義系統提示、工具和獨立上下文窗口的特定任務配置，實現更高效的問題解決。
+> 在 Claude Code 中建立和使用專門的 AI 子代理，用於特定任務的工作流程和改善上下文管理。
+
+Claude Code 中的自訂子代理是專門的 AI 助手，可以被調用來處理特定類型的任務。它們透過提供具有自訂系統提示、工具和獨立上下文視窗的特定任務配置，實現更高效的問題解決。
 
 ## 什麼是子代理？
 
-子代理是 Claude Code 可以委派任務的預配置 AI 個性。每個子代理：
+子代理是預先配置的 AI 個性，Claude Code 可以將任務委派給它們。每個子代理：
 
-- 具有特定的目的和專業領域
-- 使用與主對話分離的自己的上下文窗口
-- 可以配置允許使用的特定工具
-- 包含指導其行為的自定義系統提示
+* 具有特定的目的和專業領域
+* 使用與主要對話分離的自己的上下文視窗
+* 可以配置允許使用的特定工具
+* 包含指導其行為的自訂系統提示
 
-當 Claude Code 遇到與子代理專業知識匹配的任務時，它可以將該任務委派給專門的子代理，該子代理獨立工作並返回結果。
+當 Claude Code 遇到符合子代理專業領域的任務時，它可以將該任務委派給專門的子代理，該子代理獨立工作並返回結果。
 
 ## 主要優勢
 
-- **專業領域聚焦**：每個子代理針對特定任務類型進行優化
-- **獨立上下文**：避免主對話窗口過載，提升效能
-- **工具權限控制**：精確控制子代理可使用的工具
-- **可重複使用**：一次定義，多次調用
-- **團隊共享**：項目級子代理可與團隊成員共享
+<CardGroup cols={2}>
+  <Card title="上下文保護" icon="layer-group">
+    每個子代理在自己的上下文中運作，防止主要對話的污染並保持其專注於高層次目標。
+  </Card>
+
+  <Card title="專業知識" icon="brain">
+    子代理可以針對特定領域進行詳細指令的微調，在指定任務上獲得更高的成功率。
+  </Card>
+
+  <Card title="可重複使用性" icon="rotate">
+    一旦建立，子代理可以在不同專案中使用，並與您的團隊共享以實現一致的工作流程。
+  </Card>
+
+  <Card title="靈活權限" icon="shield-check">
+    每個子代理可以有不同的工具存取層級，允許您將強大的工具限制在特定的子代理類型。
+  </Card>
+</CardGroup>
 
 ## 快速開始
 
-### 查看現有子代理
+建立您的第一個子代理：
 
-使用 `/agents` 指令查看所有可用的子代理：
+<Steps>
+  <Step title="開啟子代理介面">
+    執行以下命令：
 
-```bash
-> /agents
-```
+    ```
+    /agents
+    ```
+  </Step>
 
-### 創建您的第一個項目子代理
+  <Step title="選擇「建立新代理」">
+    選擇是否建立專案層級或使用者層級的子代理
+  </Step>
 
-```bash
-mkdir -p .claude/agents
-echo '---
-name: test-runner
-description: Use proactively to run tests and fix failures
----
+  <Step title="定義子代理">
+    * **建議**：先用 Claude 生成，然後自訂以使其成為您的
+    * 詳細描述您的子代理以及何時應該使用它
+    * 選擇您想要授予存取權限的工具（或留空以繼承所有工具）
+    * 介面顯示所有可用工具，使選擇變得容易
+    * 如果您正在使用 Claude 生成，您也可以按 `e` 在自己的編輯器中編輯系統提示
+  </Step>
 
-You are a test automation expert. When you see code changes, proactively run the appropriate tests. If tests fail, analyze the failures and fix them while preserving the original test intent.' > .claude/agents/test-runner.md
-```
+  <Step title="儲存並使用">
+    您的子代理現在可用了！Claude 會在適當時自動使用它，或者您可以明確調用它：
 
-### 顯式調用子代理
-
-您可以明確要求特定子代理執行任務：
-
-```bash
-> Use the test-runner subagent to fix failing tests
-> Have the code-reviewer subagent look at my recent changes
-> Ask the debugger subagent to investigate this error
-```
+    ```
+    > 使用 code-reviewer 子代理檢查我最近的變更
+    ```
+  </Step>
+</Steps>
 
 ## 子代理配置
 
-### 文件位置
+### 檔案位置
 
-子代理作為帶有 YAML 前置內容的 Markdown 文件存儲在兩個可能的位置：
+子代理儲存為帶有 YAML 前置資料的 Markdown 檔案，位於兩個可能的位置：
 
-| 類型           | 位置                | 範圍             | 優先級 |
-| -------------- | ------------------- | ---------------- | ------ |
-| **項目子代理** | `.claude/agents/`   | 在當前項目中可用 | 最高   |
-| **用戶子代理** | `~/.claude/agents/` | 在所有項目中可用 | 較低   |
+| 類型         | 位置                  | 範圍       | 優先級 |
+| :--------- | :------------------ | :------- | :-- |
+| **專案子代理**  | `.claude/agents/`   | 在當前專案中可用 | 最高  |
+| **使用者子代理** | `~/.claude/agents/` | 在所有專案中可用 | 較低  |
 
-當子代理名稱衝突時，項目級子代理優先於用戶級子代理。
+當子代理名稱衝突時，專案層級的子代理優先於使用者層級的子代理。
 
-### 文件格式
+### 外掛代理
 
-每個子代理在 Markdown 文件中定義，具有以下結構：
+[外掛](/zh-TW/docs/claude-code/plugins)可以提供與 Claude Code 無縫整合的自訂子代理。外掛代理的工作方式與使用者定義的代理完全相同，並出現在 `/agents` 介面中。
 
-#### 配置字段
+**外掛代理位置**：外掛在其 `agents/` 目錄中包含代理（或外掛清單中指定的自訂路徑）。
 
-| 字段          | 必需 | 描述                                                   |
-| ------------- | ---- | ------------------------------------------------------ |
-| `name`        | 是   | 使用小寫字母和連字符的唯一標識符                       |
-| `description` | 是   | 子代理目的的自然語言描述                               |
-| `tools`       | 否   | 特定工具的逗號分隔列表。如果省略，從主線程繼承所有工具 |
+**使用外掛代理**：
+
+* 外掛代理與您的自訂代理一起出現在 `/agents` 中
+* 可以明確調用："使用來自 security-plugin 的 code-reviewer 代理"
+* 可以在適當時由 Claude 自動調用
+* 可以透過 `/agents` 介面進行管理（檢視、檢查）
+
+有關建立外掛代理的詳細資訊，請參閱[外掛元件參考](/zh-TW/docs/claude-code/plugins-reference#agents)。
+
+### 基於 CLI 的配置
+
+您也可以使用 `--agents` CLI 標誌動態定義子代理，該標誌接受 JSON 物件：
+
+```bash  theme={null}
+claude --agents '{
+  "code-reviewer": {
+    "description": "專業程式碼審查員。在程式碼變更後主動使用。",
+    "prompt": "您是一位資深程式碼審查員。專注於程式碼品質、安全性和最佳實務。",
+    "tools": ["Read", "Grep", "Glob", "Bash"],
+    "model": "sonnet"
+  }
+}'
+```
+
+**優先級**：CLI 定義的子代理優先級低於專案層級的子代理，但高於使用者層級的子代理。
+
+**使用案例**：這種方法適用於：
+
+* 快速測試子代理配置
+* 不需要儲存的會話特定子代理
+* 需要自訂子代理的自動化腳本
+* 在文件或腳本中共享子代理定義
+
+有關 JSON 格式和所有可用選項的詳細資訊，請參閱 [CLI 參考文件](/zh-TW/docs/claude-code/cli-reference#agents-flag-format)。
+
+### 檔案格式
+
+每個子代理都在具有此結構的 Markdown 檔案中定義：
+
+```markdown  theme={null}
+---
+name: your-sub-agent-name
+description: 描述何時應該調用此子代理
+tools: tool1, tool2, tool3  # 可選 - 如果省略則繼承所有工具
+model: sonnet  # 可選 - 指定模型別名或 'inherit'
+---
+
+您的子代理系統提示在這裡。這可以是多個段落
+並且應該清楚定義子代理的角色、能力和解決問題的方法。
+
+包含具體指令、最佳實務和子代理應該遵循的任何約束。
+```
+
+#### 配置欄位
+
+| 欄位            | 必需 | 描述                                                                                                                          |
+| :------------ | :- | :-------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | 是  | 使用小寫字母和連字符的唯一識別符                                                                                                            |
+| `description` | 是  | 子代理目的的自然語言描述                                                                                                                |
+| `tools`       | 否  | 特定工具的逗號分隔列表。如果省略，從主執行緒繼承所有工具                                                                                                |
+| `model`       | 否  | 此子代理使用的模型。可以是模型別名（`sonnet`、`opus`、`haiku`）或 `'inherit'` 以使用主要對話的模型。如果省略，預設為[配置的子代理模型](/zh-TW/docs/claude-code/model-config) |
+
+### 模型選擇
+
+`model` 欄位允許您控制子代理使用哪個 [AI 模型](/zh-TW/docs/claude-code/model-config)：
+
+* **模型別名**：使用可用別名之一：`sonnet`、`opus` 或 `haiku`
+* **`'inherit'`**：使用與主要對話相同的模型（對一致性有用）
+* **省略**：如果未指定，使用為子代理配置的預設模型（`sonnet`）
+
+<Note>
+  使用 `'inherit'` 在您希望子代理適應主要對話的模型選擇時特別有用，確保整個會話中的一致能力和回應風格。
+</Note>
 
 ### 可用工具
 
-子代理可以被授予訪問 Claude Code 的任何內部工具。請參閱[工具文檔](about:/zh-TW/docs/claude-code/settings#tools-available-to-claude)以獲取可用工具的完整列表。
+子代理可以被授予存取 Claude Code 任何內部工具的權限。請參閱[工具文件](/zh-TW/docs/claude-code/settings#tools-available-to-claude)以獲取可用工具的完整列表。
+
+<Tip>
+  \*\*建議：\*\*使用 `/agents` 命令修改工具存取權限 - 它提供一個互動式介面，列出所有可用工具，包括任何連接的 MCP 伺服器工具，使選擇您需要的工具變得更容易。
+</Tip>
 
 您有兩個配置工具的選項：
 
-- **省略 `tools` 字段**以從主線程繼承所有工具（默認），包括 MCP 工具
-- **指定個別工具**作為逗號分隔列表以進行更精細的控制（可以手動編輯或通過 `/agents` 編輯）
+* **省略 `tools` 欄位**以從主執行緒繼承所有工具（預設），包括 MCP 工具
+* **指定個別工具**作為逗號分隔列表以進行更精細的控制（可以手動編輯或透過 `/agents` 編輯）
 
-**MCP 工具**：子代理可以訪問來自配置的 MCP 服務器的 MCP 工具。當省略 `tools` 字段時，子代理繼承主線程可用的所有 MCP 工具。
+**MCP 工具**：子代理可以存取來自配置的 MCP 伺服器的 MCP 工具。當省略 `tools` 欄位時，子代理繼承主執行緒可用的所有 MCP 工具。
 
 ## 管理子代理
 
-### 使用 /agents 命令（推薦）
+### 使用 /agents 命令（建議）
 
-`/agents` 命令為子代理管理提供了全面的界面：
+`/agents` 命令提供子代理管理的全面介面：
 
-這會打開一個交互式菜單，您可以：
-
-- 查看所有可用的子代理（內置、用戶和項目）
-- 使用引導設置創建新的子代理
-- 編輯現有的自定義子代理，包括其工具訪問權限
-- 刪除自定義子代理
-- 查看當存在重複時哪些子代理處於活動狀態
-- **輕鬆管理工具權限**，提供可用工具的完整列表
-
-### 直接文件管理
-
-您也可以通過直接處理子代理文件來管理它們：
-
-## 實戰範例
-
-### 程式碼審查子代理 (code-reviewer)
-
-```markdown
----
-name: code-reviewer
-description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code.
-tools: Read, Grep, Glob, Bash
----
-
-You are a senior code reviewer ensuring high standards of code quality and security.
-
-When invoked:
-1. Run git diff to see recent changes
-2. Focus on modified files
-3. Begin review immediately
-
-Review checklist:
-- Code is simple and readable
-- Functions and variables are well-named
-- No duplicated code
-- Proper error handling
-- No exposed secrets or API keys
-- Input validation implemented
-- Good test coverage
-- Performance considerations addressed
-
-Provide feedback organized by priority:
-- Critical issues (must fix)
-- Warnings (should fix)
-- Suggestions (consider improving)
-
-Include specific examples of how to fix issues.
+```
+/agents
 ```
 
-### 除錯專家子代理 (debugger)
+這會開啟一個互動式選單，您可以：
 
-```markdown
----
-name: debugger
-description: Debugging specialist for errors, test failures, and unexpected behavior. Use proactively when encountering any issues.
-tools: Read, Edit, Bash, Grep, Glob
----
+* 檢視所有可用的子代理（內建、使用者和專案）
+* 使用引導設定建立新的子代理
+* 編輯現有的自訂子代理，包括其工具存取權限
+* 刪除自訂子代理
+* 查看當重複存在時哪些子代理是活躍的
+* **輕鬆管理工具權限**，提供可用工具的完整列表
 
-You are an expert debugger specializing in root cause analysis.
+### 直接檔案管理
 
-When invoked:
-1. Capture error message and stack trace
-2. Identify reproduction steps
-3. Isolate the failure location
-4. Implement minimal fix
-5. Verify solution works
+您也可以透過直接處理子代理檔案來管理它們：
 
-Debugging process:
-- Analyze error messages and logs
-- Check recent code changes
-- Form and test hypotheses
-- Add strategic debug logging
-- Inspect variable states
-
-For each issue, provide:
-- Root cause explanation
-- Evidence supporting the diagnosis
-- Specific code fix
-- Testing approach
-- Prevention recommendations
-
-Focus on fixing the underlying issue, not just symptoms.
-```
-
-### 資料科學子代理 (data-scientist)
-
-```markdown
----
-name: data-scientist
-description: Data analysis expert for SQL queries, BigQuery operations, and data insights. Use proactively for data analysis tasks and queries.
-tools: Bash, Read, Write
+```bash  theme={null}
+# 建立專案子代理
+mkdir -p .claude/agents
+echo '---
+name: test-runner
+description: 主動用於執行測試和修復失敗
 ---
 
-You are a data scientist specializing in SQL and BigQuery analysis.
+您是測試自動化專家。當您看到程式碼變更時，主動執行適當的測試。如果測試失敗，分析失敗原因並修復它們，同時保持原始測試意圖。' > .claude/agents/test-runner.md
 
-When invoked:
-1. Understand the data analysis requirement
-2. Write efficient SQL queries
-3. Use BigQuery command line tools (bq) when appropriate
-4. Analyze and summarize results
-5. Present findings clearly
-
-Key practices:
-- Write optimized SQL queries with proper filters
-- Use appropriate aggregations and joins
-- Include comments explaining complex logic
-- Format results for readability
-- Provide data-driven recommendations
-
-For each analysis:
-- Explain the query approach
-- Document any assumptions
-- Highlight key findings
-- Suggest next steps based on data
-
-Always ensure queries are efficient and cost-effective.
-```
-
-## 子代理鏈接與協作
-
-### 多子代理協作範例
-
-```bash
-# 複雜工作流程：分析 → 優化
-> First use the code-analyzer subagent to find performance issues, then use the optimizer subagent to fix them
-
-# 安全審查流程
-> Use the security-auditor subagent to check for vulnerabilities, then have the code-reviewer subagent verify the fixes
-
-# 全面測試流程
-> Have the test-runner subagent run all tests, then use the debugger subagent to investigate any failures
+# 建立使用者子代理
+mkdir -p ~/.claude/agents
+# ... 建立子代理檔案
 ```
 
 ## 有效使用子代理
@@ -240,47 +226,166 @@ Always ensure queries are efficient and cost-effective.
 
 Claude Code 基於以下因素主動委派任務：
 
-- 您請求中的任務描述
-- 子代理配置中的 `description` 字段
-- 當前上下文和可用工具
+* 您請求中的任務描述
+* 子代理配置中的 `description` 欄位
+* 當前上下文和可用工具
+
+<Tip>
+  為了鼓勵更主動的子代理使用，在您的 `description` 欄位中包含諸如「主動使用」或「必須使用」等短語。
+</Tip>
 
 ### 明確調用
 
-通過在命令中提及特定子代理來請求它：
+透過在命令中提及特定子代理來請求它：
 
-## 示例子代理
+```
+> 使用 test-runner 子代理修復失敗的測試
+> 讓 code-reviewer 子代理查看我最近的變更
+> 請 debugger 子代理調查這個錯誤
+```
 
-### 代碼審查員
+## 範例子代理
 
-### 調試器
+### 程式碼審查員
 
-### 數據科學家
+```markdown  theme={null}
+---
+name: code-reviewer
+description: 專業程式碼審查專家。主動審查程式碼的品質、安全性和可維護性。在編寫或修改程式碼後立即使用。
+tools: Read, Grep, Glob, Bash
+model: inherit
+---
 
-## 最佳實踐
+您是一位資深程式碼審查員，確保高標準的程式碼品質和安全性。
 
-- **從 Claude 生成的代理開始**：我們強烈建議使用 Claude 生成您的初始子代理，然後對其進行迭代以使其個人化。這種方法為您提供最佳結果 - 一個您可以根據特定需求自定義的堅實基礎。
-- **設計專注的子代理**：創建具有單一、明確責任的子代理，而不是試圖讓一個子代理做所有事情。這提高了性能並使子代理更可預測。
-- **編寫詳細的提示**：在您的系統提示中包含具體指令、示例和約束。您提供的指導越多，子代理的表現就越好。
-- **限制工具訪問**：只授予子代理目的所必需的工具。這提高了安全性並幫助子代理專注於相關操作。
-- **版本控制**：將項目子代理檢入版本控制，以便您的團隊可以從中受益並協作改進它們。
+被調用時：
+1. 執行 git diff 查看最近的變更
+2. 專注於修改的檔案
+3. 立即開始審查
 
-## 高級用法
+審查檢查清單：
+- 程式碼簡單且可讀
+- 函數和變數命名良好
+- 沒有重複程式碼
+- 適當的錯誤處理
+- 沒有暴露的秘密或 API 金鑰
+- 實施輸入驗證
+- 良好的測試覆蓋率
+- 考慮效能問題
+
+按優先級組織提供回饋：
+- 關鍵問題（必須修復）
+- 警告（應該修復）
+- 建議（考慮改進）
+
+包含如何修復問題的具體範例。
+```
+
+### 除錯器
+
+```markdown  theme={null}
+---
+name: debugger
+description: 錯誤、測試失敗和意外行為的除錯專家。在遇到任何問題時主動使用。
+tools: Read, Edit, Bash, Grep, Glob
+---
+
+您是專門從事根本原因分析的專業除錯器。
+
+被調用時：
+1. 捕獲錯誤訊息和堆疊追蹤
+2. 識別重現步驟
+3. 隔離失敗位置
+4. 實施最小修復
+5. 驗證解決方案有效
+
+除錯過程：
+- 分析錯誤訊息和日誌
+- 檢查最近的程式碼變更
+- 形成和測試假設
+- 添加策略性除錯日誌
+- 檢查變數狀態
+
+對於每個問題，提供：
+- 根本原因解釋
+- 支持診斷的證據
+- 具體程式碼修復
+- 測試方法
+- 預防建議
+
+專注於修復潛在問題，而不僅僅是症狀。
+```
+
+### 資料科學家
+
+```markdown  theme={null}
+---
+name: data-scientist
+description: SQL 查詢、BigQuery 操作和資料洞察的資料分析專家。主動用於資料分析任務和查詢。
+tools: Bash, Read, Write
+model: sonnet
+---
+
+您是專門從事 SQL 和 BigQuery 分析的資料科學家。
+
+被調用時：
+1. 理解資料分析需求
+2. 編寫高效的 SQL 查詢
+3. 適當時使用 BigQuery 命令列工具 (bq)
+4. 分析和總結結果
+5. 清楚地呈現發現
+
+關鍵實務：
+- 編寫具有適當篩選器的優化 SQL 查詢
+- 使用適當的聚合和連接
+- 包含解釋複雜邏輯的註釋
+- 格式化結果以提高可讀性
+- 提供基於資料的建議
+
+對於每個分析：
+- 解釋查詢方法
+- 記錄任何假設
+- 突出關鍵發現
+- 基於資料建議下一步
+
+始終確保查詢高效且具成本效益。
+```
+
+## 最佳實務
+
+* **從 Claude 生成的代理開始**：我們強烈建議使用 Claude 生成您的初始子代理，然後對其進行迭代以使其個人化。這種方法為您提供最佳結果 - 一個堅實的基礎，您可以根據特定需求進行自訂。
+
+* **設計專注的子代理**：建立具有單一、明確責任的子代理，而不是試圖讓一個子代理做所有事情。這提高了效能並使子代理更可預測。
+
+* **編寫詳細提示**：在您的系統提示中包含具體指令、範例和約束。您提供的指導越多，子代理的表現就越好。
+
+* **限制工具存取**：只授予子代理目的所需的工具。這提高了安全性並幫助子代理專注於相關行動。
+
+* **版本控制**：將專案子代理檢入版本控制，這樣您的團隊就可以從中受益並協作改進它們。
+
+## 進階用法
 
 ### 鏈接子代理
 
 對於複雜的工作流程，您可以鏈接多個子代理：
 
+```
+> 首先使用 code-analyzer 子代理找出效能問題，然後使用 optimizer 子代理修復它們
+```
+
 ### 動態子代理選擇
 
-Claude Code 基於上下文智能選擇子代理。使您的 `description` 字段具體且面向行動，以獲得最佳結果。
+Claude Code 根據上下文智慧地選擇子代理。讓您的 `description` 欄位具體且面向行動以獲得最佳結果。
 
-## 性能考慮
+## 效能考量
 
-- **上下文效率**：代理幫助保護主上下文，實現更長的整體會話
-- **延遲**：子代理每次被調用時都從乾淨的狀態開始，可能會增加延遲，因為它們需要收集有效完成工作所需的上下文。
+* **上下文效率**：代理有助於保護主要上下文，實現更長的整體會話
+* **延遲**：子代理每次被調用時都從乾淨的狀態開始，可能會增加延遲，因為它們需要收集執行工作所需的上下文。
 
-## 相關文檔
+## 相關文件
 
-- [斜線命令](/zh-TW/docs/claude-code/slash-commands) - 了解其他內置命令
-- [設置](/zh-TW/docs/claude-code/settings) - 配置 Claude Code 行為
-- [鉤子](/zh-TW/docs/claude-code/hooks) - 使用事件處理程序自動化工作流程
+* [外掛](/zh-TW/docs/claude-code/plugins) - 透過外掛使用自訂代理擴展 Claude Code
+* [斜線命令](/zh-TW/docs/claude-code/slash-commands) - 了解其他內建命令
+* [設定](/zh-TW/docs/claude-code/settings) - 配置 Claude Code 行為
+* [鉤子](/zh-TW/docs/claude-code/hooks) - 使用事件處理器自動化工作流程
+
