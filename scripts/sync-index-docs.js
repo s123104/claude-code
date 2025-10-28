@@ -295,7 +295,9 @@ const projectsConfig = [
 ];
 
 /**
- * 從 Markdown 文件中提取元資料
+ * 從 Markdown 文件中提取元資料（標準化格式）
+ * 
+ * 優先從「專案資訊」和「核心定位」區塊提取，符合 unified-documentation-standard.md
  */
 function extractMetadata(filePath) {
   try {
@@ -303,44 +305,115 @@ function extractMetadata(filePath) {
     const lines = content.split('\n');
     
     const metadata = {
+      projectName: null,
       version: null,
       lastUpdate: null,
+      docUpdateTime: null,
       features: null,
       scenarios: null,
       audience: null,
     };
     
-    // 提取版本號
-    for (const line of lines) {
-      // 從資料來源區塊提取
-      if (line.includes('專案版本') || line.includes('版本')) {
-        const match = line.match(/v?(\d+\.\d+\.?\d*[\w.-]*)/);
-        if (match) metadata.version = match[0];
+    // 狀態追蹤
+    let inProjectInfo = false;
+    let inCorePosition = false;
+    
+    // 逐行解析標準化元資料區塊
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      
+      // 檢測「專案資訊」區塊開始
+      if (line === '> **專案資訊**') {
+        inProjectInfo = true;
+        inCorePosition = false;
+        continue;
       }
       
-      // 從標題或 YAML front matter 提取
-      if (line.startsWith('> **版本**:')) {
-        const match = line.match(/v?(\d+\.\d+\.?\d*[\w.-]*)/);
-        if (match) metadata.version = match[0];
+      // 檢測「核心定位」區塊開始
+      if (line === '> **核心定位**') {
+        inProjectInfo = false;
+        inCorePosition = true;
+        continue;
       }
       
-      // 提取更新時間
-      if (line.includes('文件整理時間') || line.includes('最後更新')) {
-        const match = line.match(/(\d{4}-\d{2}-\d{2})/);
-        if (match) metadata.lastUpdate = match[1];
+      // 檢測區塊結束（遇到非引用行）
+      if (!line.startsWith('>') && (inProjectInfo || inCorePosition)) {
+        inProjectInfo = false;
+        inCorePosition = false;
       }
       
-      // 提取專案最後更新（備用）
-      if (line.includes('專案最後更新') && !metadata.lastUpdate) {
-        const match = line.match(/(\d{4}-\d{2}-\d{2})/);
-        if (match) metadata.lastUpdate = match[1];
+      // === 從「專案資訊」區塊提取 ===
+      if (inProjectInfo) {
+        // 提取專案名稱
+        if (line.includes('**專案名稱**')) {
+          const match = line.match(/專案名稱[**：:]+\s*(.+)$/);
+          if (match) metadata.projectName = match[1].trim();
+        }
+        
+        // 提取專案版本
+        if (line.includes('**專案版本**')) {
+          const match = line.match(/專案版本[**：:]+\s*(v?[\d.]+[\w.-]*)/);
+          if (match) metadata.version = match[1];
+        }
+        
+        // 提取專案最後更新
+        if (line.includes('**專案最後更新**')) {
+          const match = line.match(/專案最後更新[**：:]+\s*(\d{4}-\d{2}-\d{2})/);
+          if (match) metadata.lastUpdate = match[1];
+        }
+        
+        // 提取文件整理時間
+        if (line.includes('**文件整理時間**')) {
+          const match = line.match(/文件整理時間[**：:]+\s*(\d{4}-\d{2}-\d{2})/);
+          if (match) metadata.docUpdateTime = match[1];
+        }
+      }
+      
+      // === 從「核心定位」區塊提取 ===
+      if (inCorePosition) {
+        // 提取功能描述
+        if (line.includes('**功能**')) {
+          const match = line.match(/功能[**：:]+\s*(.+)$/);
+          if (match) {
+            metadata.features = match[1].trim();
+          }
+        }
+        
+        // 提取場景描述
+        if (line.includes('**場景**')) {
+          const match = line.match(/場景[**：:]+\s*(.+)$/);
+          if (match) {
+            metadata.scenarios = match[1].trim();
+          }
+        }
+        
+        // 提取客群描述
+        if (line.includes('**客群**')) {
+          const match = line.match(/客群[**：:]+\s*(.+)$/);
+          if (match) {
+            metadata.audience = match[1].trim();
+          }
+        }
       }
     }
     
-    // 智能提取功能、場景、客群（從文檔內容分析）
-    metadata.features = extractFeatures(content);
-    metadata.scenarios = extractScenarios(content);
-    metadata.audience = extractAudience(content);
+    // 如果標準化區塊未找到，使用舊方法作為備用
+    if (!metadata.version || !metadata.lastUpdate) {
+      const fallback = extractMetadataFallback(content);
+      metadata.version = metadata.version || fallback.version;
+      metadata.lastUpdate = metadata.lastUpdate || fallback.lastUpdate;
+    }
+    
+    // 如果核心定位未找到，使用智能提取作為備用
+    if (!metadata.features) {
+      metadata.features = extractFeaturesFallback(content);
+    }
+    if (!metadata.scenarios) {
+      metadata.scenarios = extractScenariosFallback(content);
+    }
+    if (!metadata.audience) {
+      metadata.audience = extractAudienceFallback(content);
+    }
     
     return metadata;
   } catch (error) {
@@ -350,9 +423,31 @@ function extractMetadata(filePath) {
 }
 
 /**
- * 提取功能描述（智能分析）
+ * 備用：舊格式元資料提取
  */
-function extractFeatures(content) {
+function extractMetadataFallback(content) {
+  const lines = content.split('\n');
+  const metadata = { version: null, lastUpdate: null };
+  
+  for (const line of lines) {
+    if ((line.includes('專案版本') || line.includes('版本')) && !metadata.version) {
+      const match = line.match(/v?([\d.]+[\w.-]*)/);
+      if (match) metadata.version = match[1];
+    }
+    
+    if ((line.includes('文件整理時間') || line.includes('最後更新')) && !metadata.lastUpdate) {
+      const match = line.match(/(\d{4}-\d{2}-\d{2})/);
+      if (match) metadata.lastUpdate = match[1];
+    }
+  }
+  
+  return metadata;
+}
+
+/**
+ * 備用：智能提取功能描述（從文檔內容）
+ */
+function extractFeaturesFallback(content) {
   const lines = content.split('\n');
   const features = [];
   
@@ -377,13 +472,13 @@ function extractFeatures(content) {
     }
   }
   
-  return features.slice(0, 3);
+  return features.length > 0 ? features.join('、') : '詳見文檔';
 }
 
 /**
- * 提取應用場景
+ * 備用：智能提取應用場景
  */
-function extractScenarios(content) {
+function extractScenariosFallback(content) {
   const lines = content.split('\n');
   const scenarios = [];
   
@@ -407,13 +502,13 @@ function extractScenarios(content) {
     }
   }
   
-  return scenarios.slice(0, 3);
+  return scenarios.length > 0 ? scenarios.join('、') : '多種應用場景';
 }
 
 /**
- * 提取目標客群
+ * 備用：智能提取目標客群
  */
-function extractAudience(content) {
+function extractAudienceFallback(content) {
   // 基於文檔內容智能推斷
   const audienceMap = {
     'ML': ['ML 分析師', 'SRE 工程師'],
@@ -437,11 +532,12 @@ function extractAudience(content) {
     }
   }
   
-  return Array.from(audiences).slice(0, 3);
+  const audienceList = Array.from(audiences).slice(0, 3);
+  return audienceList.length > 0 ? audienceList.join('、') : '所有用戶';
 }
 
 /**
- * 生成專案卡片 HTML
+ * 生成專案卡片 HTML（使用標準化元資料）
  */
 function generateProjectCard(config, metadata) {
   if (!metadata) {
@@ -450,16 +546,16 @@ function generateProjectCard(config, metadata) {
   }
   
   const { category, tags, badge, icon, title, color, independence } = config;
-  const { version, lastUpdate, features, scenarios, audience } = metadata;
+  const { version, lastUpdate, docUpdateTime, features, scenarios, audience } = metadata;
   
-  // 格式化功能、場景、客群
-  const featureText = features.length > 0 ? features.join('、') : '詳見文檔';
-  const scenarioText = scenarios.length > 0 ? scenarios.join('、') : '多種應用場景';
-  const audienceText = audience.length > 0 ? audience.join('、') : '所有用戶';
+  // 優先使用標準化格式的字符串，否則使用備用
+  const featureText = features || '詳見文檔';
+  const scenarioText = scenarios || '多種應用場景';
+  const audienceText = audience || '所有用戶';
   
-  // 版本和時間資訊
-  const versionDisplay = version || '最新版';
-  const dateDisplay = lastUpdate || '2025-10-28';
+  // 版本和時間資訊（優先使用文件整理時間）
+  const versionDisplay = version ? (version.startsWith('v') ? version : `v${version}`) : '最新版';
+  const dateDisplay = docUpdateTime || lastUpdate || '2025-10-28';
   
   return `
           <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="${category}" data-tags="${tags.join(',')}">
@@ -470,7 +566,7 @@ function generateProjectCard(config, metadata) {
               </div>
               <h3 class="text-lg font-bold text-${color}-400 mb-2">
                 <i class="fas fa-${icon} mr-2"></i>${title}
-            </h3>
+              </h3>
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: ${featureText}<br/>
                 <strong>場景</strong>: ${scenarioText}<br/>
