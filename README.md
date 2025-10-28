@@ -8,13 +8,14 @@
   [![Version](https://img.shields.io/badge/Version-4.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-  [![Claude Code](https://img.shields.io/badge/Claude%20Code-Latest-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
-  [![Documentation](https://img.shields.io/badge/Documentation-Complete-green.svg)](docs/)
+  [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.0.27-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
+  [![Documentation](https://img.shields.io/badge/Documentation-19_Projects_100%25-green.svg)](docs/)
   [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
   [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
   [![Stars](https://img.shields.io/github/stars/s123104/claude-code?style=social)](https://github.com/s123104/claude-code/stargazers)
   
-  > 最後更新：2025-10-28T06:00:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案
+  > 最後更新：2025-10-28T05:30:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案  
+  > 📊 涵蓋 18 個專案完整文檔 + 超級工作流程大全 + 自動化更新工具鏈
 </div>
 
 ---
@@ -40,11 +41,13 @@
 ### ✨ 專案特色
 
 - **🌐 全繁體中文化** - 所有文件均為繁體中文，符合華語使用者習慣
-- **📋 系統化整理** - 18 個結構化繁體中文文檔，涵蓋完整 Claude Code 生態系統
-- **🎯 場景導向** - 根據用戶類型提供差異化指引
+- **📋 系統化整理** - 19 個專案結構化文檔 + 超級工作流程大全
+- **🎯 場景導向** - 根據用戶類型提供差異化指引（新手→專家）
 - **⚡ 實戰導向** - 包含大量實用範例、最佳實踐和疑難排解方案
-- **🔄 持續更新** - 跟隨 Claude Code 版本更新，確保內容時效性
+- **🔄 持續更新** - 跟隨 Claude Code v2.0.27 最新版本，100% 覆蓋率
 - **🖥️ 現代化介面** - 響應式 Web 介面，支援所有裝置
+- **🤖 自動化工具鏈** - 專業的文檔同步與版本追蹤系統
+- **📚 完整工作流** - 6 大 Agent 角色 + 3 核心工作流 + 可複用 Prompt 模板
 
 ### 👥 適用對象
 
@@ -164,12 +167,12 @@ claude "測試連線成功"
 
 | 專案文件                                                             | 專案描述             | 版本     | 最後更新   | 主要功能                              | 獨立性 |
 | -------------------------------------------------------------------- | -------------------- | -------- | ---------- | ------------------------------------- | ------ |
-| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v4.2.0   | 2025-10-28 | Deep Research 深度研究、26 指令、16 代理、8 MCP、Agent Skills 整合 | ⭐⭐⭐ |
-| [⭐ awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐資源集合 | 2025-10-16 | 2025-10-16 | Agent Skills 整合、Codex Skill、claude-mem、cc-sessions、fcakyon Collection | ⭐⭐⭐ |
+| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v4.1.6   | 2025-10-27 | 26 指令、16 代理、8 MCP、Deep Research | ⭐⭐⭐ |
+| [⭐ awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐資源集合 | 社群版本 | 2025-08-17 | Hooks、斜線指令、CLAUDE.md 範例       | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（增強框架類）
 
-- **SuperClaude v4.2.0**：功能：Deep Research 深度研究系統（適應性規劃、多跳推理、品質評分、4 層研究深度）、26 個斜線指令（`/sc:` 前綴）、16 個專業代理（PM、Deep Research、Security等）、8 個 MCP 伺服器整合、7 種行為模式、Agent Skills 整合；應用場景：深度技術調研、學術文獻綜述、市場趨勢分析、複雜問題解決、企業級開發自動化、系統化工作流程；適用客群：研究人員、產品經理、技術架構師、數據分析師、進階開發者、技術主管、企業開發團隊
+- **SuperClaude v4.1.6**：功能：26 個斜線指令（`/sc:` 前綴）、16 個專業代理（PM、Deep Research、Security等）、8 個 MCP 伺服器整合、7 種行為模式、深度研究能力（最多 5 次迭代）；應用場景：企業級開發自動化、系統化工作流程、AI 驅動研究與分析、效能優化（減少 30-50% tokens）；適用客群：進階開發者、技術主管、研究團隊、企業開發團隊
 - **Awesome Claude Code**：功能：實戰範例與最佳實踐索引；應用場景：專案啟動、流程與 Hooks 實作範本查找；適用客群：所有開發者、技術寫作者
 ### 🤖 AI 代理類
 
@@ -177,12 +180,12 @@ claude "測試連線成功"
 
 | 專案文件                                                 | 專案描述            | 版本  | 最後更新   | 主要功能                     | 獨立性 |
 | -------------------------------------------------------- | ------------------- | ----- | ---------- | ---------------------------- | ------ |
-| [🤖 agents-zh-tw.md](docs/agents-zh-tw.md)               | AI 代理 Plugin Marketplace | Plugin Marketplace  | 2025-10-28 | 85 個專業 AI 代理、47 個 Agent Skills、63 個聚焦插件   | ⭐⭐⭐ |
+| [🤖 agents-zh-tw.md](docs/agents-zh-tw.md)               | 75 個專業子代理集合 | 最新  | 2025-08-15 | 領域專家代理、智能任務分派   | ⭐⭐⭐ |
 | [👥 claude-agents-zh-tw.md](docs/claude-agents-zh-tw.md) | 自訂代理系統        | v1.0+ | 2025-08-14 | 7 個自訂代理、工作流程自動化 | ⭐⭐   |
 
 #### 適用客群與應用場景（AI 代理類）
 
-- **agents (Plugin Marketplace)**：功能：85 個專業 AI 代理、47 個 Agent Skills、63 個聚焦插件、Plugin Marketplace 統一插件管理、混合模型編排（Haiku + Sonnet）、15 個多代理工作流編排器；應用場景：企業級開發流程自動化、多代理協同工作流設計、專業任務特定優化（測試、安全、文檔等）；適用客群：中大型開發團隊、DevOps 工程師、技術架構師
+- **Agents（75 子代理）**：功能：領域專家子代理與智能分工；應用場景：大型專案的多角色協作、按任務自動選用代理；適用客群：產品/工程團隊、專案負責人
 - **Claude Agents（自訂 7 代理）**：功能：自訂工作流代理組合；應用場景：專案流程自動化、團隊內客製化協作；適用客群：全端開發者、Tech Lead
 ### 📊 監控分析類
 
@@ -190,13 +193,13 @@ claude "測試連線成功"
 
 | 專案文件                                                                         | 專案描述         | 版本   | 最後更新   | 主要功能                       | 獨立性 |
 | -------------------------------------------------------------------------------- | ---------------- | ------ | ---------- | ------------------------------ | ------ |
-| [📊 claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 進階用量監控工具 | v3.0.0 | 2025-10-27 | ML 基礎預測、P90 百分位計算、即時監控、智能自動檢測 | ⭐⭐⭐ |
+| [📊 claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 進階用量監控工具 | v3.1.0 | 2025-07-24 | 即時監控、ML 預測、Docker 部署 | ⭐⭐⭐ |
 | [⚡ ccusage-zh-tw.md](docs/ccusage-zh-tw.md)                                     | 極速用量分析工具 | v17.1.3 | 2025-10-27 | 快速成本分析、狀態列整合       | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（監控分析類）
 
-- **Usage Monitor (v3.0.0)**：功能：ML 基礎預測、P90 百分位計算、即時監控（0.1-20 Hz）、智能自動檢測、進階 Rich UI、增強的計畫支援（Pro 19k、Max5 88k、Max20 220k）、進階警告系統、成本分析；應用場景：精確成本控制、即時使用量監控、ML 基礎預測和限制檢測；適用客群：重度 Claude Code 用戶、企業用戶、成本敏感型開發者
-- **ccusage (v17.1.3)**：功能：ccusage Family 生態系統（ccusage、@ccusage/codex、@ccusage/mcp）、即時令牌監控、快取效率分析、歷史記錄查詢、MCP 整合；應用場景：個人開發成本控制、團隊使用量追蹤、令牌效率優化、歷史使用分析；適用客群：所有 Claude Code 用戶、成本敏感型團隊、個人開發者
+- **Usage Monitor**：功能：即時用量監控、ML 預測、Docker 部署；應用場景：生產成本監控、限額預警、趨勢預測；適用客群：產品/技術主管、FinOps、SRE
+- **ccusage (v17.1.3)**：功能：極速 CLI 分析、Statusline 狀態列、報表匯出；應用場景：本地開發成本檢視、CI 產出報告；適用客群：日常開發者、資料分析/報表維護
 ### 🖥️ 介面工具類
 
 Web UI、視覺化界面和開發者工具
