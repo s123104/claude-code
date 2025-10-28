@@ -10,15 +10,24 @@
 
 Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI 基礎編碼助手和代理，您可以在終端或 IDE 中訪問。這是一個快速發展的工具，提供許多強大的功能，並允許以多種不同方式進行大量配置。使用者正在積極探索最佳實踐和工作流程。希望此儲存庫能幫助社群分享知識並了解如何充分利用 Claude Code。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：Awesome Claude Code
+> - **專案版本**：v2025.10.16
+> - **專案最後更新**：2025-10-16
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：精選的 Claude Code 資源總覽，包含 Agent Skills、斜線指令、CLI 工具、Hooks 系統等
+> - **場景**：學習 Claude Code、提升工作流程、探索最佳實踐、社群資源發現
+> - **客群**：Claude Code 用戶、開發者、學習者、工具探索者
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/hesreallyhim/awesome-claude-code)
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
 > - [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
 > - [官方斜線命令文檔](https://docs.anthropic.com/en/docs/claude-code/slash-commands)
 > - [官方 Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-10-28T03:30:00+08:00**
-> - **專案最後更新：2025-10-16**
 
 ---
 

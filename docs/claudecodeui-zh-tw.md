@@ -2,18 +2,27 @@
 
 ## 概述
 
-此專案提供了完整的功能說明。
+Claude Code UI 是一個專為 **Claude Code CLI** 和 **Cursor CLI** 設計的**雙 CLI 支援**桌面和行動裝置使用者介面。提供完整的專案管理、會話管理、檔案編輯、Git Explorer、整合終端等功能，讓您能在本地或遠端從任何裝置（手機或桌面）使用 Claude Code。
 
+支援 **Claude Sonnet 4、Opus 4.1、GPT-5** 等多種模型，配備 **TaskMaster AI 整合**、**完整行動體驗**和**安全優先設計**，真正實現從行動裝置進行專業開發的完整體驗。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：Claude Code UI
+> - **專案版本**：v1.8.12
+> - **專案最後更新**：2025-10-27
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：雙 CLI 支援的桌面/行動 UI，提供專案管理、會話管理、檔案編輯、Git Explorer、整合終端
+> - **場景**：遠端開發、行動裝置開發、多專案管理、團隊協作、AI 任務管理
+> - **客群**：遠端開發者、行動開發者、多專案管理者、團隊協作者
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/siteboon/claudecodeui)
 > - [官方網站](https://claudecodeui.siteboon.ai)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Cursor CLI 文檔](https://docs.cursor.com/en/cli/overview)
-> - **文件整理時間：2025-10-28T00:15:00+08:00**
-> - **專案版本：v1.8.12**
-> - **專案最後更新：2025-10-27**
 
 ---
 

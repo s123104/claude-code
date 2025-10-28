@@ -2,18 +2,27 @@
 
 ## 概述
 
-此專案提供了完整的功能說明。
+Claude Code Leaderboard CLI 是一個自動追蹤 Claude Code 使用量的工具，透過 **全球排行榜** 讓開發者能夠比較和分享自己的 AI 開發效率。利用 Claude Code 的 **Hooks 系統**，在每次會話結束後自動收集使用統計資料，並上傳到公開的排行榜網站 [claudecount.com](https://claudecount.com)。
 
+提供即時排名、使用量統計和效率比較功能，讓開發者能夠了解自己在全球 Claude Code 使用者中的位置，並與其他開發者交流經驗。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：Claude Code Leaderboard CLI
+> - **專案版本**：v0.2.9
+> - **專案最後更新**：2025-08-06
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：自動追蹤 Claude Code 使用量，透過 Hooks 系統上傳至全球排行榜，提供即時排名和統計
+> - **場景**：使用量追蹤、效率比較、社群互動、開發習慣分析
+> - **客群**：Claude Code 使用者、開發效率追求者、社群參與者
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/grp06/claude-code-leaderboard)
 > - [排行榜網站](https://claudecount.com)
 > - [NPM 套件](https://www.npmjs.com/package/claude-code-leaderboard)
 > - [Claude Code Hooks 官方文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-10-28T03:50:00+08:00**
-> - **專案版本：v0.2.9**
-> - **專案最後更新：2025-08-06**
 
 ---
 

@@ -6,16 +6,24 @@
 
 SuperClaude 是一套 **meta-programming 配置框架**，透過行為指令注入和元件編排，將 Claude Code 轉變為結構化開發平台。提供系統化工作流程自動化，配備強大工具和智能代理。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：SuperClaude Framework
+> - **專案版本**：v4.2.0 (最新版本)
+> - **專案最後更新**：2025-10-27
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：Meta-programming 配置框架，提供系統化工作流程自動化、Deep Research 深度研究、Agent Skills 和 MCP 伺服器整合
+> - **場景**：結構化開發、工作流程自動化、深度研究、多代理協作、專案腳手架
+> - **客群**：專業開發者、AI 研究人員、企業團隊、工作流程優化者
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/SuperClaude-Org/SuperClaude_Framework)
 > - [SuperClaude 官方網站](https://superclaude.netlify.app/)
 > - [PyPI 套件](https://pypi.org/project/superclaude/)
 > - [npm 套件](https://www.npmjs.com/package/@bifrost_inc/superclaude)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
-> - **文件整理時間：2025-10-28T03:00:00+08:00**
-> - **版本：v4.2.0（最新版本）**
-> - **專案最後更新：2025-10-27**
 
 ---
 

@@ -4,14 +4,22 @@
 
 cc-sdd 是一套革命性的規格驅動開發（Spec-Driven Development, SDD）工具，將 Claude Code、Cursor IDE、Gemini CLI、Codex CLI、GitHub Copilot、Qwen Code 和 Windsurf 從原型開發轉型為生產級開發，同時支援自訂規格與指導模板以符合團隊流程。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：cc-sdd (Claude Code Spec-Driven Development)
+> - **專案版本**：v1.1.5
+> - **專案最後更新**：2025-10-25
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：AI 代理規格驅動開發工具，支援 8 個 AI 平台和 12 種語言，11 個 /kiro:* 斜線命令
+> - **場景**：規格驅動開發、AI-DLC 工作流、團隊協作、生產級開發、多平台支援
+> - **客群**：專業開發團隊、AI 輔助開發者、規格工程師、技術領導
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/gotalab/claude-code-spec)
 > - [npm 套件](https://www.npmjs.com/package/cc-sdd)
 > - [Kiro IDE 文檔](https://kiro.dev/docs/specs/)
-> - **文件整理時間：2025-10-27T23:45:00+08:00**
-> - **專案版本：v1.1.5**
-> - **專案最後更新：2025-10-25**
 
 ---
 

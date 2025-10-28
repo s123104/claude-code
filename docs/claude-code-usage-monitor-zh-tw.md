@@ -6,14 +6,22 @@
 
 **具備 ML 預測、進階分析和 Rich UI 的即時終端監控工具，用於追蹤 Claude AI 令牌使用量**
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：Claude Code Usage Monitor
+> - **專案版本**：v3.0.0 (完全架構重寫)
+> - **專案最後更新**：2025-10-27
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：具備 ML-based P90 預測、進階分析和 Rich UI 的即時終端監控工具，追蹤 Claude AI token 使用量
+> - **場景**：即時監控、用量預測、成本分析、計畫限制管理、會話追蹤
+> - **客群**：Claude Code 用戶、成本管理者、團隊領導、效能優化工程師
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)
 > - [PyPI 套件頁面](https://pypi.org/project/claude-monitor/)
 > - [官方文檔](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/tree/main/doc)
-> - **文件整理時間：2025-10-28T02:00:00+08:00**
-> - **專案版本：v3.0.0（完全架構重寫）**
-> - **專案最後更新：2025-10-27**
 
 ---
 

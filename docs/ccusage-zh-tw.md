@@ -2,18 +2,27 @@
 
 ## 概述
 
-此專案提供了完整的功能說明。
+ccusage 是一個專為 Claude Code 設計的**用量分析工具**，能夠從本地 JSONL 檔案快速分析您的 Claude Code token 使用量和成本。已發展成完整的 **ccusage Family 生態系統**，包含 `ccusage`（Claude Code 分析器）、`@ccusage/codex`（OpenAI Codex 分析器）和 `@ccusage/mcp`（MCP 伺服器）。
 
+憑藉極小的 bundle 尺寸（高效打包）、美觀的表格輸出和豐富的功能集（日報、月報、會話追蹤、即時監控），ccusage 為開發者提供了深入了解 AI 開發成本的強大工具。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：ccusage
+> - **專案版本**：v17.1.3
+> - **專案最後更新**：2025-10-27
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：Claude Code 用量分析工具，支援 GPT-5 Codex，提供日報、月報、會話追蹤、即時監控功能
+> - **場景**：成本監控、用量分析、預算管理、會話追蹤、團隊管理
+> - **客群**：專業開發者、團隊領導、財務管理、個人開發者
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/ryoppippi/ccusage)
 > - [NPM 套件頁面](https://npmjs.com/package/ccusage)
 > - [官方文檔](https://ccusage.com/)
 > - [ClaudeLog 整合](https://claudelog.com/)
-> - **文件整理時間：2025-10-28T00:10:00+08:00**
-> - **專案版本：v17.1.3**
-> - **專案最後更新：2025-10-27**
 
 ---
 

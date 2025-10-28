@@ -2,11 +2,24 @@
 
 ## 概述
 
-此專案提供了完整的功能說明。
+Claude Code Guide 是一份社群驅動的完整 Claude Code 使用指南，涵蓋從**基礎安裝**到**進階功能**的全方位內容。本指南整合官方文檔與社群最佳實踐，提供 **CLI 指令參考**、**Subagents 多代理協作**、**Agent Skills 技能系統**、**MCP 協議整合**、**Hooks 自動化**等完整說明。
 
+適合所有層級的 Claude Code 使用者，從新手入門到專家優化，都能在本指南中找到所需的資訊和實用範例。
 
-> **本文件彙整自：**
-> 
+> **專案資訊**
+>
+> - **專案名稱**：Claude Code Guide
+> - **專案版本**：v1.5
+> - **專案最後更新**：2025-08-10
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **Claude Code 版本**：v2.0+ (支援 Subagents + Agent Skills)
+>
+> **核心定位**
+> - **功能**：完整的 Claude Code 社群指南，涵蓋 CLI、Subagents、Agent Skills、MCP、Hooks 等全部功能
+> - **場景**：學習入門、功能探索、最佳實踐、疑難排解、進階優化
+> - **客群**：Claude Code 新手、專業開發者、團隊領導、技術探索者
+>
+> **資料來源**
 > - [zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide) 社群指南
 > - [Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Claude Code CLI 參考](https://docs.anthropic.com/en/docs/claude-code/cli-reference)
@@ -14,10 +27,6 @@
 > - [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
 > - [MCP 協議官方規範](https://docs.anthropic.com/en/docs/claude-code/mcp)
 > - [Hooks 系統文檔](https://docs.anthropic.com/en/docs/claude-code/hooks)
-> - **文件整理時間：2025-10-28T04:35:00+08:00**
-> - **專案版本：v1.5**
-> - **專案最後更新：2025-08-10**
-> - **Claude Code 版本：v2.0+ (支援 Subagents + Agent Skills)**
 
 ---
 

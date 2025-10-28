@@ -8,14 +8,23 @@
 
 這是一個完整的生產就緒系統，結合了 **85 個專業 AI 代理**、**15 個多代理工作流編排器**、**47 個代理技能** 和 **44 個開發工具**，組織為 **63 個專注、單一用途的插件**，專為 [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) 設計。
 
-> **資料來源：**
+> **專案資訊**
 >
+> - **專案名稱**：Claude Code Plugins
+> - **專案版本**：v2.0.0
+> - **專案最後更新**：2025-08-15
+> - **文件整理時間**：2025-10-28T19:00:00+08:00
+>
+> **核心定位**
+> - **功能**：85 個專業 AI 代理 + 15 個多代理編排器 + 47 個代理技能 + 44 個開發工具，組織為 63 個插件
+> - **場景**：全端開發、AI工程、DevOps自動化、安全加固、ML管道、事件響應
+> - **客群**：專業開發者、企業團隊、AI研究人員、DevOps工程師、安全專家
+>
+> **資料來源**
 > - [GitHub 專案](https://github.com/wshobson/agents)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Plugins 官方指南](https://docs.claude.com/en/docs/claude-code/plugins)
 > - [Agent Skills 官方規範](https://github.com/anthropics/skills/blob/main/agent_skills_spec.md)
-> - **文件整理時間：2025-10-28T01:30:00+08:00**
-> - **專案最後更新：2025-08-15**
 
 ---
 
