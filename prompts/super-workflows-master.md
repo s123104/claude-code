@@ -839,6 +839,628 @@ git push origin master
 
 ---
 
+### 2.4 腳本管理與清理工作流 (Super Workflow Delta)
+
+**目的**: 分析、清理和維護 `scripts/` 目錄中的腳本工具
+
+**前置條件**:
+- scripts/ 目錄存在且包含多個腳本
+- 具備基本的 Shell 和 Node.js 知識
+
+---
+
+## 📚 腳本功能摘要與調用指南
+
+### 核心腳本一覽表
+
+| 腳本名稱 | 主要功能 | 調用時機 | 預估時間 | 優先級 |
+|---------|---------|---------|---------|--------|
+| `batch-sync-projects.sh` | 批次同步 18 個專案 | 定期更新專案 | 10-15 分鐘 | 🔴 高 |
+| `sync-versions.sh` | 版本號同步驗證 | 專案版本變更後 | 3-5 分鐘 | 🟡 中 |
+| `validate-docs.sh` | 文檔完整性驗證 | 文檔更新後 | 2-3 分鐘 | 🟡 中 |
+| `update-all-docs.sh` | 批次更新所有文檔 | 重大功能發布後 | 15-20 分鐘 | 🔴 高 |
+| `setup-git-hooks.sh` | 設定 Git 自動化 | 初次設定/重新配置 | 1 分鐘 | 🟢 低 |
+| `import-mcp-servers.sh` | 導入 MCP 伺服器 | 新增 MCP 工具時 | 2-3 分鐘 | 🟢 低 |
+| `quality-checker.js` | 文檔品質檢查 | 提交前品質保證 | 3-5 分鐘 | 🟡 中 |
+| `analyze-scripts.sh` | 腳本功能分析 | 腳本管理維護時 | 2 分鐘 | 🟢 低 |
+| `doc-sync/enhanced-doc-sync.js` | 官方文檔同步 | 官方文檔更新時 | 5-10 分鐘 | 🔴 高 |
+| `doc-sync/sync-docs.sh` | 文檔同步包裝器 | 快速同步官方文檔 | 5-10 分鐘 | 🔴 高 |
+
+---
+
+### 🎯 情境驅動調用指南
+
+#### 情境 1: 每週定期維護
+**目標**: 確保所有專案和文檔保持最新
+
+```bash
+# 步驟 1: 同步所有專案 (10-15 分鐘)
+cd /path/to/project
+./scripts/batch-sync-projects.sh
+
+# 步驟 2: 驗證版本對齊 (3-5 分鐘)
+./scripts/sync-versions.sh
+
+# 步驟 3: 驗證文檔完整性 (2-3 分鐘)
+./scripts/validate-docs.sh
+
+# 步驟 4: 同步官方文檔 (5-10 分鐘)
+cd scripts/doc-sync
+./sync-docs.sh all
+
+# 總計時間: 20-33 分鐘
+```
+
+---
+
+#### 情境 2: Claude Code 官方更新後
+**目標**: 快速同步官方最新功能和更新日誌
+
+```bash
+# 步驟 1: 同步官方文檔 (5-10 分鐘)
+cd /path/to/project/scripts/doc-sync
+./sync-docs.sh changelog  # 只更新 CHANGELOG
+# 或
+./sync-docs.sh all        # 更新所有官方文檔
+
+# 步驟 2: 驗證文檔品質 (3-5 分鐘)
+cd ../..
+node scripts/quality-checker.js
+
+# 步驟 3: 提交變更
+git add .
+git commit -m "docs: 同步 Claude Code 官方最新更新"
+git push origin master
+
+# 總計時間: 8-15 分鐘
+```
+
+---
+
+#### 情境 3: 新增或移除專案
+**目標**: 管理 analysis-projects/ 中的專案
+
+```bash
+# 新增專案
+cd /path/to/project/analysis-projects
+git clone https://github.com/[USER]/[PROJECT].git
+cd ..
+
+# 更新專案列表
+./scripts/sync-versions.sh
+
+# 建立繁體中文文檔（手動或 AI 輔助）
+# 參考: Super Workflow Gamma
+
+# 更新索引
+# 編輯 docs/README.md 和根目錄 README.md
+
+# 總計時間: 1-2 小時（含文檔撰寫）
+```
+
+---
+
+#### 情境 4: 文檔品質保證（提交前）
+**目標**: 確保文檔符合標準，無錯誤
+
+```bash
+# 步驟 1: 品質檢查 (3-5 分鐘)
+cd /path/to/project
+node scripts/quality-checker.js
+
+# 步驟 2: 連結驗證 (2-3 分鐘)
+./scripts/validate-docs.sh
+
+# 步驟 3: 版本對齊確認 (3-5 分鐘)
+./scripts/sync-versions.sh
+
+# 如有錯誤，修復後重新檢查
+# 總計時間: 8-13 分鐘
+```
+
+---
+
+#### 情境 5: 腳本維護與清理
+**目標**: 分析和清理 scripts/ 目錄
+
+```bash
+# 步驟 1: 執行腳本分析 (2 分鐘)
+cd /path/to/project
+./scripts/analyze-scripts.sh
+
+# 步驟 2: 查看分析報告
+cat scripts/scripts-analysis-report.md
+
+# 步驟 3: 執行清理（根據報告建議）
+# 參考: Super Workflow Delta（詳見下方）
+
+# 總計時間: 1-2 小時（含清理和測試）
+```
+
+---
+
+#### 情境 6: 初次設定開發環境
+**目標**: 配置自動化工具和 Git hooks
+
+```bash
+# 步驟 1: 設定 Git hooks (1 分鐘)
+cd /path/to/project
+./scripts/setup-git-hooks.sh
+
+# 步驟 2: 安裝文檔同步依賴 (2-3 分鐘)
+cd scripts/doc-sync
+npm install
+
+# 步驟 3: 導入 MCP 伺服器（可選）
+cd ../..
+./scripts/import-mcp-servers.sh
+
+# 步驟 4: 驗證設定
+./scripts/validate-docs.sh --no-external
+
+# 總計時間: 5-8 分鐘
+```
+
+---
+
+#### 情境 7: 批次更新所有文檔
+**目標**: 重大版本發布後全面更新
+
+```bash
+# 步驟 1: 同步所有專案 (10-15 分鐘)
+cd /path/to/project
+./scripts/batch-sync-projects.sh
+
+# 步驟 2: 同步官方文檔 (5-10 分鐘)
+cd scripts/doc-sync
+./sync-docs.sh all
+
+# 步驟 3: 批次更新文檔 (15-20 分鐘)
+cd ../..
+./scripts/update-all-docs.sh
+
+# 步驟 4: 品質驗證 (5-8 分鐘)
+node scripts/quality-checker.js
+./scripts/validate-docs.sh
+
+# 步驟 5: 提交變更
+git add .
+git commit -m "docs: 批次更新至 Claude Code v[VERSION]"
+git push origin master
+
+# 總計時間: 35-53 分鐘
+```
+
+---
+
+### 🔧 個別腳本詳細說明
+
+#### 1. `batch-sync-projects.sh`
+**功能**: 批次同步 18 個 Claude Code 相關專案  
+**輸入**: 無（預設專案列表）  
+**輸出**: 同步報告 + 更新的專案目錄  
+**使用時機**:
+- ✅ 每週定期維護
+- ✅ 準備更新文檔前
+- ✅ 驗證專案版本前
+
+**執行範例**:
+```bash
+./scripts/batch-sync-projects.sh
+```
+
+**注意事項**:
+- 需要網路連線
+- 會執行 `git pull --rebase`
+- 失敗的專案會顯示錯誤但繼續處理
+
+---
+
+#### 2. `sync-versions.sh`
+**功能**: 驗證專案版本與文檔版本對齊  
+**輸入**: 無（掃描 analysis-projects/ 和 docs/）  
+**輸出**: `project-versions.txt` + 版本對齊報告  
+**使用時機**:
+- ✅ 專案更新後驗證
+- ✅ 文檔更新前確認
+- ✅ 提交前版本檢查
+
+**執行範例**:
+```bash
+./scripts/sync-versions.sh
+cat project-versions.txt
+```
+
+**注意事項**:
+- 會讀取 Git tags 和版本號
+- 無版本號的專案顯示最後更新日期
+
+---
+
+#### 3. `validate-docs.sh`
+**功能**: 驗證文檔完整性、連結有效性、格式正確性  
+**輸入**: `docs/` 目錄中的所有 `.md` 文檔  
+**輸出**: 驗證報告（終端機顯示）  
+**使用時機**:
+- ✅ 文檔更新後
+- ✅ Git commit 前
+- ✅ CI/CD 流程中
+
+**執行範例**:
+```bash
+./scripts/validate-docs.sh              # 驗證所有（含外部連結）
+./scripts/validate-docs.sh --no-external  # 跳過外部連結
+```
+
+**驗證項目**:
+- ✅ 必要的元資料（版本、更新時間）
+- ✅ 內部連結有效性
+- ✅ 外部連結可達性（可選）
+- ✅ 格式一致性
+
+---
+
+#### 4. `update-all-docs.sh`
+**功能**: 批次更新所有繁體中文文檔  
+**輸入**: `analysis-projects/` 和 `docs/` 目錄  
+**輸出**: 更新後的文檔 + 更新報告  
+**使用時機**:
+- ✅ 重大版本發布後
+- ✅ 需要全面更新文檔
+- ✅ 格式統一化需求
+
+**執行範例**:
+```bash
+./scripts/update-all-docs.sh
+```
+
+**注意事項**:
+- 需要較長執行時間（15-20 分鐘）
+- 建議配合 AI 輔助檢查更新內容
+- 執行前建議先備份
+
+---
+
+#### 5. `quality-checker.js`
+**功能**: 檢查文檔品質（拼寫、格式、標準）  
+**輸入**: `docs/` 目錄和主要文檔  
+**輸出**: 品質報告 + 建議改善項目  
+**使用時機**:
+- ✅ Git commit 前
+- ✅ Pull request 前
+- ✅ 定期品質審查
+
+**執行範例**:
+```bash
+node scripts/quality-checker.js
+```
+
+**檢查項目**:
+- ✅ 繁體中文正確性
+- ✅ 標點符號統一
+- ✅ 格式一致性
+- ✅ 必要欄位完整性
+
+---
+
+#### 6. `doc-sync/enhanced-doc-sync.js`
+**功能**: 從官方網站同步最新文檔和 CHANGELOG  
+**輸入**: 官方 URL 列表  
+**輸出**: 更新的 `claude-code-zh-tw.md` + 同步報告  
+**使用時機**:
+- ✅ Claude Code 官方更新後
+- ✅ 需要最新功能說明
+- ✅ CHANGELOG 有新版本
+
+**執行範例**:
+```bash
+cd scripts/doc-sync
+node enhanced-doc-sync.js
+```
+
+**功能特色**:
+- ✅ HTML 轉 Markdown
+- ✅ 自動翻譯專業術語
+- ✅ 內容去重
+- ✅ 批次處理
+
+---
+
+#### 7. `doc-sync/sync-docs.sh`
+**功能**: Shell 包裝器，簡化文檔同步操作  
+**輸入**: 模式選擇（`all` | `changelog` | `overview`）  
+**輸出**: 呼叫 `enhanced-doc-sync.js` 的結果  
+**使用時機**:
+- ✅ 快速同步官方文檔
+- ✅ 不熟悉 Node.js 的使用者
+- ✅ 自動化腳本中呼叫
+
+**執行範例**:
+```bash
+cd scripts/doc-sync
+./sync-docs.sh all        # 同步所有
+./sync-docs.sh changelog  # 只同步 CHANGELOG
+./sync-docs.sh overview   # 只同步概覽頁
+```
+
+---
+
+#### 8. `analyze-scripts.sh`
+**功能**: 分析 scripts/ 目錄中所有腳本  
+**輸入**: `scripts/` 目錄  
+**輸出**: `scripts-analysis-report.md`  
+**使用時機**:
+- ✅ 定期腳本維護（每季）
+- ✅ 發現腳本問題時
+- ✅ 新成員了解腳本功能
+
+**執行範例**:
+```bash
+./scripts/analyze-scripts.sh
+cat scripts/scripts-analysis-report.md
+```
+
+**分析內容**:
+- ✅ 腳本清單與基本資訊
+- ✅ 功能分類與狀態評估
+- ✅ 重複功能檢測
+- ✅ 清理建議
+
+---
+
+#### 9. `setup-git-hooks.sh`
+**功能**: 設定 Git hooks 自動化工作流  
+**輸入**: 無  
+**輸出**: `.git/hooks/` 中的 hook 檔案  
+**使用時機**:
+- ✅ 初次設定開發環境
+- ✅ 重新配置 Git hooks
+- ✅ 多人協作專案初始化
+
+**執行範例**:
+```bash
+./scripts/setup-git-hooks.sh
+```
+
+**設定的 hooks**:
+- `pre-commit`: 執行文檔驗證
+- `pre-push`: 執行品質檢查
+- `post-merge`: 提示版本更新
+
+---
+
+#### 10. `import-mcp-servers.sh`
+**功能**: 導入和配置 MCP 伺服器  
+**輸入**: MCP 伺服器配置  
+**輸出**: 配置完成的 MCP 環境  
+**使用時機**:
+- ✅ 新增 MCP 工具時
+- ✅ 更新 MCP 配置時
+- ✅ 重置 MCP 環境時
+
+**執行範例**:
+```bash
+./scripts/import-mcp-servers.sh
+```
+
+---
+
+### 📊 腳本優先級與頻率建議
+
+| 優先級 | 腳本 | 建議執行頻率 |
+|--------|------|-------------|
+| 🔴 **每週必執行** | `batch-sync-projects.sh` | 每週一次 |
+| 🔴 **每週必執行** | `doc-sync/sync-docs.sh all` | 每週一次 |
+| 🟡 **定期執行** | `sync-versions.sh` | 每次專案更新後 |
+| 🟡 **定期執行** | `validate-docs.sh` | 每次文檔更新後 |
+| 🟡 **定期執行** | `quality-checker.js` | Git commit 前 |
+| 🟢 **按需執行** | `update-all-docs.sh` | 重大版本發布後 |
+| 🟢 **按需執行** | `analyze-scripts.sh` | 每季或發現問題時 |
+| 🟢 **一次性** | `setup-git-hooks.sh` | 初次設定 |
+| 🟢 **按需執行** | `import-mcp-servers.sh` | 新增 MCP 工具時 |
+
+---
+
+**執行步驟**:
+
+```markdown
+### Phase 1: 腳本分析 (Scanner Agent)
+
+執行腳本分析工具：
+
+```bash
+cd /path/to/project
+chmod +x scripts/analyze-scripts.sh
+scripts/analyze-scripts.sh
+```
+
+分析結果將生成 `scripts/scripts-analysis-report.md`，包含：
+- 所有腳本的清單與基本資訊
+- 功能分類與狀態評估
+- 重複功能檢測
+- 清理建議
+
+---
+
+### Phase 2: 功能分類 (Classifier Agent)
+
+根據分析報告，將腳本分為：
+
+**✅ 保留類別**:
+1. **核心工具** - 不可或缺的功能
+   - 專案同步腳本
+   - 版本管理工具
+   - 文檔驗證工具
+
+2. **自動化工具** - 提升效率
+   - Git hooks 設定
+   - CI/CD 整合腳本
+   - 批次處理工具
+
+3. **獨立功能** - 特定用途
+   - MCP 伺服器導入
+   - 品質檢查工具
+   - 翻譯工具
+
+**⚠️ 需檢查類別**:
+- 功能重疊的腳本
+- 長期未更新的腳本
+- 功能不明確的腳本
+
+**❌ 移除類別**:
+- 完全過時的腳本
+- 已被取代的工具
+- 功能重複且次要的版本
+
+---
+
+### Phase 3: 乾模式測試 (Testing Agent)
+
+執行乾模式測試確保腳本功能：
+
+```bash
+cd /path/to/project/scripts
+./test-scripts-dry-run.sh
+```
+
+測試內容：
+- Shell 腳本語法檢查 (`bash -n`)
+- Node.js 腳本語法檢查 (`node --check`)
+- 執行權限驗證
+- 依賴檢查
+
+**通過標準**:
+- ✅ 所有腳本語法正確
+- ✅ 必要依賴已安裝
+- ✅ 執行權限正確設定
+- ✅ 無明顯錯誤或警告
+
+---
+
+### Phase 4: 執行清理 (Cleanup Agent)
+
+移除過時和重複的腳本：
+
+```bash
+# 建立歸檔目錄
+mkdir -p archives/deprecated-scripts
+
+# 移動過時腳本
+mv scripts/outdated-script.sh archives/deprecated-scripts/
+mv scripts/duplicate-tool.js archives/deprecated-scripts/
+
+# 記錄清理操作
+echo "移除日期: $(date)" >> archives/deprecated-scripts/README.md
+echo "移除原因: [說明原因]" >> archives/deprecated-scripts/README.md
+```
+
+**清理檢查清單**:
+- [ ] 確認腳本確實過時或重複
+- [ ] 備份到 archives/ 而非直接刪除
+- [ ] 更新相關文檔說明
+- [ ] 檢查是否有其他腳本依賴
+- [ ] 測試保留腳本功能正常
+
+---
+
+### Phase 5: 文檔更新 (Documentation Agent)
+
+更新腳本相關文檔：
+
+1. **scripts/README.md**
+   - 列出所有當前腳本
+   - 說明每個腳本的用途
+   - 提供使用範例
+
+2. **prompts/super-workflows-master.md**
+   - 添加腳本管理工作流
+   - 記錄腳本自動化流程
+   - 提供最佳實踐指南
+
+3. **根目錄 README.md**
+   - 更新腳本工具說明
+   - 移除已廢棄腳本的引用
+
+---
+
+### Phase 6: 最終清理 (Final Cleanup Agent)
+
+確保專案根目錄整潔：
+
+```bash
+cd /path/to/project
+
+# 移除所有報告類文檔
+mkdir -p archives/reports
+mv *-REPORT.md archives/reports/ 2>/dev/null || true
+mv *-report.md archives/reports/ 2>/dev/null || true
+
+# 移除測試類文檔
+mv test-*.md archives/reports/ 2>/dev/null || true
+mv *-test.md archives/reports/ 2>/dev/null || true
+
+# 移除暫存檔案
+rm -f *.tmp 2>/dev/null || true
+rm -f *.log 2>/dev/null || true
+
+# 驗證根目錄結構
+ls -la
+```
+
+**最終根目錄應包含**:
+```
+project/
+├── README.md           # 專案說明
+├── CHANGELOG.md        # 變更記錄
+├── LICENSE             # 授權
+├── .gitignore          # Git 忽略規則
+├── package.json        # 依賴配置（如適用）
+├── index.html          # Web 入口（如適用）
+├── docs/               # 文檔目錄
+├── scripts/            # 腳本工具
+├── prompts/            # Prompt 模板
+├── analysis-projects/  # 分析專案（Git ignored）
+└── archives/           # 歸檔目錄
+```
+
+---
+
+### Phase 7: Git 提交 (Git Agent)
+
+提交所有變更：
+
+```bash
+git add .
+git commit -m "refactor(scripts): 腳本管理與清理
+
+執行 Super Workflow Delta:
+- ✅ 分析所有腳本功能
+- ✅ 移除 5 個過時/重複腳本
+- ✅ 乾模式測試通過
+- ✅ 更新腳本文檔
+- ✅ 清理根目錄報告類文檔
+- ✅ 確保 Clean Code 架構
+
+清理結果:
+- 移除腳本: 5 個
+- 保留腳本: 12 個
+- 根目錄檔案: 簡化 XX%
+- 專案結構: 符合開源標準"
+
+git push origin master
+```
+```
+
+**預估時間**: 1-2 小時
+
+**關鍵重點**:
+- 永遠先歸檔而非直接刪除
+- 乾模式測試確保功能完整性
+- 最終必須清理報告和測試類文檔
+- 確保根目錄整潔符合 Clean Code
+
+---
+
 ## 3. Prompt 模板庫
 
 ### 3.1 文檔更新模板
