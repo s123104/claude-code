@@ -10,6 +10,12 @@
 
 ## 📚 文件清單
 
+### 📋 元文檔
+
+| 文件名 | 說明 | 版本 | 最後更新 | 簡介 |
+|--------|-----|------|---------|-----|
+| [DATA-SOURCE-DOCUMENTATION.md](./DATA-SOURCE-DOCUMENTATION.md) | 資料來源完整說明 | v1.0.0 | 2025-10-29 | 記錄所有文檔的資料來源、獲取方式、自動化爬取工具、更新機制與歷史追蹤 |
+
 ### 🎯 主要文件
 
 | 文件名稱                                                                       | 核心功能         | 適用對象 | 快速連結 |
@@ -193,6 +199,7 @@ chmod +x start.sh
 - ✅ **概述質量提升**: 15 個空洞概述重寫（11 字 → 100-160 字）
 - ✅ **時間格式統一**: 全部使用 ISO 8601 格式
 - ✅ **功能/場景/客群明確標記**: 100% 覆蓋
+- ✅ **資料來源文檔**: 新增完整的資料來源說明與維護指南
 
 ### 品質提升
 
@@ -202,7 +209,7 @@ chmod +x start.sh
 | 元資料統一性 | 23.5/30 | 28/30 | +19.1% |
 | LLM 理解程度 | 28.3/35 | 32/35 | +13.1% |
 
-詳細報告請參閱：[FINAL-DOCS-STANDARDIZATION-COMPLETE.md](../FINAL-DOCS-STANDARDIZATION-COMPLETE.md)
+詳細報告請參閱：[FINAL-DOCS-STANDARDIZATION-COMPLETE.md](../archives/reports/FINAL-DOCS-STANDARDIZATION-COMPLETE.md)
 
 ---
 
