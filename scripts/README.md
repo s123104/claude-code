@@ -2,6 +2,28 @@
 
 這是一套專業的自動爬取和同步工具，用於維護 Claude Code 的繁體中文文檔。
 
+## 🎯 核心工具
+
+### 1. 文檔同步至 index.html (`sync-index-docs.js`) ⭐ 新增
+- ✅ **自動掃描** - 掃描所有繁體中文文檔
+- ✅ **元資料提取** - 自動提取版本、時間、功能、場景、客群
+- ✅ **智能分析** - 從文檔內容智能推斷資訊
+- ✅ **自動更新** - 同步更新到 index.html 專案卡片
+- ✅ **格式統一** - 確保所有卡片格式一致
+
+**快速使用**：
+```bash
+# 在 scripts 目錄執行
+npm run sync-index        # 執行同步
+npm run sync-index:dry    # 乾模式預覽
+
+# 或直接執行
+node sync-index-docs.js
+node sync-index-docs.js --dry-run
+```
+
+### 2. 官方文檔爬取工具 (`doc-sync/`)
+
 ## 🚀 功能特色
 
 ### 基本版本 (`auto-doc-sync.js`)

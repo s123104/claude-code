@@ -1,0 +1,19 @@
+{
+  "name": "claude-code-scripts",
+  "version": "1.0.0",
+  "description": "Claude Code 文檔自動化維護工具集",
+  "type": "module",
+  "scripts": {
+    "sync-index": "node sync-index-docs.js",
+    "sync-index:dry": "node sync-index-docs.js --dry-run",
+    "analyze": "bash analyze-scripts.sh"
+  },
+  "keywords": [
+    "claude-code",
+    "documentation",
+    "automation"
+  ],
+  "author": "s123104",
+  "license": "MIT"
+}
+
