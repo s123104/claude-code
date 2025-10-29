@@ -4,7 +4,25 @@
 
 ## 🎯 核心工具
 
-### 1. 文檔同步至 index.html (`sync-index-docs.js`) ⭐ 新增
+### 1. CHANGELOG 同步工具 (`sync-changelog.js`) ⭐ 最新
+- ✅ **自動讀取** - 從 `claude-code-changelog-2.0-zh-tw.md` 讀取內容
+- ✅ **智能替換** - 自動替換主文檔中的 CHANGELOG 區塊
+- ✅ **格式保留** - 保持元資料和結構完整性
+- ✅ **去重處理** - 自動清理重複和混雜內容
+- ✅ **版本追蹤** - 記錄同步時間和統計資訊
+
+**快速使用**：
+```bash
+# 在專案根目錄執行
+node scripts/sync-changelog.js
+```
+
+**使用場景**：
+- 更新 CHANGELOG 後同步到主文檔
+- 確保 CHANGELOG 區塊內容一致
+- 自動化文檔維護流程
+
+### 2. 文檔同步至 index.html (`sync-index-docs.js`) ⭐
 - ✅ **自動掃描** - 掃描所有繁體中文文檔
 - ✅ **元資料提取** - 自動提取版本、時間、功能、場景、客群
 - ✅ **智能分析** - 從文檔內容智能推斷資訊
@@ -22,7 +40,7 @@ node sync-index-docs.js
 node sync-index-docs.js --dry-run
 ```
 
-### 2. 官方文檔爬取工具 (`doc-sync/`) 🌟 最新
+### 3. 官方文檔爬取工具 (`doc-sync/`) 🌟
 
 #### auto-discover-sync.js（推薦）
 - ✅ **自動發現** - 自動掃描官方網站發現所有文檔（53+ 頁）
