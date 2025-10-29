@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/troubleshooting.md"
-fetched_at: "2025-10-28T19:19:54+08:00"
+fetched_at: "2025-10-29T14:12:19+08:00"
 ---
 
 # 疑難排解

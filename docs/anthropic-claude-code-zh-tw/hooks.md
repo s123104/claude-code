@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/hooks.md"
-fetched_at: "2025-10-28T19:17:13+08:00"
+fetched_at: "2025-10-29T14:10:43+08:00"
 ---
 
 # Hooks 參考

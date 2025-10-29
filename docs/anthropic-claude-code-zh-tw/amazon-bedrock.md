@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/amazon-bedrock.md"
-fetched_at: "2025-10-28T19:12:16+08:00"
+fetched_at: "2025-10-29T14:09:21+08:00"
 ---
 
 # Amazon Bedrock 上的 Claude Code

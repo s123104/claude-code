@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/mcp.md"
-fetched_at: "2025-10-28T19:17:52+08:00"
+fetched_at: "2025-10-29T14:11:07+08:00"
 ---
 
 # 透過 MCP 將 Claude Code 連接到工具

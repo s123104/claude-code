@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/terminal-config.md"
-fetched_at: "2025-10-28T19:19:51+08:00"
+fetched_at: "2025-10-29T14:12:17+08:00"
 ---
 
 # 優化您的終端機設定

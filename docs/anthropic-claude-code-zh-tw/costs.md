@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/costs.md"
-fetched_at: "2025-10-28T19:16:18+08:00"
+fetched_at: "2025-10-29T14:10:10+08:00"
 ---
 
 # 有效管理成本

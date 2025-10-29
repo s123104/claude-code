@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/sub-agents.md"
-fetched_at: "2025-10-28T19:19:17+08:00"
+fetched_at: "2025-10-29T14:11:50+08:00"
 ---
 
 # 子代理

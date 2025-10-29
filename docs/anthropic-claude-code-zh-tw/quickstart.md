@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/quickstart.md"
-fetched_at: "2025-10-28T19:18:25+08:00"
+fetched_at: "2025-10-29T14:11:27+08:00"
 ---
 
 # 快速入門

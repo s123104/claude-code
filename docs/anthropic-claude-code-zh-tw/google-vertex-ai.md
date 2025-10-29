@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/google-vertex-ai.md"
-fetched_at: "2025-10-28T19:17:03+08:00"
+fetched_at: "2025-10-29T14:10:33+08:00"
 ---
 
 # Claude Code on Google Vertex AI

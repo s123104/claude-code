@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/vs-code.md"
-fetched_at: "2025-10-28T19:20:11+08:00"
+fetched_at: "2025-10-29T14:12:30+08:00"
 ---
 
 # Visual Studio Code

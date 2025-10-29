@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/interactive-mode.md"
-fetched_at: "2025-10-28T19:17:42+08:00"
+fetched_at: "2025-10-29T14:11:00+08:00"
 ---
 
 # 互動模式

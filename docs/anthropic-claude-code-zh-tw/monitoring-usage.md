@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/monitoring-usage.md"
-fetched_at: "2025-10-28T19:18:03+08:00"
+fetched_at: "2025-10-29T14:11:13+08:00"
 ---
 
 # 監控

@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/devcontainer.md"
-fetched_at: "2025-10-28T19:16:28+08:00"
+fetched_at: "2025-10-29T14:10:12+08:00"
 ---
 
 # 開發容器

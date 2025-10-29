@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/settings.md"
-fetched_at: "2025-10-28T19:18:50+08:00"
+fetched_at: "2025-10-29T14:11:44+08:00"
 ---
 
 # Claude Code 設定

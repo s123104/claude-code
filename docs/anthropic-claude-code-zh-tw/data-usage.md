@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/data-usage.md"
-fetched_at: "2025-10-28T19:16:23+08:00"
+fetched_at: "2025-10-29T14:10:11+08:00"
 ---
 
 # 資料使用

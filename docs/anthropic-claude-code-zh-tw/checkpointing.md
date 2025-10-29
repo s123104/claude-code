@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/checkpointing.md"
-fetched_at: "2025-10-28T19:14:39+08:00"
+fetched_at: "2025-10-29T14:09:44+08:00"
 ---
 
 # 檢查點

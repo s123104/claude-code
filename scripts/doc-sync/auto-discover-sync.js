@@ -47,6 +47,8 @@ class AutoDiscoverSync {
       existing: 0,
       new: 0,
       updated: 0,
+      deleted: 0,
+      skipped: 0,
       failed: 0,
       errors: [],
     };
@@ -259,6 +261,21 @@ ${markdown}
       console.error(`  ❌ 失敗: ${slug} - ${error.message}`);
       this.stats.failed++;
       this.stats.errors.push({ doc: slug, error: error.message });
+
+      // 如果是 404 錯誤且文件存在，則刪除該文件
+      if (error.message.includes("404") && existsSync(outputPath)) {
+        try {
+          if (!this.options.dryRun) {
+            await fs.unlink(outputPath);
+            console.log(`  🗑️  已刪除 404 文檔: ${slug}`);
+            this.stats.deleted = (this.stats.deleted || 0) + 1;
+          } else {
+            console.log(`  🗑️  [預覽] 將刪除: ${slug}`);
+          }
+        } catch (unlinkError) {
+          console.error(`  ⚠️  無法刪除: ${slug} - ${unlinkError.message}`);
+        }
+      }
     }
   }
 
@@ -318,14 +335,32 @@ ${bullets}
     console.log(`📄 現有文檔: ${this.stats.existing} 個`);
     console.log(`🆕 新增文檔: ${this.stats.new} 個`);
     console.log(`✅ 成功更新: ${this.stats.updated} 個`);
-    console.log(`⏭️  跳過文檔: ${this.stats.skipped} 個`);
+    console.log(`🗑️  已刪除 (404): ${this.stats.deleted || 0} 個`);
+    console.log(`⏭️  跳過文檔: ${this.stats.skipped || 0} 個`);
     console.log(`❌ 失敗文檔: ${this.stats.failed} 個`);
 
     if (this.stats.errors.length > 0) {
       console.log("\n⚠️  錯誤詳情:");
-      this.stats.errors.forEach((err, index) => {
-        console.log(`  ${index + 1}. ${err.doc || err.phase}: ${err.error}`);
-      });
+      const error404s = this.stats.errors.filter((e) =>
+        e.error.includes("404")
+      );
+      const otherErrors = this.stats.errors.filter(
+        (e) => !e.error.includes("404")
+      );
+
+      if (error404s.length > 0) {
+        console.log(`  📋 404 錯誤 (${error404s.length} 個):`);
+        error404s.forEach((err, index) => {
+          console.log(`    ${index + 1}. ${err.doc}`);
+        });
+      }
+
+      if (otherErrors.length > 0) {
+        console.log(`  📋 其他錯誤 (${otherErrors.length} 個):`);
+        otherErrors.forEach((err, index) => {
+          console.log(`    ${index + 1}. ${err.doc}: ${err.error}`);
+        });
+      }
     }
 
     console.log("=".repeat(60) + "\n");

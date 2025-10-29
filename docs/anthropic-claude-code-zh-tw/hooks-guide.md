@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/hooks-guide.md"
-fetched_at: "2025-10-28T19:17:12+08:00"
+fetched_at: "2025-10-29T14:10:42+08:00"
 ---
 
 # 開始使用 Claude Code hooks

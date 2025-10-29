@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/cli-reference.md"
-fetched_at: "2025-10-28T19:14:49+08:00"
+fetched_at: "2025-10-29T14:09:46+08:00"
 ---
 
 # CLI 參考

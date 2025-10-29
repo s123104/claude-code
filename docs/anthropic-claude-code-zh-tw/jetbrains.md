@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/jetbrains.md"
-fetched_at: "2025-10-28T19:17:49+08:00"
+fetched_at: "2025-10-29T14:11:04+08:00"
 ---
 
 # JetBrains IDEs

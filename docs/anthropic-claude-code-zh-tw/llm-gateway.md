@@ -1,6 +1,6 @@
 ---
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/llm-gateway.md"
-fetched_at: "2025-10-28T19:17:51+08:00"
+fetched_at: "2025-10-29T14:11:06+08:00"
 ---
 
 # LLM 閘道配置
