@@ -1,48 +1,80 @@
-# Claude Code 文檔自動同步工具
+# Claude Code 腳本工具集
 
-這是一套專業的自動爬取和同步工具，用於維護 Claude Code 的繁體中文文檔。
+專業的自動化工具集，用於維護 Claude Code 專案的文檔、版本同步和品質檢查。
+
+## 📁 檔案結構
+
+```
+scripts/
+├── README.md                    # 本說明文件
+├── sync-changelog.js            # ⭐ CHANGELOG 自動同步
+├── sync-index-docs.js           # 📊 文檔元資料同步到 index.html
+├── validate-docs.sh             # 🔍 文檔驗證工具
+├── sync-versions.sh             # 🔄 版本同步機制
+├── update-all-docs.sh           # 📝 批次更新文檔
+├── batch-sync-projects.sh       # 🚀 18 個專案批次同步
+├── setup-git-hooks.sh           # 🔧 Git hooks 設定
+├── import-mcp-servers.sh        # 🔌 MCP 伺服器導入
+└── doc-sync/                    # 📥 官方文檔同步模組
+    ├── README.md                # 模組說明
+    ├── auto-discover-sync.js    # 自動發現與同步
+    ├── auto-discover.sh         # Shell 包裝器
+    ├── zh-tw-translator-simple.cjs  # 繁體中文翻譯
+    ├── package.json             # 依賴配置
+    └── package-lock.json        # 版本鎖定
+```
 
 ## 🎯 核心工具
 
 ### 1. CHANGELOG 同步工具 (`sync-changelog.js`) ⭐ 最新
-- ✅ **自動讀取** - 從 `claude-code-changelog-2.0-zh-tw.md` 讀取內容
-- ✅ **智能替換** - 自動替換主文檔中的 CHANGELOG 區塊
-- ✅ **格式保留** - 保持元資料和結構完整性
-- ✅ **去重處理** - 自動清理重複和混雜內容
-- ✅ **版本追蹤** - 記錄同步時間和統計資訊
+
+從 `claude-code-changelog-2.0-zh-tw.md` 自動同步到主文檔，確保內容一致性。
+
+**核心功能**：
+
+- ✅ **自動讀取** - 從專用 CHANGELOG 文件讀取
+- ✅ **智能替換** - 精確定位並替換主文檔區塊
+- ✅ **格式保留** - 保持元資料和結構完整
+- ✅ **去重處理** - 自動清理重複內容
+- ✅ **版本追蹤** - 記錄同步時間和統計
 
 **快速使用**：
+
 ```bash
-# 在專案根目錄執行
 node scripts/sync-changelog.js
 ```
 
 **使用場景**：
+
 - 更新 CHANGELOG 後同步到主文檔
 - 確保 CHANGELOG 區塊內容一致
 - 自動化文檔維護流程
 
-### 2. 文檔同步至 index.html (`sync-index-docs.js`) ⭐
-- ✅ **自動掃描** - 掃描所有繁體中文文檔
-- ✅ **元資料提取** - 自動提取版本、時間、功能、場景、客群
-- ✅ **智能分析** - 從文檔內容智能推斷資訊
+### 2. 文檔同步至 index.html (`sync-index-docs.js`) 📊
+
+自動提取文檔元資料並同步更新到 `index.html` 專案卡片。
+
+**核心功能**：
+
+- ✅ **自動掃描** - 掃描所有繁體中文文檔（20+ 個）
+- ✅ **元資料提取** - 版本、時間、功能、場景、客群
+- ✅ **智能推斷** - 從文檔內容智能分析資訊
 - ✅ **自動更新** - 同步更新到 index.html 專案卡片
 - ✅ **格式統一** - 確保所有卡片格式一致
 
 **快速使用**：
-```bash
-# 在 scripts 目錄執行
-npm run sync-index        # 執行同步
-npm run sync-index:dry    # 乾模式預覽
 
-# 或直接執行
-node sync-index-docs.js
-node sync-index-docs.js --dry-run
+```bash
+node scripts/sync-index-docs.js
+node scripts/sync-index-docs.js --dry-run  # 預覽模式
 ```
 
 ### 3. 官方文檔爬取工具 (`doc-sync/`) 🌟
 
+完整的官方文檔自動發現、下載、翻譯和同步系統。
+
 #### auto-discover-sync.js（推薦）
+
 - ✅ **自動發現** - 自動掃描官方網站發現所有文檔（53+ 頁）
 - ✅ **直接下載** - 直接從 .md 端點下載完整 Markdown
 - ✅ **智能同步** - 僅更新變更的文檔
@@ -52,6 +84,7 @@ node sync-index-docs.js --dry-run
 - ✅ **詳細報告** - 完整的同步報告和錯誤分類
 
 #### zh-tw-translator-simple.cjs（翻譯工具）
+
 - ✅ 技術術語智能翻譯
 - ✅ CHANGELOG 項目翻譯
 - ✅ 保持程式碼和指令原樣
@@ -67,6 +100,7 @@ npm install
 ## 🔧 使用方式
 
 ### 基本同步
+
 ```bash
 # 使用 Shell 包裝器（推薦）
 cd scripts/doc-sync
@@ -80,6 +114,7 @@ node auto-discover-sync.js --verbose # 詳細輸出
 ```
 
 ### 進階選項
+
 ```bash
 # 僅發現文檔列表（不下載）
 ./auto-discover.sh discover
@@ -133,9 +168,7 @@ auto-discover-sync-report.json # 同步報告（根目錄）
 source: "https://docs.anthropic.com/zh-TW/docs/claude-code/page.md"
 fetched_at: "2025-10-29T22:13:00+08:00"
 ---
-
 # 文檔內容（完整 Markdown 格式）
-...
 ```
 
 ## 📈 同步報告
@@ -162,13 +195,14 @@ fetched_at: "2025-10-29T22:13:00+08:00"
 ## 🔄 自動化設定
 
 ### GitHub Actions 整合
+
 建立 `.github/workflows/sync-docs.yml`：
 
 ```yaml
 name: 同步文檔
 on:
   schedule:
-    - cron: '0 2 * * *'  # 每日 02:00
+    - cron: "0 2 * * *" # 每日 02:00
   workflow_dispatch:
 
 jobs:
@@ -178,7 +212,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
       - name: 安裝依賴
         run: cd scripts/doc-sync && npm install
       - name: 同步文檔
@@ -193,9 +227,146 @@ jobs:
 ```
 
 ### Cron 任務
+
 ```bash
 # 每日 2:00 自動同步
 0 2 * * * cd /path/to/claude-code/scripts/doc-sync && ./auto-discover.sh
+```
+
+### 4. 文檔驗證工具 (`validate-docs.sh`) 🔍
+
+全面的文檔品質檢查系統，確保連結有效性和內容品質。
+
+**核心功能**：
+
+- ✅ **Markdown 語法檢查** - YAML front matter、標題層級、程式碼區塊
+- ✅ **連結驗證** - 內部連結、圖片連結、外部連結可達性
+- ✅ **結構分析** - 文檔結構、標點符號、表格格式
+- ✅ **版本一致性** - 版本資訊、日期格式檢查
+- ✅ **內容品質** - 檔案大小、TODO 檢查、重複標題
+
+**快速使用**：
+
+```bash
+bash scripts/validate-docs.sh              # 完整驗證
+bash scripts/validate-docs.sh --no-external  # 跳過外部連結
+bash scripts/validate-docs.sh --quick-fix    # 快速修復
+```
+
+### 5. 版本同步工具 (`sync-versions.sh`, `update-all-docs.sh`) 🔄
+
+自動同步專案版本資訊到對應文檔。
+
+**核心功能**：
+
+- ✅ **版本掃描** - 自動掃描 analysis-projects/ 的 Git 版本
+- ✅ **文檔更新** - 批次更新對應的繁中文檔版本資訊
+- ✅ **多源支援** - Git tags、package.json、Cargo.toml
+- ✅ **報告生成** - 完整的版本同步報告
+
+**快速使用**：
+
+```bash
+bash scripts/sync-versions.sh           # 完整版本同步
+bash scripts/update-all-docs.sh         # 批次更新文檔
+```
+
+### 6. 專案同步工具 (`batch-sync-projects.sh`) 🚀
+
+批次同步 18 個 Claude Code 相關專案到最新版本。
+
+**核心功能**：
+
+- ✅ **批次 Git 同步** - fetch、reset、clean、pull
+- ✅ **版本提取** - tags、commit hash、最後更新時間
+- ✅ **詳細報告** - 成功/失敗統計、版本記錄
+
+**快速使用**：
+
+```bash
+bash scripts/batch-sync-projects.sh
+# 查看報告：PROJECT-SYNC-REPORT.md
+```
+
+### 7. Git 自動化工具 (`setup-git-hooks.sh`) 🔧
+
+設定 Git Hooks 實現提交品質自動檢查。
+
+**核心功能**：
+
+- ✅ **commit-msg Hook** - Conventional Commits 格式驗證
+- ✅ **pre-commit Hook** - 文檔驗證、大檔案檢查
+- ✅ **post-commit Hook** - 版本提醒、CHANGELOG 提示
+- ✅ **commitlint 配置** - 自動生成配置檔案
+
+**快速使用**：
+
+```bash
+bash scripts/setup-git-hooks.sh          # 安裝 hooks
+bash scripts/setup-git-hooks.sh --uninstall  # 移除 hooks
+```
+
+### 8. MCP 伺服器導入工具 (`import-mcp-servers.sh`) 🔌
+
+從 Claude Desktop 配置自動導入 MCP 伺服器到 Claude Code。
+
+**核心功能**：
+
+- ✅ **配置解析** - 解析 Claude Desktop JSON 配置
+- ✅ **自動導入** - 批次導入所有 MCP 伺服器
+- ✅ **配置轉換** - 自動轉換為 Claude Code 格式
+
+**快速使用**：
+
+```bash
+bash scripts/import-mcp-servers.sh
+```
+
+## 🔄 自動化設定
+
+### GitHub Actions 整合
+
+建立 `.github/workflows/sync-docs.yml`：
+
+```yaml
+name: 同步文檔
+on:
+  schedule:
+    - cron: "0 2 * * *" # 每日 02:00
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: 安裝依賴
+        run: cd scripts/doc-sync && npm install
+      - name: 同步文檔
+        run: cd scripts/doc-sync && ./auto-discover.sh force
+      - name: 提交變更
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/anthropic-claude-code-zh-tw/
+          git diff --staged --quiet || git commit -m "docs: 自動同步官方文檔 $(date +%Y-%m-%d)"
+          git push
+```
+
+### Cron 任務
+
+```bash
+# 每日 2:00 自動同步官方文檔
+0 2 * * * cd /path/to/claude-code/scripts/doc-sync && ./auto-discover.sh
+
+# 每日 3:00 同步專案版本
+0 3 * * * cd /path/to/claude-code && bash scripts/sync-versions.sh
+
+# 每日 4:00 驗證文檔品質
+0 4 * * * cd /path/to/claude-code && bash scripts/validate-docs.sh
 ```
 
 ## 🐛 疑難排解
@@ -203,6 +374,7 @@ jobs:
 ### 常見問題
 
 1. **依賴安裝失敗**
+
    ```bash
    cd scripts/doc-sync
    rm -rf node_modules package-lock.json
@@ -210,15 +382,31 @@ jobs:
    ```
 
 2. **網路連線問題**
+
    ```bash
    # 使用詳細輸出查看錯誤
    cd scripts/doc-sync && node auto-discover-sync.js --verbose
    ```
 
 3. **404 文檔問題**
+
    ```bash
    # 強制更新會自動清理 404 文檔
    cd scripts/doc-sync && ./auto-discover.sh force
+   ```
+
+4. **Git Hooks 權限問題**
+
+   ```bash
+   chmod +x .git/hooks/*
+   ```
+
+5. **文檔驗證失敗**
+   ```bash
+   # 查看詳細日誌
+   cat scripts/validation.log
+   # 快速修復常見問題
+   bash scripts/validate-docs.sh --quick-fix
    ```
 
 ### 錯誤代碼
@@ -227,12 +415,27 @@ jobs:
 - `1` - 一般錯誤
 - `130` - 使用者中斷
 
+## 📊 工具使用統計
+
+| 工具                   | 類別     | 維護難度 | 使用頻率           |
+| ---------------------- | -------- | -------- | ------------------ |
+| sync-changelog.js      | 文檔同步 | 低       | 每次更新 CHANGELOG |
+| sync-index-docs.js     | 文檔同步 | 中       | 每次文檔更新       |
+| doc-sync/              | 文檔同步 | 中       | 每日自動           |
+| validate-docs.sh       | 品質檢查 | 低       | 每次提交前         |
+| sync-versions.sh       | 版本管理 | 中       | 每週/每次發布      |
+| batch-sync-projects.sh | 專案管理 | 低       | 每週/按需          |
+| setup-git-hooks.sh     | 自動化   | 低       | 一次性設定         |
+| import-mcp-servers.sh  | MCP 整合 | 低       | 按需使用           |
+
 ## 📞 技術支援
 
 如有問題請：
-1. 檢查 `auto-discover-sync-report.json` 同步報告
-2. 使用 `--verbose` 查看詳細日誌
-3. 在 GitHub Issues 中回報問題
+
+1. 查看對應工具的報告文件（`*-report.md`）
+2. 使用 `--verbose` 或 `--help` 查看詳細資訊
+3. 檢查日誌文件（`scripts/*.log`）
+4. 在 GitHub Issues 中回報問題
 
 ## 📄 許可證
 
@@ -241,5 +444,6 @@ MIT License - 請參考 LICENSE 文件。
 ---
 
 **最後更新**: 2025-10-29  
-**版本**: 3.0  
-**維護者**: s123104
+**版本**: 4.0  
+**維護者**: s123104  
+**腳本總數**: 8 個核心工具 + doc-sync 模組
