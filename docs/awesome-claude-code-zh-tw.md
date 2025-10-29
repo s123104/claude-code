@@ -18,11 +18,13 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 > - **文件整理時間**：2025-10-28T19:00:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：精選的 Claude Code 資源總覽，包含 Agent Skills、斜線指令、CLI 工具、Hooks 系統等
 > - **場景**：學習 Claude Code、提升工作流程、探索最佳實踐、社群資源發現
 > - **客群**：Claude Code 用戶、開發者、學習者、工具探索者
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/hesreallyhim/awesome-claude-code)
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
 > - [Agent Skills 官方文檔](https://docs.claude.com/en/docs/claude-code/skills)
@@ -35,7 +37,7 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 
 ### 🆕 2025-10-16 - **AGENT SKILLS 重大更新**
 
-**Claude Got Skills!** 
+**Claude Got Skills!**
 
 自 Claude Code v2.0.20 起，我們獲得了一組**新功能**供使用者探索：[**Agent Skills**](https://docs.claude.com/en/docs/claude-code/skills)。
 
@@ -48,26 +50,31 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 > 過去 7 天新增的資源
 
 ### [`Codex Skill`](https://github.com/skills-directory/skill-codex)
+
 由 [klaudworks](https://github.com/klaudworks) 開發 | MIT 授權
 
 使用戶能夠從 claude code 中提示 codex。與原始 codex mcp 伺服器不同，此技能會從您的提示中推斷參數（如模型、推理努力、沙箱），或要求您指定它們。它還簡化了繼續先前 codex 會話的過程，以便 codex 可以繼續使用先前的情境。
 
 ### [`claude-mem`](https://github.com/thedotmack/claude-mem)
+
 由 [Alex Newman](https://github.com/thedotmack) 開發
 
 持久化記憶壓縮系統，捕獲工具使用、生成 AI 驅動的會話摘要，並透過 SQLite 儲存和全文搜尋將相關情境注入未來的 Claude Code 會話中（無需額外成本依賴！）🦾
 
 ### [`cc-sessions`](https://github.com/GWUDCAP/cc-sessions)
+
 由 [toastdev](https://github.com/satoastshi) 開發 | MIT 授權
 
 使用 Claude Code 進行生產開發的主觀方法。
 
 ### [`fcakyon Collection`](https://github.com/fcakyon/claude-codex-settings/tree/main/.claude/hooks)
+
 由 [Fatih Akyon](https://github.com/fcakyon) 開發 | Apache-2.0 授權
 
 精心編寫的程式碼品質和工具使用管理 hooks 集合（例如強制使用 Tavily 而非 WebFetch 工具）。
 
 ### [`/linux-desktop-slash-commands`](https://github.com/danielrosehill/Claude-Code-Linux-Desktop-Slash-Commands)
+
 由 [Daniel Rosehill](https://github.com/danielrosehill) 開發
 
 專為促進 Linux 桌面環境中常見和進階操作的斜線指令庫（儘管許多指令在 Linux 伺服器上也很有用）。指令組包括硬體基準測試、檔案系統組織和安全性態勢驗證。
@@ -126,12 +133,15 @@ Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜�
 ### 可用的 Agent Skills
 
 #### [`Codex Skill`](https://github.com/skills-directory/skill-codex)
+
 **功能**：從 Claude Code 內部提示 Codex
+
 - 自動推斷模型、推理努力、沙箱參數
 - 簡化繼續先前 Codex 會話的過程
 - 保持情境連續性
 
 **使用場景**：
+
 - 需要多步驟推理的複雜程式設計任務
 - 需要深度思考的架構設計
 - 跨會話的程式碼生成和優化
@@ -444,4 +454,4 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 > 本文件僅為社群整理版本，詳細內容與最新資源請參閱官方 GitHub 與文檔。
 >
-**最後更新**：2025-08-20T00:13:54+08:00 | **專案更新**：2025-08-18T22:09:25-04:00
+> **最後更新**：2025-10-29T02:05:00+08:00 | **專案更新**：2025-10-29T13:54:56-04:00

@@ -10,15 +10,17 @@ Claude Code Security Reviewer 是 **Anthropic 官方** 開發的 AI 驅動安全
 >
 > - **專案名稱**：Claude Code Security Reviewer
 > - **專案版本**：v1.0
-> - **專案最後更新**：2025-08-12
+> - **專案最後更新**：2025-08-25
 > - **文件整理時間**：2025-10-28T19:00:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：AI 驅動的 GitHub Action 安全審查工具，提供深度語義分析和自動化 CI/CD 整合
 > - **場景**：Pull Request 安全檢查、CI/CD 自動化、程式碼審查、安全漏洞檢測
 > - **客群**：開發團隊、安全工程師、DevSecOps 實踐者、專案管理者
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/anthropics/claude-code-security-review)（Anthropic 官方）
 > - [官方部落格文章](https://www.anthropic.com/news/automate-security-reviews-with-claude-code)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
@@ -574,5 +576,5 @@ claude --security-review --path ./src --output-format json
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/anthropics/claude-code-security-review) 與相關文檔。
 >
-**版本資訊**：Claude Code Security Reviewer - 最新版本  
-> **最後更新**：2025-08-20T00:13:54+08:00
+> **版本資訊**：Claude Code Security Reviewer - 最新版本  
+> **最後更新**：2025-10-29T02:08:00+08:00

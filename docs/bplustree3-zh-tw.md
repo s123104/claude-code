@@ -28,15 +28,17 @@ Kent Beck 開發此專案的核心目的：
 >
 > - **專案名稱**：BPlusTree3
 > - **專案版本**：v3.0
-> - **專案最後更新**：2025-08-18
+> - **專案最後更新**：2025-09-12
 > - **文件整理時間**：2025-10-28T19:00:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：Kent Beck 實驗開發的高效能 B+ Tree 資料結構，Rust + Python 雙語言實作，AI 輔助編程案例
 > - **場景**：AI 輔助編程實驗、效能優化研究、資料庫索引、教學示範
 > - **客群**：AI 輔助開發研究者、效能優化工程師、資料庫開發者、軟體工程學習者
 >
 > **資料來源**
+>
 > - [KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3) 官方文件與原始碼
 > - [B+ Tree 學術資源](https://en.wikipedia.org/wiki/B%2B_tree)
 > - [資料庫系統實作參考](https://db-book.com/)
@@ -71,11 +73,13 @@ BPlusTree3 是 Kent Beck 所設計的高效能 B+ Tree 資料結構實作，專�
 ### 1.2 效能亮點
 
 #### Rust 實作
+
 - **刪除操作快 41%**：優化的重新平衡演算法
 - **混合工作負載提升 19-30%**：全面的效能優化
 - **完整 Rust 範圍語法支援**：`3..7`、`3..=7`、`5..` 等
 
 #### Python 實作
+
 - **部分範圍掃描快 2.5 倍**：相比 SortedDict
 - **中等範圍查詢快 1.4 倍**：針對特定查詢模式優化
 - **優秀的大資料集迭代縮放**：線性時間複雜度
@@ -89,12 +93,12 @@ BPlusTree3 是 Kent Beck 所設計的高效能 B+ Tree 資料結構實作，專�
 
 ### 1.4 效能優勢
 
-| 操作類型 | 時間複雜度 | 空間複雜度 | 適用場景 |
-|----------|------------|------------|----------|
-| 插入 | O(log n) | O(1) | 動態資料插入 |
-| 刪除 | O(log n) | O(1) | 資料清理 |
-| 查詢 | O(log n) | O(1) | 單點查詢 |
-| 範圍查詢 | O(log n + k) | O(k) | 區間搜尋 |
+| 操作類型 | 時間複雜度   | 空間複雜度 | 適用場景     |
+| -------- | ------------ | ---------- | ------------ |
+| 插入     | O(log n)     | O(1)       | 動態資料插入 |
+| 刪除     | O(log n)     | O(1)       | 資料清理     |
+| 查詢     | O(log n)     | O(1)       | 單點查詢     |
+| 範圍查詢 | O(log n + k) | O(k)       | 區間搜尋     |
 
 - 官方專案：[KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3)
 
@@ -203,19 +207,19 @@ fn main() {
     let config = Config::default()
         .with_order(4)
         .with_arena_size(1024 * 1024);
-    
+
     // 建立樹
     let mut tree = BPlusTree::with_config(config);
-    
+
     // 插入資料
     for i in 0..1000 {
         tree.insert(i, format!("value_{}", i));
     }
-    
+
     // 範圍查詢
     let range: Vec<_> = tree.range(100..200).collect();
     println!("Found {} items in range 100..200", range.len());
-    
+
     // 效能測試
     let start = std::time::Instant::now();
     for i in 0..1000 {
@@ -235,15 +239,15 @@ import time
 def main():
     # 建立樹
     tree = BPlusTree(order=4)
-    
+
     # 插入資料
     for i in range(1000):
         tree.insert(i, f"value_{i}")
-    
+
     # 範圍查詢
     range_items = list(tree.range(100, 200))
     print(f"Found {len(range_items)} items in range 100..200")
-    
+
     # 效能測試
     start_time = time.time()
     for i in range(1000):
@@ -267,6 +271,7 @@ if __name__ == "__main__":
 ### 6.1 效能優化技巧
 
 #### Rust 優化
+
 ```rust
 // 使用適當的 order 值
 let config = Config::default()
@@ -282,6 +287,7 @@ tree.insert_batch(batch);
 ```
 
 #### Python 優化
+
 ```python
 # 使用生成器避免記憶體浪費
 def data_generator():
@@ -303,6 +309,7 @@ gc.collect()  # 手動垃圾回收
 ### 7.1 Claude Code 整合最佳實踐
 
 #### 程式碼索引優化
+
 ```python
 # Claude Code 專案索引範例
 class CodebaseIndex:
@@ -310,21 +317,22 @@ class CodebaseIndex:
         self.file_index = BPlusTree(order)
         self.symbol_index = BPlusTree(order)
         self.dependency_index = BPlusTree(order)
-    
+
     def index_project(self, project_path):
         """為整個專案建立索引"""
         for file_path in self.scan_files(project_path):
             self.index_file(file_path)
-    
+
     def fast_search(self, pattern):
         """快速搜尋程式碼符號"""
         return self.symbol_index.range_search(pattern)
 ```
 
 #### 效能調優策略
+
 - **階數選擇**：
   - 小型專案（<10K 檔案）：階數 64-128
-  - 中型專案（10K-100K 檔案）：階數 256-512  
+  - 中型專案（10K-100K 檔案）：階數 256-512
   - 大型專案（>100K 檔案）：階數 1024+
 
 - **記憶體管理**：
@@ -340,23 +348,25 @@ class CodebaseIndex:
 ### 7.2 併發存取最佳實踐
 
 #### 讀寫分離
+
 ```python
 class ConcurrentBPlusTree:
     def __init__(self, order=256):
         self.tree = BPlusTree(order)
         self.read_lock = ReadWriteLock()
         self.write_lock = ReadWriteLock()
-    
+
     def concurrent_read(self, key):
         with self.read_lock.read():
             return self.tree.search(key)
-    
+
     def concurrent_write(self, key, value):
         with self.write_lock.write():
             return self.tree.insert(key, value)
 ```
 
 #### 批次操作優化
+
 - **批次插入**：累積多個操作後一次性執行
 - **預先排序**：插入前對資料進行排序，減少樹重組
 - **分段處理**：大量資料分批處理，避免記憶體溢出
@@ -364,13 +374,14 @@ class ConcurrentBPlusTree:
 ### 7.3 持久化與備份策略
 
 #### Write-Ahead Logging (WAL)
+
 ```python
 class PersistentBPlusTree:
     def __init__(self, data_file, wal_file):
         self.data_file = data_file
         self.wal = WriteAheadLog(wal_file)
         self.tree = self.load_from_disk()
-    
+
     def safe_insert(self, key, value):
         # 先寫入 WAL
         self.wal.log_operation('INSERT', key, value)
@@ -382,6 +393,7 @@ class PersistentBPlusTree:
 ```
 
 #### 增量備份
+
 - **差異備份**：只備份變更的節點
 - **檢查點機制**：定期創建完整快照
 - **壓縮儲存**：使用壓縮算法減少儲存空間
@@ -389,6 +401,7 @@ class PersistentBPlusTree:
 ### 7.4 監控與診斷
 
 #### 效能指標追蹤
+
 ```python
 class BTreePerformanceMonitor:
     def __init__(self):
@@ -398,13 +411,14 @@ class BTreePerformanceMonitor:
             'cache_hit_rate': 0,
             'rebalance_frequency': 0
         }
-    
+
     def track_operation(self, operation_type, duration):
         self.metrics['operation_count'] += 1
         # 更新其他指標...
 ```
 
 #### 診斷工具
+
 - **樹結構視覺化**：生成樹的圖形表示
 - **熱點分析**：識別頻繁存取的節點
 - **碎片化檢測**：監控樹的平衡度
@@ -412,22 +426,24 @@ class BTreePerformanceMonitor:
 ### 7.5 Claude Code 特定優化
 
 #### 語義搜尋整合
+
 ```python
 def semantic_code_search(query, btree_index):
     """結合 Claude Code 的語義理解進行搜尋"""
     # 使用 Claude 分析查詢意圖
     semantic_tokens = claude_analyze(query)
-    
+
     # 在 B+ Tree 中快速定位相關程式碼
     candidates = []
     for token in semantic_tokens:
         candidates.extend(btree_index.range_search(token))
-    
+
     # 使用 Claude 進行結果排序
     return claude_rank_results(candidates, query)
 ```
 
 #### 版本差異追蹤
+
 ```python
 def track_code_changes(old_tree, new_tree):
     """高效追蹤程式碼變更"""
@@ -436,14 +452,14 @@ def track_code_changes(old_tree, new_tree):
         'modified': [],
         'deleted': []
     }
-    
+
     # 利用 B+ Tree 的排序特性快速比較
     old_iter = old_tree.iterator()
     new_iter = new_tree.iterator()
-    
+
     # 雙指針演算法比較兩個樹
     # ...實作細節
-    
+
     return changes
 ```
 
@@ -459,6 +475,7 @@ def track_code_changes(old_tree, new_tree):
 ### 8.1 常見效能問題
 
 #### 記憶體使用過高
+
 ```python
 # 檢查記憶體使用
 import psutil
@@ -471,16 +488,17 @@ tree.set_memory_limit(1024 * 1024 * 100)  # 設定記憶體限制
 ```
 
 #### 查詢效能下降
+
 ```python
 # 檢查樹的平衡度
 def check_balance(tree):
     depths = []
     for leaf in tree.leaves():
         depths.append(tree.depth(leaf))
-    
+
     avg_depth = sum(depths) / len(depths)
     max_depth = max(depths)
-    
+
     print(f"Average depth: {avg_depth:.2f}")
     print(f"Max depth: {max_depth}")
     print(f"Balance ratio: {avg_depth / max_depth:.2f}")
@@ -511,8 +529,8 @@ def check_balance(tree):
 
 ---
 
-本文件最後更新：2025-08-20T00:13:54+08:00
->
+本文件最後更新：2025-10-29T02:06:00+08:00
+
 > 主要參考來源：[KentBeck/BPlusTree3](https://github.com/KentBeck/BPlusTree3)
 >
-**專案更新**：2025-08-18T16:28:05+00:00 | **特色**：雙語言實作（Rust + Python）
+> **專案更新**：2025-09-12T06:35:34+00:00 | **特色**：雙語言實作（Rust + Python）

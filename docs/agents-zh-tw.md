@@ -12,15 +12,17 @@
 >
 > - **專案名稱**：Claude Code Plugins
 > - **專案版本**：v2.0.0
-> - **專案最後更新**：2025-08-15
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **專案最後更新**：2025-10-24
+> - **文件整理時間**：2025-10-29T02:00:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：85 個專業 AI 代理 + 15 個多代理編排器 + 47 個代理技能 + 44 個開發工具，組織為 63 個插件
 > - **場景**：全端開發、AI工程、DevOps自動化、安全加固、ML管道、事件響應
 > - **客群**：專業開發者、企業團隊、AI研究人員、DevOps工程師、安全專家
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/wshobson/agents)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [Plugins 官方指南](https://docs.claude.com/en/docs/claude-code/plugins)
@@ -184,152 +186,152 @@
 
 ### 🎨 開發類（4 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **debugging-toolkit** | 互動式除錯和開發者體驗優化 | `/plugin install debugging-toolkit` |
-| **backend-development** | 後端 API 設計與 GraphQL、TDD | `/plugin install backend-development` |
-| **frontend-mobile-development** | 前端 UI 和行動應用開發 | `/plugin install frontend-mobile-development` |
-| **multi-platform-apps** | 跨平台應用協調（web/iOS/Android） | `/plugin install multi-platform-apps` |
+| 插件                            | 描述                              | 安裝指令                                      |
+| ------------------------------- | --------------------------------- | --------------------------------------------- |
+| **debugging-toolkit**           | 互動式除錯和開發者體驗優化        | `/plugin install debugging-toolkit`           |
+| **backend-development**         | 後端 API 設計與 GraphQL、TDD      | `/plugin install backend-development`         |
+| **frontend-mobile-development** | 前端 UI 和行動應用開發            | `/plugin install frontend-mobile-development` |
+| **multi-platform-apps**         | 跨平台應用協調（web/iOS/Android） | `/plugin install multi-platform-apps`         |
 
 ### 📚 文檔類（2 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **code-documentation** | 文檔生成和程式碼說明 | `/plugin install code-documentation` |
+| 插件                         | 描述                             | 安裝指令                                   |
+| ---------------------------- | -------------------------------- | ------------------------------------------ |
+| **code-documentation**       | 文檔生成和程式碼說明             | `/plugin install code-documentation`       |
 | **documentation-generation** | OpenAPI 規格、Mermaid 圖表、教學 | `/plugin install documentation-generation` |
 
 ### 🔄 工作流類（3 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **git-pr-workflows** | Git 自動化和 PR 增強 | `/plugin install git-pr-workflows` |
-| **full-stack-orchestration** | 端到端功能編排 | `/plugin install full-stack-orchestration` |
-| **tdd-workflows** | 測試驅動開發方法論 | `/plugin install tdd-workflows` |
+| 插件                         | 描述                 | 安裝指令                                   |
+| ---------------------------- | -------------------- | ------------------------------------------ |
+| **git-pr-workflows**         | Git 自動化和 PR 增強 | `/plugin install git-pr-workflows`         |
+| **full-stack-orchestration** | 端到端功能編排       | `/plugin install full-stack-orchestration` |
+| **tdd-workflows**            | 測試驅動開發方法論   | `/plugin install tdd-workflows`            |
 
 ### ✅ 測試類（2 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **unit-testing** | 自動單元測試生成（Python/JavaScript） | `/plugin install unit-testing` |
-| **tdd-workflows** | 測試驅動開發方法論 | `/plugin install tdd-workflows` |
+| 插件              | 描述                                  | 安裝指令                        |
+| ----------------- | ------------------------------------- | ------------------------------- |
+| **unit-testing**  | 自動單元測試生成（Python/JavaScript） | `/plugin install unit-testing`  |
+| **tdd-workflows** | 測試驅動開發方法論                    | `/plugin install tdd-workflows` |
 
 ### 🔍 品質類（3 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **code-review-ai** | AI 驅動的程式碼審查 | `/plugin install code-review-ai` |
-| **comprehensive-review** | 多角度分析（架構/安全/效能） | `/plugin install comprehensive-review` |
-| **application-performance** | 應用程式效能分析和優化 | `/plugin install application-performance` |
+| 插件                        | 描述                         | 安裝指令                                  |
+| --------------------------- | ---------------------------- | ----------------------------------------- |
+| **code-review-ai**          | AI 驅動的程式碼審查          | `/plugin install code-review-ai`          |
+| **comprehensive-review**    | 多角度分析（架構/安全/效能） | `/plugin install comprehensive-review`    |
+| **application-performance** | 應用程式效能分析和優化       | `/plugin install application-performance` |
 
 ### 🤖 AI & ML 類（4 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **llm-application-dev** | LLM 應用、RAG、提示工程 | `/plugin install llm-application-dev` |
-| **agent-orchestration** | 多代理系統和協調 | `/plugin install agent-orchestration` |
-| **context-engineering** | 上下文優化和提示設計 | `/plugin install context-engineering` |
-| **machine-learning-ops** | MLOps 管道和模型服務 | `/plugin install machine-learning-ops` |
+| 插件                     | 描述                    | 安裝指令                               |
+| ------------------------ | ----------------------- | -------------------------------------- |
+| **llm-application-dev**  | LLM 應用、RAG、提示工程 | `/plugin install llm-application-dev`  |
+| **agent-orchestration**  | 多代理系統和協調        | `/plugin install agent-orchestration`  |
+| **context-engineering**  | 上下文優化和提示設計    | `/plugin install context-engineering`  |
+| **machine-learning-ops** | MLOps 管道和模型服務    | `/plugin install machine-learning-ops` |
 
 ### 📊 資料類（2 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **data-engineering** | ETL 管道、資料倉儲 | `/plugin install data-engineering` |
-| **data-validation-suite** | 資料品質和驗證 | `/plugin install data-validation-suite` |
+| 插件                      | 描述               | 安裝指令                                |
+| ------------------------- | ------------------ | --------------------------------------- |
+| **data-engineering**      | ETL 管道、資料倉儲 | `/plugin install data-engineering`      |
+| **data-validation-suite** | 資料品質和驗證     | `/plugin install data-validation-suite` |
 
 ### 🗄️ 資料庫類（2 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **database-design** | 資料庫架構和設計 | `/plugin install database-design` |
+| 插件                    | 描述                  | 安裝指令                              |
+| ----------------------- | --------------------- | ------------------------------------- |
+| **database-design**     | 資料庫架構和設計      | `/plugin install database-design`     |
 | **database-migrations** | Schema 遷移和版本控制 | `/plugin install database-migrations` |
 
 ### 🚨 維運類（4 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **incident-response** | 生產事件管理 | `/plugin install incident-response` |
-| **error-diagnostics** | 錯誤診斷和分析 | `/plugin install error-diagnostics` |
-| **distributed-debugging** | 分散式系統追蹤 | `/plugin install distributed-debugging` |
+| 插件                         | 描述            | 安裝指令                                   |
+| ---------------------------- | --------------- | ------------------------------------------ |
+| **incident-response**        | 生產事件管理    | `/plugin install incident-response`        |
+| **error-diagnostics**        | 錯誤診斷和分析  | `/plugin install error-diagnostics`        |
+| **distributed-debugging**    | 分散式系統追蹤  | `/plugin install distributed-debugging`    |
 | **observability-monitoring** | 監控、追蹤、SLO | `/plugin install observability-monitoring` |
 
 ### ⚡ 效能類（2 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **application-performance** | 應用程式效能優化 | `/plugin install application-performance` |
+| 插件                            | 描述                 | 安裝指令                                      |
+| ------------------------------- | -------------------- | --------------------------------------------- |
+| **application-performance**     | 應用程式效能優化     | `/plugin install application-performance`     |
 | **database-cloud-optimization** | 資料庫和雲端成本優化 | `/plugin install database-cloud-optimization` |
 
 ### ☁️ 基礎設施類（5 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **deployment-automation** | 部署自動化和 CI/CD | `/plugin install deployment-automation` |
-| **infrastructure-validation** | IaC 驗證和測試 | `/plugin install infrastructure-validation` |
-| **kubernetes-operations** | K8s 操作和 GitOps | `/plugin install kubernetes-operations` |
-| **cloud-infrastructure** | AWS/Azure/GCP 架構 | `/plugin install cloud-infrastructure` |
-| **ci-cd-automation** | GitHub Actions、GitLab CI | `/plugin install ci-cd-automation` |
+| 插件                          | 描述                      | 安裝指令                                    |
+| ----------------------------- | ------------------------- | ------------------------------------------- |
+| **deployment-automation**     | 部署自動化和 CI/CD        | `/plugin install deployment-automation`     |
+| **infrastructure-validation** | IaC 驗證和測試            | `/plugin install infrastructure-validation` |
+| **kubernetes-operations**     | K8s 操作和 GitOps         | `/plugin install kubernetes-operations`     |
+| **cloud-infrastructure**      | AWS/Azure/GCP 架構        | `/plugin install cloud-infrastructure`      |
+| **ci-cd-automation**          | GitHub Actions、GitLab CI | `/plugin install ci-cd-automation`          |
 
 ### 🔒 安全類（4 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **security-scanning** | SAST、依賴掃描 | `/plugin install security-scanning` |
-| **security-compliance** | SOC2、HIPAA、GDPR | `/plugin install security-compliance` |
-| **backend-api-security** | 後端/API 安全 | `/plugin install backend-api-security` |
-| **frontend-mobile-security** | 前端/行動安全 | `/plugin install frontend-mobile-security` |
+| 插件                         | 描述              | 安裝指令                                   |
+| ---------------------------- | ----------------- | ------------------------------------------ |
+| **security-scanning**        | SAST、依賴掃描    | `/plugin install security-scanning`        |
+| **security-compliance**      | SOC2、HIPAA、GDPR | `/plugin install security-compliance`      |
+| **backend-api-security**     | 後端/API 安全     | `/plugin install backend-api-security`     |
+| **frontend-mobile-security** | 前端/行動安全     | `/plugin install frontend-mobile-security` |
 
 ### 💻 程式語言類（7 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **python-development** | Python 專案腳手架（含 5 技能） | `/plugin install python-development` |
-| **javascript-typescript** | JS/TS 腳手架（含 4 技能） | `/plugin install javascript-typescript` |
-| **systems-programming** | C、C++、Rust、Go | `/plugin install systems-programming` |
-| **jvm-languages** | Java、Scala、C# | `/plugin install jvm-languages` |
-| **web-scripting** | Ruby、PHP | `/plugin install web-scripting` |
-| **functional-programming** | Elixir、Haskell | `/plugin install functional-programming` |
-| **embedded-systems** | ARM Cortex-M、嵌入式 | `/plugin install embedded-systems` |
+| 插件                       | 描述                           | 安裝指令                                 |
+| -------------------------- | ------------------------------ | ---------------------------------------- |
+| **python-development**     | Python 專案腳手架（含 5 技能） | `/plugin install python-development`     |
+| **javascript-typescript**  | JS/TS 腳手架（含 4 技能）      | `/plugin install javascript-typescript`  |
+| **systems-programming**    | C、C++、Rust、Go               | `/plugin install systems-programming`    |
+| **jvm-languages**          | Java、Scala、C#                | `/plugin install jvm-languages`          |
+| **web-scripting**          | Ruby、PHP                      | `/plugin install web-scripting`          |
+| **functional-programming** | Elixir、Haskell                | `/plugin install functional-programming` |
+| **embedded-systems**       | ARM Cortex-M、嵌入式           | `/plugin install embedded-systems`       |
 
 ### 🔗 區塊鏈類（1 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
+| 插件                | 描述                              | 安裝指令                          |
+| ------------------- | --------------------------------- | --------------------------------- |
 | **blockchain-web3** | 智能合約、DeFi、Web3（含 4 技能） | `/plugin install blockchain-web3` |
 
 ### 💰 金融類（1 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
+| 插件                     | 描述               | 安裝指令                               |
+| ------------------------ | ------------------ | -------------------------------------- |
 | **quantitative-trading** | 量化交易、風險管理 | `/plugin install quantitative-trading` |
 
 ### 💳 支付類（1 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
+| 插件                   | 描述                              | 安裝指令                             |
+| ---------------------- | --------------------------------- | ------------------------------------ |
 | **payment-processing** | Stripe、PayPal、帳單（含 4 技能） | `/plugin install payment-processing` |
 
 ### 🎮 遊戲類（1 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
+| 插件                 | 描述                  | 安裝指令                           |
+| -------------------- | --------------------- | ---------------------------------- |
 | **game-development** | Unity、Minecraft 插件 | `/plugin install game-development` |
 
 ### 📢 行銷類（4 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **seo-content-creation** | SEO 內容創作 | `/plugin install seo-content-creation` |
+| 插件                           | 描述          | 安裝指令                                     |
+| ------------------------------ | ------------- | -------------------------------------------- |
+| **seo-content-creation**       | SEO 內容創作  | `/plugin install seo-content-creation`       |
 | **seo-technical-optimization** | 技術 SEO 優化 | `/plugin install seo-technical-optimization` |
-| **seo-analysis-monitoring** | SEO 分析監控 | `/plugin install seo-analysis-monitoring` |
-| **content-marketing** | 內容行銷策略 | `/plugin install content-marketing` |
+| **seo-analysis-monitoring**    | SEO 分析監控  | `/plugin install seo-analysis-monitoring`    |
+| **content-marketing**          | 內容行銷策略  | `/plugin install content-marketing`          |
 
 ### 💼 業務類（3 個插件）
 
-| 插件 | 描述 | 安裝指令 |
-|------|------|----------|
-| **business-analytics** | 業務分析和報告 | `/plugin install business-analytics` |
-| **hr-legal-compliance** | HR 和法律合規 | `/plugin install hr-legal-compliance` |
+| 插件                          | 描述           | 安裝指令                                    |
+| ----------------------------- | -------------- | ------------------------------------------- |
+| **business-analytics**        | 業務分析和報告 | `/plugin install business-analytics`        |
+| **hr-legal-compliance**       | HR 和法律合規  | `/plugin install hr-legal-compliance`       |
 | **customer-sales-automation** | 客戶支援和銷售 | `/plugin install customer-sales-automation` |
 
 **完整插件清單**: 共 23 個類別、63 個插件。查看 [完整插件目錄](https://github.com/wshobson/agents/blob/main/docs/plugins.md)。
@@ -445,54 +447,54 @@
 
 #### 核心架構
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **backend-architect** | Opus | RESTful API 設計、微服務邊界、資料庫 schema |
-| **frontend-developer** | Sonnet | React 元件、響應式佈局、客戶端狀態管理 |
-| **graphql-architect** | Opus | GraphQL schema、resolvers、federation 架構 |
-| **architect-reviewer** | Opus | 架構一致性分析和模式驗證 |
-| **cloud-architect** | Opus | AWS/Azure/GCP 基礎設施設計和成本優化 |
-| **hybrid-cloud-architect** | Opus | 跨雲端和本地環境的多雲策略 |
-| **kubernetes-architect** | Opus | 雲原生基礎設施與 Kubernetes、GitOps |
+| 代理                       | 模型   | 描述                                        |
+| -------------------------- | ------ | ------------------------------------------- |
+| **backend-architect**      | Opus   | RESTful API 設計、微服務邊界、資料庫 schema |
+| **frontend-developer**     | Sonnet | React 元件、響應式佈局、客戶端狀態管理      |
+| **graphql-architect**      | Opus   | GraphQL schema、resolvers、federation 架構  |
+| **architect-reviewer**     | Opus   | 架構一致性分析和模式驗證                    |
+| **cloud-architect**        | Opus   | AWS/Azure/GCP 基礎設施設計和成本優化        |
+| **hybrid-cloud-architect** | Opus   | 跨雲端和本地環境的多雲策略                  |
+| **kubernetes-architect**   | Opus   | 雲原生基礎設施與 Kubernetes、GitOps         |
 
 #### UI/UX 與行動
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **ui-ux-designer** | Sonnet | 介面設計、線框圖、設計系統 |
-| **ui-visual-validator** | Sonnet | 視覺回歸測試和 UI 驗證 |
-| **mobile-developer** | Sonnet | React Native 和 Flutter 應用開發 |
-| **ios-developer** | Sonnet | Swift/SwiftUI 原生 iOS 開發 |
-| **flutter-expert** | Sonnet | 進階 Flutter 開發與狀態管理 |
+| 代理                    | 模型   | 描述                             |
+| ----------------------- | ------ | -------------------------------- |
+| **ui-ux-designer**      | Sonnet | 介面設計、線框圖、設計系統       |
+| **ui-visual-validator** | Sonnet | 視覺回歸測試和 UI 驗證           |
+| **mobile-developer**    | Sonnet | React Native 和 Flutter 應用開發 |
+| **ios-developer**       | Sonnet | Swift/SwiftUI 原生 iOS 開發      |
+| **flutter-expert**      | Sonnet | 進階 Flutter 開發與狀態管理      |
 
 ### 6.2 程式語言專家（25 個代理）
 
 #### 系統與低階
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **c-pro** | Sonnet | 系統程式設計與記憶體管理 |
-| **cpp-pro** | Sonnet | 現代 C++（RAII、智能指標、STL） |
-| **rust-pro** | Sonnet | 記憶體安全系統程式設計 |
+| 代理           | 模型   | 描述                                 |
+| -------------- | ------ | ------------------------------------ |
+| **c-pro**      | Sonnet | 系統程式設計與記憶體管理             |
+| **cpp-pro**    | Sonnet | 現代 C++（RAII、智能指標、STL）      |
+| **rust-pro**   | Sonnet | 記憶體安全系統程式設計               |
 | **golang-pro** | Sonnet | 並發程式設計（goroutines、channels） |
 
 #### Web 與應用
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
+| 代理               | 模型   | 描述                                    |
+| ------------------ | ------ | --------------------------------------- |
 | **javascript-pro** | Sonnet | 現代 JavaScript（ES6+、async、Node.js） |
-| **typescript-pro** | Sonnet | 進階 TypeScript 型別系統 |
-| **python-pro** | Sonnet | Python 開發與進階功能 |
-| **ruby-pro** | Sonnet | Ruby 元程式設計、Rails、gem 開發 |
-| **php-pro** | Sonnet | 現代 PHP 框架和效能優化 |
+| **typescript-pro** | Sonnet | 進階 TypeScript 型別系統                |
+| **python-pro**     | Sonnet | Python 開發與進階功能                   |
+| **ruby-pro**       | Sonnet | Ruby 元程式設計、Rails、gem 開發        |
+| **php-pro**        | Sonnet | 現代 PHP 框架和效能優化                 |
 
 #### 企業與 JVM
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **java-pro** | Sonnet | 現代 Java（streams、並發、JVM 優化） |
-| **scala-pro** | Sonnet | 企業 Scala 函數式程式設計 |
-| **csharp-pro** | Sonnet | C# 開發與 .NET 框架 |
+| 代理           | 模型   | 描述                                 |
+| -------------- | ------ | ------------------------------------ |
+| **java-pro**   | Sonnet | 現代 Java（streams、並發、JVM 優化） |
+| **scala-pro**  | Sonnet | 企業 Scala 函數式程式設計            |
+| **csharp-pro** | Sonnet | C# 開發與 .NET 框架                  |
 
 #### 專業平台（12 個）
 
@@ -502,95 +504,95 @@
 
 #### DevOps 與部署
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **devops-troubleshooter** | Sonnet | 生產除錯、日誌分析 |
-| **deployment-engineer** | Sonnet | CI/CD 管道、容器化、雲端部署 |
-| **terraform-specialist** | Sonnet | Terraform IaC 和狀態管理 |
-| **dx-optimizer** | Sonnet | 開發者體驗優化 |
+| 代理                      | 模型   | 描述                         |
+| ------------------------- | ------ | ---------------------------- |
+| **devops-troubleshooter** | Sonnet | 生產除錯、日誌分析           |
+| **deployment-engineer**   | Sonnet | CI/CD 管道、容器化、雲端部署 |
+| **terraform-specialist**  | Sonnet | Terraform IaC 和狀態管理     |
+| **dx-optimizer**          | Sonnet | 開發者體驗優化               |
 
 #### 資料庫管理
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **database-optimizer** | Sonnet | 查詢優化、索引設計 |
-| **database-admin** | Sonnet | 資料庫操作、備份、複製 |
-| **database-architect** | Opus | 從零開始的資料庫設計 |
+| 代理                   | 模型   | 描述                   |
+| ---------------------- | ------ | ---------------------- |
+| **database-optimizer** | Sonnet | 查詢優化、索引設計     |
+| **database-admin**     | Sonnet | 資料庫操作、備份、複製 |
+| **database-architect** | Opus   | 從零開始的資料庫設計   |
 
 #### 事件響應與網路
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **incident-responder** | Opus | 生產事件管理和解決 |
-| **network-engineer** | Sonnet | 網路除錯、負載平衡 |
+| 代理                   | 模型   | 描述               |
+| ---------------------- | ------ | ------------------ |
+| **incident-responder** | Opus   | 生產事件管理和解決 |
+| **network-engineer**   | Sonnet | 網路除錯、負載平衡 |
 
 ### 6.4 品質保證與安全（13 個代理）
 
 #### 程式碼品質與審查
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **code-reviewer** | Opus | 程式碼審查（安全和可靠性） |
-| **security-auditor** | Opus | 漏洞評估和 OWASP 合規 |
-| **backend-security-coder** | Opus | 安全後端編碼實踐 |
-| **frontend-security-coder** | Opus | XSS 防護、CSP 實作 |
-| **mobile-security-coder** | Opus | 行動安全模式 |
+| 代理                        | 模型 | 描述                       |
+| --------------------------- | ---- | -------------------------- |
+| **code-reviewer**           | Opus | 程式碼審查（安全和可靠性） |
+| **security-auditor**        | Opus | 漏洞評估和 OWASP 合規      |
+| **backend-security-coder**  | Opus | 安全後端編碼實踐           |
+| **frontend-security-coder** | Opus | XSS 防護、CSP 實作         |
+| **mobile-security-coder**   | Opus | 行動安全模式               |
 
 #### 測試與除錯
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **test-automator** | Sonnet | 全面測試套件建立 |
-| **tdd-orchestrator** | Sonnet | TDD 方法論指導 |
-| **debugger** | Sonnet | 錯誤解決和測試失敗分析 |
-| **error-detective** | Sonnet | 日誌分析和錯誤模式識別 |
+| 代理                 | 模型   | 描述                   |
+| -------------------- | ------ | ---------------------- |
+| **test-automator**   | Sonnet | 全面測試套件建立       |
+| **tdd-orchestrator** | Sonnet | TDD 方法論指導         |
+| **debugger**         | Sonnet | 錯誤解決和測試失敗分析 |
+| **error-detective**  | Sonnet | 日誌分析和錯誤模式識別 |
 
 #### 效能與可觀測性
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **performance-engineer** | Opus | 應用程式分析和優化 |
-| **observability-engineer** | Opus | 生產監控、分散式追蹤、SLI/SLO |
-| **search-specialist** | Haiku | 進階網路研究和資訊綜合 |
+| 代理                       | 模型  | 描述                          |
+| -------------------------- | ----- | ----------------------------- |
+| **performance-engineer**   | Opus  | 應用程式分析和優化            |
+| **observability-engineer** | Opus  | 生產監控、分散式追蹤、SLI/SLO |
+| **search-specialist**      | Haiku | 進階網路研究和資訊綜合        |
 
 ### 6.5 資料與 AI（7 個代理）
 
 #### 資料工程與分析
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **data-scientist** | Opus | 資料分析、SQL 查詢、BigQuery |
-| **data-engineer** | Sonnet | ETL 管道、資料倉儲、串流架構 |
+| 代理               | 模型   | 描述                         |
+| ------------------ | ------ | ---------------------------- |
+| **data-scientist** | Opus   | 資料分析、SQL 查詢、BigQuery |
+| **data-engineer**  | Sonnet | ETL 管道、資料倉儲、串流架構 |
 
 #### 機器學習與 AI
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **ai-engineer** | Opus | LLM 應用、RAG 系統、提示管道 |
-| **ml-engineer** | Opus | ML 管道、模型服務、特徵工程 |
-| **mlops-engineer** | Opus | ML 基礎設施、實驗追蹤、模型註冊 |
-| **prompt-engineer** | Opus | LLM 提示優化和工程 |
-| **context-engineer** | Opus | 上下文優化和 token 效率 |
+| 代理                 | 模型 | 描述                            |
+| -------------------- | ---- | ------------------------------- |
+| **ai-engineer**      | Opus | LLM 應用、RAG 系統、提示管道    |
+| **ml-engineer**      | Opus | ML 管道、模型服務、特徵工程     |
+| **mlops-engineer**   | Opus | ML 基礎設施、實驗追蹤、模型註冊 |
+| **prompt-engineer**  | Opus | LLM 提示優化和工程              |
+| **context-engineer** | Opus | 上下文優化和 token 效率         |
 
 ### 6.6 文檔與技術寫作（5 個代理）
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **docs-architect** | Opus | 全面的技術文檔生成 |
-| **api-documenter** | Sonnet | OpenAPI/Swagger 規格 |
-| **reference-builder** | Haiku | 技術參考和 API 文檔 |
-| **tutorial-engineer** | Sonnet | 逐步教學和教育內容 |
-| **mermaid-expert** | Sonnet | 圖表建立（流程圖、序列圖、ERD） |
+| 代理                  | 模型   | 描述                            |
+| --------------------- | ------ | ------------------------------- |
+| **docs-architect**    | Opus   | 全面的技術文檔生成              |
+| **api-documenter**    | Sonnet | OpenAPI/Swagger 規格            |
+| **reference-builder** | Haiku  | 技術參考和 API 文檔             |
+| **tutorial-engineer** | Sonnet | 逐步教學和教育內容              |
+| **mermaid-expert**    | Sonnet | 圖表建立（流程圖、序列圖、ERD） |
 
 ### 6.7 業務與營運（13 個代理）
 
 #### 業務分析與金融
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
+| 代理                 | 模型   | 描述                     |
+| -------------------- | ------ | ------------------------ |
 | **business-analyst** | Sonnet | 指標分析、報告、KPI 追蹤 |
-| **quant-analyst** | Opus | 金融建模、交易策略 |
-| **risk-manager** | Sonnet | 投資組合風險監控 |
+| **quant-analyst**    | Opus   | 金融建模、交易策略       |
+| **risk-manager**     | Sonnet | 投資組合風險監控         |
 
 #### 行銷與銷售（10 個 SEO 和內容代理）
 
@@ -599,21 +601,21 @@
 
 #### 支援與法律
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
+| 代理                 | 模型   | 描述                    |
+| -------------------- | ------ | ----------------------- |
 | **customer-support** | Sonnet | 支援工單、FAQ、客戶溝通 |
-| **hr-pro** | Opus | HR 營運、政策、員工關係 |
-| **legal-advisor** | Opus | 隱私政策、服務條款 |
+| **hr-pro**           | Opus   | HR 營運、政策、員工關係 |
+| **legal-advisor**    | Opus   | 隱私政策、服務條款      |
 
 ### 6.8 專業領域（5 個代理）
 
-| 代理 | 模型 | 描述 |
-|------|------|------|
-| **arm-cortex-expert** | Sonnet | ARM Cortex-M 韌體開發 |
-| **blockchain-developer** | Sonnet | Web3、智能合約、DeFi |
-| **payment-integration** | Sonnet | Stripe、PayPal 整合 |
-| **seo-analyst** | Sonnet | 全面 SEO 審計 |
-| **compliance-auditor** | Opus | SOC2、HIPAA、GDPR 合規 |
+| 代理                     | 模型   | 描述                   |
+| ------------------------ | ------ | ---------------------- |
+| **arm-cortex-expert**    | Sonnet | ARM Cortex-M 韌體開發  |
+| **blockchain-developer** | Sonnet | Web3、智能合約、DeFi   |
+| **payment-integration**  | Sonnet | Stripe、PayPal 整合    |
+| **seo-analyst**          | Sonnet | 全面 SEO 審計          |
+| **compliance-auditor**   | Opus   | SOC2、HIPAA、GDPR 合規 |
 
 **完整代理參考**: [85 個代理完整清單](https://github.com/wshobson/agents/blob/main/docs/agents.md)
 
@@ -726,9 +728,10 @@ Claude 會自動選擇和協調適當的代理：
 ```
 
 **協調 7+ 代理**：
+
 ```
-backend-architect → database-architect → frontend-developer 
-→ test-automator → security-auditor → deployment-engineer 
+backend-architect → database-architect → frontend-developer
+→ test-automator → security-auditor → deployment-engineer
 → observability-engineer
 ```
 
@@ -739,6 +742,7 @@ backend-architect → database-architect → frontend-developer
 ```
 
 **多代理安全評估**：
+
 - SAST 掃描
 - 依賴漏洞掃描
 - 程式碼審查
@@ -751,6 +755,7 @@ backend-architect → database-architect → frontend-developer
 ```
 
 **協調**：
+
 ```
 data-engineer → ml-engineer → mlops-engineer → observability-engineer
 ```
@@ -762,6 +767,7 @@ data-engineer → ml-engineer → mlops-engineer → observability-engineer
 ```
 
 **快速分類和解決**：
+
 ```
 incident-responder → devops-troubleshooter → performance-engineer
 → database-optimizer → observability-engineer
@@ -774,8 +780,9 @@ incident-responder → devops-troubleshooter → performance-engineer
 ```
 
 **協調**：
+
 ```
-cloud-architect → terraform-specialist → security-auditor 
+cloud-architect → terraform-specialist → security-auditor
 → deployment-engineer
 ```
 
@@ -790,6 +797,7 @@ cloud-architect → terraform-specialist → security-auditor
 #### 根據專案類型
 
 **全端 Web 應用**：
+
 ```bash
 /plugin install backend-development
 /plugin install frontend-mobile-development
@@ -798,6 +806,7 @@ cloud-architect → terraform-specialist → security-auditor
 ```
 
 **資料科學專案**：
+
 ```bash
 /plugin install python-development
 /plugin install data-engineering
@@ -805,6 +814,7 @@ cloud-architect → terraform-specialist → security-auditor
 ```
 
 **雲端基礎設施**：
+
 ```bash
 /plugin install cloud-infrastructure
 /plugin install kubernetes-operations
@@ -814,6 +824,7 @@ cloud-architect → terraform-specialist → security-auditor
 #### 根據團隊角色
 
 **後端工程師**：
+
 ```bash
 /plugin install backend-development
 /plugin install database-design
@@ -821,6 +832,7 @@ cloud-architect → terraform-specialist → security-auditor
 ```
 
 **DevOps 工程師**：
+
 ```bash
 /plugin install cloud-infrastructure
 /plugin install ci-cd-automation
@@ -828,6 +840,7 @@ cloud-architect → terraform-specialist → security-auditor
 ```
 
 **安全工程師**：
+
 ```bash
 /plugin install security-scanning
 /plugin install security-compliance

@@ -16,11 +16,13 @@ Context Engineering（脈絡工程）是一門為 AI 程式設計助手工程化
 > - **文件整理時間**：2025-10-28T19:00:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：提供 PRP 工作流程、結構化範本和最佳實踐，幫助開發者建立高效的 AI 協作流程
 > - **場景**：新專案啟動、AI 協作開發、技術寫作、知識管理、程式碼生成
 > - **客群**：AI 輔助開發者、技術寫作者、專案經理、知識工程師
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/coleam00/context-engineering-intro)
 > - [Context Engineering 方法論網站](https://contextengineering.dev)
 > - [PRP 工作流程說明](https://github.com/coleam00/context-engineering-intro#prp-workflow)
@@ -691,5 +693,5 @@ PRPs/
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/coleam00/context-engineering-intro) 與相關文檔。
 >
-**版本資訊**：Context Engineering - AI 輔助開發脈絡工程方法論  
+> **版本資訊**：Context Engineering - AI 輔助開發脈絡工程方法論  
 > **最後更新**：2025-08-20T00:13:54+08:00
