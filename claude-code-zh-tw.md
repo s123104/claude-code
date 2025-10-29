@@ -1,9 +1,9 @@
 # Claude Code 官方驗證使用手冊 📚
 
 > **經官方文檔驗證的完整 Claude Code 中文指南**  
-> 最後更新時間：2025-08-10T03:04:13+08:00  
+> 最後更新時間：2025-10-29T22:30:00+08:00  
 > 文件語言：繁體中文  
-> 版本：v6.0.0 - 2025 年 8 月最新版本，包含 Subagents 多代理協作系統  
+> 版本：v2.0.28 - 2025 年 10 月最新版本，包含 Plugins、Agent Skills、Subagents 多代理協作系統  
 > GitHub 作者：[s123104](https://github.com/s123104) 整理
 >
 > **🎯 本手冊特色**
@@ -541,6 +541,18 @@ claude -p "重構這個模組" --output-format stream-json --verbose
 | `/pr_comments` | PR 評論查看 | `/pr_comments`           | `/pr_comments`            |
 | `/agents`      | 子代理管理  | `/agents`                | `/agents`                 |
 | `/export`      | 對話匯出    | `/export`                | `/export`                 |
+| `/rewind`      | 回退程式碼/對話 | `/rewind`            | `/rewind`                 |
+
+### Plugin 與進階功能
+
+| 命令              | 功能                   | 語法                          | 範例                    |
+| ----------------- | ---------------------- | ----------------------------- | ----------------------- |
+| `/plugin`         | 外掛管理               | `/plugin [操作]`              | `/plugin`               |
+| `/sandbox`        | 啟用沙箱隔離           | `/sandbox`                    | `/sandbox`              |
+| `/usage`          | 查看方案使用限制       | `/usage`                      | `/usage`                |
+| `/context`        | 查看上下文使用情況     | `/context`                    | `/context`              |
+| `/output-style`   | 切換輸出樣式           | `/output-style [style]`       | `/output-style explanatory` |
+| `/statusline`     | 配置狀態列             | `/statusline`                 | `/statusline`           |
 
 ### 編輯器整合
 
@@ -769,6 +781,154 @@ Claude Code 的 Subagents 系統是一個革命性的多代理協作框架，允
 > Have the performance-engineer analyze the system,
   then coordinate with relevant specialists to implement fixes
 ```
+
+---
+
+## 🎯 Agent Skills 系統
+
+### 什麼是 Agent Skills
+
+Agent Skills 是模組化功能，透過包含指示、指令碼和資源的有組織資料夾來擴展 Claude 的功能。Skills 是**模型調用的**—Claude 根據任務上下文自主決定何時使用它們，與需要手動輸入的斜線命令不同。
+
+#### 核心優勢
+
+- **📦 模組化專業知識**：將複雜功能打包成可重用的單元
+- **🤖 自動發現**：Claude 根據上下文自動選擇合適的 Skill
+- **🔄 團隊共享**：透過 git 輕鬆與團隊分享專業知識
+- **⚡ 減少重複**：避免重複輸入相同的提示指令
+
+### Skills 儲存位置
+
+| 類型 | 位置 | 範圍 | 用途 |
+|------|------|------|------|
+| **個人 Skills** | `~/.claude/skills/` | 所有專案 | 個人工作流程和偏好 |
+| **專案 Skills** | `.claude/skills/` | 當前專案 | 團隊共享的專案特定功能 |
+| **外掛 Skills** | 外掛程式目錄 | 已安裝外掛 | 外掛程式提供的自動功能 |
+
+### 建立 Skill
+
+每個 Skill 包含一個 `SKILL.md` 檔案：
+
+```yaml
+---
+name: pdf-processor
+description: Extract text and tables from PDF files. Use when working with PDF files or document extraction.
+allowed-tools: Read, Bash  # 可選：限制工具存取
+---
+
+# PDF Processor
+
+## Instructions
+1. Use pdfplumber to extract text
+2. Parse tables and structure data
+3. Export to desired format
+
+## Requirements
+- pypdf and pdfplumber packages must be installed
+```
+
+### 使用 Skills
+
+Skills 由 Claude 自動調用，無需手動觸發：
+
+```bash
+# Claude 會自動使用 pdf-processor Skill
+> Can you extract the data from this PDF file?
+
+# 或明確請求
+> Use the PDF processor Skill to analyze document.pdf
+```
+
+### Skills vs 斜線命令 vs 子代理
+
+| 特性 | Skills | 斜線命令 | 子代理 |
+|------|--------|----------|--------|
+| **調用方式** | 模型自動 | 手動輸入 | 自動或手動 |
+| **檔案結構** | 目錄+SKILL.md | 單一 .md | 單一 .md |
+| **複雜度** | 中等到高 | 簡單 | 中等 |
+| **工具限制** | 可配置 | 可配置 | 可配置 |
+| **適用場景** | 複雜功能 | 快速提示 | 特定任務工作流 |
+
+---
+
+## 🔌 Plugin 外掛系統
+
+### 什麼是 Plugins
+
+Plugins（外掛程式）是可安裝的擴展包，可包含：
+- 自訂斜線命令
+- 專門的子代理
+- Agent Skills
+- Hooks 事件處理器
+- MCP 伺服器整合
+
+#### 核心優勢
+
+- **📦 打包分發**：一次安裝獲得多個功能
+- **🏪 市場系統**：從 Plugin Marketplace 輕鬆發現和安裝
+- **👥 團隊協作**：透過 `.claude/settings.json` 自動安裝團隊外掛
+- **🔄 版本管理**：支援版本控制和自動更新
+
+### Plugin 管理
+
+```bash
+# 開啟 Plugin 管理介面
+/plugin
+
+# 新增 Marketplace
+/plugin marketplace add your-org/claude-plugins
+
+# 安裝 Plugin
+/plugin install formatter@your-org
+
+# 啟用/停用
+/plugin enable plugin-name@marketplace
+/plugin disable plugin-name@marketplace
+
+# 移除
+/plugin uninstall plugin-name@marketplace
+```
+
+### Plugin 結構
+
+```
+my-plugin/
+├── .claude-plugin/
+│   └── plugin.json          # 外掛清單（必需）
+├── commands/                 # 自訂斜線命令
+│   └── custom.md
+├── agents/                   # 子代理定義
+│   └── reviewer.md
+├── skills/                   # Agent Skills
+│   └── my-skill/
+│       └── SKILL.md
+├── hooks/                    # 事件處理器
+│   └── hooks.json
+└── .mcp.json                # MCP 伺服器配置
+```
+
+### 團隊 Plugin 設定
+
+在 `.claude/settings.json` 中配置自動安裝：
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "company-tools": {
+      "source": {
+        "source": "github",
+        "repo": "company/claude-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "formatter@company-tools": true,
+    "deployer@company-tools": true
+  }
+}
+```
+
+當團隊成員信任專案資料夾時，外掛程式會自動安裝。
 
 ---
 
@@ -1150,6 +1310,93 @@ claude -r "abc123" "繼續這個功能開發"
 # 清除歷史
 /clear
 ```
+
+### 檢查點與回退系統
+
+#### 自動追蹤編輯
+
+Claude Code 會在每次編輯前自動捕獲程式碼狀態，讓您可以快速撤銷不需要的變更：
+
+- **自動檢查點**：每個使用者提示建立新檢查點
+- **跨會話持續**：檢查點在會話間保留（30 天）
+- **選擇性恢復**：可分別恢復程式碼或對話
+
+#### 回退操作
+
+```bash
+# 開啟回退選單
+按兩次 Esc（Esc + Esc）
+# 或使用指令
+/rewind
+```
+
+**回退選項**：
+1. **僅對話**：回退對話但保留程式碼變更
+2. **僅程式碼**：還原檔案變更但保留對話
+3. **程式碼和對話**：兩者都恢復到先前時間點
+
+#### 限制說明
+
+**不追蹤的變更**：
+- Bash 指令修改的檔案（如 `rm`、`mv`、`cp`）
+- Claude Code 外部的手動變更
+- 其他並行會話的編輯
+
+**最佳實踐**：
+- 檢查點補充但不取代 Git 版本控制
+- 將檢查點視為「本地撤銷」
+- 將 Git 視為「永久歷史」
+
+### 沙箱隔離系統
+
+#### 什麼是沙箱
+
+沙箱隔離提供作業系統層級的安全邊界，限制 bash 命令的檔案系統和網路存取：
+
+**核心功能**：
+- **檔案系統隔離**：限制寫入存取特定目錄
+- **網路隔離**：僅允許存取批准的域名
+- **減少提示**：沙箱內的安全命令自動批准
+- **提升安全性**：防止提示注入和惡意操作
+
+#### 啟用沙箱
+
+```bash
+# 在會話中啟用
+/sandbox
+
+# 配置檔案啟用（.claude/settings.json）
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": ["docker", "git"],
+    "network": {
+      "allowUnixSockets": ["~/.ssh/agent-socket"],
+      "allowLocalBinding": true
+    }
+  }
+}
+```
+
+#### 安全優勢
+
+**防止提示注入**：
+- 無法修改系統檔案（如 `~/.bashrc`、`/bin/`）
+- 無法洩露資料到未授權伺服器
+- 無法下載惡意指令碼
+- 所有違規嘗試在作業系統層級被阻止
+
+**攻擊面減少**：
+- 限制惡意依賴項的影響
+- 防止被破壞的建置指令碼
+- 阻止社交工程攻擊
+
+#### 作業系統支援
+
+- **Linux**：使用 [bubblewrap](https://github.com/containers/bubblewrap)
+- **macOS**：使用 Seatbelt 沙箱
+- **Windows**：計劃中
 
 ---
 
@@ -2268,7 +2515,7 @@ which claude
 ### 本地鏡像索引（繁中）
 
 - [docs/anthropic-claude-code-zh-tw/README.md](docs/anthropic-claude-code-zh-tw/README.md) — Anthropic 官方文檔（繁中）本地鏡像索引
-  > 來源: https://docs.anthropic.com/zh-TW/docs/claude-code/overview · 抓取時間: 2025-08-09T22:31:55+08:00
+  > 來源: https://docs.anthropic.com/zh-TW/docs/claude-code/overview · 抓取時間: 2025-10-29T14:12:31+08:00
 
 ### 學習資源
 
@@ -2297,14 +2544,43 @@ which claude
 
 ## 📊 更新記錄
 
-### v6.0.0 (2025-08-07) - Subagents 多代理協作版本
+### v2.0.28 (2025-10-29) - Plan 子代理與動態模型選擇
+
+**🎯 重大更新**：
+
+- 🤖 **Plan 子代理**：全新專門用於計劃模式的智能子代理
+- 🔄 **子代理恢復**：Claude 可選擇恢復先前的子代理會話
+- ⚡ **動態模型選擇**：子代理可根據任務動態切換模型
+- 💰 **預算控制**：SDK 新增 `--max-budget-usd` 參數
+- 📁 **發現改進**：自訂命令/代理/輸出樣式不再受 .gitignore 限制
+- 🔌 **Git Plugin 支援**：外掛和市場支援分支/標籤（`owner/repo#branch`）
+
+### v2.0.12 (2025-09) - Plugin 外掛系統正式發布
 
 **🎯 重大突破**：
 
-- 🤖 **Subagents 專業代理系統**：70+ 專業代理涵蓋全開發生命週期，支援智能任務分解與代理協作
-- ⚡ **流式輸出功能**：`--output-format=stream-json` 支援即時流式處理與程式化整合
-- 🔧 **新斜線指令**：`/approved-tools`、`/release-notes`、`/vim` 等增強開發體驗
-- 📡 **增強 MCP 支援**：OAuth 整合、HTTP/SSE 傳輸、JSON 伺服器配置
+- 🔌 **Plugin 系統**：透過市場安裝自訂命令、代理、hooks 和 MCP 伺服器
+- 🏪 **Plugin Marketplace**：集中式外掛發現和管理平台
+- 👥 **團隊協作**：透過 `extraKnownMarketplaces` 實現儲存庫層級配置
+- ✅ **驗證工具**：`/plugin validate` 命令檢查外掛結構
+
+### v2.0.20 (2025-09) - Agent Skills 系統
+
+**🎯 重大突破**：
+
+- 🎯 **Agent Skills**：模組化功能擴展 Claude 能力
+- 🤖 **模型調用**：Skills 由 Claude 根據上下文自動使用
+- 📦 **打包分發**：包含 SKILL.md、指令碼和範本的完整目錄
+- 🔧 **工具限制**：`allowed-tools` 前置屬性精細控制權限
+
+### v2.0.0 (2025-08) - Subagents 多代理協作版本
+
+**🎯 重大突破**：
+
+- 🤖 **Subagents 專業代理系統**：70+ 專業代理涵蓋全開發生命週期
+- ⚡ **流式輸出功能**：`--output-format=stream-json` 支援即時流式處理
+- 🔧 **新斜線指令**：`/approved-tools`、`/release-notes`、`/vim` 等
+- 📡 **增強 MCP 支援**：OAuth 整合、HTTP/SSE 傳輸
 
 **🤖 Subagents 分類系統**：
 
@@ -2313,20 +2589,6 @@ which claude
 - **基礎設施代理**：devops-engineer、kubernetes-specialist、cloud-architect 等
 - **品質安全代理**：code-reviewer、security-auditor、performance-engineer 等
 - **資料 AI 代理**：data-engineer、ml-engineer、ai-engineer 等
-
-**⚡ 新功能整合**：
-
-- 多代理協作工作流程與最佳實踐
-- 智能代理選擇指南與使用範例
-- 代理間知識傳遞與任務分解策略
-- 流式輸出程式化整合範例
-
-**🔧 CLI 功能增強**：
-
-- `/approved-tools` 工具權限管理指令
-- `/release-notes` 版本更新查看指令
-- `/vim` Vim 編輯模式支援
-- 增強的 MCP 伺服器管理功能
 
 ### v5.0.0 (2025-07-18) - 完整百科全書版本
 
@@ -2372,6 +2634,18 @@ which claude
 ---
 
 ### CHANGELOG 新功能摘錄（依版本，來源：GitHub CHANGELOG）
+
+## 2.0.28
+
+- 計劃模式：推出全新的 Plan 子代理
+- 子代理：Claude 現在可以選擇恢復子代理
+- 子代理：Claude 可以動態選擇其子代理使用的模型
+- SDK：新增 --max-budget-usd 參數
+- 自訂斜線命令、子代理和輸出樣式的發現不再遵循 .gitignore
+- 停止 `/terminal-setup` 在 VS Code 中為 `Shift + Enter` 添加反斜線
+- 為基於 git 的外掛程式和市場新增分支和標籤支援，使用片段語法（例如 `owner/repo#branch`）
+- 修復從主目錄啟動時初始啟動會顯示 macOS 權限提示的錯誤
+- 各種其他錯誤修復
 
 ## 2.0.27
 
@@ -2566,6 +2840,7 @@ which claude
 - 改善權限請求對話框的 UI 一致性
 
 ## 2.0.22
+
 - Claude will now ask you questions more often 在 plan mode
 - 新增 Haiku 4.5 as a model option 用於 Pro users
 - 修復 an issue where queued commands don't have access to previous messages' output
@@ -2753,10 +3028,10 @@ which claude
 - MCP: OAuth tokens now proactively refresh before expiration
 - 修復 reliability issues 使用 background Bash processes
 
-**📅 最後更新時間**: 2025-10-27  
+**📅 最後更新時間**: 2025-10-29  
 **📊 資料來源**: [GitHub CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)  
 **🔄 翻譯方式**: 人工高品質翻譯  
-**📌 版本範圍**: 1.0.115 - 2.0.27（最新）
+**📌 版本範圍**: 1.0.115 - 2.0.28（最新）
 
 ---
 

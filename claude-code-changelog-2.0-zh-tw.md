@@ -1,5 +1,17 @@
 # Claude Code CHANGELOG 高品質繁體中文翻譯
 
+## 2.0.28
+
+- 計劃模式：推出全新的 Plan 子代理
+- 子代理：Claude 現在可以選擇恢復子代理
+- 子代理：Claude 可以動態選擇其子代理使用的模型
+- SDK：新增 --max-budget-usd 參數
+- 自訂斜線命令、子代理和輸出樣式的發現不再遵循 .gitignore
+- 停止 `/terminal-setup` 在 VS Code 中為 `Shift + Enter` 添加反斜線
+- 為基於 git 的外掛程式和市場新增分支和標籤支援，使用片段語法（例如 `owner/repo#branch`）
+- 修復從主目錄啟動時初始啟動會顯示 macOS 權限提示的錯誤
+- 各種其他錯誤修復
+
 ## 2.0.27
 
 - 權限提示新增全新 UI 介面
@@ -192,8 +204,7 @@
 - 修復載入狀態完成時的視覺回饋
 - 改善權限請求對話框的 UI 一致性
 
-**📅 最後更新時間**: 2025-10-27  
+**📅 最後更新時間**: 2025-10-29  
 **📊 資料來源**: [GitHub CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)  
 **🔄 翻譯方式**: 人工高品質翻譯
-**📌 版本範圍**: 1.0.115 - 2.0.27（最新）
-
+**📌 版本範圍**: 1.0.115 - 2.0.28（最新）
