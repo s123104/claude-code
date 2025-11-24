@@ -11,7 +11,7 @@ Claude Code Security Reviewer 是 **Anthropic 官方** 開發的 AI 驅動安全
 > - **專案名稱**：Claude Code Security Reviewer
 > - **專案版本**：v1.0
 > - **專案最後更新**：2025-08-25
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **文件整理時間**：2025-11-25T00:15:00+08:00
 >
 > **核心定位**
 >
@@ -36,8 +36,9 @@ Claude Code Security Reviewer 是 **Anthropic 官方** 開發的 AI 驅動安全
 - [4. 安裝與配置](#4-安裝與配置)
 - [5. 使用指南](#5-使用指南)
 - [6. 進階配置](#6-進階配置)
-- [7. 疑難排解](#7-疑難排解)
-- [8. 延伸閱讀](#8-延伸閱讀)
+- [7. Claude Code 整合](#7-claude-code-整合)
+- [8. 疑難排解](#8-疑難排解)
+- [9. 延伸閱讀](#9-延伸閱讀)
 
 ---
 
@@ -53,6 +54,8 @@ Claude Code Security Reviewer 是一個使用 Claude 進行 AI 驅動安全審�
 - **上下文理解**：超越模式匹配，理解程式碼語義
 - **語言無關**：支援任何程式語言
 - **誤報過濾**：進階過濾減少噪音，專注於真實漏洞
+- **快取機制**：防止同一 PR 重複執行，減少誤報
+- **Claude Code 整合**：支援 `/security-review` 斜線命令
 
 ### 1.2 使用場景
 
@@ -67,11 +70,18 @@ Claude Code Security Reviewer 是一個使用 Claude 進行 AI 驅動安全審�
 
 ### 2.1 安全漏洞檢測
 
-- **注入攻擊**：SQL 注入、命令注入、XSS 等
-- **認證與授權**：權限提升、會話管理問題
-- **資料洩露**：敏感資訊暴露、日誌洩露
-- **加密問題**：弱加密算法、金鑰管理不當
-- **輸入驗證**：緩衝區溢出、格式字串漏洞
+#### 檢測的漏洞類型
+
+- **注入攻擊**：SQL 注入、命令注入、LDAP 注入、XPath 注入、NoSQL 注入、XXE
+- **認證與授權**：認證繞過、權限提升、會話管理缺陷、JWT 漏洞、授權邏輯繞過
+- **資料洩露**：硬編碼密鑰、敏感資料日誌、資訊洩露、PII 處理違規
+- **加密問題**：弱加密算法、不當的金鑰管理、不安全的隨機數生成、憑證驗證繞過
+- **輸入驗證**：缺少驗證、不當的清理、緩衝區溢出
+- **業務邏輯缺陷**：競爭條件、TOCTOU（Time-of-Check-Time-of-Use）問題
+- **配置安全**：不安全的預設值、缺少安全標頭、過於寬鬆的 CORS
+- **供應鏈**：易受攻擊的依賴、域名搶注風險
+- **程式碼執行**：透過反序列化的 RCE、pickle 注入、eval 注入
+- **跨站腳本攻擊（XSS）**：反射型、儲存型、DOM 型 XSS
 
 ### 2.2 智能分析能力
 
@@ -80,12 +90,24 @@ Claude Code Security Reviewer 是一個使用 Claude 進行 AI 驅動安全審�
 - **誤報減少**：使用 AI 推理減少誤報
 - **優先級排序**：根據風險等級排序發現的問題
 
-### 2.3 整合功能
+### 2.3 誤報過濾
+
+工具會自動排除以下低影響和容易誤報的發現，專注於高影響漏洞：
+
+- 拒絕服務（DoS）漏洞
+- 速率限制問題
+- 記憶體/CPU 耗盡問題
+- 沒有實際影響的通用輸入驗證
+- 開放重定向漏洞
+
+誤報過濾可以根據專案的特定安全目標進行調整。
+
+### 2.4 整合功能
 
 - **GitHub Actions**：無縫整合到 CI/CD 流程
 - **PR 評論**：自動在 PR 上添加安全評論
-- **報告生成**：生成詳細的安全審查報告
-- **通知系統**：支援多種通知方式
+- **報告生成**：生成詳細的安全審查報告（JSON 格式）
+- **Artifact 上傳**：自動上傳掃描結果作為 GitHub Actions artifacts
 
 ---
 
@@ -99,7 +121,7 @@ Claude Code Security Reviewer 是一個使用 Claude 進行 AI 驅動安全審�
 name: Security Review
 
 permissions:
-  pull-requests: write # 需要此權限來留下 PR 評論
+  pull-requests: write  # 需要此權限來留下 PR 評論
   contents: read
 
 on:
@@ -110,21 +132,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Run Security Review
-        uses: anthropics/claude-code-security-review@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
 ```
 
-### 3.2 環境變數設定
+### 3.2 API 金鑰設定
+
+**重要**：API 金鑰需要同時啟用 Claude API 和 Claude Code 使用權限。
 
 在您的 GitHub 儲存庫設定中添加以下密鑰：
 
 1. 前往 **Settings** → **Secrets and variables** → **Actions**
 2. 點擊 **New repository secret**
-3. 名稱：`ANTHROPIC_API_KEY`
-4. 值：您的 Anthropic API 金鑰
+3. 名稱：`CLAUDE_API_KEY`
+4. 值：您的 Anthropic API 金鑰（需要同時啟用 Claude API 和 Claude Code）
 
 ---
 
@@ -133,134 +160,62 @@ jobs:
 ### 4.1 前置需求
 
 - GitHub 儲存庫
-- Anthropic API 金鑰
+- Anthropic API 金鑰（需要同時啟用 Claude API 和 Claude Code）
 - GitHub Actions 啟用
 
-### 4.2 完整配置範例
+### 4.2 Action 輸入參數
+
+| 輸入參數 | 描述 | 預設值 | 必填 |
+|---------|------|--------|------|
+| `claude-api-key` | Anthropic Claude API 金鑰（需要同時啟用 Claude API 和 Claude Code） | 無 | 是 |
+| `comment-pr` | 是否在 PR 上留下發現的評論 | `true` | 否 |
+| `upload-results` | 是否將結果上傳為 artifacts | `true` | 否 |
+| `exclude-directories` | 要從掃描中排除的目錄列表（逗號分隔） | 無 | 否 |
+| `claude-model` | 要使用的 Claude [模型名稱](https://docs.anthropic.com/en/docs/about-claude/models/overview#model-names)，預設為 Opus 4.1 | `claude-opus-4-1-20250805` | 否 |
+| `claudecode-timeout` | ClaudeCode 分析的超時時間（分鐘） | `20` | 否 |
+| `run-every-commit` | 在每個 commit 上運行 ClaudeCode（跳過快取檢查）。警告：在有很多 commit 的 PR 上可能會增加誤報 | `false` | 否 |
+| `false-positive-filtering-instructions` | 自訂誤報過濾指令文字檔的路徑 | 無 | 否 |
+| `custom-security-scan-instructions` | 要附加到審計提示的自訂安全掃描指令文字檔路徑 | 無 | 否 |
+
+### 4.3 Action 輸出
+
+| 輸出 | 描述 |
+|------|------|
+| `findings-count` | 安全發現的總數 |
+| `results-file` | 結果 JSON 檔案的路徑 |
+
+### 4.4 完整配置範例
 
 ```yaml
-name: Comprehensive Security Review
+name: Security Review
 
 permissions:
   pull-requests: write
   contents: read
-  security-events: write
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    branches: [main, develop]
 
 jobs:
   security-review:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - name: "Security Review"
-            command: "review"
-          - name: "Vulnerability Scan"
-            command: "scan"
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 完整歷史記錄
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      
+      - uses: anthropics/claude-code-security-review@main
         with:
-          node-version: "18"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Security Review
-        uses: anthropics/claude-code-security-review@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          command: ${{ matrix.command }}
-          output_format: "detailed"
-          include_patterns: "src/**,tests/**"
-          exclude_patterns: "node_modules/**,dist/**"
-
-      - name: Upload Security Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: security-report-${{ matrix.command }}
-          path: security-report-*.json
-
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const reportPath = `security-report-${context.job}.json`;
-
-            if (fs.existsSync(reportPath)) {
-              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-              
-              const comment = `## 🔒 Security Review Results
-              
-              **Status**: ${report.status}
-              **Vulnerabilities Found**: ${report.vulnerabilities.length}
-              **Risk Level**: ${report.overall_risk}
-              
-              ${report.vulnerabilities.map(vuln => 
-                `### ${vuln.severity}: ${vuln.title}
-                - **File**: ${vuln.file}
-                - **Line**: ${vuln.line}
-                - **Description**: ${vuln.description}
-                - **Recommendation**: ${vuln.recommendation}
-                `
-              ).join('\n\n')}
-              
-              ---
-              *This review was automatically generated by Claude Code Security Reviewer*
-              `;
-              
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: comment
-              });
-            }
-```
-
-### 4.3 進階配置選項
-
-```yaml
-- name: Run Security Review
-  uses: anthropics/claude-code-security-review@v1
-  with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    # 基本配置
-    command: "review"
-    output_format: "detailed"
-
-    # 檔案過濾
-    include_patterns: "src/**,tests/**,config/**"
-    exclude_patterns: "node_modules/**,dist/**,build/**"
-
-    # 掃描選項
-    scan_depth: "deep"
-    max_files: 1000
-    timeout_minutes: 30
-
-    # 報告配置
-    report_format: "json"
-    include_recommendations: true
-    include_examples: true
-
-    # 通知配置
-    notify_on_failure: true
-    notify_on_success: false
-    slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          comment-pr: true
+          upload-results: true
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          exclude-directories: "node_modules,dist,build,.git"
+          claude-model: "claude-opus-4-1-20250805"
+          claudecode-timeout: 30
+          false-positive-filtering-instructions: ".github/false-positive-filtering.txt"
+          custom-security-scan-instructions: ".github/custom-security-scan-instructions.txt"
 ```
 
 ---
@@ -272,25 +227,15 @@ jobs:
 #### 自動觸發
 
 - **PR 開啟**：新 PR 時自動觸發
-- **PR 更新**：PR 內容變更時觸發
-- **分支推送**：推送到特定分支時觸發
+- **PR 更新**：PR 內容變更時觸發（`synchronize` 事件）
+- **PR 重新開啟**：關閉的 PR 重新開啟時觸發
 
-#### 手動觸發
+#### 快取機制
 
-```yaml
-on:
-  workflow_dispatch:
-    inputs:
-      scan_type:
-        description: "Scan Type"
-        required: true
-        default: "full"
-        type: choice
-        options:
-          - quick
-          - full
-          - deep
-```
+Action 使用快取機制防止同一 PR 重複執行：
+
+- **預設行為**：每個 PR 只執行一次，後續 commit 會跳過
+- **強制執行**：設定 `run-every-commit: true` 可在每個 commit 上執行（可能增加誤報）
 
 ### 5.2 查看結果
 
@@ -302,6 +247,7 @@ on:
 - 風險等級評估
 - 詳細的漏洞描述
 - 修復建議
+- 具體的檔案和行號
 
 #### 工作流程摘要
 
@@ -310,271 +256,261 @@ on:
 - 執行狀態
 - 掃描結果摘要
 - 詳細日誌
+- 錯誤日誌（如果有）
 
 #### 下載報告
 
-- JSON 格式的詳細報告
-- 可整合到其他安全工具
-- 支援自訂報告格式
+- **Artifacts**：掃描結果會自動上傳為 artifacts
+  - `findings.json`：發現的漏洞列表
+  - `claudecode-results.json`：完整的掃描結果
+  - `claudecode-error.log`：錯誤日誌（如果有）
+- **JSON 格式**：可整合到其他安全工具
+- **保留期限**：Artifacts 預設保留 7 天
 
-### 5.3 自訂掃描規則
+### 5.3 自訂掃描配置
 
-#### 專案特定規則
+#### 自訂誤報過濾指令
 
-```yaml
-# .claude/security-rules.yml
-rules:
-  - name: "Custom SQL Injection Check"
-    pattern: "executeQuery"
-    severity: "high"
-    message: "Potential SQL injection vulnerability"
+建立自訂誤報過濾指令檔案（例如 `.github/false-positive-filtering.txt`）：
 
-  - name: "API Key Validation"
-    pattern: "API_KEY"
-    severity: "critical"
-    message: "API key should not be hardcoded"
+```text
+HARD EXCLUSIONS - Automatically exclude findings matching these patterns:
+1. All DOS/resource exhaustion - we have k8s resource limits and autoscaling
+2. Missing rate limiting - handled by our API gateway
+3. Test files (ending in _test.go, _test.js, or in __tests__ directories)
+4. Documentation files (*.md, *.rst)
+5. Memory safety in Rust, Go, or managed languages
 
-  - name: "Input Validation"
-    pattern: "userInput"
-    severity: "medium"
-    message: "User input should be validated"
+SIGNAL QUALITY CRITERIA - For remaining findings, assess:
+1. Can an unauthenticated external attacker exploit this?
+2. Is there actual data exfiltration or system compromise potential?
+3. Is this exploitable in our production Kubernetes environment?
+
+PRECEDENTS - 
+1. We use AWS Cognito for all authentication - auth bypass must defeat Cognito
+2. All APIs require valid JWT tokens validated at the gateway level
+3. SQL injection is only valid if using raw queries (we use Prisma ORM everywhere)
 ```
 
-#### 忽略規則
+在 workflow 中使用：
 
 ```yaml
-# .claude/security-ignore.yml
-ignore:
-  - file: "tests/**"
-    reason: "Test files are safe to ignore"
+- uses: anthropics/claude-code-security-review@main
+  with:
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    false-positive-filtering-instructions: ".github/false-positive-filtering.txt"
+```
 
-  - pattern: "TODO.*FIXME"
-    reason: "Development notes"
+#### 自訂安全掃描指令
 
-  - file: "docs/**"
-    reason: "Documentation files"
+建立自訂安全掃描指令檔案（例如 `.github/custom-security-scan-instructions.txt`）：
+
+```text
+**Compliance-Specific Checks:**
+- GDPR Article 17 "Right to Erasure" implementation gaps
+- HIPAA PHI encryption at rest violations
+- PCI DSS credit card data retention beyond allowed periods
+
+**Financial Services Security:**
+- Transaction replay attacks in payment processing
+- Double-spending vulnerabilities in ledger systems
+- Interest calculation manipulation through timing attacks
+
+**E-commerce Specific:**
+- Shopping cart manipulation for price changes
+- Inventory race conditions allowing overselling
+- Coupon/discount stacking exploits
+```
+
+在 workflow 中使用：
+
+```yaml
+- uses: anthropics/claude-code-security-review@main
+  with:
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    custom-security-scan-instructions: ".github/custom-security-scan-instructions.txt"
 ```
 
 ---
 
 ## 6. 進階配置
 
-### 6.1 多環境配置
-
-#### 開發環境
+### 6.1 排除目錄
 
 ```yaml
-- name: Development Security Review
-  if: github.ref == 'refs/heads/develop'
-  uses: anthropics/claude-code-security-review@v1
+- uses: anthropics/claude-code-security-review@main
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    command: "quick"
-    output_format: "summary"
-    notify_on_failure: false
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    exclude-directories: "node_modules,dist,build,.git,vendor"
 ```
 
-#### 生產環境
+### 6.2 選擇 Claude 模型
 
 ```yaml
-- name: Production Security Review
-  if: github.ref == 'refs/heads/main'
-  uses: anthropics/claude-code-security-review@v1
+- uses: anthropics/claude-code-security-review@main
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    command: "deep"
-    output_format: "detailed"
-    notify_on_failure: true
-    slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    claude-model: "claude-sonnet-4-20250514"  # 使用 Sonnet 4
 ```
 
-### 6.2 整合其他安全工具
-
-#### SonarQube 整合
+### 6.3 調整超時時間
 
 ```yaml
-- name: SonarQube Analysis
-  uses: sonarqube-quality-gate-action@master
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-- name: Security Review
-  uses: anthropics/claude-code-security-review@v1
+- uses: anthropics/claude-code-security-review@main
   with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    previous_results: "sonarqube-results.json"
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    claudecode-timeout: 30  # 30 分鐘超時
 ```
 
-#### OWASP ZAP 整合
+### 6.4 每個 Commit 執行
 
 ```yaml
-- name: OWASP ZAP Scan
-  uses: zaproxy/action-full-scan@v0.8.0
+- uses: anthropics/claude-code-security-review@main
   with:
-    target: "https://example.com"
-
-- name: Security Review
-  uses: anthropics/claude-code-security-review@v1
-  with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    zap_results: "zap-report.json"
-```
-
-### 6.3 自訂通知
-
-#### Slack 通知
-
-```yaml
-- name: Security Review
-  uses: anthropics/claude-code-security-review@v1
-  with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-    slack_channel: "#security-alerts"
-    slack_username: "Security Bot"
-```
-
-#### 電子郵件通知
-
-```yaml
-- name: Send Email Notification
-  if: always()
-  uses: dawidd6/action-send-mail@v3
-  with:
-    server_address: smtp.gmail.com
-    server_port: 587
-    username: ${{ secrets.EMAIL_USERNAME }}
-    password: ${{ secrets.EMAIL_PASSWORD }}
-    subject: "Security Review Results - ${{ github.repository }}"
-    to: ${{ secrets.SECURITY_TEAM_EMAIL }}
-    body: |
-      Security review completed for ${{ github.repository }}
-
-      Status: ${{ job.status }}
-      Vulnerabilities: ${{ steps.security.outputs.vulnerability_count }}
-
-      View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    run-every-commit: true  # 警告：可能增加誤報
 ```
 
 ---
 
-## 7. 疑難排解
+## 7. Claude Code 整合
 
-### 7.1 常見問題
+### 7.1 `/security-review` 斜線命令
+
+Claude Code 預設提供 `/security-review` [斜線命令](https://docs.anthropic.com/en/docs/claude-code/slash-commands)，提供與 GitHub Action 工作流程相同的安全分析功能，但直接整合到您的 Claude Code 開發環境中。
+
+#### 使用方式
+
+在 Claude Code 中執行：
+
+```
+/security-review
+```
+
+這會對所有待處理的變更執行全面的安全審查。
+
+### 7.2 自訂命令
+
+您可以自訂 `/security-review` 命令以符合您的特定安全需求：
+
+1. 從此儲存庫複製 [`security-review.md`](https://github.com/anthropics/claude-code-security-review/blob/main/.claude/commands/security-review.md) 檔案到您專案的 `.claude/commands/` 資料夾
+2. 編輯 `security-review.md` 以自訂安全分析。例如，您可以添加組織特定的誤報過濾指令
+
+---
+
+## 8. 疑難排解
+
+### 8.1 常見問題
 
 #### API 金鑰問題
 
-```bash
-# 檢查 API 金鑰是否正確設定
-echo $ANTHROPIC_API_KEY
+**錯誤訊息**：`ANTHROPIC_API_KEY is not set`
 
-# 測試 API 連線
-curl -H "x-api-key: $ANTHROPIC_API_KEY" \
-     -H "content-type: application/json" \
-     https://api.anthropic.com/v1/messages
-```
+**解決方案**：
+
+1. 確認已在 GitHub Secrets 中設定 `CLAUDE_API_KEY`
+2. 確認 API 金鑰同時啟用了 Claude API 和 Claude Code 使用權限
+3. 檢查 workflow 檔案中的 secret 名稱是否正確
 
 #### 權限問題
 
+**錯誤訊息**：無法在 PR 上留下評論
+
+**解決方案**：
+
 ```yaml
-# 確保有足夠的權限
 permissions:
-  pull-requests: write # 需要寫入 PR 評論
-  contents: read # 需要讀取程式碼
-  security-events: write # 需要寫入安全事件
+  pull-requests: write  # 需要寫入 PR 評論
+  contents: read        # 需要讀取程式碼
 ```
 
 #### 掃描超時
 
+**錯誤訊息**：ClaudeCode 分析超時
+
+**解決方案**：
+
 ```yaml
-# 增加超時時間
-- name: Security Review
-  uses: anthropics/claude-code-security-review@v1
+- uses: anthropics/claude-code-security-review@main
   with:
-    timeout_minutes: 60 # 預設 30 分鐘
-    max_files: 500 # 減少掃描檔案數量
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    claudecode-timeout: 30  # 增加超時時間（預設 20 分鐘）
 ```
 
-### 7.2 效能優化
+#### 快取問題
 
-#### 快取配置
+如果快取導致問題，可以強制執行：
 
 ```yaml
-- name: Cache dependencies
-  uses: actions/cache@v3
+- uses: anthropics/claude-code-security-review@main
   with:
-    path: ~/.npm
-    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-    restore-keys: |
-      ${{ runner.os }}-node-
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    run-every-commit: true  # 跳過快取檢查
 ```
 
-#### 並行執行
+### 8.2 除錯技巧
 
-```yaml
-jobs:
-  security-review:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - name: "Frontend Security"
-            path: "frontend/**"
-          - name: "Backend Security"
-            path: "backend/**"
-          - name: "Infrastructure Security"
-            path: "infra/**"
-```
+#### 查看詳細日誌
 
-### 7.3 除錯技巧
+在 GitHub Actions 頁面查看：
 
-#### 詳細日誌
+- **ClaudeCode Environment**：環境變數和配置
+- **ClaudeCode Execution**：執行過程和結果
+- **Error Log**：錯誤日誌（如果有）
 
-```yaml
-- name: Security Review
-  uses: anthropics/claude-code-security-review@v1
-  with:
-    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    debug: true
-    verbose: true
-```
+#### 檢查結果檔案
 
-#### 本地測試
+下載 artifacts 並檢查：
+
+- `claudecode-results.json`：完整的掃描結果
+- `claudecode-error.log`：錯誤日誌
+- `findings.json`：發現的漏洞列表
+
+### 8.3 本地測試
+
+使用評估框架在本地測試安全掃描器：
 
 ```bash
-# 在本地測試安全審查
-npm install -g @anthropic-ai/claude-code
-claude --security-review --path ./src --output-format json
+cd claude-code-security-review
+# 查看評估框架文檔
+cat claudecode/evals/README.md
 ```
 
 ---
 
-## 8. 延伸閱讀
+## 9. 延伸閱讀
 
-### 8.1 官方資源
+### 9.1 官方資源
 
 - [Claude Code Security Reviewer GitHub](https://github.com/anthropics/claude-code-security-review)
 - [官方部落格文章](https://www.anthropic.com/news/automate-security-reviews-with-claude-code)
 - [Claude Code 文檔](https://docs.anthropic.com/en/docs/claude-code)
 - [GitHub Actions 文檔](https://docs.github.com/en/actions)
 
-### 8.2 相關專案
+### 9.2 相關專案
 
 - [OWASP ZAP](https://owasp.org/www-project-zap/) - 網頁應用程式安全測試工具
 - [SonarQube](https://www.sonarqube.org/) - 程式碼品質和安全分析
 - [Snyk](https://snyk.io/) - 依賴漏洞掃描
 - [CodeQL](https://codeql.github.com/) - GitHub 的程式碼分析引擎
 
-### 8.3 安全最佳實踐
+### 9.3 安全最佳實踐
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/) - 網頁應用程式安全風險
 - [CWE](https://cwe.mitre.org/) - 常見弱點列舉
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework) - 網路安全框架
 
+### 9.4 自訂配置文檔
+
+- [自訂誤報過濾指令](https://github.com/anthropics/claude-code-security-review/blob/main/docs/custom-filtering-instructions.md)
+- [自訂安全掃描指令](https://github.com/anthropics/claude-code-security-review/blob/main/docs/custom-security-scan-instructions.md)
+- [範例檔案](https://github.com/anthropics/claude-code-security-review/tree/main/examples)
+
 ---
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/anthropics/claude-code-security-review) 與相關文檔。
 >
-> **版本資訊**：Claude Code Security Reviewer - 最新版本  
-> **最後更新**：2025-10-29T02:08:00+08:00
+> **版本資訊**：Claude Code Security Reviewer v1.0 - AI 驅動的 GitHub Action 安全審查工具  
+> **最後更新**：2025-11-25T00:15:00+08:00  
+> **專案更新**：2025-08-25T14:16:53-07:00  
+> **主要變更**：更新 Action 輸入參數說明、新增快取機制說明、新增 Claude Code 整合章節、更新自訂配置說明、更新誤報過濾說明

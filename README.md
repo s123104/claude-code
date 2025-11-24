@@ -5,18 +5,18 @@
   
   **🚀 完整的 Claude Code 與 Cursor AI 整合說明書集合**
   
-  [![Version](https://img.shields.io/badge/Version-4.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
+  [![Version](https://img.shields.io/badge/Version-5.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
   [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.0.27-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
-  [![Documentation](https://img.shields.io/badge/Documentation-19_Projects_100%25-green.svg)](docs/)
+  [![Documentation](https://img.shields.io/badge/Documentation-20_Projects_100%25-green.svg)](docs/)
   [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
   [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
   [![Stars](https://img.shields.io/github/stars/s123104/claude-code?style=social)](https://github.com/s123104/claude-code/stargazers)
   
-  > 最後更新：2025-10-28T19:30:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案  
-  > 📊 涵蓋 18 個專案完整文檔 + 超級工作流程大全 + 自動化更新工具鏈  
-  > ✨ 文檔標準化 v4.0.0 完成 - 20/20 文檔 100% 統一格式
+  > 最後更新：2025-11-25T03:02:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案  
+  > 📊 涵蓋 20 個專案完整文檔 + 超級工作流程大全 + 自動化更新工具鏈  
+  > ✨ 文檔標準化 v5.0.0 完成 - 20/20 文檔 100% 統一格式
 </div>
 
 ---
@@ -38,16 +38,18 @@
 > **專案資訊**
 >
 > - **專案名稱**：Claude Code 中文文件整合專案
-> - **專案版本**：v4.0.0
-> - **專案最後更新**：2025-10-28
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **專案版本**：v5.0.0
+> - **專案最後更新**：2025-11-25
+> - **文件整理時間**：2025-11-25T03:02:00+08:00
 >
 > **核心定位**
-> - **功能**：18 個 Claude Code 專案的完整繁體中文文檔 + 超級工作流大全 + 自動化更新工具鏈
+>
+> - **功能**：20 個 Claude Code 專案的完整繁體中文文檔 + 超級工作流大全 + 自動化更新工具鏈
 > - **場景**：AI 輔助開發、團隊協作、效能優化、用量監控、部署維運、學習實踐
 > - **客群**：AI 開發初學者、專業開發者、架構師、團隊領導、DevOps 工程師
 >
 > **資料來源**
+>
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [社群專案集合](https://github.com/s123104/claude-code)
 > - [18 個分析專案倉庫](analysis-projects/)
@@ -68,7 +70,7 @@
 - **🖥️ 現代化介面** - 響應式 Web 介面，支援所有裝置
 - **🤖 自動化工具鏈** - 專業的文檔同步與版本追蹤系統
 - **📚 完整工作流** - 6 大 Agent 角色 + 3 核心工作流 + 可複用 Prompt 模板
-- **📊 文檔標準化** - v4.0.0 完成 20/20 文檔統一格式（元資料+概述+定位）
+- **📊 文檔標準化** - v5.0.0 完成 20/20 文檔統一格式（元資料+概述+定位）
 
 ### 👥 適用對象
 
@@ -186,76 +188,90 @@ claude "測試連線成功"
 
 專注於擴展 Claude Code 核心功能的框架
 
-| 專案文件                                                             | 專案描述             | 版本     | 最後更新   | 主要功能                              | 獨立性 |
-| -------------------------------------------------------------------- | -------------------- | -------- | ---------- | ------------------------------------- | ------ |
-| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v4.1.6   | 2025-10-27 | 26 指令、16 代理、8 MCP、Deep Research | ⭐⭐⭐ |
-| [⭐ awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐資源集合 | 社群版本 | 2025-08-17 | Hooks、斜線指令、CLAUDE.md 範例       | ⭐⭐⭐ |
+| 專案文件                                                             | 專案描述             | 版本   | 最後更新   | 主要功能                                 | 獨立性 |
+| -------------------------------------------------------------------- | -------------------- | ------ | ---------- | ---------------------------------------- | ------ |
+| [🔧 superclaude-zh-tw.md](docs/superclaude-zh-tw.md)                 | SuperClaude 專業框架 | v4.1.9 | 2025-11-14 | 30 指令、16 代理、7 模式、8 MCP          | ⭐⭐⭐ |
+| [⭐ awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) | 社群最佳實踐資源集合 | v2.0.0 | 2025-10-29 | Hooks、斜線指令、CLAUDE.md 範例          | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（增強框架類）
 
-- **SuperClaude v4.1.6**：功能：26 個斜線指令（`/sc:` 前綴）、16 個專業代理（PM、Deep Research、Security等）、8 個 MCP 伺服器整合、7 種行為模式、深度研究能力（最多 5 次迭代）；應用場景：企業級開發自動化、系統化工作流程、AI 驅動研究與分析、效能優化（減少 30-50% tokens）；適用客群：進階開發者、技術主管、研究團隊、企業開發團隊
+- **SuperClaude v4.1.9**：功能：30 個斜線指令（Planning & Design、Development、Testing & Quality、Documentation、Version Control、Project Management、Research & Analysis、Utilities）、16 個專業代理（PM、Deep Research、Security等）、7 種行為模式、8 個 MCP 伺服器整合、深度研究能力、熱重載、零安裝；應用場景：企業級開發自動化、系統化工作流程、AI 驅動研究與分析、效能優化（減少 30-50% tokens）；適用客群：進階開發者、技術主管、研究團隊、企業開發團隊
 - **Awesome Claude Code**：功能：實戰範例與最佳實踐索引；應用場景：專案啟動、流程與 Hooks 實作範本查找；適用客群：所有開發者、技術寫作者
+
 ### 🤖 AI 代理類
 
 專業化的 AI 代理和子代理系統
 
-| 專案文件                                                 | 專案描述            | 版本  | 最後更新   | 主要功能                     | 獨立性 |
-| -------------------------------------------------------- | ------------------- | ----- | ---------- | ---------------------------- | ------ |
-| [🤖 agents-zh-tw.md](docs/agents-zh-tw.md)               | 75 個專業子代理集合 | 最新  | 2025-08-15 | 領域專家代理、智能任務分派   | ⭐⭐⭐ |
-| [👥 claude-agents-zh-tw.md](docs/claude-agents-zh-tw.md) | 自訂代理系統        | v1.0+ | 2025-08-14 | 7 個自訂代理、工作流程自動化 | ⭐⭐   |
+| 專案文件                                                 | 專案描述            | 版本   | 最後更新   | 主要功能                     | 獨立性 |
+| -------------------------------------------------------- | ------------------- | ------ | ---------- | ---------------------------- | ------ |
+| [🤖 agents-zh-tw.md](docs/agents-zh-tw.md)               | 86 個專業子代理集合 | v2.0.0 | 2025-11-16 | 86 代理、66 插件、57 技能     | ⭐⭐⭐ |
+| [👥 claude-agents-zh-tw.md](docs/claude-agents-zh-tw.md) | 自訂代理系統        | v1.0+  | 2025-08-14 | 7 個自訂代理、工作流程自動化 | ⭐⭐   |
+| [🤖 contains-studio-agents-zh-tw.md](docs/contains-studio-agents-zh-tw.md) | 37+ 專業代理（6 天衝刺） | v1.2 | 2025-07-28 | 37+ 代理、7 部門、自動觸發 | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（AI 代理類）
 
-- **Agents（75 子代理）**：功能：領域專家子代理與智能分工；應用場景：大型專案的多角色協作、按任務自動選用代理；適用客群：產品/工程團隊、專案負責人
+- **Agents（86 子代理）**：功能：86 個專業代理、66 個插件、57 個技能、領域專家子代理與智能分工；應用場景：大型專案的多角色協作、按任務自動選用代理；適用客群：產品/工程團隊、專案負責人
 - **Claude Agents（自訂 7 代理）**：功能：自訂工作流代理組合；應用場景：專案流程自動化、團隊內客製化協作；適用客群：全端開發者、Tech Lead
+- **Contains Studio Agents（37+ 代理）**：功能：37+ 個專業代理、7 大部門（Engineering、Design、Marketing、Product、Project Management、Studio Operations、Testing & Benchmarking）、6 天衝刺優化、自動觸發代理；應用場景：快速開發專業代理、Studio 環境、6 天衝刺專案；適用客群：開發者、研究者、企業開發團隊
+
 ### 📊 監控分析類
 
 用量監控、成本分析和效能追蹤工具
 
-| 專案文件                                                                         | 專案描述         | 版本   | 最後更新   | 主要功能                       | 獨立性 |
-| -------------------------------------------------------------------------------- | ---------------- | ------ | ---------- | ------------------------------ | ------ |
-| [📊 claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 進階用量監控工具 | v3.1.0 | 2025-07-24 | 即時監控、ML 預測、Docker 部署 | ⭐⭐⭐ |
-| [⚡ ccusage-zh-tw.md](docs/ccusage-zh-tw.md)                                     | 極速用量分析工具 | v17.1.3 | 2025-10-27 | 快速成本分析、狀態列整合       | ⭐⭐⭐ |
+| 專案文件                                                                         | 專案描述         | 版本    | 最後更新   | 主要功能                       | 獨立性 |
+| -------------------------------------------------------------------------------- | ---------------- | ------- | ---------- | ------------------------------ | ------ |
+| [📊 claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) | 進階用量監控工具 | v3.1.0  | 2025-07-24 | 即時監控、ML 預測、Docker 部署 | ⭐⭐⭐ |
+| [⚡ ccusage-zh-tw.md](docs/ccusage-zh-tw.md)                                     | 極速用量分析工具 | v17.1.6 | 2025-11-20 | 極速分析、狀態列整合、5 小時區塊報告 | ⭐⭐⭐ |
+| [📊 claude-code-leaderboard-zh-tw.md](docs/claude-code-leaderboard-zh-tw.md)     | 使用量排行榜     | v0.2.9  | 2025-08-06 | 競爭式用量追蹤、排行榜         | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（監控分析類）
 
-- **Usage Monitor**：功能：即時用量監控、ML 預測、Docker 部署；應用場景：生產成本監控、限額預警、趨勢預測；適用客群：產品/技術主管、FinOps、SRE
-- **ccusage (v17.1.3)**：功能：極速 CLI 分析、Statusline 狀態列、報表匯出；應用場景：本地開發成本檢視、CI 產出報告；適用客群：日常開發者、資料分析/報表維護
+- **Usage Monitor**：功能：即時用量監控、ML 預測、Docker 部署、Rich UI；應用場景：生產成本監控、限額預警、趨勢預測；適用客群：產品/技術主管、FinOps、SRE
+- **ccusage (v17.1.6)**：功能：極速 CLI 分析、Statusline 狀態列、5 小時區塊報告、即時監控、報表匯出；應用場景：本地開發成本檢視、CI 產出報告、即時用量追蹤；適用客群：日常開發者、資料分析/報表維護
+- **Leaderboard (v0.2.9)**：功能：使用量排行榜、競爭式追蹤、Twitter 整合；應用場景：團隊競賽、使用量激勵、社群運營；適用客群：團隊管理者、社群運營
+
 ### 🖥️ 介面工具類
 
 Web UI、視覺化界面和開發者工具
 
-| 專案文件                                                             | 專案描述        | 版本 | 最後更新   | 主要功能                     | 獨立性 |
-| -------------------------------------------------------------------- | --------------- | ---- | ---------- | ---------------------------- | ------ |
-| [🖥️ claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md)               | Web UI 管理介面 | 最新 | 2025-08-16 | PWA 支援、專案管理、視覺化   | ⭐⭐⭐ |
-| [🐛 claudecode-debugger-zh-tw.md](docs/claudecode-debugger-zh-tw.md) | AI 驅動除錯工具 | 最新 | 2025-08-14 | 多語言錯誤分析、智能修復建議 | ⭐⭐⭐ |
+| 專案文件                                                             | 專案描述        | 版本    | 最後更新   | 主要功能                     | 獨立性 |
+| -------------------------------------------------------------------- | --------------- | ------- | ---------- | ---------------------------- | ------ |
+| [🖥️ claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md)               | Web UI 管理介面 | v1.12.0 | 2025-11-19 | PWA 支援、雙 CLI、TaskMaster AI | ⭐⭐⭐ |
+| [🐛 claudecode-debugger-zh-tw.md](docs/claudecode-debugger-zh-tw.md) | AI 驅動除錯工具 | v1.5.0  | 2025-07-30 | 多語言錯誤分析、智能修復建議 | ⭐⭐⭐ |
+| [🖥️ claudia-zh-tw.md](docs/claudia-zh-tw.md)                         | 桌面 GUI (opcode) | v0.2.1 | 2025-10-13 | 桌面應用、會話管理、視覺化   | ⭐⭐⭐ |
+| [📋 vibe-kanban-zh-tw.md](docs/vibe-kanban-zh-tw.md)                 | 看板專案管理    | v0.0.122 | 2025-11-24 | Git 整合、10 代理、多代理協作 | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（介面工具類）
 
-- **ClaudeCodeUI**：功能：Web UI、專案/會話管理、PWA；應用場景：遠端/行動端管理、可視化統計；適用客群：DevOps、團隊管理者、移動辦公者
-- **Debugger**：功能：AI 驅動除錯、堆疊/模式/上下文分析；應用場景：快速從錯誤到解法、多語言專案維護；適用客群：多語言開發者、維運工程師
+- **ClaudeCodeUI (v1.12.0)**：功能：Web UI、專案/會話管理、PWA、雙 CLI 支援（Claude Code CLI 和 Claude Desktop CLI）、TaskMaster AI 整合；應用場景：遠端/行動端管理、可視化統計、AI 驅動專案管理；適用客群：DevOps、團隊管理者、移動辦公者
+- **Debugger (v1.5.0)**：功能：AI 驅動除錯、堆疊/模式/上下文分析、多語言支援；應用場景：快速從錯誤到解法、多語言專案維護；適用客群：多語言開發者、維運工程師
+- **opcode (v0.2.1)**：功能：桌面 GUI 應用、會話管理、視覺化、Tauri 2 框架；應用場景：圖形化專案管理、視覺化監控；適用客群：開發者、PM、設計師
+- **Vibe Kanban (v0.0.122)**：功能：看板管理、Git 整合、10 個程式設計代理、MCP 伺服器整合、遠端 SSH 配置；應用場景：專案管理、團隊協作、多代理協作管理；適用客群：專案經理、敏捷團隊
+
 ### ⚡ 效能優化類
 
 效能調優、資料結構和系統優化
 
-| 專案文件                                           | 專案描述        | 版本 | 最後更新   | 主要功能               | 獨立性 |
-| -------------------------------------------------- | --------------- | ---- | ---------- | ---------------------- | ------ |
-| [⚡ bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) | B+Tree 效能優化 | 最新 | 2025-08-17 | 高效資料結構、快取策略 | ⭐⭐⭐ |
+| 專案文件                                           | 專案描述        | 版本   | 最後更新   | 主要功能               | 獨立性 |
+| -------------------------------------------------- | --------------- | ------ | ---------- | ---------------------- | ------ |
+| [⚡ bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) | B+Tree 效能優化 | v0.9.0 | 2025-09-12 | 高效資料結構、快取策略（Rust + Python） | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（效能優化類）
 
 - **BPlusTree3**：功能：高效 B+Tree（Rust/Python）、範圍查詢與迭代優化；應用場景：大型代碼庫索引、依賴與版本比較、性能基準；適用客群：架構師、性能工程師
+
 ### 🛡️ 安全審查類
 
 安全掃描、合規檢查和漏洞分析
 
 | 專案文件                                                                             | 專案描述        | 版本 | 最後更新   | 主要功能                 | 獨立性 |
 | ------------------------------------------------------------------------------------ | --------------- | ---- | ---------- | ------------------------ | ------ |
-| [🛡️ claude-code-security-review-zh-tw.md](docs/claude-code-security-review-zh-tw.md) | AI 安全審查工具 | 最新 | 2025-08-14 | 自動化安全掃描、合規檢查 | ⭐⭐⭐ |
+| [🛡️ claude-code-security-review-zh-tw.md](docs/claude-code-security-review-zh-tw.md) | AI 安全審查工具 | v1.0 | 2025-08-25 | 自動化安全掃描、合規檢查、GitHub Action | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（安全審查類）
 
 - **Security Review**：功能：PR 差異掃描、PR 評論、報告輸出；應用場景：開發提交流程的安全把關、合規自動化；適用客群：Security/平台團隊、受合規約束團隊
+
 ### 📖 指南教學類
 
 基礎教學、API 指南和設定說明
@@ -263,34 +279,29 @@ Web UI、視覺化界面和開發者工具
 | 專案文件                                                         | 專案描述      | 版本 | 最後更新   | 主要功能              | 獨立性 |
 | ---------------------------------------------------------------- | ------------- | ---- | ---------- | --------------------- | ------ |
 | [📖 claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) | 基礎 API 指南 | 最新 | 2025-08-10 | CLI 操作、基礎設定    | ⭐⭐   |
-| [🔧 mcp-setup-guide-zh-tw.md](docs/mcp-setup-guide-zh-tw.md)     | MCP 設定指南  | 最新 | 2025-08-14 | MCP 伺服器配置、OAuth | ⭐⭐   |
+| [🔧 mcp-setup-guide-zh-tw.md](docs/mcp-setup-guide-zh-tw.md)     | MCP 設定指南  | v2.0.0 | 2025-10-28 | MCP 伺服器配置、OAuth | ⭐⭐   |
+| [🔧 claude-code-hooks-zh-tw.md](docs/claude-code-hooks-zh-tw.md) | Hooks 系統指南 | 最新 | 2025-07-20 | 工作流程自動化、安全防護 | ⭐⭐⭐ |
 
 #### 適用客群與應用場景（指南教學類）
 
 - **Claude Code Guide**：功能：基礎安裝、CLI/會話操作；應用場景：首次安裝、日常開發指南；適用客群：初學者、日常開發者
-- **MCP Setup Guide**：功能：MCP 伺服器配置與 OAuth；應用場景：私有工具鏈/企業整合；適用客群：整合工程師、DevOps
+- **MCP Setup Guide (v2.0.0)**：功能：MCP 伺服器配置與 OAuth、完整整合指南；應用場景：私有工具鏈/企業整合、MCP 協作；適用客群：整合工程師、DevOps
+- **Claude Code Hooks**：功能：Hooks 系統完整指南、生命週期事件處理、安全防護；應用場景：工作流程自動化、安全防護、開發效率提升；適用客群：開發者、DevOps 工程師
 
 ### 🎨 專業工具類
 
 專門工具與特殊應用場景
 
-| 專案文件                                                                             | 專案描述        | 版本 | 最後更新   | 主要功能                     | 獨立性 |
-| ------------------------------------------------------------------------------------ | --------------- | ---- | ---------- | ---------------------------- | ------ |
-| [📊 claude-code-leaderboard-zh-tw.md](docs/claude-code-leaderboard-zh-tw.md)       | 使用量排行榜    | 最新 | 2025-08-06 | 競爭式用量追蹤、排行榜       | ⭐⭐⭐ |
-| [📋 claude-code-spec-zh-tw.md](docs/claude-code-spec-zh-tw.md)                     | 規格驅動開發    | v1.1.5 | 2025-10-27 | cc-sdd CLI、規格驅動開發、12 語言、8 平台     | ⭐⭐⭐ |
-| [🖥️ claudia-zh-tw.md](docs/claudia-zh-tw.md)                                       | 桌面 GUI (opcode)   | v0.2.0 | 2025-10-27 | 桌面應用、會話管理、視覺化 ⚠️ 已更名為 opcode   | ⭐⭐⭐ |
-| [🎓 context-engineering-intro-zh-tw.md](docs/context-engineering-intro-zh-tw.md)   | 脈絡工程方法論  | 最新 | 2025-08-06 | PRP 方法論、AI 輔助開發      | ⭐⭐   |
-| [📋 vibe-kanban-zh-tw.md](docs/vibe-kanban-zh-tw.md)                               | 看板專案管理    | v0.0.111 | 2025-10-27 | Git 整合、多代理協作管理     | ⭐⭐⭐ |
-| [🤖 contains-studio-agents-zh-tw.md](docs/contains-studio-agents-zh-tw.md)         | 專業代理庫      | 最新 | 2025-08-16 | 快速開發專業代理、Studio     | ⭐⭐⭐ |
+| 專案文件                                                                         | 專案描述          | 版本     | 最後更新   | 主要功能                                      | 獨立性 |
+| -------------------------------------------------------------------------------- | ----------------- | -------- | ---------- | --------------------------------------------- | ------ |
+| [📋 claude-code-spec-zh-tw.md](docs/claude-code-spec-zh-tw.md)                   | 規格驅動開發      | v2.0.3   | 2025-11-20 | cc-sdd CLI、11 指令 + 3 驗證、12 語言、8 平台 | ⭐⭐⭐ |
+| [🎓 context-engineering-intro-zh-tw.md](docs/context-engineering-intro-zh-tw.md) | 脈絡工程方法論    | 最新     | 2025-11-15 | PRP 方法論、AI 輔助開發、自訂命令系統         | ⭐⭐   |
 
 #### 適用客群與應用場景（專業工具類）
 
-- **Leaderboard**：功能：全球使用量排行榜、競爭式追蹤；應用場景：團隊競賽、使用量激勵；適用客群：團隊管理者、社群運營
-- **Spec (cc-sdd v1.1.5)**：功能：規格驅動開發工具鏈、cc-sdd CLI、支援 8 個 AI 平台（Claude/Cursor/Gemini/Codex/Copilot/Qwen/Windsurf）、12 種語言、11 個 /kiro:* 斜線指令；應用場景：AI-DLC 開發流程、規格文檔自動化、跨平台 AI 協作；適用客群：架構師、技術寫作者、企業開發團隊
-- **opcode (原 Claudia v0.2.0)**：功能：桌面 GUI 應用、CC Agents、會話管理、背景代理執行；應用場景：圖形化專案管理、視覺化監控；適用客群：開發者、PM、設計師
-- **Context Engineering**：功能：PRP 方法論、脈絡工程；應用場景：AI 輔助開發最佳實踐、提示工程；適用客群：AI 工程師、研究者
-- **Vibe Kanban**：功能：看板管理、Git 整合、多代理協作；應用場景：專案管理、團隊協作；適用客群：專案經理、敏捷團隊
-- **Contains Studio Agents**：功能：專業代理庫、快速開發；應用場景：代理快速部署、專業場景定制；適用客群：企業開發者、解決方案架構師
+- **Spec (cc-sdd v2.0.3)**：功能：規格驅動開發工具鏈、cc-sdd CLI、支援 8 個 AI 平台（Claude/Cursor/Gemini/Codex/Copilot/Qwen/Windsurf）、12 種語言、11 個 /kiro:\* 斜線指令 + 3 個驗證命令（validate-gap、validate-design、validate-impl）；應用場景：AI-DLC 開發流程、規格文檔自動化、跨平台 AI 協作、Brownfield 開發；適用客群：架構師、技術寫作者、企業開發團隊
+- **Context Engineering**：功能：PRP 方法論、脈絡工程、自訂命令系統（generate-prp.md、execute-prp.md）、完整模板結構；應用場景：AI 輔助開發最佳實踐、提示工程、MCP 伺服器開發、AI Agent 開發；適用客群：AI 工程師、研究者、架構師
+
 ---
 
 ## 🎯 專案獨立性說明
@@ -550,4 +561,4 @@ Claude Code 中文文件整合專案致力於為華語地區的開發者提供�
 
 ---
 
-_最後更新：2025-08-20T01:27:23+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件_
+_最後更新：2025-11-25T03:02:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案_

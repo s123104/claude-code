@@ -13,9 +13,9 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 > **專案資訊**
 >
 > - **專案名稱**：Awesome Claude Code
-> - **專案版本**：v2025.10.16
-> - **專案最後更新**：2025-10-16
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **專案版本**：v2.0.0
+> - **專案最後更新**：2025-11-21
+> - **文件整理時間**：2025-11-24T04:25:00+08:00
 >
 > **核心定位**
 >
@@ -35,6 +35,12 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 
 ## 📢 重要公告
 
+### 🆕 2025-11-21 - **Claude Code for Web - Breaking the Internet**
+
+**Claude Code for Web 來了！**
+
+我們正在探索 Claude Code for Web 的可能性，這是一個令人興奮的新平台。如果您正在使用 Claude Code for Web，或希望看到相關資源被收錄到這個清單中，請在 [討論串](https://github.com/hesreallyhim/awesome-claude-code/discussions/308) 中發聲。
+
 ### 🆕 2025-10-16 - **AGENT SKILLS 重大更新**
 
 **Claude Got Skills!**
@@ -47,37 +53,19 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 
 ## 🆕 本週新增
 
-> 過去 7 天新增的資源
+> 過去 7 天新增的資源（2025-11-21）
 
-### [`Codex Skill`](https://github.com/skills-directory/skill-codex)
+### [`Awesome Claude Code Output Styles (That I Really Like)`](https://github.com/hesreallyhim/awesome-claude-code-output-styles-that-i-really-like)
 
-由 [klaudworks](https://github.com/klaudworks) 開發 | MIT 授權
+由 [Really Him](https://github.com/hesreallyhim/) 開發 | MIT 授權
 
-使用戶能夠從 claude code 中提示 codex。與原始 codex mcp 伺服器不同，此技能會從您的提示中推斷參數（如模型、推理努力、沙箱），或要求您指定它們。它還簡化了繼續先前 codex 會話的過程，以便 codex 可以繼續使用先前的情境。
+一個有趣且適度有趣的實驗性輸出樣式集合。讓 Claude Code 可以作為任何類型的代理使用，同時保持其核心功能，如運行本地腳本、讀寫檔案和追蹤 TODO。
 
-### [`claude-mem`](https://github.com/thedotmack/claude-mem)
+### [`claude-code-docs`](https://github.com/costiash/claude-code-docs)
 
-由 [Alex Newman](https://github.com/thedotmack) 開發
+由 [Constantin Shafranski](https://github.com/costiash) 開發 | Mixed 授權
 
-持久化記憶壓縮系統，捕獲工具使用、生成 AI 驅動的會話摘要，並透過 SQLite 儲存和全文搜尋將相關情境注入未來的 Claude Code 會話中（無需額外成本依賴！）🦾
-
-### [`cc-sessions`](https://github.com/GWUDCAP/cc-sessions)
-
-由 [toastdev](https://github.com/satoastshi) 開發 | MIT 授權
-
-使用 Claude Code 進行生產開發的主觀方法。
-
-### [`fcakyon Collection`](https://github.com/fcakyon/claude-codex-settings/tree/main/.claude/hooks)
-
-由 [Fatih Akyon](https://github.com/fcakyon) 開發 | Apache-2.0 授權
-
-精心編寫的程式碼品質和工具使用管理 hooks 集合（例如強制使用 Tavily 而非 WebFetch 工具）。
-
-### [`/linux-desktop-slash-commands`](https://github.com/danielrosehill/Claude-Code-Linux-Desktop-Slash-Commands)
-
-由 [Daniel Rosehill](https://github.com/danielrosehill) 開發
-
-專為促進 Linux 桌面環境中常見和進階操作的斜線指令庫（儘管許多指令在 Linux 伺服器上也很有用）。指令組包括硬體基準測試、檔案系統組織和安全性態勢驗證。
+Anthropic© PBC Claude/Code 文檔網站的鏡像，但具有額外功能，如全文搜尋和即時更新 - 是 `claude-code-docs` 的絕佳伴侶，提供最新、完全索引的資訊，讓 Claude Code 可以閱讀關於自己的內容。
 
 ---
 
@@ -85,15 +73,16 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 
 - [1. 專案簡介](#1-專案簡介)
 - [2. Agent Skills（代理技能）](#2-agent-skills代理技能) ⭐ 新增
-- [3. 目錄分類與重點資源](#3-目錄分類與重點資源)
-- [4. Workflow & Knowledge Guides](#4-workflow--knowledge-guides)
-- [5. Tooling & IDE 整合](#5-tooling--ide-整合)
-- [6. Hooks 實例](#6-hooks-實例)
-- [7. Slash-Commands 精選](#7-slash-commands-精選)
-- [8. CLAUDE.md 實戰範例](#8-claudemd-實戰範例)
-- [9. MCP/整合與自動化](#9-mcp整合與自動化)
-- [10. 社群貢獻與參與](#10-社群貢獻與參與)
-- [11. 官方文檔與延伸閱讀](#11-官方文檔與延伸閱讀)
+- [3. Output Styles（輸出樣式）](#3-output-styles輸出樣式) ⭐ 新增
+- [4. 目錄分類與重點資源](#4-目錄分類與重點資源)
+- [5. Workflow & Knowledge Guides](#5-workflow--knowledge-guides)
+- [6. Tooling & IDE 整合](#6-tooling--ide-整合)
+- [7. Hooks 實例](#7-hooks-實例)
+- [8. Slash-Commands 精選](#8-slash-commands-精選)
+- [9. CLAUDE.md 實戰範例](#9-claudemd-實戰範例)
+- [10. MCP/整合與自動化](#10-mcp整合與自動化)
+- [11. 社群貢獻與參與](#11-社群貢獻與參與)
+- [12. 官方文檔與延伸閱讀](#12-官方文檔與延伸閱讀)
 
 ---
 
@@ -101,10 +90,12 @@ Claude Code 是由 [Anthropic](https://www.anthropic.com/) 發布的尖端 CLI �
 
 Awesome Claude Code 是一份由社群協作維護的精選清單，收錄 Claude Code 相關的指令、CLAUDE.md、workflow、hooks、MCP 整合、IDE 工具、最佳實踐與各類自動化資源，協助開發者提升生產力、優化 AI 代理開發流程。
 
-### 1.1 最新更新（2025-10-16）
+### 1.1 最新更新（2025-11-21）
 
-- **🆕 Agent Skills**：Claude Code v2.0.20 新功能
-- **新增工具**：claude-mem、cc-sessions、Codex Skill 等
+- **🆕 Claude Code for Web**：新平台探索中，歡迎社群反饋
+- **🆕 Output Styles**：新增輸出樣式分類，包含實驗性樣式集合
+- **🆕 Agent Skills**：新增 Web Assets Generator Skill
+- **🆕 文檔鏡像**：新增 claude-code-docs（全文搜尋和即時更新）
 - **持續維護**：定期更新社群貢獻的資源
 - **品質保證**：嚴格的資源篩選標準
 - **社群驅動**：開放式貢獻模式
@@ -148,10 +139,78 @@ Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜�
 
 **目標使用者**：高級開發者、AI 研究人員、需要增強推理能力的專案
 
+#### [`Web Assets Generator Skill`](https://github.com/alonw0/web-asset-generator)
+
+由 [Alon Wolenitz](https://github.com/alonw0) 開發 | MIT 授權
+
+**功能**：輕鬆從 Claude Code 生成 Web 資源
+
+- 生成 favicon、應用程式圖標（PWA）
+- 生成社交媒體元圖像（Open Graph）用於 Facebook、Twitter、WhatsApp、LinkedIn
+- 處理圖像調整大小、文字轉圖像生成、表情符號
+- 提供適當的 HTML meta 標籤
+
+**使用場景**：
+
+- Web 專案快速啟動
+- PWA 應用程式開發
+- 社交媒體內容準備
+- 品牌資產生成
+
+**目標使用者**：前端開發者、Web 設計師、全端開發者
+
 ---
 
-## 3. 目錄分類與重點資源
+## 3. Output Styles（輸出樣式）
 
+> **Output styles** 允許您將 Claude Code 用作任何類型的代理，同時保持其核心功能，如運行本地腳本、讀寫檔案和追蹤 TODO。
+
+### 什麼是 Output Styles？
+
+Output Styles 是 Claude Code 的一個強大功能，允許您自訂 Claude Code 的行為和輸出格式，使其適應不同的使用場景和角色。
+
+### 可用的 Output Styles
+
+#### [`Awesome Claude Code Output Styles (That I Really Like)`](https://github.com/hesreallyhim/awesome-claude-code-output-styles-that-i-really-like)
+
+由 [Really Him](https://github.com/hesreallyhim/) 開發 | MIT 授權
+
+**功能**：實驗性輸出樣式集合
+
+- 有趣且適度有趣的樣式範例
+- 展示 Output Styles 的各種可能性
+- 社群驅動的創意集合
+
+**使用場景**：
+
+- 探索不同的 Claude Code 使用方式
+- 學習如何自訂輸出樣式
+- 尋找適合您專案的樣式範例
+
+#### [`ccoutputstyles`](https://github.com/viveknair/ccoutputstyles)
+
+由 [Vivek Nair](https://github.com/viveknair) 開發 | MIT 授權
+
+**功能**：CLI 工具和模板畫廊
+
+- 使用預建模板自訂 Claude Code 輸出樣式
+- 提供超過 15 個模板（撰寫時）
+- CLI 工具簡化樣式應用
+
+**使用場景**：
+
+- 快速應用預建輸出樣式
+- 自訂專案特定的輸出格式
+- 探索不同的樣式選項
+
+**目標使用者**：所有 Claude Code 用戶、希望自訂體驗的開發者
+
+---
+
+## 4. 目錄分類與重點資源
+
+- **Agent Skills**：Codex Skill、Web Assets Generator Skill 等專業技能
+- **Output Styles**：輸出樣式自訂、模板畫廊、實驗性樣式集合
 - **Workflows & Knowledge Guides**：專案啟動、管理、知識導入、Context Priming、SDLC 全流程
 - **Tooling**：用量監控、Code Flow、IDE/編輯器整合、Webhooks、Swarm/多代理協作
 - **Hooks**：各類 hooks 實作、TypeScript/PHP/Go 等語言範例
@@ -162,7 +221,7 @@ Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜�
 
 ---
 
-## 3. Workflow & Knowledge Guides
+## 5. Workflow & Knowledge Guides
 
 - **Blogging Platform**：一鍵管理部落格文章、分類、媒體
 - **ClaudeLog**：進階 CLAUDE.md 實戰、plan mode、配置技巧
@@ -176,7 +235,7 @@ Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜�
 
 ---
 
-## 4. Tooling & IDE 整合
+## 6. Tooling & IDE 整合
 
 - **CC Usage**：用量監控 CLI，token/cost 儀表板
 - **Claude Code Flow**：遞迴式自動化 agent 編輯/測試/優化
@@ -186,7 +245,7 @@ Agent Skills 是 Claude Code v2.0.20 引入的重大新功能。與傳統的斜�
 
 ---
 
-## 5. Hooks 實例與最佳實踐
+## 7. Hooks 實例與最佳實踐
 
 ### 5.1 官方 Hooks 系統架構
 
@@ -260,7 +319,7 @@ fi
 
 ---
 
-## 6. Slash-Commands 精選與完整指南
+## 8. Slash-Commands 精選與完整指南
 
 ### 6.1 內建斜線命令（官方）
 
@@ -413,7 +472,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 ---
 
-## 7. CLAUDE.md 實戰範例
+## 9. CLAUDE.md 實戰範例
 
 - **語言/框架**：AI IntelliJ Plugin、AWS MCP Server、DroidconKotlin、EDSL、Giselle、HASH、Inkline、JSBeeb、Lamoom Python、LangGraphJS、Metabase、SG Cars Trends Backend、SPy、TPL
 - **領域/專案**：AVS Vibe、Comm、Course Builder、Cursor Tools、Guitar、Note Companion、Pareto Mac、SteadyStart
@@ -422,7 +481,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 ---
 
-## 8. MCP 整合與自動化
+## 10. MCP 整合與自動化
 
 - **MCP server/client**：`claude mcp add`、`claude mcp serve`、`claude mcp list`、`claude mcp get`、`claude mcp remove`
 - **Slash-commands 與 MCP**：`/mcp__github__list_prs`、`/mcp__jira__create_issue "Bug" high`
@@ -433,7 +492,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 ---
 
-## 9. 社群貢獻與參與
+## 11. 社群貢獻與參與
 
 - **貢獻方式**：Pull Request、/project:add-new-resource 指令、CLAUDE.md/HOOKS/指令投稿
 - **內容收錄原則**：最佳實踐、創新/實驗性 workflow、工具/外掛、非傳統 AI 助理應用
@@ -442,7 +501,7 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 ---
 
-## 10. 官方文檔與延伸閱讀
+## 12. 官方文檔與延伸閱讀
 
 - [Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code/overview)
 - [MCP/工具整合 API](https://docs.anthropic.com/en/docs/claude-code/docs/claude-code/mcp)
@@ -454,4 +513,6 @@ MCP 伺服器會自動暴露斜線命令，格式為：`/mcp__<server-name>__<pr
 
 > 本文件僅為社群整理版本，詳細內容與最新資源請參閱官方 GitHub 與文檔。
 >
-> **最後更新**：2025-10-29T02:05:00+08:00 | **專案更新**：2025-10-29T13:54:56-04:00
+> **版本資訊**：Awesome Claude Code v2.0.0 - 精選資源總覽  
+> **最後更新**：2025-11-24T05:15:00+08:00  
+> **專案更新**：2025-11-21T17:23:51-05:00

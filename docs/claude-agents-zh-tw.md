@@ -11,14 +11,16 @@ Claude Code Custom Agents 是一個專為 Claude Code 設計的自訂代理集�
 > - **專案名稱**：Claude Code Custom Agents
 > - **專案版本**：v1.0
 > - **專案最後更新**：2025-07-25
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **文件整理時間**：2025-11-24T05:35:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：7 個專業化 AI 代理，提供程式碼重構、前端設計、專案規劃、安全審查、內容撰寫等全方位支援
 > - **場景**：程式碼開發、專案管理、內容創作、學習輔助、安全審查
 > - **客群**：全端開發者、專案經理、技術寫作者、學習者
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/iannuttall/claude-agents)
 > - [Claude Code Subagents 官方文檔](https://docs.anthropic.com/en/docs/claude-code/subagents)
 > - [MCP 協議文檔](https://docs.anthropic.com/en/docs/claude-code/mcp)
@@ -66,23 +68,50 @@ Claude Code Custom Agents 是一個專為 Claude Code 設計的自訂代理集�
 
 #### **code-refactorer**
 
-- **功能**：程式碼重構輔助
-- **適用場景**：程式碼優化、架構改進、效能提升
-- **特色**：智能重構建議、最佳實踐指導
+- **功能**：程式碼重構輔助，改善程式碼結構、可讀性和可維護性，同時保持功能不變
+- **適用場景**：
+  - 清理混亂的程式碼
+  - 減少重複代碼
+  - 改善命名
+  - 簡化複雜邏輯
+  - 重組程式碼以提高清晰度
+- **特色**：
+  - 系統化分析（重複、命名、複雜度、函數大小、設計模式）
+  - 具體重構建議（說明問題和原因）
+  - 保持功能一致性
+  - 增量改進而非完全重寫
+- **工具**：Edit, MultiEdit, Write, NotebookEdit, Grep, LS, Read
 
 #### **frontend-designer**
 
-- **功能**：前端設計輔助
-- **適用場景**：UI/UX 設計、響應式佈局、元件設計
-- **特色**：現代設計原則、使用者體驗優化
+- **功能**：將設計稿、線框圖或視覺概念轉換為詳細的技術規格和實作指南
+- **適用場景**：
+  - 分析 UI/UX 設計
+  - 創建設計系統
+  - 生成元件架構
+  - 產生開發者可用的完整文件
+- **特色**：
+  - 視覺分解（原子設計模式、顏色、字體、間距）
+  - 生成設計 Schema（JSON 格式）
+  - 元件架構規劃
+  - 響應式設計規範
+- **工具**：Edit, MultiEdit, Write, NotebookEdit, Grep, LS, Read
 
 ### 2.2 專案管理代理
 
 #### **project-task-planner**
 
-- **功能**：專案規劃和任務分解
-- **適用場景**：專案啟動、里程碑規劃、資源分配
-- **特色**：敏捷方法論、任務優先級管理
+- **功能**：從產品需求文件（PRD）創建完整的開發任務清單
+- **適用場景**：
+  - 從 PRD 生成開發路線圖
+  - 創建結構化任務清單
+  - 涵蓋從初始設置到部署維護的所有方面
+- **特色**：
+  - 需要 PRD 作為輸入
+  - 生成 `plan.md` 文件
+  - 包含主要開發階段（專案設置、後端開發、前端開發、整合）
+  - 每個功能包含後端和前端任務
+- **工具**：Task, Bash, Edit, MultiEdit, Write, NotebookEdit, Grep, LS, Read, ExitPlanMode, TodoWrite, WebSearch
 
 #### **prd-writer**
 
@@ -94,9 +123,19 @@ Claude Code Custom Agents 是一個專為 Claude Code 設計的自訂代理集�
 
 #### **security-auditor**
 
-- **功能**：安全審查輔助
-- **適用場景**：程式碼安全檢查、漏洞掃描、合規審查
-- **特色**：安全最佳實踐、風險評估
+- **功能**：執行全面的安全審計，識別漏洞並生成詳細的安全報告
+- **適用場景**：
+  - 程式碼庫安全審計
+  - API 安全檢查
+  - 認證機制審查
+  - 依賴項安全檢查
+- **特色**：
+  - 系統化檢查（認證、輸入驗證、資料保護、API 安全、依賴項、配置）
+  - 生成 `security-report.md` 文件
+  - 漏洞嚴重性評級（Critical, High, Medium, Low）
+  - 具體修復步驟（Markdown 檢查清單）
+  - 參考相關安全標準
+- **工具**：Task, Bash, Edit, MultiEdit, Write, NotebookEdit
 
 #### **vibe-coding-coach**
 
@@ -142,13 +181,14 @@ cp agents/*.md ~/.claude/agents/
 
 ### 3.3 驗證安裝
 
-```bash
-# 檢查代理是否正確安裝
-claude --list-agents
+安裝完成後，Claude Code 會自動檢測並在適當的任務中使用這些代理。您無需手動調用，Claude Code 會根據您的任務自動選擇最適合的代理。
 
-# 檢查特定代理狀態
-claude --agent-status code-refactorer
-```
+代理文件格式遵循 Claude Code Subagents 規範，包含：
+
+- `name`: 代理名稱
+- `description`: 代理描述和使用場景
+- `tools`: 代理可用的工具列表
+- `color`: 代理在介面中顯示的顏色
 
 ---
 
@@ -156,45 +196,56 @@ claude --agent-status code-refactorer
 
 ### 4.1 基本使用
 
-#### 調用特定代理
+#### 自動代理選擇（推薦）
+
+Claude Code 會根據您的任務自動選擇最適合的代理。您只需要描述您的需求：
 
 ```bash
-# 使用程式碼重構代理
-claude --agent code-refactorer "請幫我重構這個函數"
+# 程式碼重構需求
+claude "我剛完成了用戶認證系統的實作，可以幫我清理一下嗎？"
+# Claude Code 會自動調用 code-refactorer 代理
 
-# 使用前端設計代理
-claude --agent frontend-designer "設計一個響應式導航欄"
+# 前端設計需求
+claude "我有一個 Figma 設計稿，需要幫我實作成 React 元件"
+# Claude Code 會自動調用 frontend-designer 代理
 
-# 使用專案規劃代理
-claude --agent project-task-planner "為這個電商專案制定開發計劃"
+# 專案規劃需求
+claude "我有一個 PRD，需要創建開發任務清單"
+# Claude Code 會自動調用 project-task-planner 代理
+
+# 安全審計需求
+claude "可以幫我進行安全審計嗎？"
+# Claude Code 會自動調用 security-auditor 代理
 ```
 
-#### 自動代理選擇
+#### 明確指定代理
+
+如果需要明確指定使用特定代理，可以在對話中提及：
 
 ```bash
-# Claude Code 會根據上下文自動選擇最適合的代理
-claude "重構這個程式碼以提高效能"
-# 會自動調用 code-refactorer
-
-claude "設計一個現代化的使用者介面"
-# 會自動調用 frontend-designer
+claude "使用 code-refactorer 代理重構這個函數"
+claude "使用 frontend-designer 代理分析這個設計稿"
+claude "使用 security-auditor 代理檢查這個 API 的安全性"
 ```
 
 ### 4.2 進階使用
 
-#### 多代理協作
+#### 代理協作
+
+Claude Code 支援多代理協作，可以讓不同代理處理任務的不同方面：
 
 ```bash
-# 讓多個代理協作完成複雜任務
-claude "請 code-refactorer 和 security-auditor 協作檢查並優化這個程式碼"
+# 先進行安全審計，然後重構程式碼
+claude "先使用 security-auditor 檢查這個程式碼的安全性，然後使用 code-refactorer 進行重構"
 ```
 
-#### 代理鏈式調用
+#### 代理輸出文件
 
-```bash
-# 一個代理完成後自動調用下一個代理
-claude "請 project-task-planner 制定計劃，然後讓 prd-writer 撰寫需求文件"
-```
+某些代理會生成文件供後續使用：
+
+- **project-task-planner**: 生成 `plan.md` 開發計劃文件
+- **security-auditor**: 生成 `security-report.md` 安全報告文件
+- **frontend-designer**: 生成設計 Schema 和元件架構文件
 
 ---
 
@@ -204,88 +255,149 @@ claude "請 project-task-planner 制定計劃，然後讓 prd-writer 撰寫需�
 
 #### 主要功能
 
-- **程式碼分析**：分析現有程式碼的結構和品質
-- **重構建議**：提供具體的重構建議和實作方案
-- **效能優化**：識別效能瓶頸並提供優化建議
-- **最佳實踐**：應用現代程式設計最佳實踐
+- **初始評估**：完全理解程式碼的當前功能，絕不建議會改變行為的變更
+- **重構目標**：詢問用戶的具體優先級（效能、可讀性、維護痛點、團隊標準）
+- **系統化分析**：檢查以下改進機會：
+  - **重複**：識別可提取為可重用函數的重複代碼塊
+  - **命名**：找出不清楚或誤導性的變數、函數和類別名稱
+  - **複雜度**：定位深度巢狀條件、長參數列表或過於複雜的表達式
+  - **函數大小**：識別做太多事情的函數，需要分解
+  - **設計模式**：識別可以使用已建立模式簡化結構的地方
+  - **組織**：發現屬於不同模組或需要更好分組的程式碼
+  - **效能**：找出明顯的低效率（如不必要的迴圈或冗餘計算）
+- **重構建議**：為每個建議的改進提供具體程式碼區段、問題說明、原因解釋和重構版本
 
 #### 使用範例
 
 ```bash
-# 重構特定函數
-claude --agent code-refactorer "請重構這個函數以提高可讀性和效能"
+# 清理剛完成的實作
+claude "我剛完成了用戶認證系統的實作，可以幫我清理一下嗎？"
 
-# 整體架構重構
-claude --agent code-refactorer "請分析這個類別的設計並提供重構建議"
+# 重構長函數
+claude "這個函數可以運作，但它有 200 行，很難理解"
 
-# 效能優化
-claude --agent code-refactorer "請檢查這個演算法的效能並提供優化建議"
+# 處理程式碼審查意見
+claude "程式碼審查指出了幾個有重複邏輯和命名不佳的區域"
 ```
+
+#### 邊界限制
+
+code-refactorer 代理**不會**：
+
+- 添加新功能或能力
+- 改變程式的外部行為或 API
+- 對未見的程式碼做假設
+- 建議沒有具體程式碼範例的理論改進
+- 重構已經乾淨且結構良好的程式碼
 
 ### 5.2 frontend-designer 代理
 
 #### 主要功能
 
-- **UI 設計**：創建現代化的使用者介面設計
-- **響應式佈局**：設計適配不同裝置的響應式佈局
-- **元件設計**：設計可重用的 UI 元件
-- **使用者體驗**：優化使用者體驗和互動流程
+- **初始發現過程**：
+  - 評估框架和技術棧（React, Vue, Angular, Next.js, Tailwind, Material-UI 等）
+  - 收集設計資產（UI mockups、線框圖、Figma/Sketch 文件、品牌指南）
+- **設計分析過程**：
+  - **視覺分解**：系統化分析每個視覺元素
+  - 識別原子設計模式（atoms, molecules, organisms）
+  - 提取顏色調色板、字體比例、間距系統
+  - 映射元件層次結構和關係
+  - 記錄互動模式和微動畫
+  - 注意響應式行為指標
+- **生成設計 Schema**：創建詳細的 JSON schema，包含設計系統、元件規格、響應式斷點等
+- **實作指南**：產生開發者可直接使用的詳細實作指南
 
 #### 使用範例
 
 ```bash
-# 設計登入頁面
-claude --agent frontend-designer "設計一個現代化的登入頁面"
+# 從 Figma mockup 實作 React 元件
+claude "我有一個 dashboard 的 Figma 設計稿，需要幫我實作成 React"
 
-# 響應式導航
-claude --agent frontend-designer "設計一個響應式導航欄"
+# 從現有截圖提取設計系統
+claude "這些是我們當前應用的截圖，需要從中提取一致的設計系統"
 
-# 元件庫設計
-claude --agent frontend-designer "設計一個按鈕元件庫"
+# 從線框圖創建元件規格
+claude "我畫了這個用戶資料頁面的線框圖，應該如何結構化元件？"
 ```
 
 ### 5.3 project-task-planner 代理
 
 #### 主要功能
 
-- **專案規劃**：制定完整的專案開發計劃
-- **任務分解**：將大型任務分解為可管理的小任務
-- **時間估算**：提供準確的時間估算和里程碑規劃
-- **資源分配**：建議適當的資源分配策略
+- **PRD 要求**：需要產品需求文件（PRD）作為輸入，如果沒有 PRD 會要求提供
+- **技術澄清**：可能需要詢問技術方面以確定：
+  - 資料庫技術偏好
+  - 前端框架偏好
+  - 認證需求
+  - API 設計考量
+  - 編碼標準和實踐
+- **生成計劃文件**：在用戶指定的位置創建 `plan.md` 文件（如果未指定，會建議位置）
+- **開發階段**：必須包含以下主要開發階段（按順序）：
+  1. 初始專案設置（資料庫、儲存庫、CI/CD 等）
+  2. 後端開發（API 端點、控制器、模型等）
+  3. 前端開發（UI 元件、頁面、功能）
+  4. 整合（連接前端和後端）
+- **功能任務**：每個需求功能都包含後端任務（API 端點、資料庫操作、業務邏輯）和前端任務（UI 元件、狀態管理、用戶互動）
 
 #### 使用範例
 
 ```bash
-# 專案啟動規劃
-claude --agent project-task-planner "為這個電商平台制定 3 個月的開發計劃"
+# 從 PRD 創建開發任務清單
+claude "我有一個新電商平台的 PRD，可以創建任務清單嗎？"
 
-# 任務分解
-claude --agent project-task-planner "將用戶認證功能分解為具體的開發任務"
-
-# 里程碑規劃
-claude --agent project-task-planner "為這個專案制定關鍵里程碑"
+# 創建 SaaS 產品的開發計劃
+claude "我需要為我們的新 SaaS 產品創建開發計劃"
+# 代理會先要求提供 PRD
 ```
+
+#### 輸出格式
+
+生成的 `plan.md` 文件包含：
+
+- 專案設置（儲存庫設置、開發環境配置、資料庫設置、初始專案腳手架）
+- 後端基礎（資料庫遷移和模型、認證系統、核心服務和工具、基礎 API 結構）
+- 功能特定後端（每個功能的 API 端點、業務邏輯實作）
+- 功能特定前端（UI 元件、狀態管理、用戶互動）
 
 ### 5.4 security-auditor 代理
 
 #### 主要功能
 
-- **安全檢查**：檢查程式碼中的安全漏洞
-- **最佳實踐**：應用安全開發最佳實踐
-- **風險評估**：評估潛在的安全風險
-- **合規檢查**：確保符合安全合規要求
+- **系統化檢查**：系統化檢查整個程式碼庫，專注於：
+  - 認證和授權機制
+  - 輸入驗證和清理
+  - 資料處理和儲存實踐
+  - API 端點保護
+  - 依賴項管理
+  - 配置檔案和環境變數
+  - 錯誤處理和日誌記錄
+  - 會話管理
+  - 加密和雜湊實作
+- **生成安全報告**：在用戶指定的位置創建 `security-report.md` 文件（如果未指定，會建議位置）
+- **漏洞類別檢查**：
+  - **認證與授權**：弱密碼策略、會話管理、JWT 實作缺陷、權限提升向量等
+  - **輸入驗證與清理**：SQL/NoSQL 注入、XSS、命令注入、路徑遍歷等
+  - **資料保護**：敏感資料暴露、加密問題、資料洩露風險等
+  - **API 安全**：端點保護、速率限制、CORS 配置等
+  - **依賴項安全**：已知漏洞、過時套件、許可證問題等
+- **報告內容**：
+  - 發現摘要
+  - 漏洞詳細資訊（嚴重性評級：Critical, High, Medium, Low）
+  - 突出問題區域的程式碼片段
+  - 詳細修復步驟（Markdown 檢查清單）
+  - 相關安全標準或最佳實踐的參考
 
 #### 使用範例
 
 ```bash
-# 程式碼安全檢查
-claude --agent security-auditor "檢查這個認證系統的安全性"
+# 執行安全審計
+claude "可以幫我進行安全審計嗎？"
 
-# 漏洞掃描
-claude --agent security-auditor "掃描這個 API 的潛在安全漏洞"
+# 檢查 API 安全性
+claude "我擔心我們的 API 端點可能有安全問題"
 
-# 安全最佳實踐
-claude --agent security-auditor "為這個專案制定安全開發指南"
+# 檢查新功能的安全性
+claude "我們剛為應用添加了用戶認證，可以檢查是否安全嗎？"
 ```
 
 ### 5.5 prd-writer 代理
@@ -358,66 +470,64 @@ claude --agent content-writer "為這個專案撰寫用戶說明文件"
 
 ## 6. 自訂與擴展
 
-### 6.1 自訂代理行為
+### 6.1 自訂代理
 
-#### 修改代理配置
+#### 創建自訂代理
 
-```yaml
-# .claude/agents/custom-code-refactorer.yml
-name: "custom-code-refactorer"
-base_agent: "code-refactorer"
-customizations:
-  preferred_languages: ["JavaScript", "TypeScript", "Python"]
-  refactoring_style: "aggressive"
-  include_tests: true
-  documentation_style: "JSDoc"
+您可以基於現有代理創建自訂版本，或創建全新的代理。代理文件使用 Markdown 格式，包含 YAML front matter：
+
+```markdown
+---
+name: custom-code-refactorer
+description: 自訂的程式碼重構代理，專注於 JavaScript/TypeScript
+tools: Edit, MultiEdit, Write, NotebookEdit, Grep, LS, Read
+color: blue
+---
+
+您是一個專注於 JavaScript 和 TypeScript 的資深軟體開發者...
 ```
 
-#### 創建新代理
+#### 代理文件結構
 
-```yaml
-# .claude/agents/custom-agent.yml
-name: "custom-agent"
-description: "自訂代理描述"
-specializations:
-  - "特定領域 1"
-  - "特定領域 2"
+每個代理文件包含：
 
-preferences:
-  model: "claude-3-sonnet-20240229"
-  response_format: "markdown"
-  include_examples: true
-```
+- **YAML front matter**：
+  - `name`: 代理名稱（必需）
+  - `description`: 代理描述和使用場景（必需）
+  - `tools`: 代理可用的工具列表（可選）
+  - `color`: 代理在介面中顯示的顏色（可選）
+- **代理指令**：Markdown 格式的詳細指令，描述代理的行為和功能
 
-### 6.2 代理組合
+### 6.2 代理擴展
 
-#### 建立代理組合
+#### 修改現有代理
 
-```yaml
-# .claude/agent-groups.yml
-groups:
-  full_stack_development:
-    name: "全端開發"
-    agents:
-      - "code-refactorer"
-      - "frontend-designer"
-      - "project-task-planner"
-      - "security-auditor"
-
-  content_creation:
-    name: "內容創作"
-    agents:
-      - "content-writer"
-      - "prd-writer"
-      - "vibe-coding-coach"
-```
-
-#### 使用代理組合
+您可以複製現有代理文件並進行修改：
 
 ```bash
-# 使用代理組合
-claude --agent-group full_stack_development "設計並開發一個完整的用戶管理系統"
+# 複製現有代理
+cp .claude/agents/code-refactorer.md .claude/agents/custom-refactorer.md
+
+# 編輯自訂代理
+# 修改 name、description 和指令內容
 ```
+
+#### 代理工具配置
+
+代理可以使用的工具包括：
+
+- `Edit`: 編輯單一檔案
+- `MultiEdit`: 同時編輯多個檔案
+- `Write`: 創建新檔案
+- `NotebookEdit`: 編輯 Jupyter notebook
+- `Grep`: 搜尋程式碼
+- `LS`: 列出目錄內容
+- `Read`: 讀取檔案
+- `Task`: 創建任務
+- `Bash`: 執行 shell 命令
+- `TodoWrite`: 寫入 TODO 清單
+- `WebSearch`: 網路搜尋
+- `ExitPlanMode`: 退出計劃模式
 
 ---
 
@@ -480,56 +590,73 @@ usage_monitoring:
 
 ### 8.1 常見問題
 
-#### 代理無法調用
+#### 代理無法被自動選擇
+
+**問題**：Claude Code 沒有自動選擇預期的代理
+
+**解決方案**：
+
+- 確保代理文件位於正確的位置（`.claude/agents/` 或 `~/.claude/agents/`）
+- 檢查代理文件的格式是否正確（YAML front matter 和 Markdown 內容）
+- 在對話中明確提及代理名稱或功能
+- 確保代理的 `description` 中包含相關關鍵字
+
+#### 代理文件格式錯誤
+
+**問題**：代理文件無法被 Claude Code 識別
+
+**解決方案**：
 
 ```bash
-# 檢查代理安裝
-ls -la .claude/agents/
+# 檢查文件格式
+cat .claude/agents/code-refactorer.md | head -10
 
-# 檢查代理權限
-claude --check-permissions
-
-# 重新載入代理
-claude --reload-agents
+# 確保 YAML front matter 格式正確
+# 應該以 --- 開始和結束
+# name 和 description 欄位是必需的
 ```
 
-#### 代理回應異常
+#### 代理工具不可用
 
-```bash
-# 檢查代理配置
-claude --agent-config code-refactorer
+**問題**：代理嘗試使用未配置的工具
 
-# 檢查模型設定
-claude --model-status
+**解決方案**：
 
-# 啟用除錯模式
-claude --verbose --debug
-```
+- 檢查代理文件的 `tools` 欄位
+- 確保列出的工具是 Claude Code 支援的工具
+- 如果不需要特定工具，可以從 `tools` 列表中移除
 
 ### 8.2 除錯技巧
 
-#### 詳細日誌
+#### 檢查代理文件
 
 ```bash
-# 啟用詳細日誌
-claude --verbose --agent code-refactorer "重構這個程式碼"
+# 列出所有已安裝的代理
+ls -la .claude/agents/
 
-# 記錄到檔案
-claude --log-file agent-debug.log --agent code-refactorer "重構這個程式碼"
+# 檢查特定代理的內容
+cat .claude/agents/code-refactorer.md
+
+# 驗證 YAML front matter
+head -10 .claude/agents/code-refactorer.md
 ```
 
-#### 代理狀態檢查
+#### 測試代理
 
 ```bash
-# 檢查代理狀態
-claude --agent-status
+# 明確指定代理進行測試
+claude "使用 code-refactorer 代理重構這個函數：[貼上程式碼]"
 
-# 檢查代理健康狀況
-claude --agent-health code-refactorer
-
-# 檢查代理配置
-claude --agent-config code-refactorer
+# 檢查代理是否正確回應
+# 如果代理沒有被調用，檢查描述中的關鍵字是否匹配您的請求
 ```
+
+#### 代理文件最佳實踐
+
+- **清晰的描述**：`description` 欄位應該清楚說明代理的用途和使用場景
+- **範例**：在 `description` 中包含使用範例可以幫助 Claude Code 更好地匹配代理
+- **工具選擇**：只列出代理實際需要的工具，避免不必要的工具
+- **顏色標識**：使用 `color` 欄位幫助在介面中識別不同代理
 
 ---
 
@@ -556,7 +683,11 @@ claude --agent-config code-refactorer
 
 ---
 
+---
+
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/iannuttall/claude-agents) 與相關文檔。
 >
-**版本資訊**：Claude Code Custom Agents - 7 個專業代理  
-> **最後更新**：2025-08-20T00:13:54+08:00
+> **版本資訊**：Claude Code Custom Agents v1.0 - 7 個專業化 AI 代理  
+> **最後更新**：2025-11-24T05:35:00+08:00  
+> **專案更新**：2025-07-25T12:08:37+01:00  
+> **主要變更**：更新代理功能描述、使用指南、代理詳解、自訂與擴展說明、疑難排解指南

@@ -10,9 +10,9 @@ Claude Code Guide 是一份社群驅動的完整 Claude Code 使用指南，涵�
 >
 > - **專案名稱**：Claude Code Guide
 > - **專案版本**：v1.5
-> - **專案最後更新**：2025-10-29
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
-> - **Claude Code 版本**：v2.0+ (支援 Subagents + Agent Skills)
+> - **專案最後更新**：2025-11-24
+> - **文件整理時間**：2025-11-24T05:40:00+08:00
+> - **Claude Code 版本**：v2.0+ (支援 Subagents + Agent Skills + MCP)
 >
 > **核心定位**
 >
@@ -53,10 +53,13 @@ Claude Code 是 Anthropic 推出的 AI 編程助手，支援自然語言指令�
 
 ### 1.1 最新版本特色
 
-- **Claude Code v1.0.72**：最新穩定版本
-- **完整命令參考**：涵蓋所有可發現的 Claude Code 命令
+- **Claude Code v2.0+**：支援 Subagents、Agent Skills、MCP 協議
+- **完整命令參考**：涵蓋所有可發現的 Claude Code 命令和參數
 - **進階功能文檔**：包含許多未廣泛知曉或基礎教程中未記錄的功能
-- **社群驅動**：持續更新和改進
+- **社群驅動**：每日同步官方發布說明和更新
+- **完整配置指南**：環境變數、全域配置、專案配置完整說明
+- **MCP 整合**：詳細的 MCP 伺服器配置和使用指南
+- **Subagents 系統**：多代理協作完整指南
 
 ### 1.2 官方資源
 
@@ -76,35 +79,92 @@ Claude Code 是 Anthropic 推出的 AI 編程助手，支援自然語言指令�
 
 ### 2.2 安裝方式
 
-- **NPM（官方推薦）**
+- **NPM（官方推薦，通用方法）**
+
   ```bash
   npm install -g @anthropic-ai/claude-code
   ```
+
+- **Windows**
+
+  ```bash
+  # 透過 CMD
+  npm install -g @anthropic-ai/claude-code
+
+  # 透過 PowerShell（自動安裝腳本）
+  irm https://claude.ai/install.ps1 | iex
+  ```
+
+- **WSL/Git Bash**
+
+  ```bash
+  # 透過終端
+  npm install -g @anthropic-ai/claude-code
+
+  # 透過安裝腳本
+  curl -fsSL https://claude.ai/install.sh | bash
+  ```
+
 - **MacOS**
+
   ```bash
-  brew install node
-  npm install -g @anthropic-ai/claude-code
+  brew install node && npm install -g @anthropic-ai/claude-code
   ```
+
+- **Linux**
+
+  ```bash
+  # 安裝 Node.js
+  sudo apt update && sudo apt install -y nodejs npm
+
+  # 安裝 Claude Code
+  npm install -g @anthropic-ai/claude-code
+
+  # 或使用安裝腳本
+  curl -fsSL https://claude.ai/install.sh | bash
+  ```
+
 - **Arch Linux AUR**
+
   ```bash
   yay -S claude-code
-  # 或 paru -S claude-code
+  # 或
+  paru -S claude-code
   ```
+
 - **Docker 容器化**
-  參考 [claudebox](https://github.com/RchGrav/claudebox)
-- **Windows/WSL**
-  1. 啟用 WSL2 並安裝 Ubuntu
-  2. 於 Ubuntu 執行：
-     ```bash
-     sudo apt update && sudo apt install -y nodejs npm
-     npm install -g @anthropic-ai/claude-code
-     ```
+
+  ```bash
+  # Windows (CMD)
+  docker run -it --rm -v "%cd%:/workspace" -e ANTHROPIC_API_KEY="sk-your-key" node:20-slim bash -lc "npm i -g @anthropic-ai/claude-code && cd /workspace && claude"
+
+  # macOS/Linux (bash/zsh)
+  docker run -it --rm -v "$PWD:/workspace" -e ANTHROPIC_API_KEY="sk-your-key" node:20-slim bash -lc 'npm i -g @anthropic-ai/claude-code && cd /workspace && claude'
+
+  # 無 bash 後備方案
+  docker run -it --rm -v "$PWD:/workspace" -e ANTHROPIC_API_KEY="sk-your-key" node:20-slim sh -lc 'npm i -g @anthropic-ai/claude-code && cd /workspace && claude'
+  ```
 
 #### 驗證安裝
 
 ```bash
+# Linux
 which claude
+
+# Windows
+where claude
+
+# 通用
 claude --version
+```
+
+#### 常見管理命令
+
+```bash
+claude config          # 配置設定
+claude mcp list        # 設定 MCP 伺服器（可用 add/remove 替換 list）
+claude /agents         # 配置/設定不同任務的 Subagents
+claude update          # 更新至最新版本
 ```
 
 > 來源：[官方文檔](https://docs.anthropic.com/en/docs/claude-code/docs/get-started)｜[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)
@@ -138,38 +198,106 @@ claude --version
 
 ### 4.1 常用指令
 
-| 指令               | 說明           |
-| ------------------ | -------------- |
-| claude             | 啟動互動 REPL  |
-| claude -p "prompt" | 一次性查詢     |
-| claude config      | 設定管理       |
-| claude update      | 升級至最新版   |
-| claude mcp         | MCP 伺服器管理 |
+| 指令                     | 說明                                           |
+| ------------------------ | ---------------------------------------------- |
+| `claude`                 | 啟動互動 REPL                                  |
+| `claude "prompt"`        | 啟動 REPL 並預設提示                           |
+| `claude -p "prompt"`     | 一次性查詢（非互動模式）                       |
+| `claude -c`              | 繼續最近的對話（`--continue` 的別名）          |
+| `claude -r "<id>"`       | 恢復特定會話（`--resume` 的別名）              |
+| `claude config`          | 設定管理（互動式配置精靈）                     |
+| `claude update`          | 升級至最新版                                   |
+| `claude mcp`             | MCP 伺服器管理                                 |
+| `claude /agents`         | 管理自訂 AI Subagents                          |
+| `claude /memory`         | 編輯 CLAUDE.md 記憶檔案                        |
+| `claude /model`          | 選擇或變更 AI 模型                             |
+| `claude /cost`           | 顯示 token 使用統計和帳單資訊                  |
+| `claude /permissions`    | 查看或更新工具權限                             |
+| `claude /review`         | 請求程式碼審查                                 |
+| `claude /status`         | 查看帳戶和系統狀態                             |
+| `claude /doctor`         | 檢查 Claude Code 安裝的健康狀況                |
+| `claude /bug`            | 回報錯誤（將對話發送給 Anthropic）             |
+| `claude /clear`          | 清除對話歷史                                   |
+| `claude /compact`        | 壓縮對話（可選焦點指令）                       |
+| `claude /login`          | 切換 Anthropic 帳戶                            |
+| `claude /logout`         | 登出 Anthropic 帳戶                            |
+| `claude /vim`            | 進入 vim 模式                                  |
+| `claude /terminal-setup` | 安裝 Shift+Enter 鍵綁定（僅 iTerm2 和 VSCode） |
 
-### 4.2 參數參考
+### 4.2 命令列參數參考
 
-| 參數                           | 說明                                |
-| ------------------------------ | ----------------------------------- |
-| --allowedTools                 | 指定允許工具（如 View, Edit, Bash） |
-| --apply-patch                  | 啟用自動修復（beta）                |
-| --output-format                | 指定輸出格式（如 json, cyclonedx）  |
-| --timeout                      | 設定逾時秒數                        |
-| --stream                       | 大型 diff 建議加速                  |
-| --dangerously-skip-permissions | 跳過權限檢查（僅限測試/容器）       |
+| 參數                             | 說明                                                                           |
+| -------------------------------- | ------------------------------------------------------------------------------ |
+| `-d, --debug`                    | 啟用除錯模式（顯示詳細除錯輸出）                                               |
+| `--verbose`                      | 覆蓋配置中的 verbose 模式設定（顯示擴展日誌/逐輪輸出）                         |
+| `-p, --print`                    | 列印回應並退出（適用於管道輸出）                                               |
+| `--output-format <format>`       | 輸出格式（僅與 `--print` 一起使用）：`text`（預設）、`json`、`stream-json`     |
+| `--input-format <format>`        | 輸入格式（僅與 `--print` 一起使用）：`text`（預設）、`stream-json`             |
+| `--replay-user-messages`         | 將用戶訊息從 stdin 重新發送到 stdout 以確認（僅與 `stream-json` 格式一起使用） |
+| `--allowedTools <tools...>`      | 允許的工具名稱列表（逗號/空格分隔，如 `"Bash(git:*) Edit"`）                   |
+| `--disallowedTools <tools...>`   | 拒絕的工具名稱列表（逗號/空格分隔）                                            |
+| `--mcp-config <configs...>`      | 從 JSON 檔案或字串載入 MCP 伺服器（空格分隔）                                  |
+| `--strict-mcp-config`            | 僅使用 `--mcp-config` 中的 MCP 伺服器，忽略其他 MCP 配置                       |
+| `--append-system-prompt`         | 附加系統提示到預設系統提示（僅在 print 模式中有效）                            |
+| `--permission-mode <mode>`       | 會話的權限模式（選項：`acceptEdits`、`bypassPermissions`、`default`、`plan`）  |
+| `--permission-prompt-tool`       | 指定 MCP 工具在非互動模式下處理權限提示                                        |
+| `--fallback-model <model>`       | 當預設模型過載時自動回退到指定模型（注意：僅與 `--print` 一起使用）            |
+| `--model <model>`                | 當前會話的模型（接受別名如 `sonnet`/`opus` 或完整模型名稱）                    |
+| `--settings <file-or-json>`      | 從 JSON 檔案或 JSON 字串載入額外設定                                           |
+| `--add-dir <directories...>`     | 允許工具存取的額外目錄                                                         |
+| `--ide`                          | 如果恰好有一個有效的 IDE 可用，在啟動時自動連接到 IDE                          |
+| `-c, --continue`                 | 繼續當前目錄中最最近的對話                                                     |
+| `-r, --resume [sessionId]`       | 恢復對話；提供會話 ID 或互動式選擇一個                                         |
+| `--session-id <uuid>`            | 為對話使用特定的會話 ID（必須是有效的 UUID）                                   |
+| `--dangerously-skip-permissions` | 繞過所有權限檢查（僅用於受信任的沙盒）                                         |
+| `-v, --version`                  | 顯示已安裝的 `claude` CLI 版本                                                 |
+| `-h, --help`                     | 顯示幫助/使用說明                                                              |
+| `--include-partial-messages`     | 透過 CLI 標誌支援部分訊息串流                                                  |
+| `--mcp-debug`                    | [已棄用] MCP 除錯模式（顯示 MCP 伺服器錯誤）。改用 `--debug`                   |
 
 #### 常見組合範例
 
-- 安全審查：
+- **安全審查**：
+
   ```bash
   claude -p "檢查 secrets" --allowedTools "View"
   ```
-- 自動修復：
+
+- **JSON 輸出（用於腳本）**：
+
   ```bash
-  claude -p "修正 lint" --allowedTools "View,Write" --apply-patch
+  claude -p "分析這個專案" --output-format json
   ```
-- 產生 SBOM：
+
+- **串流 JSON（即時串流）**：
+
   ```bash
-  claude -p "產生 SBOM" --allowedTools "View" --output-format cyclonedx
+  claude -p "查詢" --output-format stream-json --input-format stream-json
+  ```
+
+- **多目錄分析**：
+
+  ```bash
+  claude --add-dir ../apps ../lib "分析微服務架構"
+  ```
+
+- **特定工具權限**：
+
+  ```bash
+  claude --allowedTools "Bash(git log:*)" "Read" "分析 git 歷史"
+  claude --disallowedTools "Edit" "只讀分析"
+  ```
+
+- **權限模式**：
+
+  ```bash
+  claude --permission-mode plan "制定計劃"
+  ```
+
+- **模型選擇**：
+  ```bash
+  claude --model sonnet "使用 Sonnet 模型"
+  claude --model claude-sonnet-4-20250514 "使用特定版本"
   ```
 
 > 來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)
@@ -185,17 +313,72 @@ claude --version
 
 ### 5.2 Config 指令
 
-- `claude config list` 查看所有設定
-- `claude config get <key>` 取得設定值
-- `claude config set <key> <value>` 設定參數
-- `claude config import <file>` 匯入團隊模板
+#### 基本配置命令
+
+- `claude config` - 互動式配置精靈
+- `claude config get <key>` - 取得設定值（例如：`claude config get theme`）
+- `claude config set <key> <value>` - 設定值（例如：`claude config set theme dark`）
+- `claude config add <key> <vals...>` - 附加到陣列類型鍵（例如：`claude config add env DEV=1`）
+- `claude config remove <key> <vals...>` - 從列表類型鍵移除項目
+- `claude config list` - 顯示所有當前設定（專案範圍是預設）
+
+#### 專案範圍設定範例
+
+```bash
+claude config set model "claude-3-5-sonnet-20241022"   # 覆蓋此專案的預設模型
+claude config set includeCoAuthoredBy false            # 在 git/PR 中停用 "co-authored-by Claude" 署名
+claude config set forceLoginMethod claudeai            # 限制登入流程：claudeai | console
+claude config set enableAllProjectMcpServers true      # 自動批准來自 .mcp.json 的所有 MCP 伺服器
+claude config set defaultMode "acceptEdits"            # 設定預設權限模式
+```
+
+#### 管理列表設定（專案範圍）
+
+```bash
+claude config add enabledMcpjsonServers github         # 批准來自 .mcp.json 的特定 MCP 伺服器
+claude config add enabledMcpjsonServers memory         # 添加另一個
+claude config remove enabledMcpjsonServers memory      # 移除一個項目
+claude config add disabledMcpjsonServers filesystem    # 明確拒絕特定的 MCP 伺服器
+```
+
+#### 全域範圍設定（使用 `-g` 或 `--global`）
+
+```bash
+claude config set -g autoUpdates false                 # 全域關閉自動更新
+claude config set --global preferredNotifChannel iterm2_with_bell
+claude config set -g theme dark                        # 主題：dark | light | light-daltonized | dark-daltonized
+claude config set -g verbose true                      # 到處顯示完整的 bash/命令輸出
+claude config get -g theme                             # 確認全域值
+```
+
+#### 設定優先順序
+
+設定優先順序：**Enterprise > CLI 參數 > 本地專案 > 共享專案 > 用戶（~/.claude）**
+
+> **注意**：專案範圍是 `claude config` 的預設值；使用 `-g/--global` 影響所有專案。`add`/`remove` 僅用於列表類型鍵（例如 `enabledMcpjsonServers`）。
 
 ### 5.3 MCP 指令
 
-- `claude mcp` 進入 MCP 管理
-- `claude mcp status` 檢查 MCP 狀態
-- `claude mcp restart --all` 重啟所有 MCP
-- `claude --mcp-debug` 啟用 MCP 除錯
+#### MCP 管理命令
+
+- `claude mcp` - 啟動 MCP 精靈/配置 MCP 伺服器
+- `claude mcp list` - 列出已配置的 MCP 伺服器
+- `claude mcp get <name>` - 顯示伺服器的詳細資訊
+- `claude mcp remove <name>` - 移除伺服器
+- `claude mcp add <name> <command> [args...]` - 添加本地 stdio 伺服器
+- `claude mcp add --transport sse <name> <url>` - 添加遠端 SSE 伺服器
+- `claude mcp add --transport http <name> <url>` - 添加遠端 HTTP 伺服器
+- `claude mcp add <name> --env KEY=VALUE -- <cmd> [args...]` - 將環境變數傳遞給伺服器命令
+- `claude mcp add --transport sse private-api https://api.example/mcp --header "Authorization: Bearer TOKEN"` - 添加帶認證標頭的伺服器
+- `claude mcp add-json <name> '<json>'` - 透過 JSON blob 添加伺服器
+- `claude mcp add-from-claude-desktop` - 從 Claude Desktop 匯入伺服器
+- `claude mcp reset-project-choices` - 重置專案 .mcp.json 伺服器的批准
+- `claude mcp serve` - 將 Claude Code 本身作為 MCP stdio 伺服器運行
+
+#### MCP 除錯
+
+- `claude --mcp-debug` - [已棄用] MCP 除錯模式，改用 `--debug`
+- `claude --debug` - 啟用除錯模式（顯示詳細除錯輸出，包括 MCP）
 
 > 來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)
 
@@ -203,10 +386,27 @@ claude --version
 
 ## 6. CLAUDE.md 與記憶體管理
 
-- **CLAUDE.md**：專案根目錄下的記憶體檔案，記錄架構、目標、開發規範等。
-- **記憶體指令**：
-  - `claude /memory` 編輯記憶體
-  - `claude /memory view` 檢視記憶體
+### 6.1 記憶體類型
+
+Claude Code 提供四種記憶體位置，採用階層結構，每種都有不同用途：
+
+| 記憶體類型                 | 位置                                                                                                                                                    | 用途                            | 使用案例範例                                    | 共享對象               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ----------------------------------------------- | ---------------------- |
+| **Enterprise policy**      | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\ProgramData\ClaudeCode\CLAUDE.md` | 由 IT/DevOps 管理的組織範圍指令 | 公司編碼標準、安全政策、合規要求                | 組織中的所有用戶       |
+| **Project memory**         | `./CLAUDE.md`                                                                                                                                           | 專案的團隊共享指令              | 專案架構、編碼標準、常見工作流程                | 透過版本控制的團隊成員 |
+| **User memory**            | `~/.claude/CLAUDE.md`                                                                                                                                   | 所有專案的個人偏好              | 程式碼樣式偏好、個人工具快捷方式                | 僅您（所有專案）       |
+| **Project memory (local)** | `./CLAUDE.local.md`                                                                                                                                     | 個人專案特定偏好                | _（已棄用，見下方）_ 您的沙盒 URL、首選測試資料 | 僅您（當前專案）       |
+
+> 所有記憶體檔案在啟動時會自動載入到 Claude Code 的上下文中。階層中較高的檔案優先，並首先載入，為更具體的記憶體提供基礎。
+
+### 6.2 記憶體指令
+
+- `claude /memory` - 編輯記憶體檔案
+- `claude /memory view` - 檢視記憶體（如果支援）
+
+### 6.3 記憶體快捷方式
+
+- `#` 在開頭 - 記憶快捷方式，添加到 CLAUDE.md（提示選擇檔案）
 
 > 來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)
 
@@ -555,8 +755,11 @@ echo "✅ 架構分析完成！查看生成的報告文件。"
 
 ---
 
-> 本文件最後更新：2025-10-29T02:07:00+08:00
+---
+
+> **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/zebbern/claude-code-guide) 與 [官方文檔](https://docs.anthropic.com/en/docs/claude-code)。
 >
-> 主要參考來源：[zebbern/claude-code-guide](https://github.com/zebbern/claude-code-guide)、[Anthropic Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
->
-> **專案版本**：Claude Code v1.0.72 | **專案更新**：2025-10-29T00:39:30+00:00
+> **版本資訊**：Claude Code Guide v1.5 - 完整的 Claude Code 社群指南  
+> **最後更新**：2025-11-24T05:40:00+08:00  
+> **專案更新**：2025-11-24T00:41:50+00:00  
+> **主要變更**：更新安裝指南、命令參考、配置選項、MCP 整合、Subagents 系統、環境變數說明

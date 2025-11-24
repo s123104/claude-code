@@ -11,9 +11,9 @@ Context Engineering（脈絡工程）是一門為 AI 程式設計助手工程化
 > **專案資訊**
 >
 > - **專案名稱**：Context Engineering Intro
-> - **專案版本**：v1.0
-> - **專案最後更新**：2025-08-06
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **專案版本**：最新版本
+> - **專案最後更新**：2025-11-15
+> - **文件整理時間**：2025-11-25T02:45:00+08:00
 >
 > **核心定位**
 >
@@ -125,8 +125,8 @@ PRP 融合了傳統 PRD（產品需求文件）的嚴謹性和現代 prompt engi
 
 ```bash
 # 1. 克隆範本
-git clone https://github.com/coleam00/Context-Engineering-Intro.git
-cd Context-Engineering-Intro
+git clone https://github.com/coleam00/context-engineering-intro.git
+cd context-engineering-intro
 
 # 2. 設定專案規則（可選 - 提供範本）
 # 編輯 CLAUDE.md 添加專案特定指導原則
@@ -136,6 +136,14 @@ cd Context-Engineering-Intro
 
 # 4. 建立初始功能需求
 # 編輯 INITIAL.md 包含您的功能需求
+
+# 5. 生成全面的 PRP（產品需求提示）
+# 在 Claude Code 中執行：
+/generate-prp INITIAL.md
+
+# 6. 執行 PRP 以實作功能
+# 在 Claude Code 中執行：
+/execute-prp PRPs/your-feature-name.md
 ```
 
 ### 3.2 基本工作流程
@@ -174,32 +182,77 @@ cd Context-Engineering-Intro
 /generate-prp INITIAL.md
 ```
 
+**注意**：斜線命令是定義在 `.claude/commands/` 中的自訂命令。您可以查看其實作：
+- `.claude/commands/generate-prp.md` - 查看如何研究和建立 PRP
+- `.claude/commands/execute-prp.md` - 查看如何從 PRP 實作功能
+
+這些命令中的 `$ARGUMENTS` 變數會接收您在命令名稱後傳遞的任何內容（例如 `INITIAL.md` 或 `PRPs/your-feature.md`）。
+
+此命令會：
+1. 讀取您的功能需求
+2. 研究程式碼庫以尋找模式
+3. 搜尋相關文檔
+4. 在 `PRPs/your-feature-name.md` 中建立全面的 PRP
+
 #### 步驟 3：執行實作
 
 ```bash
 # 在 Claude Code 中執行
-/execute-prp PRPs/user-authentication.md
+/execute-prp PRPs/your-feature-name.md
 ```
+
+AI 編碼助手會：
+1. 從 PRP 讀取所有脈絡
+2. 建立詳細的實作計劃
+3. 執行每個步驟並進行驗證
+4. 執行測試並修復任何問題
+5. 確保所有成功標準都達成
 
 ### 3.3 範本結構
 
 ```
-context-engineering-template/
-├── CLAUDE.md              # 專案規範和標準
-├── INITIAL.md             # 初始功能需求
-├── examples/              # 程式碼範例
-│   ├── auth-example.js
-│   ├── api-patterns.js
-│   └── test-examples.js
-├── PRPs/                  # 生成的產品需求規格
-│   └── user-auth.md
-├── use-cases/             # 特定使用案例
-│   ├── mcp-server/
-│   ├── pydantic-ai/
-│   └── template-generator/
-└── docs/                  # 文檔和指南
-    ├── best-practices.md
-    └── workflow-guide.md
+context-engineering-intro/
+├── .claude/
+│   ├── commands/
+│   │   ├── generate-prp.md    # 生成全面 PRP 的命令
+│   │   └── execute-prp.md     # 執行 PRP 實作功能的命令
+│   └── settings.local.json    # Claude Code 權限設定
+├── PRPs/
+│   ├── templates/
+│   │   └── prp_base.md       # PRP 基礎範本
+│   └── EXAMPLE_multi_agent_prp.md  # 完整 PRP 範例
+├── examples/                  # 您的程式碼範例（關鍵！）
+│   ├── README.md             # 說明每個範例的用途
+│   ├── cli.py                # CLI 實作模式
+│   ├── agent/                # Agent 架構模式
+│   │   ├── agent.py          # Agent 建立模式
+│   │   ├── tools.py          # 工具實作模式
+│   │   └── providers.py     # 多提供者模式
+│   └── tests/                # 測試模式
+│       ├── test_agent.py     # 單元測試模式
+│       └── conftest.py       # Pytest 配置
+├── use-cases/                # 特定使用案例
+│   ├── agent-factory-with-subagents/  # AI Agent Factory（含子代理）
+│   ├── ai-coding-workflows-foundation/  # AI 編碼工作流程基礎
+│   ├── mcp-server/          # MCP 伺服器範本
+│   ├── pydantic-ai/         # Pydantic AI 範本
+│   └── template-generator/  # 範本生成器
+├── validation/               # 驗證工具
+│   ├── example-validate.md
+│   ├── README.md
+│   └── ultimate_validate_command.md
+├── claude-code-full-guide/   # Claude Code 完整指南
+│   ├── CLAUDE.md
+│   ├── INITIAL.md
+│   ├── install_claude_code_windows.md
+│   └── PRPs/
+│       ├── EXAMPLE_multi_agent_prp.md
+│       └── templates/
+│           └── prp_base.md
+├── CLAUDE.md                 # AI 助手的全域規則
+├── INITIAL.md                # 功能需求範本
+├── INITIAL_EXAMPLE.md        # 功能需求範例
+└── README.md                 # 專案說明文件
 ```
 
 ---
@@ -219,13 +272,28 @@ context-engineering-template/
 
 ```bash
 /generate-prp INITIAL.md
-
-# 系統會：
-# 1. 分析 INITIAL.md 的需求
-# 2. 讀取 CLAUDE.md 的專案標準
-# 3. 掃描 examples/ 的相關範例
-# 4. 結合專案脈絡生成詳細 PRP
 ```
+
+**生成過程詳解**：
+
+1. **研究階段**
+   - 分析您的程式碼庫以尋找模式
+   - 搜尋類似的實作
+   - 識別要遵循的慣例
+
+2. **文檔收集**
+   - 獲取相關 API 文檔
+   - 包含函式庫文檔
+   - 添加注意事項和特殊情況
+
+3. **藍圖建立**
+   - 建立逐步實作計劃
+   - 包含驗證關卡
+   - 添加測試要求
+
+4. **品質檢查**
+   - 評分信心等級（1-10）
+   - 確保包含所有脈絡
 
 #### 輸出結果
 
@@ -279,15 +347,29 @@ CREATE TABLE users (
 ### 4.2 PRP 執行
 
 ```bash
-/execute-prp PRPs/user-authentication.md
+/execute-prp PRPs/your-feature-name.md
+```
 
-# 系統會：
-# 1. 讀取 PRP 的詳細規格
-# 2. 分析現有程式碼結構
-# 3. 生成所需的程式碼檔案
-# 4. 實作測試案例
-# 5. 更新相關文檔
-````
+**執行過程詳解**：
+
+1. **載入脈絡**：讀取整個 PRP
+2. **計劃**：使用 TodoWrite 建立詳細任務清單
+3. **執行**：實作每個元件
+4. **驗證**：執行測試和 linting
+5. **迭代**：修復發現的任何問題
+6. **完成**：確保所有需求都達成
+
+**PRP 內容**：
+
+PRP（Product Requirements Prompt）是全面的實作藍圖，包含：
+- 完整的脈絡和文檔
+- 帶驗證的實作步驟
+- 錯誤處理模式
+- 測試要求
+
+它們類似於 PRD（產品需求文件），但更專門針對指導 AI 編碼助手而設計。
+
+**查看範例**：參閱 `PRPs/EXAMPLE_multi_agent_prp.md` 查看生成的完整範例。
 
 ---
 
@@ -485,23 +567,44 @@ CREATE TABLE users (
 
 ### 6.2 有效使用範例
 
+`examples/` 資料夾對成功**至關重要**。當 AI 編碼助手能看到要遵循的模式時，表現會好得多。
+
 #### 組織範例檔案
 
 ```
 examples/
-├── authentication/
-│   ├── jwt-service.js      # JWT 處理範例
-│   ├── auth-middleware.js  # 認證中介軟體
-│   └── password-utils.js   # 密碼處理工具
-├── api-patterns/
-│   ├── rest-controller.js  # REST API 控制器範例
-│   ├── error-handling.js   # 錯誤處理模式
-│   └── validation.js       # 輸入驗證範例
-└── testing/
-    ├── unit-test.spec.js   # 單元測試範例
-    ├── integration.spec.js # 整合測試範例
-    └── mock-data.js        # 測試資料範例
+├── README.md           # 說明每個範例的用途
+├── cli.py             # CLI 實作模式
+├── agent/             # Agent 架構模式
+│   ├── agent.py      # Agent 建立模式
+│   ├── tools.py      # 工具實作模式
+│   └── providers.py  # 多提供者模式
+└── tests/            # 測試模式
+    ├── test_agent.py # 單元測試模式
+    └── conftest.py   # Pytest 配置
 ```
+
+#### 範例應包含的內容
+
+1. **程式碼結構模式**
+   - 如何組織模組
+   - 匯入慣例
+   - 類別/函數模式
+
+2. **測試模式**
+   - 測試檔案結構
+   - Mock 方法
+   - 斷言風格
+
+3. **整合模式**
+   - API 客戶端實作
+   - 資料庫連接
+   - 認證流程
+
+4. **CLI 模式**
+   - 參數解析
+   - 輸出格式化
+   - 錯誤處理
 
 #### 範例檔案品質標準
 
@@ -509,6 +612,7 @@ examples/
 - **相關性**：與目前任務高度相關
 - **最佳實踐**：展示正確的實作方式
 - **文檔完整**：包含清晰的註解說明
+- **README 說明**：每個範例都應有 README 說明其用途
 
 ### 6.3 迭代改進
 
@@ -531,135 +635,109 @@ PRPs/
 3. **流程改進**：優化 PRP 生成流程
 4. **知識累積**：更新最佳實踐文檔
 
+### 6.4 驗證工具
+
+專案包含驗證工具目錄 (`validation/`)，提供：
+- **範例驗證**：驗證範例的正確性
+- **終極驗證命令**：全面的驗證流程
+- **驗證指南**：如何有效使用驗證工具
+
+### 6.5 最佳實踐總結
+
+1. **在 INITIAL.md 中明確**：不要假設 AI 知道您的偏好
+2. **提供全面的範例**：更多範例 = 更好的實作
+3. **使用驗證關卡**：PRP 包含必須通過的測試命令
+4. **利用文檔**：包含官方 API 文檔和 MCP 伺服器資源
+5. **自訂 CLAUDE.md**：添加您的慣例和專案特定規則
+
 ---
 
 ## 7. 實用案例
 
-### 7.1 MCP 伺服器開發
+專案包含多個完整的使用案例範本，每個都展示了 Context Engineering 在不同場景下的應用：
 
-使用 Context Engineering 開發 MCP 伺服器的完整流程：
+### 7.1 MCP 伺服器開發 (`use-cases/mcp-server/`)
 
-#### 案例：GitHub 整合 MCP 伺服器
+使用 Context Engineering 開發 MCP 伺服器的完整流程，包含：
+- TypeScript 實作範本
+- Cloudflare Workers 部署配置
+- OAuth 認證機制
+- 完整的測試套件
+- 資料庫工具實作範例
 
-```markdown
-# INITIAL.md
-
-# GitHub MCP 伺服器
-
-## 背景和目標
-
-為 Claude Code 提供 GitHub 整合能力，支援 issue 管理、PR 審查等功能。
-
-## 功能需求
-
-### 核心工具
-
-- list_repositories：列出用戶倉庫
-- create_issue：建立新 issue
-- search_code：搜尋程式碼
-- get_pull_request：獲取 PR 資訊
-
-### 認證機制
-
-- GitHub OAuth App 整合
-- token 安全管理
-- 權限範圍控制
-
-## 技術要求
-
-- TypeScript 實作
-- Cloudflare Workers 部署
+**範例功能**：
+- GitHub OAuth 整合
+- 資料庫工具（含 Sentry 錯誤追蹤）
+- MCP 協議規範遵循
 - 完整的錯誤處理
-- 單元測試覆蓋
 
-## 驗收標準
+### 7.2 Pydantic AI 代理開發 (`use-cases/pydantic-ai/`)
 
-- [ ] 所有工具正常運作
-- [ ] OAuth 認證流程完整
-- [ ] 錯誤處理優雅
-- [ ] 部署自動化完成
-```
+建立 Pydantic AI 代理的完整範本，包含：
+- 基本聊天代理
+- 結構化輸出代理
+- 工具啟用代理
+- 測試模式範例
 
-### 7.2 Pydantic AI 代理開發
-
-#### 案例：智能程式碼審查代理
-
-```markdown
-# INITIAL.md
-
-# 程式碼審查 AI 代理
-
-## 背景和目標
-
-建立智能程式碼審查代理，自動檢查程式碼品質、安全性和最佳實踐。
-
-## 功能需求
-
-### 核心能力
-
-- 程式碼品質分析
-- 安全漏洞檢測
-- 效能問題識別
-- 最佳實踐建議
-
-### 整合需求
-
-- Git 工作流程整合
-- CI/CD 管道支援
-- 多種程式語言支援
-
-## 技術實作
-
-- Pydantic AI 框架
-- 結構化輸出格式
+**範例功能**：
+- 多提供者支援（OpenAI、Anthropic 等）
 - 工具函數整合
-- 完整測試套件
+- 結構化輸出格式
+- 完整的測試套件
 
-## 交付標準
+### 7.3 AI Agent Factory（含子代理）(`use-cases/agent-factory-with-subagents/`)
 
-- [ ] 代理正確分析程式碼
-- [ ] 輸出格式結構化
-- [ ] 整合測試通過
-- [ ] 文檔完整
-```
+建立具有子代理的 AI Agent Factory，包含：
+- RAG Agent 完整實作
+- 文件擷取和嵌入流程
+- 多提供者支援
+- CLI 介面
+- 完整的測試和驗證報告
 
-### 7.3 範本生成器
+**範例功能**：
+- RAG（檢索增強生成）代理
+- 文件擷取和分塊
+- 向量嵌入和搜尋
+- SQLite 資料庫整合
+- 完整的依賴管理
 
-#### Meta-Framework 開發
+### 7.4 AI 編碼工作流程基礎 (`use-cases/ai-coding-workflows-foundation/`)
 
-這是一個生成其他範本的範本系統：
+建立 AI 編碼工作流程的基礎架構，包含：
+- 程式碼庫分析代理
+- 驗證代理
+- 計劃建立和執行命令
+- 入門指南
 
-```markdown
-# INITIAL.md
+**範例功能**：
+- 程式碼庫分析
+- 自動驗證
+- 計劃生成
+- 執行追蹤
 
-# Context Engineering 範本生成器
+### 7.5 範本生成器 (`use-cases/template-generator/`)
 
-## 背景和目標
+Meta-Framework 開發範本，能夠為任何技術領域生成專門的 Context Engineering 範本。
 
-建立 Meta-Framework，能夠為任何技術領域生成專門的 Context Engineering 範本。
-
-## 功能需求
-
-### 範本類型
-
-- 框架專用範本（React、Vue、Django 等）
-- 領域專用範本（AI、區塊鏈、IoT 等）
-- 專案類型範本（Web App、API、CLI 等）
-
-### 生成能力
-
+**範例功能**：
 - 動態 CLAUDE.md 生成
 - 相關範例程式碼收集
 - 最佳實踐文檔生成
 - 工作流程腳本生成
 
-## 技術架構
+### 7.6 Claude Code 完整指南 (`claude-code-full-guide/`)
 
-- 範本引擎設計
-- 知識庫管理
-- API 介面設計
-- 擴展機制設計
-```
+專為 Claude Code 使用者設計的完整指南，包含：
+- Windows 安裝指南
+- 完整的工作流程範例
+- PRP 範本和範例
+- 最佳實踐
+
+**範例功能**：
+- Claude Code 安裝和設定
+- 工作流程建立
+- PRP 生成和執行
+- 多代理協作範例
 
 ---
 
@@ -671,11 +749,14 @@ PRPs/
 - [Context Engineering 方法論](https://contextengineering.dev)
 - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 
-### 8.2 相關專案
+### 8.2 相關專案和使用案例
 
 - [MCP 伺服器範例](https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/mcp-server)
 - [Pydantic AI 範本](https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/pydantic-ai)
+- [AI Agent Factory（含子代理）](https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/agent-factory-with-subagents)
+- [AI 編碼工作流程基礎](https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/ai-coding-workflows-foundation)
 - [範本生成器](https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/template-generator)
+- [Claude Code 完整指南](https://github.com/coleam00/context-engineering-intro/tree/main/claude-code-full-guide)
 
 ### 8.3 最佳實踐資源
 
@@ -694,4 +775,6 @@ PRPs/
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/coleam00/context-engineering-intro) 與相關文檔。
 >
 > **版本資訊**：Context Engineering - AI 輔助開發脈絡工程方法論  
-> **最後更新**：2025-08-20T00:13:54+08:00
+> **最後更新**：2025-11-25T02:45:00+08:00  
+> **專案更新**：2025-11-15T18:41:25-06:00  
+> **主要變更**：新增 `.claude/commands/` 自訂命令系統（generate-prp、execute-prp）、新增多個使用案例（agent-factory-with-subagents、ai-coding-workflows-foundation、mcp-server、pydantic-ai、template-generator）、新增 validation/ 驗證工具目錄、新增 claude-code-full-guide/ 完整指南、更新 PRP 工作流程詳細說明、更新範例結構和使用指南、新增最佳實踐總結

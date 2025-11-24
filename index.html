@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Claude Code 完整生態系統中文指南（最後更新：2025-10-28）— 19 個專案 100% 文檔覆蓋 + 超級工作流大全，包含最新 Agent Skills、Deep Research、Plugin Marketplace、Claude Code v2.0.27 功能"
+      content="Claude Code 完整生態系統中文指南（最後更新：2025-11-25）— 20 個專案 100% 文檔覆蓋 + 超級工作流大全，包含最新 Agent Skills、Deep Research、Plugin Marketplace、Claude Code v2.0.27 功能、Hooks 系統"
     />
     <meta
       name="keywords"
@@ -1335,7 +1335,7 @@
         </div>
         <!-- 更新最後更新時間戳記 -->
         <div class="mt-8 text-center text-xs text-neutral-400">
-          最後更新：2025-08-20T01:27:23+08:00 | 完整生態系統整合：62 個文檔 + 自動化 CI/CD + v6.0.0 Subagents 功能
+          最後更新：2025-11-25T03:02:00+08:00 | 完整生態系統整合：20 個專案文檔 + 44 個官方文檔 + 自動化 CI/CD + v5.0.0 文檔標準化
         </div>
 
         <!-- Documentation Statistics -->
@@ -1619,7 +1619,7 @@
               viewBox="0 0 20 20"
             >
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg
-            >Claude Code 完整生態系統文檔庫（最後更新：2025-10-28），整合 19 個專案 100% 文檔覆蓋 + 超級工作流大全，涵蓋 Claude Code v2.0.27 最新 Agent Skills、Deep Research、Plugin Marketplace、ML-based P90 分析、多代理編排等完整功能
+            >Claude Code 完整生態系統文檔庫（最後更新：2025-11-25），整合 20 個專案 100% 文檔覆蓋 + 超級工作流大全，涵蓋 Claude Code v2.0.27 最新 Agent Skills、Deep Research、Plugin Marketplace、ML-based P90 分析、多代理編排、Hooks 系統等完整功能
           </p>
           <p class="text-sm text-neutral-400 mt-3">
             <svg
@@ -2586,7 +2586,7 @@
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
             Claude Code 史上最完整生態系統文檔庫 - 20 個精心整理專案文檔，包含 Agent Skills、Deep Research、Plugin Marketplace 等最新功能，100% 繁體中文覆蓋
           </p>
-          <p class="text-sm text-neutral-400 mt-2">最後更新：2025-10-28 | Claude Code v2.0.27 | 超級工作流 + 自動化工具鏈</p>
+          <p class="text-sm text-neutral-400 mt-2">最後更新：2025-11-25 | Claude Code v2.0.27 | 超級工作流 + 自動化工具鏈 + Hooks 系統</p>
         </div>
 
         <!-- Search Bar -->
@@ -2679,7 +2679,7 @@
                 <strong>客群</strong>: Cursor AI 用戶、Claude Code 用戶、自動化開發實踐者、團隊協作者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v3.0.0 | 2025-10-28</span>
+                <span>v3.0.0 | 2025-11-24</span>
                 <span class="text-primary-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2697,10 +2697,10 @@
               <p class="text-neutral-200 text-xs mb-3">
                 <strong>功能</strong>: 詳見文檔<br/>
                 <strong>場景</strong>: 多種應用場景<br/>
-                <strong>客群</strong>: 產品主管、技術主管、FinOps
+                <strong>客群</strong>: ML 分析師、SRE 工程師、產品主管
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v4.0.0 | 2025-10-28</span>
+                <span>v5.0.0 | 2025-11-25</span>
                 <span class="text-orange-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2723,7 +2723,7 @@
                 <strong>客群</strong>: Claude Code 用戶、開發者、學習者、工具探索者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v2025.10.16 | 2025-10-28</span>
+                <span>v2.0.0 | 2025-11-24</span>
                 <span class="text-green-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2744,7 +2744,7 @@
                 <strong>客群</strong>: 專業開發者、AI 研究人員、企業團隊、工作流程優化者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v4.2.0 | 2025-10-28</span>
+                <span>v4.1.9 | 2025-11-25</span>
                 <span class="text-secondary-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2762,12 +2762,12 @@
                 <i class="fas fa-robot mr-2"></i>Claude Code Plugins 插件市場
               </h3>
               <p class="text-neutral-200 text-xs mb-3">
-                <strong>功能</strong>: 85 個專業 AI 代理 + 15 個多代理編排器 + 47 個代理技能 + 44 個開發工具，組織為 63 個插件<br/>
+                <strong>功能</strong>: 86 個專業 AI 代理 + 15 個多代理編排器 + 57 個代理技能 + 44 個開發工具，組織為 66 個插件<br/>
                 <strong>場景</strong>: 全端開發、AI工程、DevOps自動化、安全加固、ML管道、事件響應<br/>
                 <strong>客群</strong>: 專業開發者、企業團隊、AI研究人員、DevOps工程師、安全專家
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v2.0.0 | 2025-10-29</span>
+                <span>v2.0.0 | 2025-11-24</span>
                 <span class="text-blue-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2788,7 +2788,7 @@
                 <strong>客群</strong>: 全端開發者、專案經理、技術寫作者、學習者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.0 | 2025-10-28</span>
+                <span>v1.0 | 2025-11-24</span>
                 <span class="text-indigo-400">⭐⭐</span>
               </div>
             </a>
@@ -2804,12 +2804,12 @@
                 <i class="fas fa-building mr-2"></i>Contains Studio 代理集合
               </h3>
               <p class="text-neutral-200 text-xs mb-3">
-                <strong>功能</strong>: 30+ 個專業 AI 代理，覆蓋開發、設計、行銷、產品、專案管理、營運等完整業務鏈<br/>
-                <strong>場景</strong>: 快速原型開發、全端應用構建、產品設計、社交媒體行銷、測試優化、營運支援<br/>
-                <strong>客群</strong>: 全端開發者、產品經理、設計師、行銷專員、專案經理、創業團隊
+                <strong>功能</strong>: 37+ 個專業 AI 代理，覆蓋工程、設計、行銷、產品、專案管理、營運、測試等 7 大部門，支援 6 天衝刺開發流程<br/>
+                <strong>場景</strong>: 快速原型開發、全端應用構建、產品設計、社交媒體行銷、測試優化、營運支援、數據驅動決策<br/>
+                <strong>客群</strong>: 全端開發者、產品經理、設計師、行銷專員、專案經理、創業團隊、快速迭代團隊
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.2 | 2025-10-28</span>
+                <span>v.com | 2025-11-25</span>
                 <span class="text-teal-400">⭐⭐</span>
               </div>
             </a>
@@ -2832,7 +2832,7 @@
                 <strong>客群</strong>: Claude Code 用戶、成本管理者、團隊領導、效能優化工程師
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v3.0.0 | 2025-10-28</span>
+                <span>v3.1.0 | 2025-11-25</span>
                 <span class="text-yellow-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2853,7 +2853,7 @@
                 <strong>客群</strong>: 專業開發者、團隊領導、財務管理、個人開發者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v17.1.3 | 2025-10-28</span>
+                <span>v17.1.6 | 2025-11-24</span>
                 <span class="text-orange-400">⭐⭐⭐</span>
               </div>
             </a>
@@ -2876,7 +2876,7 @@
                 <strong>客群</strong>: 遠端開發者、行動開發者、多專案管理者、團隊協作者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.8.12 | 2025-10-28</span>
+                <span>v1.12.0 | 2025-11-25</span>
                 <span class="text-pink-400">⭐⭐</span>
               </div>
             </a>
@@ -2897,7 +2897,7 @@
                 <strong>客群</strong>: Claude Code 用戶、代理開發者、專案管理者、多任務開發者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v0.2.0 | 2025-10-28</span>
+                <span>v0.2.1 | 2025-11-25</span>
                 <span class="text-purple-400">⭐</span>
               </div>
             </a>
@@ -2918,7 +2918,7 @@
                 <strong>客群</strong>: 專案經理、開發團隊、敏捷實踐者、AI 輔助開發團隊
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v0.0.111-20251023173202 | 2025-10-28</span>
+                <span>v0.0.122 | 2025-11-25</span>
                 <span class="text-cyan-400">⭐⭐</span>
               </div>
             </a>
@@ -2941,7 +2941,7 @@
                 <strong>客群</strong>: AI 輔助開發研究者、效能優化工程師、資料庫開發者、軟體工程學習者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v3.0 | 2025-10-28</span>
+                <span>v0.9.0 | 2025-11-24</span>
                 <span class="text-emerald-400">⭐⭐</span>
               </div>
             </a>
@@ -2964,7 +2964,7 @@
                 <strong>客群</strong>: 開發團隊、安全工程師、DevSecOps 實踐者、專案管理者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.0 | 2025-10-28</span>
+                <span>v1.0 | 2025-11-25</span>
                 <span class="text-red-400">⭐⭐</span>
               </div>
             </a>
@@ -2987,7 +2987,7 @@
                 <strong>客群</strong>: Claude Code 新手、專業開發者、團隊領導、技術探索者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.5 | 2025-10-28</span>
+                <span>v1.5 | 2025-11-24</span>
                 <span class="text-green-400">⭐⭐</span>
               </div>
             </a>
@@ -3008,7 +3008,7 @@
                 <strong>客群</strong>: AI 輔助開發者、技術寫作者、專案經理、知識工程師
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.0 | 2025-10-28</span>
+                <span>v1.md | 2025-11-25</span>
                 <span class="text-amber-400">⭐⭐</span>
               </div>
             </a>
@@ -3029,8 +3029,29 @@
                 <strong>客群</strong>: Claude Code 用戶、系統整合者、開發團隊、工具配置管理者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v2.0.0 | 2025-10-28</span>
+                <span>v2.0.0 | 2025-11-24</span>
                 <span class="text-violet-400">⭐⭐</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="project-card glass-effect rounded-xl p-4 md:p-6 block hover:scale-105 transition observe-fade in-view" data-category="guides" data-tags="Hooks系統,工作流程自動化,安全防護">
+            <a href="docs/claude-code-hooks-zh-tw.md" target="_blank" rel="noopener noreferrer" class="block">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></div>
+                <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded-full">Hooks 系統</span>
+              </div>
+              <h3 class="text-lg font-bold text-emerald-400 mb-2">
+                <i class="fas fa-link mr-2"></i>Claude Code Hooks 完整指南
+              </h3>
+              <p class="text-neutral-200 text-xs mb-3">
+                <strong>功能</strong>: 完整的 Claude Code Hooks 使用指南，包含入門教學、核心概念、實用範例、安全考量、疑難排解<br/>
+                <strong>場景</strong>: 工作流程自動化、安全防護、開發效率提升、生命週期事件處理<br/>
+                <strong>客群</strong>: Claude Code 使用者、開發者、工作流程設計者、DevOps 工程師
+              </p>
+              <div class="flex justify-between items-center text-xs text-neutral-400">
+                <span>最新版本 | 2025-11-25</span>
+                <span class="text-emerald-400">⭐⭐⭐</span>
               </div>
             </a>
           </div>
@@ -3047,12 +3068,12 @@
                 <i class="fas fa-tools mr-2"></i>cc-sdd AI 規格驅動開發
               </h3>
               <p class="text-neutral-200 text-xs mb-3">
-                <strong>功能</strong>: AI 代理規格驅動開發工具，支援 8 個 AI 平台和 12 種語言，11 個 /kiro:* 斜線命令<br/>
-                <strong>場景</strong>: 規格驅動開發、AI-DLC 工作流、團隊協作、生產級開發、多平台支援<br/>
-                <strong>客群</strong>: 專業開發團隊、AI 輔助開發者、規格工程師、技術領導
+                <strong>功能</strong>: AI 代理規格驅動開發工具，支援 7 個 AI 平台和 12 種語言，11 個 /kiro:\* 斜線命令 + 3 個驗證命令<br/>
+                <strong>場景</strong>: 規格驅動開發、AI-DLC 工作流、團隊協作、生產級開發、多平台支援、平行任務分析<br/>
+                <strong>客群</strong>: 專業開發團隊、AI 輔助開發者、規格工程師、技術領導、企業開發團隊
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.1.5 | 2025-10-28</span>
+                <span>v2.0.3 | 2025-11-25</span>
                 <span class="text-slate-400">⭐⭐</span>
               </div>
             </a>
@@ -3073,7 +3094,7 @@
                 <strong>客群</strong>: Claude Code 使用者、開發效率追求者、社群參與者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v0.2.9 | 2025-10-28</span>
+                <span>v0.2.9 | 2025-11-24</span>
                 <span class="text-yellow-400">⭐⭐</span>
               </div>
             </a>
@@ -3094,7 +3115,7 @@
                 <strong>客群</strong>: 全棧開發者、多語言開發者、團隊協作者、程式學習者
               </p>
               <div class="flex justify-between items-center text-xs text-neutral-400">
-                <span>v1.5.0 | 2025-10-28</span>
+                <span>v1.5.0 | 2025-11-25</span>
                 <span class="text-red-400">⭐⭐</span>
               </div>
             </a>
@@ -3486,7 +3507,7 @@
         </div>
         <div class="mt-8 pt-8 border-t border-neutral-800 text-center">
           <p class="text-sm text-neutral-400">
-            最後更新：2025-08-20T01:27:23+08:00 | 版本：v6.0.0 Subagents | 文檔數量：62 個 |
+            最後更新：2025-11-25T03:02:00+08:00 | 版本：v5.0.0 | 文檔數量：20 個專案文檔 + 44 個官方文檔 |
             <a
               href="https://github.com/s123104/claude-code/blob/master/LICENSE"
               target="_blank"

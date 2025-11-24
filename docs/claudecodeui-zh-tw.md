@@ -9,9 +9,9 @@ Claude Code UI 是一個專為 **Claude Code CLI** 和 **Cursor CLI** 設計的*
 > **專案資訊**
 >
 > - **專案名稱**：Claude Code UI
-> - **專案版本**：v1.8.12
-> - **專案最後更新**：2025-10-27
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **專案版本**：v1.12.0
+> - **專案最後更新**：2025-11-19
+> - **文件整理時間**：2025-11-25T02:39:00+08:00
 >
 > **核心定位**
 > - **功能**：雙 CLI 支援的桌面/行動 UI，提供專案管理、會話管理、檔案編輯、Git Explorer、整合終端
@@ -93,6 +93,9 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 - **內建 Shell**：直接存取 Claude Code 或 Cursor CLI
 - **即時輸出**：查看命令執行的即時回應
 - **互動模式**：完整的 CLI 互動體驗
+- **可點擊連結**：終端中的網頁連結可直接點擊開啟
+- **WebGL 加速**：使用 WebGL 提升終端渲染效能
+- **剪貼簿整合**：支援複製和貼上操作
 
 ### 2.3 檔案管理器與編輯器
 
@@ -140,6 +143,20 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 - **自適應佈局**：可收合側邊欄和智能內容優先級
 - **PWA 支援**：新增捷徑到主畫面，行為如原生應用
 
+### 2.9 引導與配置
+
+- **引導頁面**：首次使用時的引導流程
+- **Git 配置自動填充**：自動從系統讀取 Git 配置
+- **Claude 登入狀態識別**：自動檢測 Claude Code 登入狀態
+- **設定精靈**：簡化的初始設定流程
+
+### 2.10 終端增強功能
+
+- **可點擊網頁連結**：終端中的網頁連結可直接點擊開啟
+- **WebGL 渲染**：使用 WebGL 加速終端渲染
+- **剪貼簿整合**：支援複製和貼上操作
+- **適配視窗大小**：終端自動適配視窗大小
+
 ---
 
 ## 3. 安裝與部署
@@ -158,9 +175,85 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 npx @siteboon/claude-code-ui
 ```
 
-您的預設瀏覽器將自動開啟 Claude Code UI 介面。
+伺服器將啟動並可在 `http://localhost:3001`（或您配置的 PORT）存取。
 
-### 3.3 本地開發安裝
+**重新啟動**：停止伺服器後，只需再次執行相同的 `npx` 命令即可
+
+### 3.3 全域安裝（適合經常使用）
+
+如需經常使用，可全域安裝一次：
+
+```bash
+npm install -g @siteboon/claude-code-ui
+```
+
+然後使用簡單命令啟動：
+
+```bash
+claude-code-ui
+```
+
+**重新啟動**：使用 Ctrl+C 停止，然後再次執行 `claude-code-ui`
+
+### 3.4 CLI 命令
+
+全域安裝後，您可以使用 `claude-code-ui` 和 `cloudcli` 命令：
+
+```bash
+# 啟動伺服器（預設命令）
+claude-code-ui
+cloudcli start
+
+# 顯示配置和資料位置
+cloudcli status
+
+# 顯示幫助資訊
+cloudcli help
+
+# 顯示版本
+cloudcli version
+```
+
+**`cloudcli status` 命令顯示**：
+- 安裝目錄位置
+- 資料庫位置（憑證儲存位置）
+- 當前配置（PORT、DATABASE_PATH 等）
+- Claude 專案資料夾位置
+- 配置檔案位置
+
+### 3.5 作為背景服務運行（推薦用於生產環境）
+
+對於生產環境使用，建議使用 PM2（Process Manager 2）將 Claude Code UI 作為背景服務運行：
+
+#### 安裝 PM2
+
+```bash
+npm install -g pm2
+```
+
+#### 啟動為背景服務
+
+```bash
+# 在背景啟動伺服器
+pm2 start claude-code-ui --name "claude-code-ui"
+
+# 或使用較短的別名
+pm2 start cloudcli --name "claude-code-ui"
+```
+
+#### 系統開機自動啟動
+
+讓 Claude Code UI 在系統開機時自動啟動：
+
+```bash
+# 為您的平台生成啟動腳本
+pm2 startup
+
+# 儲存當前程序列表
+pm2 save
+```
+
+### 3.6 本地開發安裝
 
 #### 1. 克隆專案
 ```bash
@@ -221,7 +314,21 @@ Claude Code UI 支援 **[TaskMaster AI](https://github.com/eyaltoledano/claude-t
 
 ## 5. 使用指南
 
-### 5.1 核心功能使用
+### 5.1 首次使用與引導
+
+#### 引導頁面
+首次使用 Claude Code UI 時，會顯示引導頁面，協助您：
+- **設定 Git 配置**：自動從系統讀取 Git 使用者名稱和電子郵件
+- **配置 Claude Code**：檢查 Claude Code 登入狀態
+- **選擇 CLI**：選擇要使用的 CLI（Claude Code 或 Cursor）
+- **基本設定**：完成初始配置
+
+#### Git 配置自動填充
+- **自動讀取**：從系統 Git 配置自動讀取使用者資訊
+- **手動編輯**：可在設定中手動修改 Git 配置
+- **即時驗證**：配置後立即驗證有效性
+
+### 5.2 核心功能使用
 
 #### 專案管理
 UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
@@ -260,7 +367,7 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 - **會話操作** - 重新命名、刪除和匯出對話歷史
 - **跨裝置同步** - 從任何裝置存取會話
 
-### 5.2 行動應用
+### 5.3 行動應用
 - **響應式設計** - 優化所有螢幕尺寸
 - **觸控友好介面** - 滑動手勢和觸控導航
 - **行動導航** - 底部標籤列便於拇指操作
@@ -377,6 +484,25 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 - 檢查 CLI 是否在系統 PATH 中
 - 驗證 API 金鑰配置正確
 - 查看終端輸出的錯誤訊息
+- 檢查 Claude Code 登入狀態（使用 `claude login` 命令）
+
+#### 引導頁面問題
+**問題**: 引導頁面無法正常顯示或配置失敗
+
+**解決方案**:
+- 清除瀏覽器快取並重新載入
+- 檢查 Git 配置是否正確（使用 `git config --list`）
+- 確認 Claude Code 已正確登入
+- 查看瀏覽器控制台的錯誤訊息
+
+#### Git 配置問題
+**問題**: Git 配置無法自動填充或提交失敗
+
+**解決方案**:
+- 確認系統 Git 配置存在（`~/.gitconfig` 或 `~/.config/git/config`）
+- 手動在設定中輸入 Git 使用者名稱和電子郵件
+- 驗證 Git 配置格式正確
+- 檢查專案目錄的 Git 初始化狀態
 
 ---
 
@@ -428,8 +554,10 @@ GNU General Public License v3.0 - 詳見 [LICENSE](https://github.com/siteboon/c
 
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/siteboon/claudecodeui) 與 [官方網站](https://claudecodeui.siteboon.ai)。
 >
-> **版本資訊**：Claude Code UI v1.8.12 - 支援 Claude Code 和 Cursor CLI  
-> **最後更新**：2025-10-28T00:15:00+08:00
+> **版本資訊**：Claude Code UI v1.12.0 - 支援 Claude Code 和 Cursor CLI  
+> **最後更新**：2025-11-25T02:39:00+08:00  
+> **專案更新**：2025-11-19T09:10:09+01:00  
+> **主要變更**：新增引導頁面、Git 配置自動填充、終端可點擊連結支援、Claude 登入狀態識別、PM2 背景服務支援、Logo 顏色更新、設定清理優化
 
 ---
 

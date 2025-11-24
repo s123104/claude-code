@@ -11,7 +11,7 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 > - **專案名稱**：Cursor‧Claude Code 綜合代理統一作業手冊
 > - **專案版本**：v3.0.0
 > - **專案最後更新**：2025-10-28
-> - **文件整理時間**：2025-10-28T19:00:00+08:00
+> - **文件整理時間**：2025-11-24T05:25:00+08:00
 > - **建立時間**：2025-07-15T14:16:31+08:00
 >
 > **核心定位**
@@ -50,11 +50,13 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 
 ```yaml
 代理特性:
-  語言解析: 模糊語句意圖抽取 + N-gram 語義向量
-  知識整合: 6 個專業文件的即時索引與查詢
-  執行引擎: Sequential-Thinking + 自動功能組合
-  安全控制: 用量監控 + 風險評估 + 沙箱執行
-  輸出標準: CLI 格式 + 程式碼區塊 + 繁體中文
+  語言解析: 模糊語句意圖抽取 + N-gram 語義向量 + 深度學習意圖識別
+  知識整合: 18 個專業文件的即時索引與查詢
+  執行引擎: Sequential-Thinking + 自動功能組合 + PRP 工作流程
+  安全控制: 用量監控 + 風險評估 + 沙箱執行 + 安全審查
+  輸出標準: CLI 格式 + 程式碼區塊 + 繁體中文 + 結構化輸出
+  多代理協作: Subagents + Agent Skills + 專業代理集合
+  深度研究: Deep Research + Context Engineering + PRP 生成
 ```
 
 ### 1.2 檔案索引結構
@@ -62,17 +64,27 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 ```
 專案根目錄/
 ├── README.md                               # 專案總覽與導航
-├── claude-code-zh-tw.md                    # 主要文件整合
 ├── CLAUDE.md                               # 專案記憶體文件
-├── docs/                                   # 專門文檔目錄
+├── docs/                                   # 專門文檔目錄（18 個專業說明書）
 │   ├── cursor-claude-master-guide-zh-tw.md # 主控手冊（本文件）
 │   ├── awesome-claude-code-zh-tw.md        # 社群最佳實踐與 Hooks
-│   ├── superclaude-zh-tw.md               # 高階功能與工作流程
-│   ├── claude-code-guide-zh-tw.md         # 基礎 API 與企業實踐
-│   ├── claude-code-usage-monitor-zh-tw.md # 用量監控與 Docker 部署
-│   ├── claudecodeui-zh-tw.md              # Web UI 與 PWA 開發
-│   └── bplustree3-zh-tw.md                # 效能優化與語義搜尋
-├── index.html                              # 簡易網頁瀏覽器
+│   ├── superclaude-zh-tw.md               # SuperClaude Framework (v4.1.9)
+│   ├── claude-code-guide-zh-tw.md         # 基礎 CLI 與 API 指南
+│   ├── claude-code-usage-monitor-zh-tw.md # 用量監控與分析 (v3.1.0)
+│   ├── claudecodeui-zh-tw.md              # Web UI 與 PWA (v1.12.0)
+│   ├── bplustree3-zh-tw.md                # B+Tree 效能優化
+│   ├── claude-code-security-review-zh-tw.md # 安全審查自動化
+│   ├── agents-zh-tw.md                    # 專業代理集合 (86 代理、66 插件)
+│   ├── ccusage-zh-tw.md                   # 用量分析工具 (v17.1.6)
+│   ├── claude-agents-zh-tw.md             # 自訂代理系統
+│   ├── claudecode-debugger-zh-tw.md       # AI 驅動除錯 (v1.5.0)
+│   ├── claude-code-spec-zh-tw.md          # 規格驅動開發 (v2.0.3)
+│   ├── claude-code-leaderboard-zh-tw.md   # 使用量排行榜 (v0.2.9)
+│   ├── claudia-zh-tw.md                  # opcode GUI (v0.2.1)
+│   ├── context-engineering-intro-zh-tw.md # 脈絡工程方法論
+│   ├── contains-studio-agents-zh-tw.md    # Contains Studio 代理 (37+)
+│   └── vibe-kanban-zh-tw.md              # 看板專案管理
+├── index.html                              # 互動式網頁瀏覽器
 └── wsl_claude_code_setup.sh               # WSL 安裝腳本
 ```
 
@@ -156,8 +168,12 @@ graph TD
 ### 3.1 基礎功能分類
 
 ```yaml
-# 來源: superclaude-zh-tw.md
+# 來源: superclaude-zh-tw.md (v4.1.9)
 核心操作功能:
+  /sc: SuperClaude 命令前綴
+  /sc:deep-research: 深度研究模式
+  /sc:agent-skills: Agent Skills 整合
+  /sc:mcp: MCP 伺服器管理
   --create: 建立新專案或元件
   --fix: 自動修復程式碼問題
   --scan: 掃描專案結構與依賴
@@ -173,19 +189,51 @@ graph TD
   --config: 設定檔管理
   --hooks: Git Hooks 整合
 
-# 來源: claude-code-usage-monitor-zh-tw.md
+# 來源: claude-code-usage-monitor-zh-tw.md (v3.1.0)
 監控與安全功能:
   --monitor: 啟用用量監控
   --limit: 設定 API 呼叫限制
   --security: 安全掃描與檢查
   --audit: 稽核日誌記錄
+  --analysis: 使用分析視圖
+  --pro-plan: Pro 計畫 44k 支援
 
-# 來源: claudecodeui-zh-tw.md
+# 來源: claudecodeui-zh-tw.md (v1.12.0)
 介面與輸出功能:
   --ui: 啟用 Web UI 介面
   --pwa: 產生 PWA 圖示與資源
   --format: 指定輸出格式
   --interactive: 互動式操作模式
+  --onboarding: 引導頁面
+  --git-config: Git 配置自動填充
+
+# 來源: ccusage-zh-tw.md (v17.1.6)
+用量分析功能:
+  --analyze: 用量分析
+  --statusline: 狀態列整合
+  --live: 即時監控
+  --instances: 多實例支援
+  --codex: GPT-5 Codex 支援
+
+# 來源: claudecode-debugger-zh-tw.md (v1.5.0)
+除錯功能:
+  /ccdebug: AI 驅動除錯命令
+  --analyze-error: 錯誤分析
+  --fix-suggestion: 修復建議
+  --pattern-match: 錯誤模式匹配
+
+# 來源: claude-code-spec-zh-tw.md (v2.0.3)
+規格驅動開發:
+  --spec: 規格驅動開發
+  --validate: 驗證規格
+  --generate: 生成程式碼
+  --codex: GPT-5.1 Codex 支援
+
+# 來源: context-engineering-intro-zh-tw.md
+脈絡工程功能:
+  /generate-prp: 生成 PRP
+  /execute-prp: 執行 PRP
+  --context-engineering: 脈絡工程模式
 ```
 
 ### 3.2 組合功能策略
@@ -303,13 +351,20 @@ claude-code --monitor --limit=$CLAUDE_DAILY_LIMIT --audit
 
 ### 6.1 常見場景對應表
 
-| 用戶描述          | 解析意圖               | 自動功能                                    | 參考文件    |
-| ----------------- | ---------------------- | ------------------------------------------- | ----------- |
-| "建立 React 專案" | create + react         | `--create --template=react --mcp`           | superclaude |
-| "修復所有錯誤"    | fix + all              | `--scan --fix --lint --test`                | awesome     |
-| "部署到生產環境"  | deploy + production    | `--build --deploy --monitor --security`     | guide       |
-| "檢查效能問題"    | optimize + performance | `--scan --profile --cache --optimize`       | bplustree   |
-| "設定監控系統"    | setup + monitoring     | `--monitor --audit --ui --format=dashboard` | monitor     |
+| 用戶描述              | 解析意圖               | 自動功能                                    | 參考文件                    |
+| --------------------- | ---------------------- | ------------------------------------------- | --------------------------- |
+| "建立 React 專案"     | create + react         | `--create --template=react --mcp`           | superclaude                 |
+| "修復所有錯誤"        | fix + all              | `/ccdebug --analyze-error --fix-suggestion` | debugger + awesome          |
+| "部署到生產環境"      | deploy + production    | `--build --deploy --monitor --security`     | guide + security-review     |
+| "檢查效能問題"        | optimize + performance | `--scan --profile --cache --optimize`       | bplustree + monitor         |
+| "設定監控系統"        | setup + monitoring     | `--monitor --audit --ui --format=dashboard` | monitor + ui                |
+| "分析使用量"          | analyze + usage        | `--analyze --statusline --live`              | ccusage                     |
+| "建立專業代理"        | create + agent         | 調用 agents 或 contains-studio-agents        | agents + contains-studio    |
+| "深度研究功能"        | research + deep        | `/sc:deep-research`                         | superclaude                 |
+| "規格驅動開發"        | spec + driven          | `--spec --validate --generate`              | spec + context-engineering  |
+| "脈絡工程流程"        | context + engineering  | `/generate-prp INITIAL.md`                  | context-engineering         |
+| "看板專案管理"        | kanban + project       | 調用 vibe-kanban                             | vibe-kanban                 |
+| "GUI 專案管理"        | gui + management       | 啟動 opcode                                  | claudia (opcode)            |
 
 ### 6.2 智能功能推論
 
@@ -479,38 +534,107 @@ claude-code --diagnose --export-logs
 
 ## 10. 文件索引與快速查詢
 
-### 10.1 功能對照索引
+### 10.1 功能對照索引（18 個專業說明書）
 
 ```yaml
+# 核心整合文檔
+cursor-claude-master-guide-zh-tw.md:
+  核心功能: 綜合代理主控手冊, 模糊需求解析, 智能執行引擎
+  主要功能: 自動指令映射, 功能組合優化, 錯誤自動修復
+  適用場景: 所有用戶, 一站式查詢, 自動化執行
+
+# 基礎與進階功能
 awesome-claude-code-zh-tw.md:
-  核心功能: 社群最佳實踐, Hooks, 工作流程範本
-  主要功能: --hooks, --workflow, --template
+  核心功能: 社群最佳實踐, Hooks, 工作流程範本, Output Styles
+  主要功能: --hooks, --workflow, --template, --output-style
   適用場景: 專案初始化, 團隊協作, 標準化流程
 
-superclaude-zh-tw.md:
-  核心功能: 高階功能系統, Personas, 命令參考
-  主要功能: --persona, --advanced, --combine
-  適用場景: 複雜任務自動化, 角色導向開發
+superclaude-zh-tw.md (v4.1.9):
+  核心功能: Meta-programming 配置框架, 30 命令, 16 代理, 7 模式, 8 MCP 伺服器
+  主要功能: /sc 命令, Deep Research, Agent Skills, MCP 整合
+  適用場景: 複雜任務自動化, 結構化開發, 多代理協作
 
 claude-code-guide-zh-tw.md:
-  核心功能: 基礎 API, 常用指令, MCP 整合
+  核心功能: 基礎 CLI, API 指南, MCP 整合, 企業實踐
   主要功能: --api, --mcp, --session, --config
   適用場景: 日常開發, 基礎操作, 多代理協作
 
-claude-code-usage-monitor-zh-tw.md:
-  核心功能: 用量監控, 安全控制, 配額管理
-  主要功能: --monitor, --limit, --security, --audit
+# 監控與安全
+claude-code-usage-monitor-zh-tw.md (v3.1.0):
+  核心功能: 用量監控, 安全控制, 配額管理, 使用分析視圖, Pro 計畫 44k
+  主要功能: --monitor, --limit, --security, --audit, --analysis
   適用場景: 生產環境, 團隊管理, 成本控制
 
-claudecodeui-zh-tw.md:
-  核心功能: Web UI, PWA, 遠端管理, 視覺化輸出
-  主要功能: --ui, --pwa, --dashboard, --remote
-  適用場景: 圖形介面操作, 行動裝置管理
+claude-code-security-review-zh-tw.md (v1.0):
+  核心功能: AI 驅動安全審查, GitHub Action, 深度語義分析
+  主要功能: 自動 PR 評論, 漏洞檢測, 合規檢查
+  適用場景: CI/CD 整合, 安全合規, 漏洞檢測
 
+# UI 與視覺化
+claudecodeui-zh-tw.md (v1.12.0):
+  核心功能: Web UI, PWA, 遠端管理, 引導頁面, Git 配置自動填充
+  主要功能: --ui, --pwa, --dashboard, --remote, --onboarding
+  適用場景: 圖形介面操作, 行動裝置管理, 團隊協作
+
+# 效能與優化
 bplustree3-zh-tw.md:
-  核心功能: B+Tree 快取, 資料結構, 效能優化
+  核心功能: B+Tree 快取, 資料結構, 效能優化, 語義搜尋
   主要功能: --cache, --optimize, --profile, --index
   適用場景: 大型專案, 效能調優, 資料處理
+
+# 代理系統
+agents-zh-tw.md:
+  核心功能: 86 專業代理, 66 插件, 57 技能, 多代理編排
+  主要功能: 專業代理調用, Agent Skills, 插件管理
+  適用場景: 專業領域任務, 任務分工, 多代理協作
+
+claude-agents-zh-tw.md:
+  核心功能: 自訂代理系統, 工作流程, 專案管理
+  主要功能: 代理建立, 工作流程設計, 專案整合
+  適用場景: 自訂工作流程, 專案管理, 團隊協作
+
+contains-studio-agents-zh-tw.md:
+  核心功能: 37+ 專業代理, 7 大部門, 6 天衝刺流程, 主動觸發代理
+  主要功能: 快速原型開發, 專業代理調用, 衝刺優化
+  適用場景: 快速開發, 專業代理, 6 天衝刺
+
+# 工具與分析
+ccusage-zh-tw.md (v17.1.6):
+  核心功能: 用量分析, 狀態列整合, 即時監控, 多實例支援, GPT-5 Codex
+  主要功能: --analyze, --statusline, --live, --instances
+  適用場景: 成本分析, 使用追蹤, 即時監控
+
+claudecode-debugger-zh-tw.md (v1.5.0):
+  核心功能: AI 驅動除錯, 多語言支援, 500+ 錯誤模式, /ccdebug 命令
+  主要功能: /ccdebug, 智能分析器, 錯誤修復建議
+  適用場景: 錯誤診斷, 問題解決, 程式碼除錯
+
+claude-code-leaderboard-zh-tw.md (v0.2.9):
+  核心功能: 使用量排行榜, 自動追蹤, OAuth 認證, 版本檢查
+  主要功能: 自動追蹤, 排行榜, Twitter 整合
+  適用場景: 競爭式使用量追蹤, 社群參與
+
+# 開發方法論
+claude-code-spec-zh-tw.md (v2.0.3):
+  核心功能: 規格驅動開發, cc-sdd CLI, GPT-5.1 Codex, EARS 格式
+  主要功能: --spec, --validate, --generate, --codex
+  適用場景: 結構化開發流程, 規格驅動開發
+
+context-engineering-intro-zh-tw.md:
+  核心功能: 脈絡工程方法論, PRP 工作流程, 自訂命令系統
+  主要功能: /generate-prp, /execute-prp, Context Engineering
+  適用場景: AI 輔助開發最佳實踐, 脈絡工程
+
+# 專案管理
+claudia-zh-tw.md (v0.2.1, opcode):
+  核心功能: 桌面 GUI, 會話管理, Web 伺服器模式, CC Agents
+  主要功能: 專案管理, 會話追蹤, Web 模式, 代理執行
+  適用場景: 圖形化專案管理, 會話管理, 遠端存取
+
+vibe-kanban-zh-tw.md:
+  核心功能: 看板專案管理, Git 整合, 多代理協作
+  主要功能: 看板管理, Git 整合, 任務追蹤
+  適用場景: 團隊協作, 專案管理, 多代理協作
 ```
 
 ### 10.2 快速查詢命令
@@ -561,17 +685,31 @@ manual_confirm_required: ["high", "critical"]
 
 **📝 文件維護說明**
 
-- **版本更新**: 當任一子文件更新時，需同步更新本索引
+- **版本更新**: 當任一子文件更新時，需同步更新本索引（目前 18 個文檔已全部更新至最新版本）
 - **功能新增**: 新功能需在此文件登記並分類
 - **安全規則**: 新的高風險操作需加入安全檢查清單
 - **範例補充**: 定期新增實戰使用案例與錯誤處理範例
+- **文檔同步**: 確保所有 18 個專業說明書的功能都反映在本索引中
+
+**📊 文檔狀態**
+
+- ✅ **18/18 文檔已更新**: 所有專業說明書已同步至最新版本
+- ✅ **格式標準化**: 100% 符合統一格式標準
+- ✅ **索引同步**: index.html 專案卡片已同步更新
+- ✅ **功能完整性**: 所有核心功能已納入索引
 
 **🔗 快速連結**
 
 - [GitHub Issues](https://github.com/anthropic/claude-code/issues) - 回報問題與建議
 - [官方文檔](https://docs.anthropic.com/claude-code) - 最新功能更新
 - [社群論壇](https://community.anthropic.com) - 經驗分享與討論
+- [Agent Skills 規範](https://github.com/anthropics/skills/blob/main/agent_skills_spec.md) - Agent Skills 官方規範
+- [MCP 協議文檔](https://docs.anthropic.com/en/docs/claude-code/mcp) - Model Context Protocol 文檔
 
 ---
 
-_本文件會隨著 Claude Code 版本更新而持續維護，確保代理功能的準確性與完整性。_
+> **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱各專業說明書與相關文檔。
+>
+> **版本資訊**：Cursor‧Claude Code 綜合代理統一作業手冊 v4.0.0 - 18 個專業說明書完整功能索引  
+> **最後更新**：2025-11-25T02:47:00+08:00  
+> **主要變更**：更新至 18 個專業說明書、新增 SuperClaude v4.1.9 功能、新增 Context Engineering 方法論、新增 PRP 工作流程、更新所有文檔版本資訊、新增多代理協作功能索引、更新功能對照索引表
