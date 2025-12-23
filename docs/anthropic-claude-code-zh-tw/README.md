@@ -2,11 +2,31 @@
 title: "Anthropic Claude Code 官方文檔（繁中）本地鏡像索引"
 source_index: "https://docs.anthropic.com/zh-TW/docs/claude-code/overview"
 fetched_at: "2025-10-29T14:12:31+08:00"
+status: "archived"
+archived_at: "2025-12-24T00:58:37+08:00"
 ---
 
 # Claude Code 官方文檔（繁中）本地鏡像索引
 
-本目錄為 Anthropic 官方「Claude Code」繁中站點的本地鏡像，來源見上方 `source_index`。
+> ⚠️ **重要說明（2025-12-24）**：
+> 
+> Anthropic 官方已於 2025 年將 Claude Code 相關文檔遷移並重構：
+> - **舊網址**：`https://docs.anthropic.com/zh-TW/docs/claude-code/...`（已失效）
+> - **新平台**：`https://platform.claude.com/docs/`
+> 
+> 原本獨立的「Claude Code」文檔區段已整合至以下新分類：
+> - **Agent SDK**：代理開發工具包
+> - **Agent Skills**：代理技能系統
+> - **Tool Use**：工具使用指南
+> - **MCP (Model Context Protocol)**：模型上下文協議
+> 
+> 本目錄內容為 **2025-10-29 版本的歷史快照**，僅供參考。
+> 如需最新官方文檔，請直接訪問 [platform.claude.com](https://platform.claude.com/docs/)
+> 或使用 `context7 MCP` 動態獲取最新內容。
+
+---
+
+本目錄為 Anthropic 官方「Claude Code」繁中站點的本地鏡像（歷史版本），來源見上方 `source_index`。
 
 ## 條目
 
@@ -54,4 +74,11 @@ fetched_at: "2025-10-29T14:12:31+08:00"
 - troubleshooting → [troubleshooting.md](./troubleshooting.md)
 - vs-code → [vs-code.md](./vs-code.md)
 
-> 註：已批次同步主要文件；若官方內容更新，建議執行同步腳本重新抓取。
+> ⚠️ **歸檔說明**：本目錄內容已歸檔為歷史版本（2025-10-29）。
+> 
+> 由於官方網站結構已完全重構，原同步腳本 (`scripts/doc-sync/auto-discover-sync.js`) 已無法使用。
+> 
+> **建議做法**：
+> 1. 使用 `context7 MCP` 動態獲取最新官方文檔
+> 2. 直接訪問 [platform.claude.com/docs](https://platform.claude.com/docs/) 查看最新內容
+> 3. 參考 [platform.claude.com/llms.txt](https://platform.claude.com/llms.txt) 獲取完整文檔索引

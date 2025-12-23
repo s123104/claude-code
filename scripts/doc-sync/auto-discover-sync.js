@@ -3,7 +3,29 @@
 /**
  * Claude Code 官方文檔自動發現與同步工具
  *
- * 功能：
+ * ⚠️ 重要說明（2025-12-24）：
+ * ==============================
+ * 此腳本目前已 **無法正常使用**，原因如下：
+ *
+ * 1. Anthropic 已將官方文檔遷移至新平台：
+ *    - 舊網址：https://docs.anthropic.com/zh-TW/docs/claude-code/... (已失效)
+ *    - 新網址：https://platform.claude.com/docs/...
+ *
+ * 2. 原本獨立的「Claude Code」文檔區段已不存在，
+ *    相關內容已整合至 Agent SDK、Agent Skills、Tool Use 等新分類。
+ *
+ * 3. 建議替代方案：
+ *    - 使用 context7 MCP 動態獲取最新官方文檔
+ *    - 直接訪問 https://platform.claude.com/docs/
+ *    - 參考 https://platform.claude.com/llms.txt 獲取完整索引
+ *
+ * 如需修復此腳本，需要：
+ * 1. 更新 baseUrl 為 https://platform.claude.com
+ * 2. 完全重寫文檔發現邏輯以適應新的目錄結構
+ * 3. 處理新的多分類文檔結構
+ * ==============================
+ *
+ * 原始功能（已過時）：
  * 1. 自動掃描官方文檔網站，發現所有可用文檔
  * 2. 自動下載新增的文檔
  * 3. 更新現有文檔
