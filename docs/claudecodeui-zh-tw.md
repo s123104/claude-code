@@ -14,11 +14,13 @@ Claude Code UI 是一個專為 **Claude Code CLI** 和 **Cursor CLI** 設計的*
 > - **文件整理時間**：2025-12-24T01:59:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：雙 CLI 支援的桌面/行動 UI，提供專案管理、會話管理、檔案編輯、Git Explorer、整合終端
 > - **場景**：遠端開發、行動裝置開發、多專案管理、團隊協作、AI 任務管理
 > - **客群**：遠端開發者、行動開發者、多專案管理者、團隊協作者
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/siteboon/claudecodeui)
 > - [官方網站](https://claudecodeui.siteboon.ai)
 > - [Claude Code 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
@@ -46,11 +48,13 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 ### 1.1 支援的 CLI 與模型
 
 #### CLI 支援
+
 - **Claude Code CLI** - Anthropic 官方命令列介面
 - **Cursor CLI** - Cursor 編輯器命令列介面
 - **動態切換** - 可在介面中自由切換使用的 CLI
 
 #### 模型支援
+
 - **Claude Sonnet 4** - 最新的 Claude 高效能模型
 - **Claude Opus 4.1** - Claude 頂級智能模型
 - **GPT-5** - OpenAI 最新一代模型
@@ -83,6 +87,7 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 ### 2.2 互動聊天介面
 
 #### 響應式聊天
+
 - **適應性 UI**：使用響應式聊天或切換到 CLI shell
 - **即時通訊**：透過 WebSocket 連接串流 AI 回應
 - **會話管理**：恢復先前對話或開始新會話
@@ -90,6 +95,7 @@ Claude Code UI 是一個專為 [Claude Code](https://docs.anthropic.com/en/docs/
 - **多格式支援**：文字、程式碼區塊和檔案引用
 
 #### 整合終端
+
 - **內建 Shell**：直接存取 Claude Code 或 Cursor CLI
 - **即時輸出**：查看命令執行的即時回應
 - **互動模式**：完整的 CLI 互動體驗
@@ -215,6 +221,7 @@ cloudcli version
 ```
 
 **`cloudcli status` 命令顯示**：
+
 - 安裝目錄位置
 - 資料庫位置（憑證儲存位置）
 - 當前配置（PORT、DATABASE_PATH 等）
@@ -256,23 +263,27 @@ pm2 save
 ### 3.6 本地開發安裝
 
 #### 1. 克隆專案
+
 ```bash
 git clone https://github.com/siteboon/claudecodeui.git
 cd claudecodeui
 ```
 
 #### 2. 安裝依賴
+
 ```bash
 npm install
 ```
 
 #### 3. 配置環境
+
 ```bash
 cp .env.example .env
 # 編輯 .env 設定您偏好的選項
 ```
 
 #### 4. 啟動應用程式
+
 ```bash
 # 開發模式（含熱重載）
 npm run dev
@@ -281,6 +292,7 @@ npm run dev
 應用程式將在您於 .env 中指定的埠啟動。
 
 #### 5. 開啟瀏覽器
+
 - 開發模式：`http://localhost:3001`
 
 ---
@@ -304,6 +316,7 @@ npm run dev
 Claude Code UI 支援 **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)**（也稱為 claude-task-master）整合，提供進階專案管理和 AI 驅動的任務規劃。
 
 #### 功能
+
 - AI 驅動的任務生成（從 PRD 產品需求文件）
 - 智能任務分解和依賴管理
 - 視覺化任務看板和進度追蹤
@@ -317,13 +330,16 @@ Claude Code UI 支援 **[TaskMaster AI](https://github.com/eyaltoledano/claude-t
 ### 5.1 首次使用與引導
 
 #### 引導頁面
+
 首次使用 Claude Code UI 時，會顯示引導頁面，協助您：
+
 - **設定 Git 配置**：自動從系統讀取 Git 使用者名稱和電子郵件
 - **配置 Claude Code**：檢查 Claude Code 登入狀態
 - **選擇 CLI**：選擇要使用的 CLI（Claude Code 或 Cursor）
 - **基本設定**：完成初始配置
 
 #### Git 配置自動填充
+
 - **自動讀取**：從系統 Git 配置自動讀取使用者資訊
 - **手動編輯**：可在設定中手動修改 Git 配置
 - **即時驗證**：配置後立即驗證有效性
@@ -331,13 +347,16 @@ Claude Code UI 支援 **[TaskMaster AI](https://github.com/eyaltoledano/claude-t
 ### 5.2 核心功能使用
 
 #### 專案管理
+
 UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
+
 - **視覺化專案瀏覽器** - 包含中繼資料和會話數量的所有可用專案
 - **專案操作** - 重新命名、刪除和組織專案
 - **智能導航** - 快速存取近期專案和會話
 - **MCP 支援** - 透過 UI 新增您自己的 MCP 伺服器
 
 #### 聊天介面
+
 - **響應式聊天或 CLI** - 您可以使用適應性聊天介面，或使用 shell 按鈕連接到您選擇的 CLI
 - **即時通訊** - 透過 WebSocket 連接串流 Claude 的回應
 - **會話管理** - 恢復先前對話或開始新會話
@@ -345,29 +364,34 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 - **多格式支援** - 文字、程式碼區塊和檔案引用
 
 #### 檔案總管與編輯器
+
 - **互動式檔案樹** - 使用展開/收合導航瀏覽專案結構
 - **即時檔案編輯** - 直接在介面中讀取、修改和儲存檔案
 - **語法高亮** - 支援多種程式語言
 - **檔案操作** - 建立、重新命名、刪除檔案和目錄
 
 #### Git Explorer
+
 - **可視化 Git 狀態** - 查看變更和當前分支
 - **暫存和提交** - 管理您的 Git 工作流
 - **分支切換** - 輕鬆切換分支
 - **歷史查看** - 檢視提交歷史
 
 #### TaskMaster AI 整合（選配）
+
 - **視覺化任務看板** - Kanban 風格的開發任務管理介面
 - **PRD 解析器** - 建立產品需求文件並解析為結構化任務
 - **進度追蹤** - 即時狀態更新和完成追蹤
 
 #### 會話管理
+
 - **會話持久化** - 所有對話自動儲存
 - **會話組織** - 按專案和時間戳分組會話
 - **會話操作** - 重新命名、刪除和匯出對話歷史
 - **跨裝置同步** - 從任何裝置存取會話
 
 ### 5.3 行動應用
+
 - **響應式設計** - 優化所有螢幕尺寸
 - **觸控友好介面** - 滑動手勢和觸控導航
 - **行動導航** - 底部標籤列便於拇指操作
@@ -406,6 +430,7 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 ### 6.4 關鍵技術棧
 
 #### 前端依賴
+
 - **UI 元件**: Lucide React 圖示、class-variance-authority
 - **程式碼編輯**: @uiw/react-codemirror、CodeMirror 語言套件
 - **終端**: xterm.js、xterm-addon-fit、xterm-addon-webgl
@@ -413,6 +438,7 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 - **檔案上傳**: react-dropzone
 
 #### 後端依賴
+
 - **伺服器**: Express、WebSocket (ws)、CORS
 - **程序管理**: cross-spawn、node-pty
 - **認證**: bcrypt、jsonwebtoken
@@ -460,26 +486,32 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 ### 8.1 常見問題與解決方案
 
 #### "找不到 Claude 專案"
+
 **問題**: UI 顯示沒有專案或專案列表為空
 
 **解決方案**:
+
 - 確保 [Claude CLI](https://docs.anthropic.com/en/docs/claude-code) 已正確安裝
 - 在至少一個專案目錄中執行 `claude` 命令以初始化
 - 驗證 `~/.claude/projects/` 目錄存在且有適當權限
 
 #### 檔案總管問題
+
 **問題**: 檔案無法載入、權限錯誤、目錄為空
 
 **解決方案**:
+
 - 檢查專案目錄權限（在終端執行 `ls -la`）
 - 驗證專案路徑存在且可存取
 - 查看伺服器控制台日誌以取得詳細錯誤訊息
 - 確保您不是試圖存取專案範圍外的系統目錄
 
 #### CLI 連接問題
+
 **問題**: 無法連接到 Claude Code 或 Cursor CLI
 
 **解決方案**:
+
 - 確認對應的 CLI 已正確安裝
 - 檢查 CLI 是否在系統 PATH 中
 - 驗證 API 金鑰配置正確
@@ -487,18 +519,22 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 - 檢查 Claude Code 登入狀態（使用 `claude login` 命令）
 
 #### 引導頁面問題
+
 **問題**: 引導頁面無法正常顯示或配置失敗
 
 **解決方案**:
+
 - 清除瀏覽器快取並重新載入
 - 檢查 Git 配置是否正確（使用 `git config --list`）
 - 確認 Claude Code 已正確登入
 - 查看瀏覽器控制台的錯誤訊息
 
 #### Git 配置問題
+
 **問題**: Git 配置無法自動填充或提交失敗
 
 **解決方案**:
+
 - 確認系統 Git 配置存在（`~/.gitconfig` 或 `~/.config/git/config`）
 - 手動在設定中輸入 Git 使用者名稱和電子郵件
 - 驗證 Git 配置格式正確
@@ -524,22 +560,25 @@ UI 會自動從 `~/.claude/projects/` 發現 Claude Code 專案，並提供：
 ### 9.3 相關專案與技術
 
 #### 建構工具
+
 - **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** - Anthropic 官方 CLI
 - **[Cursor](https://docs.cursor.com)** - AI 驅動的程式碼編輯器
 - **[React](https://react.dev/)** - 使用者介面函式庫
 - **[Vite](https://vitejs.dev/)** - 快速建置工具和開發伺服器
 - **[Tailwind CSS](https://tailwindcss.com/)** - 實用優先的 CSS 框架
 - **[CodeMirror](https://codemirror.net/)** - 進階程式碼編輯器
-- **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** *(選配)* - AI 驅動的專案管理和任務規劃
+- **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** _(選配)_ - AI 驅動的專案管理和任務規劃
 
 ### 9.4 支援與社群
 
 #### 保持更新
+
 - **Star** 此儲存庫以表示支持
 - **Watch** 獲取更新和新版本通知
 - **Follow** 專案以獲取公告
 
 #### 贊助商
+
 - [Siteboon - AI 驅動的網站建構器](https://siteboon.ai)
 
 ---

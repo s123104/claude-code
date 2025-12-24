@@ -14,11 +14,13 @@ SuperClaude 是一套 **meta-programming 配置框架**，透過行為指令注�
 > - **文件整理時間**：2025-12-24T01:59:00+08:00
 >
 > **核心定位**
+>
 > - **功能**：Meta-programming 配置框架，提供系統化工作流程自動化、Deep Research 深度研究、Agent Skills 和 MCP 伺服器整合
 > - **場景**：結構化開發、工作流程自動化、深度研究、多代理協作、專案腳手架
 > - **客群**：專業開發者、AI 研究人員、企業團隊、工作流程優化者
 >
 > **資料來源**
+>
 > - [GitHub 專案](https://github.com/SuperClaude-Org/SuperClaude_Framework)
 > - [SuperClaude 官方網站](https://superclaude.netlify.app/)
 > - [PyPI 套件](https://pypi.org/project/superclaude/)
@@ -48,9 +50,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 ## 📊 框架統計
 
 | **Commands** | **Agents** | **Modes** | **MCP Servers** |
-|:------------:|:----------:|:---------:|:---------------:|
-| **30** | **16** | **7** | **8** |
-| 斜線指令 | 專業 AI | 行為模式 | 整合服務 |
+| :----------: | :--------: | :-------: | :-------------: |
+|    **30**    |   **16**   |   **7**   |      **8**      |
+|   斜線指令   |  專業 AI   | 行為模式  |    整合服務     |
 
 30 個斜線指令涵蓋從構思到部署的完整開發生命週期。
 
@@ -61,7 +63,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### 🚀 **30 個斜線指令系統**
+
 **v4.1.9 穩定架構**：
+
 - 30 個斜線指令涵蓋完整開發生命週期
 - `/sc:research` - Deep web research（增強 Tavily MCP）
 - `/sc:brainstorm` - 結構化構思
@@ -76,7 +80,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### 🤖 **16 個專業代理系統**
+
 **領域專家代理**，具備深度知識：
+
 - PM Agent 透過系統化文檔確保持續學習
 - Deep Research agent 進行自主網路研究
 - Security engineer 捕捉真實漏洞
@@ -90,7 +96,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### 🔧 **MCP 伺服器整合**
+
 **8 個強大伺服器**協同工作：
+
 - **Context7** → 最新文檔
 - **Sequential** → 複雜分析（30-50% 減少 tokens）
 - **Magic** → UI 元件生成
@@ -106,7 +114,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### 🎯 **行為模式**
+
 **7 種適應性模式**用於不同情境：
+
 - **Brainstorming** → 提出正確問題
 - **Business Panel** → 多專家策略分析
 - **Deep Research** → 自主網路研究
@@ -121,7 +131,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### ⚡ **最佳化效能**
+
 **更小的框架，更大的專案：**
+
 - 減少框架足跡
 - 為您的程式碼提供更多情境
 - 可進行更長的對話
@@ -131,7 +143,9 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 <td width="50%">
 
 #### 📚 **文檔全面改寫**
+
 **為開發者完整重寫：**
+
 - 真實範例和使用案例
 - 記錄常見陷阱
 - 包含實用工作流程
@@ -144,6 +158,7 @@ SuperClaude v4.1.9 是一套 **meta-programming 配置框架**，透過 30 個�
 ### 🔬 **v4.1.9 核心功能：30 個斜線指令 + Deep Research**
 
 SuperClaude v4.1.9 提供：
+
 - **30 個斜線指令**：涵蓋完整開發生命週期，從構思到部署
 - **Deep Research**：自主網路研究能力（透過 `/sc:research` 指令，增強 Tavily MCP）
 - **效能提升**：配合 MCP 伺服器，執行速度提升 2-3 倍，token 使用減少 30-50%
@@ -202,6 +217,7 @@ superclaude doctor
 ```
 
 安裝完成後，**重新啟動 Claude Code** 即可使用 30 個指令，包括：
+
 - `/sc:research` - Deep web research（增強 Tavily MCP）
 - `/sc:brainstorm` - 結構化構思
 - `/sc:implement` - 程式碼實作
@@ -231,6 +247,7 @@ cd SuperClaude_Framework
 - **Mindbase**：語義搜尋增強（選用）
 
 **效能對比**：
+
 - **不使用 MCP**：完全功能，標準效能 ✅
 - **使用 MCP**：2-3x 更快，30-50% 減少 tokens ⚡
 
@@ -297,7 +314,9 @@ SuperClaude v4.1.9 提供全面的 Deep Research 能力，實現自主、適應�
 <td width="50%">
 
 #### 🎯 **適應性規劃**
+
 **三種智能策略：**
+
 - **Planning-Only**：針對明確查詢的直接執行
 - **Intent-Planning**：針對模糊請求的澄清
 - **Unified**：協作計劃優化（預設）
@@ -306,7 +325,9 @@ SuperClaude v4.1.9 提供全面的 Deep Research 能力，實現自主、適應�
 <td width="50%">
 
 #### 🔄 **Multi-Hop 推理**
+
 **最多 5 次迭代搜尋：**
+
 - 實體擴展（論文 → 作者 → 作品）
 - 概念深化（主題 → 細節 → 範例）
 - 時間進展（當前 → 歷史）
@@ -318,7 +339,9 @@ SuperClaude v4.1.9 提供全面的 Deep Research 能力，實現自主、適應�
 <td width="50%">
 
 #### 📊 **品質評分**
+
 **基於信心度的驗證：**
+
 - 來源可信度評估（0.0-1.0）
 - 覆蓋完整性追蹤
 - 綜合一致性評估
@@ -328,7 +351,9 @@ SuperClaude v4.1.9 提供全面的 Deep Research 能力，實現自主、適應�
 <td width="50%">
 
 #### 🧠 **案例學習**
+
 **跨會話智能：**
+
 - 模式識別和重用
 - 策略隨時間優化
 - 儲存成功的查詢公式
@@ -358,12 +383,12 @@ SuperClaude v4.1.9 提供全面的 Deep Research 能力，實現自主、適應�
 
 ### 📊 **研究深度層級**
 
-| 深度 | 來源數 | Hops | 時間 | 最適合 |
-|:----:|:------:|:----:|:----:|----------|
-| **Quick** | 5-10 | 1 | ~2分鐘 | 快速事實、簡單查詢 |
-| **Standard** | 10-20 | 3 | ~5分鐘 | 一般研究（預設）|
-| **Deep** | 20-40 | 4 | ~8分鐘 | 全面分析 |
-| **Exhaustive** | 40+ | 5 | ~10分鐘 | 學術級研究 |
+|      深度      | 來源數 | Hops |  時間   | 最適合             |
+| :------------: | :----: | :--: | :-----: | ------------------ |
+|   **Quick**    |  5-10  |  1   | ~2分鐘  | 快速事實、簡單查詢 |
+|  **Standard**  | 10-20  |  3   | ~5分鐘  | 一般研究（預設）   |
+|    **Deep**    | 20-40  |  4   | ~8分鐘  | 全面分析           |
+| **Exhaustive** |  40+   |  5   | ~10分鐘 | 學術級研究         |
 
 ### 🛠️ **整合工具編排**
 
@@ -478,6 +503,7 @@ Deep Research 系統智能協調多個工具：
 #### 跨會話學習
 
 Deep Research 系統會記住：
+
 - 您常用的研究模式
 - 成功的查詢公式
 - 偏好的來源和領域
@@ -488,6 +514,7 @@ Deep Research 系統會記住：
 #### 品質保證
 
 每個研究結果包含：
+
 - **信心分數**：0.0-1.0（目標 ≥ 0.8）
 - **來源評估**：可信度和相關性
 - **覆蓋分析**：主題覆蓋的完整性
