@@ -65,25 +65,22 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 專案根目錄/
 ├── README.md                               # 專案總覽與導航
 ├── CLAUDE.md                               # 專案記憶體文件
-├── docs/                                   # 專門文檔目錄（18 個專業說明書）
+├── docs/                                   # 專門文檔目錄（14 個活躍專案）
 │   ├── cursor-claude-master-guide-zh-tw.md # 主控手冊（本文件）
 │   ├── awesome-claude-code-zh-tw.md        # 社群最佳實踐與 Hooks
 │   ├── superclaude-zh-tw.md               # SuperClaude Framework (v4.1.9)
 │   ├── claude-code-guide-zh-tw.md         # 基礎 CLI 與 API 指南
-│   ├── claude-code-usage-monitor-zh-tw.md # 用量監控與分析 (v3.1.0)
+│   ├── ccusage-zh-tw.md                   # 極速用量分析 (v17.2.0)
 │   ├── claudecodeui-zh-tw.md              # Web UI 與 PWA (v1.12.0)
 │   ├── bplustree3-zh-tw.md                # B+Tree 效能優化
 │   ├── claude-code-security-review-zh-tw.md # 安全審查自動化
-│   ├── agents-zh-tw.md                    # 專業代理集合 (86 代理、66 插件)
-│   ├── ccusage-zh-tw.md                   # 用量分析工具 (v17.1.6)
-│   ├── claude-agents-zh-tw.md             # 自訂代理系統
-│   ├── claudecode-debugger-zh-tw.md       # AI 驅動除錯 (v1.5.0)
+│   ├── agents-zh-tw.md                    # 專業代理集合 (99 代理、107 技能)
+│   ├── opcode-zh-tw.md                    # 桌面 GUI (v0.2.2+)
 │   ├── claude-code-spec-zh-tw.md          # 規格驅動開發 (v2.0.3)
-│   ├── claude-code-leaderboard-zh-tw.md   # 使用量排行榜 (v0.2.9)
-│   ├── claudia-zh-tw.md                  # opcode GUI (v0.2.1)
 │   ├── context-engineering-intro-zh-tw.md # 脈絡工程方法論
 │   ├── contains-studio-agents-zh-tw.md    # Contains Studio 代理 (37+)
-│   └── vibe-kanban-zh-tw.md              # 看板專案管理
+│   ├── vibe-kanban-zh-tw.md              # 看板專案管理 (v0.0.142)
+│   └── mcp-setup-guide-zh-tw.md          # MCP 伺服器設置
 ├── index.html                              # 互動式網頁瀏覽器
 └── wsl_claude_code_setup.sh               # WSL 安裝腳本
 ```
@@ -189,7 +186,7 @@ graph TD
   --config: 設定檔管理
   --hooks: Git Hooks 整合
 
-# 來源: claude-code-usage-monitor-zh-tw.md (v3.1.0)
+# 來源: ccusage-zh-tw.md (v17.2.0)
 監控與安全功能:
   --monitor: 啟用用量監控
   --limit: 設定 API 呼叫限制
@@ -215,7 +212,7 @@ graph TD
   --instances: 多實例支援
   --codex: GPT-5 Codex 支援
 
-# 來源: claudecode-debugger-zh-tw.md (v1.5.0)
+# 來源: claudecodeui-zh-tw.md (v1.12.0)
 除錯功能:
   /ccdebug: AI 驅動除錯命令
   --analyze-error: 錯誤分析
@@ -315,7 +312,7 @@ claude-code --build --deploy --monitor --security --format=json
 ### 5.1 風險等級分類
 
 ```yaml
-# 來源: claude-code-usage-monitor-zh-tw.md
+# 來源: ccusage-zh-tw.md
 低風險操作:
   - --scan, --read, --format
   - 檔案讀取與分析
@@ -560,8 +557,8 @@ claude-code-guide-zh-tw.md:
   適用場景: 日常開發, 基礎操作, 多代理協作
 
 # 監控與安全
-claude-code-usage-monitor-zh-tw.md (v3.1.0):
-  核心功能: 用量監控, 安全控制, 配額管理, 使用分析視圖, Pro 計畫 44k
+ccusage-zh-tw.md (v17.2.0):
+  核心功能: 極速用量分析, 狀態列整合, 5 小時區塊報告
   主要功能: --monitor, --limit, --security, --audit, --analysis
   適用場景: 生產環境, 團隊管理, 成本控制
 
@@ -588,8 +585,7 @@ agents-zh-tw.md:
   主要功能: 專業代理調用, Agent Skills, 插件管理
   適用場景: 專業領域任務, 任務分工, 多代理協作
 
-claude-agents-zh-tw.md:
-  核心功能: 自訂代理系統, 工作流程, 專案管理
+# (已歸檔: claude-agents 功能已整合至官方 sub-agents 系統)
   主要功能: 代理建立, 工作流程設計, 專案整合
   適用場景: 自訂工作流程, 專案管理, 團隊協作
 
@@ -604,13 +600,11 @@ ccusage-zh-tw.md (v17.1.6):
   主要功能: --analyze, --statusline, --live, --instances
   適用場景: 成本分析, 使用追蹤, 即時監控
 
-claudecode-debugger-zh-tw.md (v1.5.0):
-  核心功能: AI 驅動除錯, 多語言支援, 500+ 錯誤模式, /ccdebug 命令
+# (已歸檔: claudecode-debugger 建議使用 claudecodeui)
   主要功能: /ccdebug, 智能分析器, 錯誤修復建議
   適用場景: 錯誤診斷, 問題解決, 程式碼除錯
 
-claude-code-leaderboard-zh-tw.md (v0.2.9):
-  核心功能: 使用量排行榜, 自動追蹤, OAuth 認證, 版本檢查
+# (已歸檔: claude-code-leaderboard 已停止維護)
   主要功能: 自動追蹤, 排行榜, Twitter 整合
   適用場景: 競爭式使用量追蹤, 社群參與
 
@@ -626,8 +620,8 @@ context-engineering-intro-zh-tw.md:
   適用場景: AI 輔助開發最佳實踐, 脈絡工程
 
 # 專案管理
-claudia-zh-tw.md (v0.2.1, opcode):
-  核心功能: 桌面 GUI, 會話管理, Web 伺服器模式, CC Agents
+opcode-zh-tw.md (v0.2.2+):
+  核心功能: 桌面 GUI, 會話管理, Web 伺服器模式
   主要功能: 專案管理, 會話追蹤, Web 模式, 代理執行
   適用場景: 圖形化專案管理, 會話管理, 遠端存取
 

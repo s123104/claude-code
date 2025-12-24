@@ -1,10 +1,11 @@
 # Claude Code 文件索引
 
 > **目錄概覽**: 完整的 Claude Code 與 Cursor AI 整合說明書集合  
-> **更新時間**: 2025-12-24T00:45:00+08:00  
+> **更新時間**: 2025-12-25T00:50:00+08:00  
 > **文件語言**: 繁體中文  
-> **版本號**: 5.0.0  
-> **文檔標準化**: 100% 完成（20/20 文檔統一格式）
+> **版本號**: 5.1.0  
+> **SSOT 配置**: [config/metadata.json](../config/metadata.json)  
+> **文檔狀態**: 14 個活躍專案 + 5 個歸檔專案
 
 ---
 
@@ -20,21 +21,23 @@
 
 #### 📚 基礎指南與教學
 
-| 文件名稱                                                     | 主要功能               | 使用場景                 | 適用對象              |
-| ------------------------------------------------------------ | ---------------------- | ------------------------ | --------------------- |
-| [claude-code-guide-zh-tw.md](claude-code-guide-zh-tw.md)     | 基礎 CLI 與 API 指南   | 日常開發、基礎操作       | 初學者、開發者        |
-| [awesome-claude-code-zh-tw.md](awesome-claude-code-zh-tw.md) | 社群最佳實踐與範例索引 | 專案初始化、團隊協作     | 開發者、技術主管      |
-| [mcp-setup-guide-zh-tw.md](mcp-setup-guide-zh-tw.md)         | MCP 伺服器設置指南     | MCP 整合、工具連接       | 系統整合者、開發者    |
-| [claude-code-hooks-zh-tw.md](claude-code-hooks-zh-tw.md)     | Hooks 系統完整指南     | 工作流程自動化、安全防護 | 開發者、DevOps 工程師 |
+| 文件名稱                                                     | 主要功能               | 使用場景             | 適用對象           |
+| ------------------------------------------------------------ | ---------------------- | -------------------- | ------------------ |
+| [claude-code-guide-zh-tw.md](claude-code-guide-zh-tw.md)     | 基礎 CLI 與 API 指南   | 日常開發、基礎操作   | 初學者、開發者     |
+| [awesome-claude-code-zh-tw.md](awesome-claude-code-zh-tw.md) | 社群最佳實踐與範例索引 | 專案初始化、團隊協作 | 開發者、技術主管   |
+| [mcp-setup-guide-zh-tw.md](mcp-setup-guide-zh-tw.md)         | MCP 伺服器設置指南     | MCP 整合、工具連接   | 系統整合者、開發者 |
+
+> 💡 **Hooks 系統**：現已整合至官方文檔，請參考 [anthropic-claude-code-zh-tw/hooks.md](anthropic-claude-code-zh-tw/hooks.md)
 
 #### 🤖 AI 代理與框架
 
 | 文件名稱                                                           | 主要功能                                                     | 使用場景                   | 適用對象              |
 | ------------------------------------------------------------------ | ------------------------------------------------------------ | -------------------------- | --------------------- |
 | [superclaude-zh-tw.md](superclaude-zh-tw.md)                       | Meta-programming 配置框架（30 指令、16 代理、7 模式、8 MCP） | 結構化開發、工作流程自動化 | 進階開發者、Tech Lead |
-| [agents-zh-tw.md](agents-zh-tw.md)                                 | 86 個專業代理 + 66 個插件 + 57 個技能                        | 專業領域、任務分工         | 專案團隊、研究人員    |
-| [claude-agents-zh-tw.md](claude-agents-zh-tw.md)                   | 7 個自訂代理系統與工作流                                     | 自訂工作流程、專案管理     | 全端開發者、Tech Lead |
+| [agents-zh-tw.md](agents-zh-tw.md)                                 | 99 個專業代理 + 66 個插件 + 107 個技能                       | 專業領域、任務分工         | 專案團隊、研究人員    |
 | [contains-studio-agents-zh-tw.md](contains-studio-agents-zh-tw.md) | 37+ 個專業代理（6 天衝刺優化）                               | 快速開發專業代理           | 開發者、研究者        |
+
+> 💡 **Claude Agents**：已歸檔，功能已整合至官方 sub-agents 系統
 
 #### 🛠️ 開發工具與方法論
 
@@ -42,23 +45,24 @@
 | ------------------------------------------------------------------------ | -------------------------------------------- | ------------------- | ------------------ |
 | [claude-code-spec-zh-tw.md](claude-code-spec-zh-tw.md)                   | 規格驅動開發、cc-sdd CLI（11 指令 + 3 驗證） | 結構化開發流程      | 架構師、技術寫作者 |
 | [context-engineering-intro-zh-tw.md](context-engineering-intro-zh-tw.md) | 脈絡工程與 PRP 方法論                        | AI 輔助開發最佳實踐 | 架構師、研究者     |
-| [claudecode-debugger-zh-tw.md](claudecode-debugger-zh-tw.md)             | AI 驅動除錯、分析與修復                      | 錯誤診斷、問題解決  | 開發者、維運工程師 |
 | [bplustree3-zh-tw.md](bplustree3-zh-tw.md)                               | B+Tree 與效能優化策略（Rust + Python）       | 大型專案、效能調優  | 架構師、效能工程師 |
+
+> 💡 **ClaudeCode Debugger**：已歸檔，建議使用 [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md)
 
 #### 📊 監控與分析
 
-| 文件名稱                                                                 | 主要功能                                 | 使用場景           | 適用對象           |
-| ------------------------------------------------------------------------ | ---------------------------------------- | ------------------ | ------------------ |
-| [ccusage-zh-tw.md](ccusage-zh-tw.md)                                     | 極速用量分析、狀態列整合、5 小時區塊報告 | 成本分析、使用追蹤 | 開發者、FinOps     |
-| [claude-code-usage-monitor-zh-tw.md](claude-code-usage-monitor-zh-tw.md) | ML 預測、進階分析、Rich UI 即時監控      | 生產環境、成本控制 | SRE、產品/技術主管 |
-| [claude-code-leaderboard-zh-tw.md](claude-code-leaderboard-zh-tw.md)     | 使用量排行榜、競賽                       | 競爭式使用量追蹤   | 社群、管理者       |
+| 文件名稱                             | 主要功能                                 | 使用場景           | 適用對象       |
+| ------------------------------------ | ---------------------------------------- | ------------------ | -------------- |
+| [ccusage-zh-tw.md](ccusage-zh-tw.md) | 極速用量分析、狀態列整合、5 小時區塊報告 | 成本分析、使用追蹤 | 開發者、FinOps |
+
+> 💡 **Usage Monitor & Leaderboard**：已歸檔，建議使用更活躍的 [ccusage](ccusage-zh-tw.md)
 
 #### 🎨 使用者介面與管理
 
 | 文件名稱                                       | 主要功能                                  | 使用場景           | 適用對象       |
 | ---------------------------------------------- | ----------------------------------------- | ------------------ | -------------- |
 | [claudecodeui-zh-tw.md](claudecodeui-zh-tw.md) | Web UI、儀表板、PWA（雙 CLI 支援）        | 圖形介面、遠端管理 | DevOps、管理者 |
-| [claudia-zh-tw.md](claudia-zh-tw.md)           | 桌面 GUI (opcode v0.2.1)、會話管理        | 圖形化專案管理     | 開發者、PM     |
+| [opcode-zh-tw.md](opcode-zh-tw.md)             | 桌面 GUI (opcode v0.2.2+)、會話管理       | 圖形化專案管理     | 開發者、PM     |
 | [vibe-kanban-zh-tw.md](vibe-kanban-zh-tw.md)   | 看板專案管理、10 個代理整合、Git 工作流程 | 多代理協作管理     | 團隊、專案經理 |
 
 #### 🔒 安全與品質
@@ -90,7 +94,7 @@
 程式碼開發:
   - claude-code-guide-zh-tw.md（基礎 CLI 指南）
   - claude-code-spec-zh-tw.md（規格驅動開發）
-  - claude-code-hooks-zh-tw.md（工作流程自動化）
+  - anthropic-claude-code-zh-tw/hooks.md（官方 Hooks 文檔）
 
 # AI 代理與協作
 多代理協作:
@@ -100,14 +104,12 @@
 
 # 監控與分析
 用量監控:
-  - ccusage-zh-tw.md（極速用量分析）
-  - claude-code-usage-monitor-zh-tw.md（ML 預測監控）
-  - claude-code-leaderboard-zh-tw.md（排行榜）
+  - ccusage-zh-tw.md（極速用量分析，推薦）
 
 # 使用者介面
 圖形化管理:
   - claudecodeui-zh-tw.md（Web UI、PWA）
-  - claudia-zh-tw.md（桌面 GUI）
+  - opcode-zh-tw.md（桌面 GUI）
   - vibe-kanban-zh-tw.md（看板管理）
 
 # 安全與品質
@@ -117,13 +119,13 @@
 
 # 除錯與問題解決
 錯誤診斷:
-  - claudecode-debugger-zh-tw.md（AI 驅動除錯）
   - claude-code-guide-zh-tw.md（基礎操作）
+  - claudecodeui-zh-tw.md（視覺化除錯）
 
 # 效能優化
 效能調優:
   - bplustree3-zh-tw.md（B+Tree 資料結構）
-  - claude-code-usage-monitor-zh-tw.md（用量分析）
+  - ccusage-zh-tw.md（用量分析）
 
 # MCP 整合
 MCP 設置:
@@ -144,42 +146,42 @@ MCP 設置:
 - **初學者**:
   - `claude-code-guide-zh-tw.md` → `awesome-claude-code-zh-tw.md` → `claudecodeui-zh-tw.md`
 - **開發者**:
-  - `claude-code-guide-zh-tw.md` → `superclaude-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md`
+  - `claude-code-guide-zh-tw.md` → `superclaude-zh-tw.md` → `ccusage-zh-tw.md`
 - **團隊領導**:
-  - `claude-code-usage-monitor-zh-tw.md` → `awesome-claude-code-zh-tw.md` → `vibe-kanban-zh-tw.md`
+  - `ccusage-zh-tw.md` → `awesome-claude-code-zh-tw.md` → `vibe-kanban-zh-tw.md`
 - **架構師**:
   - `bplustree3-zh-tw.md` → `claude-code-guide-zh-tw.md` → `superclaude-zh-tw.md` → `context-engineering-intro-zh-tw.md`
 - **安全工程師**:
-  - `claude-code-security-review-zh-tw.md` → `claude-code-guide-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md`
+  - `claude-code-security-review-zh-tw.md` → `claude-code-guide-zh-tw.md` → `ccusage-zh-tw.md`
 - **專業開發者**:
-  - `agents-zh-tw.md` → `claude-agents-zh-tw.md` → `claudecode-debugger-zh-tw.md`
+  - `agents-zh-tw.md` → `superclaude-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **成本管理員**:
-  - `ccusage-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `ccusage-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **專案經理**:
-  - `vibe-kanban-zh-tw.md` → `claudia-zh-tw.md` → `claudecodeui-zh-tw.md`
+  - `vibe-kanban-zh-tw.md` → `opcode-zh-tw.md` → `claudecodeui-zh-tw.md`
 
 ### 按任務推薦
 
 - **新專案建立**:
   - `awesome-claude-code-zh-tw.md` → `superclaude-zh-tw.md` → `context-engineering-intro-zh-tw.md`
 - **維護專案**:
-  - `claude-code-guide-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md` → `bplustree3-zh-tw.md`
+  - `claude-code-guide-zh-tw.md` → `ccusage-zh-tw.md` → `bplustree3-zh-tw.md`
 - **部署管理**:
-  - `claude-code-usage-monitor-zh-tw.md` → `claudecodeui-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `ccusage-zh-tw.md` → `claudecodeui-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **效能問題**:
-  - `bplustree3-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `bplustree3-zh-tw.md` → `ccusage-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **安全審查**:
-  - `claude-code-security-review-zh-tw.md` → `claude-code-guide-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md`
+  - `claude-code-security-review-zh-tw.md` → `claude-code-guide-zh-tw.md` → `ccusage-zh-tw.md`
 - **專業任務**:
-  - `agents-zh-tw.md` → `claude-agents-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `agents-zh-tw.md` → `superclaude-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **成本分析**:
-  - `ccusage-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `ccusage-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **錯誤除錯**:
-  - `claudecode-debugger-zh-tw.md` → `claude-code-guide-zh-tw.md` → `claude-code-usage-monitor-zh-tw.md`
+  - `claude-code-guide-zh-tw.md` → `claudecodeui-zh-tw.md`
 - **MCP 整合**:
   - `mcp-setup-guide-zh-tw.md` → `superclaude-zh-tw.md` → `claude-code-guide-zh-tw.md`
 - **工作流程自動化**:
-  - `claude-code-hooks-zh-tw.md` → `superclaude-zh-tw.md` → `claude-code-guide-zh-tw.md`
+  - `anthropic-claude-code-zh-tw/hooks.md` → `superclaude-zh-tw.md` → `claude-code-guide-zh-tw.md`
 
 ---
 

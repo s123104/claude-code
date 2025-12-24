@@ -2560,7 +2560,7 @@ which claude
 - [docs/claude-code-guide-zh-tw.md](docs/claude-code-guide-zh-tw.md) — 基礎 API 與 CLI 指南
 - [docs/awesome-claude-code-zh-tw.md](docs/awesome-claude-code-zh-tw.md) — 社群最佳實踐與 Hooks
 - [docs/superclaude-zh-tw.md](docs/superclaude-zh-tw.md) — 高階功能系統與進階工作流
-- [docs/claude-code-usage-monitor-zh-tw.md](docs/claude-code-usage-monitor-zh-tw.md) — 用量監控、安全與部署
+- [docs/ccusage-zh-tw.md](docs/ccusage-zh-tw.md) — 極速用量分析與監控
 - [docs/claudecodeui-zh-tw.md](docs/claudecodeui-zh-tw.md) — Web UI 與 PWA 介面
 - [docs/bplustree3-zh-tw.md](docs/bplustree3-zh-tw.md) — 效能優化與 B+Tree 策略
 

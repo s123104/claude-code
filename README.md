@@ -5,18 +5,18 @@
   
   **🚀 完整的 Claude Code 與 Cursor AI 整合說明書集合**
   
-  [![Version](https://img.shields.io/badge/Version-5.0.0-brightgreen.svg)](https://github.com/s123104/claude-code)
+  [![Version](https://img.shields.io/badge/Version-5.1.0-brightgreen.svg)](https://github.com/s123104/claude-code)
   [![Language](https://img.shields.io/badge/Language-繁體中文-blue.svg)](README.md)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-  [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.0.27-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
-  [![Documentation](https://img.shields.io/badge/Documentation-20_Projects_100%25-green.svg)](docs/)
+  [![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.0.75-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
+  [![Documentation](https://img.shields.io/badge/Documentation-14_Projects_100%25-green.svg)](docs/)
   [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
   [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
   [![Stars](https://img.shields.io/github/stars/s123104/claude-code?style=social)](https://github.com/s123104/claude-code/stargazers)
   
-  > 最後更新：2025-11-25T03:02:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案  
-  > 📊 涵蓋 20 個專案完整文檔 + 超級工作流程大全 + 自動化更新工具鏈  
-  > ✨ 文檔標準化 v5.0.0 完成 - 20/20 文檔 100% 統一格式
+  > 最後更新：2025-12-25T00:45:00+08:00 | 語言：繁體中文 | 資料來源：Anthropic 官方文件與社群專案  
+  > 📊 涵蓋 14 個活躍專案文檔 + 超級工作流程大全 + 自動化更新工具鏈  
+  > ✨ 文檔標準化 v5.1.0 完成 - SSOT 架構 + Clean Code 原則
 </div>
 
 ---
@@ -38,13 +38,14 @@
 > **專案資訊**
 >
 > - **專案名稱**：Claude Code 中文文件整合專案
-> - **專案版本**：v5.0.0
-> - **專案最後更新**：2025-11-25
-> - **文件整理時間**：2025-11-25T03:02:00+08:00
+> - **專案版本**：v5.1.0
+> - **專案最後更新**：2025-12-25
+> - **文件整理時間**：2025-12-25T00:45:00+08:00
+> - **SSOT 配置**：[config/metadata.json](config/metadata.json)
 >
 > **核心定位**
 >
-> - **功能**：20 個 Claude Code 專案的完整繁體中文文檔 + 超級工作流大全 + 自動化更新工具鏈
+> - **功能**：14 個活躍 Claude Code 專案的完整繁體中文文檔 + 超級工作流大全 + 自動化更新工具鏈
 > - **場景**：AI 輔助開發、團隊協作、效能優化、用量監控、部署維運、學習實踐
 > - **客群**：AI 開發初學者、專業開發者、架構師、團隊領導、DevOps 工程師
 >
@@ -52,7 +53,7 @@
 >
 > - [Anthropic 官方文檔](https://docs.anthropic.com/en/docs/claude-code)
 > - [社群專案集合](https://github.com/s123104/claude-code)
-> - [18 個分析專案倉庫](analysis-projects/)
+> - [版本單一來源 (SSOT)](config/metadata.json)
 
 ---
 
@@ -63,14 +64,14 @@
 ### ✨ 專案特色
 
 - **🌐 全繁體中文化** - 所有文件均為繁體中文，符合華語使用者習慣
-- **📋 系統化整理** - 20 個專案結構化文檔 + 超級工作流程大全
+- **📋 系統化整理** - 14 個活躍專案結構化文檔 + 超級工作流程大全
 - **🎯 場景導向** - 根據用戶類型提供差異化指引（新手→專家）
 - **⚡ 實戰導向** - 包含大量實用範例、最佳實踐和疑難排解方案
-- **🔄 持續更新** - 跟隨 Claude Code v2.0.27 最新版本，100% 覆蓋率
+- **🔄 持續更新** - 跟隨 Claude Code v2.0.75 最新版本，100% 覆蓋率
 - **🖥️ 現代化介面** - 響應式 Web 介面，支援所有裝置
 - **🤖 自動化工具鏈** - 專業的文檔同步與版本追蹤系統
 - **📚 完整工作流** - 6 大 Agent 角色 + 3 核心工作流 + 可複用 Prompt 模板
-- **📊 文檔標準化** - v5.0.0 完成 20/20 文檔統一格式（元資料+概述+定位）
+- **📊 SSOT 架構** - v5.1.0 採用單一真實來源原則，確保版本一致性
 
 ### 👥 適用對象
 
@@ -79,7 +80,7 @@
 | **AI 輔助開發初學者** | 快速上手 Claude Code | [基礎指南](docs/claude-code-guide-zh-tw.md)         |
 | **專業開發者**        | 提升開發效率         | [最佳實踐](docs/awesome-claude-code-zh-tw.md)       |
 | **架構師**            | 系統架構設計         | [效能優化](docs/bplustree3-zh-tw.md)                |
-| **團隊領導**          | 監控管理功能         | [用量監控](docs/claude-code-usage-monitor-zh-tw.md) |
+| **團隊領導**          | 監控管理功能         | [用量監控](docs/ccusage-zh-tw.md)                   |
 | **DevOps 工程師**     | 部署維運             | [Web UI](docs/claudecodeui-zh-tw.md)                |
 
 ---
@@ -360,8 +361,8 @@ Web UI、視覺化界面和開發者工具
 ```yaml
 專案建立: awesome-claude-code-zh-tw.md + superclaude-zh-tw.md
 程式碼修復: claude-code-guide-zh-tw.md + awesome-claude-code-zh-tw.md
-生產部署: claude-code-usage-monitor-zh-tw.md + claudecodeui-zh-tw.md
-效能優化: bplustree3-zh-tw.md + claude-code-usage-monitor-zh-tw.md
+生產部署: ccusage-zh-tw.md + claudecodeui-zh-tw.md
+效能優化: bplustree3-zh-tw.md + ccusage-zh-tw.md
 團隊協作: awesome-claude-code-zh-tw.md + claudecodeui-zh-tw.md
 ```
 

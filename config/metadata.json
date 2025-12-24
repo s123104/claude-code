@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "SSOT - Single Source of Truth for all version and project metadata",
+  "lastUpdated": "2025-12-25T00:45:00+08:00",
+  "project": {
+    "name": "Claude Code 中文文件整合專案",
+    "version": "5.1.0",
+    "description": "完整的 Claude Code 與 Cursor AI 整合說明書集合",
+    "repository": "https://github.com/s123104/claude-code",
+    "author": "s123104",
+    "license": "MIT",
+    "language": "zh-TW"
+  },
+  "claudeCode": {
+    "version": "2.0.75",
+    "releaseDate": "2025-12-20",
+    "documentationUrl": "https://docs.anthropic.com/en/docs/claude-code",
+    "changelogUrl": "https://claudefa.st/blog/guide/changelog"
+  },
+  "documentation": {
+    "totalProjects": 14,
+    "archivedProjects": 5,
+    "standardVersion": "5.1.0",
+    "categories": {
+      "frameworks": ["superclaude", "awesome-claude-code"],
+      "agents": ["agents", "contains-studio-agents"],
+      "monitoring": ["ccusage"],
+      "interfaces": ["claudecodeui", "opcode", "vibe-kanban"],
+      "performance": ["bplustree3"],
+      "security": ["claude-code-security-review"],
+      "guides": ["claude-code-guide", "mcp-setup-guide"],
+      "tools": ["claude-code-spec", "context-engineering-intro"]
+    }
+  },
+  "projects": [
+    {
+      "id": "superclaude",
+      "name": "SuperClaude",
+      "file": "docs/superclaude-zh-tw.md",
+      "version": "4.1.9",
+      "lastUpdate": "2025-12-16",
+      "category": "frameworks",
+      "status": "active"
+    },
+    {
+      "id": "awesome-claude-code",
+      "name": "Awesome Claude Code",
+      "file": "docs/awesome-claude-code-zh-tw.md",
+      "version": "2.0.0",
+      "lastUpdate": "2025-10-29",
+      "category": "frameworks",
+      "status": "active"
+    },
+    {
+      "id": "agents",
+      "name": "Agents",
+      "file": "docs/agents-zh-tw.md",
+      "version": "3.0.0",
+      "lastUpdate": "2025-12-23",
+      "category": "agents",
+      "status": "active"
+    },
+    {
+      "id": "contains-studio-agents",
+      "name": "Contains Studio Agents",
+      "file": "docs/contains-studio-agents-zh-tw.md",
+      "version": "1.2",
+      "lastUpdate": "2025-07-28",
+      "category": "agents",
+      "status": "active"
+    },
+    {
+      "id": "ccusage",
+      "name": "ccusage",
+      "file": "docs/ccusage-zh-tw.md",
+      "version": "17.2.0",
+      "lastUpdate": "2025-12-22",
+      "category": "monitoring",
+      "status": "active"
+    },
+    {
+      "id": "claudecodeui",
+      "name": "Claude Code UI",
+      "file": "docs/claudecodeui-zh-tw.md",
+      "version": "1.12.0",
+      "lastUpdate": "2025-12-17",
+      "category": "interfaces",
+      "status": "active"
+    },
+    {
+      "id": "opcode",
+      "name": "opcode",
+      "file": "docs/opcode-zh-tw.md",
+      "version": "0.2.2+",
+      "lastUpdate": "2025-10-16",
+      "category": "interfaces",
+      "status": "active"
+    },
+    {
+      "id": "vibe-kanban",
+      "name": "Vibe Kanban",
+      "file": "docs/vibe-kanban-zh-tw.md",
+      "version": "0.0.142",
+      "lastUpdate": "2025-12-22",
+      "category": "interfaces",
+      "status": "active"
+    },
+    {
+      "id": "bplustree3",
+      "name": "BPlusTree3",
+      "file": "docs/bplustree3-zh-tw.md",
+      "version": "0.9.0",
+      "lastUpdate": "2025-09-12",
+      "category": "performance",
+      "status": "active"
+    },
+    {
+      "id": "claude-code-security-review",
+      "name": "Claude Code Security Review",
+      "file": "docs/claude-code-security-review-zh-tw.md",
+      "version": "1.0",
+      "lastUpdate": "2025-08-25",
+      "category": "security",
+      "status": "active"
+    },
+    {
+      "id": "claude-code-guide",
+      "name": "Claude Code Guide",
+      "file": "docs/claude-code-guide-zh-tw.md",
+      "version": "1.5",
+      "lastUpdate": "2025-12-23",
+      "category": "guides",
+      "status": "active"
+    },
+    {
+      "id": "mcp-setup-guide",
+      "name": "MCP Setup Guide",
+      "file": "docs/mcp-setup-guide-zh-tw.md",
+      "version": "2.0.0",
+      "lastUpdate": "2025-10-28",
+      "category": "guides",
+      "status": "active"
+    },
+    {
+      "id": "claude-code-spec",
+      "name": "Claude Code Spec",
+      "file": "docs/claude-code-spec-zh-tw.md",
+      "version": "2.0.3",
+      "lastUpdate": "2025-11-20",
+      "category": "tools",
+      "status": "active"
+    },
+    {
+      "id": "context-engineering-intro",
+      "name": "Context Engineering Intro",
+      "file": "docs/context-engineering-intro-zh-tw.md",
+      "version": "latest",
+      "lastUpdate": "2025-11-15",
+      "category": "tools",
+      "status": "active"
+    }
+  ],
+  "archivedProjects": [
+    {
+      "id": "claude-agents",
+      "name": "Claude Agents",
+      "file": "archives/deprecated-docs/claude-agents-zh-tw.md",
+      "archivedDate": "2025-12-24",
+      "reason": "Superseded by official sub-agents system",
+      "alternative": "docs/agents-zh-tw.md"
+    },
+    {
+      "id": "claude-code-hooks",
+      "name": "Claude Code Hooks",
+      "file": "archives/deprecated-docs/claude-code-hooks-zh-tw.md",
+      "archivedDate": "2025-12-24",
+      "reason": "Superseded by official hooks documentation",
+      "alternative": "docs/anthropic-claude-code-zh-tw/hooks.md"
+    },
+    {
+      "id": "claude-code-usage-monitor",
+      "name": "Claude Code Usage Monitor",
+      "file": "archives/deprecated-docs/claude-code-usage-monitor-zh-tw.md",
+      "archivedDate": "2025-12-24",
+      "reason": "Superseded by ccusage",
+      "alternative": "docs/ccusage-zh-tw.md"
+    },
+    {
+      "id": "claudecode-debugger",
+      "name": "ClaudeCode Debugger",
+      "file": "archives/deprecated-docs/claudecode-debugger-zh-tw.md",
+      "archivedDate": "2025-12-24",
+      "reason": "Project unmaintained (6+ months)",
+      "alternative": "docs/claudecodeui-zh-tw.md"
+    },
+    {
+      "id": "claude-code-leaderboard",
+      "name": "Claude Code Leaderboard",
+      "file": "archives/deprecated-docs/claude-code-leaderboard-zh-tw.md",
+      "archivedDate": "2025-12-24",
+      "reason": "Project unmaintained (4+ months)",
+      "alternative": null
+    }
+  ]
+}

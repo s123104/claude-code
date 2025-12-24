@@ -641,7 +641,7 @@ git pull --rebase origin main
 1. 讀取高品質文檔範例：
    - docs/agents-zh-tw.md
    - docs/superclaude-zh-tw.md
-   - docs/claude-code-usage-monitor-zh-tw.md
+   - docs/ccusage-zh-tw.md
 
 2. 提取格式標準：
    - 檔頭結構
@@ -2117,7 +2117,7 @@ claude-code/
   範例:
     - superclaude-zh-tw.md
     - agents-zh-tw.md
-    - claude-code-usage-monitor-zh-tw.md
+    - ccusage-zh-tw.md
 
 腳本檔案:
   格式: "[action]-[target].sh"

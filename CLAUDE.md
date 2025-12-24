@@ -4,37 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection of Chinese language documentation for Claude Code and Cursor AI integration. The repository (GitHub: s123104/claude-code) contains 8 specialized documents covering different aspects of Claude Code usage, from basic installation to advanced features, with a focus on Traditional Chinese localization.
+This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection of Chinese language documentation for Claude Code and Cursor AI integration. The repository (GitHub: s123104/claude-code) contains 14 active project documents covering different aspects of Claude Code usage, from basic installation to advanced features, with a focus on Traditional Chinese localization.
+
+## SSOT Architecture
+
+This repository follows the **Single Source of Truth (SSOT)** principle:
+- **Version metadata**: `config/metadata.json` is the authoritative source for all version information
+- **Project status**: Active (14) and archived (5) projects are clearly tracked
+- **Clean Code**: Consistent naming, no redundancy, clear documentation structure
 
 ## Repository Structure
 
 ```
 /
-├── README.md                     # Main project overview and navigation (v3.0.0)
-├── claude-code-zh-tw.md         # Project summary with complete CLI reference
+├── README.md                     # Main project overview and navigation (v5.1.0)
+├── claude-code-zh-tw.md         # Main documentation with CLI reference (v2.0.75)
 ├── CLAUDE.md                     # This file - project memory for Claude Code
 ├── CONTRIBUTING.md               # Contribution guidelines and standards
 ├── LICENSE                       # MIT License terms
-├── TESTING_REPORT.md             # Test results and quality assurance
-├── docs/                        # All documentation files
+├── config/                      # **SSOT Configuration (NEW)**
+│   └── metadata.json            # Single source of truth for all versions
+├── docs/                        # All documentation files (14 active)
 │   ├── README.md                # Document index and quick reference
-│   ├── cursor-claude-master-guide-zh-tw.md    # **Primary guide - start here**
-│   ├── claude-code-guide-zh-tw.md             # Basic API and commands
-│   ├── awesome-claude-code-zh-tw.md           # Community best practices
-│   ├── superclaude-zh-tw.md                   # Advanced flag system
-│   ├── claude-code-usage-monitor-zh-tw.md     # Usage monitoring & security
-│   ├── claudecodeui-zh-tw.md                  # Web UI and visualization
-│   └── bplustree3-zh-tw.md                    # Performance optimization
+│   ├── agents-zh-tw.md          # 99 professional sub-agents collection
+│   ├── superclaude-zh-tw.md     # SuperClaude professional framework
+│   ├── ccusage-zh-tw.md         # Usage monitoring (replaces old monitor)
+│   ├── claudecodeui-zh-tw.md    # Web UI and visualization
+│   ├── vibe-kanban-zh-tw.md     # Kanban project management
+│   └── ...                      # 8 more active project documents
+├── archives/                    # Archived content
+│   ├── deprecated-docs/         # 5 deprecated project docs
+│   ├── deprecated-scripts/      # Old automation scripts
+│   └── reports/                 # Historical reports
+├── scripts/                     # Active automation tools
 ├── img/                         # Assets directory
-│   └── logo.png                 # Claude Code logo (pixelated style)
 ├── index.html                   # Modern interactive web interface
 ├── SuperClaude/                 # Advanced development framework submodule
-├── setup.bat                    # Windows batch installer entry point
-├── setup.ps1                    # PowerShell main installation script
-├── start.bat                    # Windows launcher for Claude Code
-├── start.sh                     # Linux/WSL/macOS Claude Code installer (v3.5.0)
-└── .claude/                     # Claude Code project configuration
-    └── settings.local.json      # Local permissions and settings
+└── .github/workflows/           # CI/CD automation
 ```
 
 ## Document Categories
@@ -49,7 +55,7 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 
 - **awesome-claude-code-zh-tw.md**: Community best practices, workflows, hooks, and integrations
 - **superclaude-zh-tw.md**: Advanced flag system, personas, and complex automation
-- **claude-code-usage-monitor-zh-tw.md**: Usage monitoring, security, cost control, and Docker deployment
+- **ccusage-zh-tw.md**: Usage monitoring, status bar integration, 5-hour block reports
 - **claudecodeui-zh-tw.md**: Web UI interface, PWA features, and remote management
 - **bplustree3-zh-tw.md**: Performance optimization strategies and B+Tree caching
 
@@ -243,11 +249,13 @@ This repository serves as a comprehensive Chinese language resource for:
 ### Key Repository Information
 
 - **GitHub Repository**: s123104/claude-code
-- **Current Version**: v3.5.0
-- **Last Update**: 2025-07-17T22:00:00+08:00
+- **Current Version**: v5.1.0
+- **Claude Code Version**: v2.0.75
+- **Last Update**: 2025-12-25T00:45:00+08:00
 - **Language**: Traditional Chinese (繁體中文)
 - **License**: MIT License
 - **Branch**: master
+- **SSOT Config**: `config/metadata.json`
 
 ### Project Configuration
 
@@ -422,7 +430,7 @@ claude mcp restart --all
 
 **Monitoring and Analytics**:
 
-- Usage tracking via `claude-code-usage-monitor-zh-tw.md`
+- Usage tracking via `ccusage-zh-tw.md`
 - Performance optimization with B+Tree caching
 - Security audit and compliance features
 
