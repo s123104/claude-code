@@ -15,11 +15,13 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 > - **建立時間**：2025-07-15T14:16:31+08:00
 >
 > **核心定位**
+>
 > - **功能**：18 個專業說明書的完整功能索引與智能執行引擎，支援模糊需求解析和自動指令執行
 > - **場景**：模糊需求解析、自動化執行、多文件整合查詢、智能指令映射、錯誤修復
 > - **客群**：Cursor AI 用戶、Claude Code 用戶、自動化開發實踐者、團隊協作者
 >
 > **資料來源**
+>
 > - 18 個 Claude Code 相關專案的完整文檔整合
 > - Agent Skills 官方文檔
 > - Subagents 多代理協作文檔
@@ -88,11 +90,13 @@ Cursor‧Claude Code 綜合代理統一作業手冊是一個**智能執行引擎
 ### 1.3 智能代理新功能 (v2.0.0)
 
 #### 多模態分析引擎
+
 - **圖像理解**：分析專案截圖、UI 設計稿、架構圖
 - **程式碼視覺化**：自動生成流程圖、依賴關係圖
 - **文檔智能提取**：從 PDF、圖片中提取技術規格
 
 #### 深度學習意圖識別
+
 ```python
 class IntentClassifier:
     def __init__(self):
@@ -105,19 +109,20 @@ class IntentClassifier:
             'testing': ['測試', '驗證', 'test', 'verify'],
             'architecture': ['架構', '設計', '規劃', 'design']
         }
-    
+
     def classify_intent(self, user_input):
         # 結合語義分析和關鍵詞匹配
         semantic_score = self.semantic_analysis(user_input)
         keyword_score = self.keyword_matching(user_input)
         context_score = self.context_analysis(user_input)
-        
+
         return self.weighted_classification(
             semantic_score, keyword_score, context_score
         )
 ```
 
 #### 實時協作優化
+
 - **多用戶同步**：支援多個開發者同時使用代理
 - **衝突解決**：智能處理併發操作衝突
 - **狀態同步**：即時同步專案狀態和進度
@@ -348,20 +353,20 @@ claude-code --monitor --limit=$CLAUDE_DAILY_LIMIT --audit
 
 ### 6.1 常見場景對應表
 
-| 用戶描述              | 解析意圖               | 自動功能                                    | 參考文件                    |
-| --------------------- | ---------------------- | ------------------------------------------- | --------------------------- |
-| "建立 React 專案"     | create + react         | `--create --template=react --mcp`           | superclaude                 |
-| "修復所有錯誤"        | fix + all              | `/ccdebug --analyze-error --fix-suggestion` | debugger + awesome          |
-| "部署到生產環境"      | deploy + production    | `--build --deploy --monitor --security`     | guide + security-review     |
-| "檢查效能問題"        | optimize + performance | `--scan --profile --cache --optimize`       | bplustree + monitor         |
-| "設定監控系統"        | setup + monitoring     | `--monitor --audit --ui --format=dashboard` | monitor + ui                |
-| "分析使用量"          | analyze + usage        | `--analyze --statusline --live`              | ccusage                     |
-| "建立專業代理"        | create + agent         | 調用 agents 或 contains-studio-agents        | agents + contains-studio    |
-| "深度研究功能"        | research + deep        | `/sc:deep-research`                         | superclaude                 |
-| "規格驅動開發"        | spec + driven          | `--spec --validate --generate`              | spec + context-engineering  |
-| "脈絡工程流程"        | context + engineering  | `/generate-prp INITIAL.md`                  | context-engineering         |
-| "看板專案管理"        | kanban + project       | 調用 vibe-kanban                             | vibe-kanban                 |
-| "GUI 專案管理"        | gui + management       | 啟動 opcode                                  | claudia (opcode)            |
+| 用戶描述          | 解析意圖               | 自動功能                                    | 參考文件                   |
+| ----------------- | ---------------------- | ------------------------------------------- | -------------------------- |
+| "建立 React 專案" | create + react         | `--create --template=react --mcp`           | superclaude                |
+| "修復所有錯誤"    | fix + all              | `/ccdebug --analyze-error --fix-suggestion` | debugger + awesome         |
+| "部署到生產環境"  | deploy + production    | `--build --deploy --monitor --security`     | guide + security-review    |
+| "檢查效能問題"    | optimize + performance | `--scan --profile --cache --optimize`       | bplustree + monitor        |
+| "設定監控系統"    | setup + monitoring     | `--monitor --audit --ui --format=dashboard` | monitor + ui               |
+| "分析使用量"      | analyze + usage        | `--analyze --statusline --live`             | ccusage                    |
+| "建立專業代理"    | create + agent         | 調用 agents 或 contains-studio-agents       | agents + contains-studio   |
+| "深度研究功能"    | research + deep        | `/sc:deep-research`                         | superclaude                |
+| "規格驅動開發"    | spec + driven          | `--spec --validate --generate`              | spec + context-engineering |
+| "脈絡工程流程"    | context + engineering  | `/generate-prp INITIAL.md`                  | context-engineering        |
+| "看板專案管理"    | kanban + project       | 調用 vibe-kanban                            | vibe-kanban                |
+| "GUI 專案管理"    | gui + management       | 啟動 opcode                                 | claudia (opcode)           |
 
 ### 6.2 智能功能推論
 

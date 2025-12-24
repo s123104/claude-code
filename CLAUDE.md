@@ -9,6 +9,7 @@ This is a **Claude Code Chinese Documentation Hub** - a comprehensive collection
 ## SSOT Architecture
 
 This repository follows the **Single Source of Truth (SSOT)** principle:
+
 - **Version metadata**: `config/metadata.json` is the authoritative source for all version information
 - **Project status**: Active (14) and archived (5) projects are clearly tracked
 - **Clean Code**: Consistent naming, no redundancy, clear documentation structure
