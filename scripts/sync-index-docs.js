@@ -115,17 +115,7 @@ const projectsConfig = [
     color: 'blue',
     independence: '⭐⭐⭐',
   },
-  {
-    id: 'claude-agents',
-    file: 'docs/claude-agents-zh-tw.md',
-    category: 'agents',
-    tags: ['自訂代理', '工作流程'],
-    badge: '自訂代理',
-    icon: 'users',
-    title: 'Claude Agents 自訂系統',
-    color: 'indigo',
-    independence: '⭐⭐',
-  },
+  // claude-agents 已淘汰（2025-12-24），建議使用 agents (wshobson)
   {
     id: 'contains-studio-agents',
     file: 'docs/contains-studio-agents-zh-tw.md',
@@ -139,17 +129,7 @@ const projectsConfig = [
   },
   
   // 監控分析類
-  {
-    id: 'usage-monitor',
-    file: 'docs/claude-code-usage-monitor-zh-tw.md',
-    category: 'monitoring',
-    tags: ['用量監控', 'ML預測', 'P90'],
-    badge: 'ML-based P90',
-    icon: 'chart-line',
-    title: 'Usage Monitor ML 進階監控',
-    color: 'yellow',
-    independence: '⭐⭐⭐',
-  },
+  // usage-monitor 已淘汰（2025-12-24），建議使用 ccusage
   {
     id: 'ccusage',
     file: 'docs/ccusage-zh-tw.md',
@@ -175,13 +155,13 @@ const projectsConfig = [
     independence: '⭐⭐',
   },
   {
-    id: 'claudia',
-    file: 'docs/claudia-zh-tw.md',
+    id: 'opcode',
+    file: 'docs/opcode-zh-tw.md',
     category: 'interface',
     tags: ['桌面', 'Tauri', 'opcode'],
-    badge: '桌面應用 (opcode)',
+    badge: '桌面應用',
     icon: 'window-maximize',
-    title: 'opcode (原 Claudia) 桌面應用',
+    title: 'opcode 桌面應用',
     color: 'purple',
     independence: '⭐',
   },
@@ -270,28 +250,8 @@ const projectsConfig = [
     color: 'slate',
     independence: '⭐⭐',
   },
-  {
-    id: 'leaderboard',
-    file: 'docs/claude-code-leaderboard-zh-tw.md',
-    category: 'tools',
-    tags: ['競賽排行', 'Hooks', '追蹤'],
-    badge: '全球排行榜',
-    icon: 'trophy',
-    title: 'Claude Code Leaderboard 排行榜',
-    color: 'yellow',
-    independence: '⭐⭐',
-  },
-  {
-    id: 'debugger',
-    file: 'docs/claudecode-debugger-zh-tw.md',
-    category: 'tools',
-    tags: ['除錯工具', '診斷', '多語言'],
-    badge: 'AI 除錯器',
-    icon: 'bug',
-    title: 'ClaudeCode-Debugger AI 除錯',
-    color: 'red',
-    independence: '⭐⭐',
-  },
+  // leaderboard 已淘汰（2025-12-24），無維護
+  // debugger 已淘汰（2025-12-24），無維護
 ];
 
 /**

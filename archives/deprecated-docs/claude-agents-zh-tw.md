@@ -1,5 +1,16 @@
 # Claude Code Custom Agents 中文說明書
 
+> ⚠️ **歸檔警告**
+>
+> 本文檔已於 **2025-12-24** 歸檔。此專案已停止維護（最後更新 2025-07-25），建議改用：
+>
+> - **agents (wshobson)**：更完整的代理集合（99 個代理、107 個技能）- [agents 文檔](/docs/agents-zh-tw.md)
+> - **Contains Studio Agents**：另一個優秀的代理集合 - [contains-studio-agents 文檔](/docs/contains-studio-agents-zh-tw.md)
+>
+> 以下內容僅供歷史參考。
+
+---
+
 ## 概述
 
 Claude Code Custom Agents 是一個專為 Claude Code 設計的自訂代理集合，提供 **7 個專業化的 AI 助手**，涵蓋**程式碼重構**、**前端設計**、**專案規劃**、**安全審查**、**內容撰寫**等多個開發領域。這些代理經過精心設計，能夠獨立或協作處理從程式碼優化到專案管理的各種開發需求。

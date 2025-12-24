@@ -1,5 +1,16 @@
 # Claude Code Hooks 完整指南
 
+> ⚠️ **歸檔警告**
+>
+> 本文檔已於 **2025-12-24** 歸檔。此專案已停止維護（最後更新 2025-07-20），建議改用：
+>
+> - **官方 Hooks 文檔**：[docs.anthropic.com/en/docs/claude-code/hooks](https://docs.anthropic.com/en/docs/claude-code/hooks)
+> - **官方繁中文檔**：[/docs/anthropic-claude-code-zh-tw/hooks.md](/docs/anthropic-claude-code-zh-tw/hooks.md)
+>
+> 以下內容僅供歷史參考。
+
+---
+
 > 透過註冊 shell 命令，客製化並擴展您的 Claude Code 工作流程。
 
 ## 概述

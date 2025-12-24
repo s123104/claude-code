@@ -8,9 +8,9 @@ opcode 是 Claude Code 的強大圖形化應用程式和工具套件。創建自
 > **專案資訊**
 >
 > - **專案名稱**：opcode (原名 Claudia)
-> - **專案版本**：v0.2.1
-> - **專案最後更新**：2025-10-13
-> - **文件整理時間**：2025-12-24T01:59:00+08:00
+> - **專案版本**：v0.2.2+
+> - **專案最後更新**：2025-10-16
+> - **文件整理時間**：2025-12-24T22:55:00+08:00
 >
 > **核心定位**
 > - **功能**：Claude Code 的強大圖形化應用程式，提供自訂代理創建、會話管理、背景代理執行等功能
@@ -18,8 +18,7 @@ opcode 是 Claude Code 的強大圖形化應用程式和工具套件。創建自
 > - **客群**：Claude Code 用戶、代理開發者、專案管理者、多任務開發者
 >
 > **資料來源**
-> - [GitHub 專案](https://github.com/getAsterisk/claudia)
-> - [官方網站](https://claudiacode.com)
+> - [GitHub 專案](https://github.com/winfunc/opcode)（原 getAsterisk/claudia，已遷移）
 > - [Discord 社群](https://discord.com/invite/KYwhHVzUsY)
 
 ---

@@ -1,5 +1,16 @@
 # 🎯 Claude Code Usage Monitor 中文說明書
 
+> ⚠️ **歸檔警告**
+>
+> 本文檔已於 **2025-12-24** 歸檔。此專案已停止維護（最後更新 2025-07-24），建議改用：
+>
+> - **ccusage**：更活躍、功能更完整的替代方案 - [ccusage 文檔](/docs/ccusage-zh-tw.md)
+> - **ccusage 官網**：[ccusage.com](https://ccusage.com/)
+>
+> 以下內容僅供歷史參考。
+
+---
+
 [![PyPI Version](https://img.shields.io/pypi/v/claude-monitor.svg)](https://pypi.org/project/claude-monitor/)
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

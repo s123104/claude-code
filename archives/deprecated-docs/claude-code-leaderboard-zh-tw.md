@@ -1,5 +1,15 @@
 # Claude Code Leaderboard CLI 中文說明書
 
+> ⚠️ **歸檔警告**
+>
+> 本文檔已於 **2025-12-24** 歸檔。此專案已停止維護（最後更新 2025-08-06），目前有 12 個未解決的 issues。
+>
+> 建議使用 **ccusage** 進行使用量追蹤：[ccusage 文檔](/docs/ccusage-zh-tw.md)
+>
+> 以下內容僅供歷史參考。
+
+---
+
 ## 概述
 
 Claude Code Leaderboard CLI 是一個自動追蹤 Claude Code 使用量的工具，透過 **全球排行榜** 讓開發者能夠比較和分享自己的 AI 開發效率。利用 Claude Code 的 **Hooks 系統**，在每次會話結束後自動收集使用統計資料，並上傳到公開的排行榜網站 [claudecount.com](https://claudecount.com)。
