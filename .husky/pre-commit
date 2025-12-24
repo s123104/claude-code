@@ -1,0 +1,43 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Claude Code 文檔專案 Pre-commit Hook
+# 在提交前自動執行品質檢查
+
+echo "🔍 執行 Pre-commit 檢查..."
+
+# 檢查 Markdown 格式
+echo "📝 檢查 Markdown 格式..."
+error_count=0
+
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.md$'); do
+    if [ -f "$file" ]; then
+        # 檢查程式碼區塊配對
+        count=$(grep -c "^\`\`\`" "$file" 2>/dev/null || echo "0")
+        if [ $((count % 2)) -ne 0 ]; then
+            echo "❌ $file: 程式碼區塊未正確關閉"
+            error_count=$((error_count + 1))
+        fi
+    fi
+done
+
+if [ $error_count -gt 0 ]; then
+    echo "❌ 發現 $error_count 個格式錯誤，請修正後再提交"
+    exit 1
+fi
+
+echo "✅ Markdown 格式檢查通過"
+
+# 檢查是否有過大的檔案
+echo "📦 檢查檔案大小..."
+for file in $(git diff --cached --name-only --diff-filter=ACM); do
+    if [ -f "$file" ]; then
+        size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+        if [ "$size" -gt 5000000 ]; then
+            echo "⚠️  警告: $file 檔案過大 ($(($size / 1024 / 1024))MB)"
+        fi
+    fi
+done
+
+echo "✅ Pre-commit 檢查完成"
+exit 0

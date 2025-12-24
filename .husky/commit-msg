@@ -1,0 +1,47 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Claude Code 文檔專案 Commit-msg Hook
+# 驗證 Conventional Commits 格式
+
+echo "📋 驗證 Commit 訊息格式..."
+
+commit_msg=$(cat "$1")
+
+# Conventional Commits 正則表達式
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,100}$"
+
+# 允許 merge commit
+if echo "$commit_msg" | grep -qE "^Merge"; then
+    echo "✅ Merge commit 已接受"
+    exit 0
+fi
+
+# 驗證格式
+if echo "$commit_msg" | head -1 | grep -qE "$pattern"; then
+    echo "✅ Commit 訊息格式正確"
+    exit 0
+else
+    echo "❌ Commit 訊息不符合 Conventional Commits 格式"
+    echo ""
+    echo "格式要求: <type>(<scope>): <description>"
+    echo ""
+    echo "有效的 type:"
+    echo "  feat     - 新功能"
+    echo "  fix      - 錯誤修復"
+    echo "  docs     - 文檔更新"
+    echo "  style    - 格式調整"
+    echo "  refactor - 重構"
+    echo "  perf     - 效能改善"
+    echo "  test     - 測試相關"
+    echo "  build    - 建構相關"
+    echo "  ci       - CI/CD 相關"
+    echo "  chore    - 其他維護"
+    echo ""
+    echo "範例:"
+    echo "  docs: 更新 agents 文檔至 v3.0.0"
+    echo "  fix(scripts): 修復版本同步腳本"
+    echo "  feat: 新增自動化維護腳本"
+    echo ""
+    exit 1
+fi

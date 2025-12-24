@@ -7,6 +7,7 @@
 ```
 scripts/
 ├── README.md                    # 本說明文件
+├── auto-maintenance.sh          # 🤖 綜合自動維護腳本（推薦）
 ├── sync-changelog.js            # ⭐ CHANGELOG 自動同步
 ├── sync-index-docs.js           # 📊 文檔元資料同步到 index.html
 ├── validate-docs.sh             # 🔍 文檔驗證工具
@@ -17,12 +18,48 @@ scripts/
 ├── import-mcp-servers.sh        # 🔌 MCP 伺服器導入
 └── doc-sync/                    # 📥 官方文檔同步模組
     ├── README.md                # 模組說明
-    ├── auto-discover-sync.js    # 自動發現與同步
+    ├── auto-discover-sync.js    # 自動發現與同步（已過時）
     ├── auto-discover.sh         # Shell 包裝器
     ├── zh-tw-translator-simple.cjs  # 繁體中文翻譯
     ├── package.json             # 依賴配置
     └── package-lock.json        # 版本鎖定
 ```
+
+## 🤖 綜合自動維護腳本（推薦）
+
+### auto-maintenance.sh
+
+整合所有維護任務的一站式腳本，用於同步、驗證、更新和提交。
+
+**快速使用**：
+
+```bash
+# 完整維護（同步 + 驗證 + 更新 + 提交）
+bash scripts/auto-maintenance.sh --full
+
+# 僅同步專案
+bash scripts/auto-maintenance.sh --sync
+
+# 僅驗證文檔
+bash scripts/auto-maintenance.sh --validate
+
+# 預覽模式（不實際執行）
+bash scripts/auto-maintenance.sh --full --dry-run
+
+# 顯示幫助
+bash scripts/auto-maintenance.sh --help
+```
+
+**選項說明**：
+
+| 選項 | 說明 |
+|------|------|
+| `--full` | 完整維護（所有步驟） |
+| `--sync` | 同步 analysis-projects 專案 |
+| `--validate` | 驗證文檔品質 |
+| `--update` | 更新文檔日期 |
+| `--commit` | 自動提交變更 |
+| `--dry-run` | 預覽模式 |
 
 ## 🎯 核心工具
 
@@ -443,7 +480,31 @@ MIT License - 請參考 LICENSE 文件。
 
 ---
 
-**最後更新**: 2025-10-29  
-**版本**: 4.0  
+**最後更新**: 2025-12-24  
+**版本**: 5.0  
 **維護者**: s123104  
-**腳本總數**: 8 個核心工具 + doc-sync 模組
+**腳本總數**: 9 個核心工具 + doc-sync 模組
+
+## 📦 npm 腳本
+
+透過 `package.json` 可使用以下 npm 命令：
+
+```bash
+npm run sync:all        # 同步專案並更新 index.html
+npm run sync:index      # 僅更新 index.html
+npm run sync:projects   # 僅同步專案
+npm run validate        # 驗證文檔（跳過外部連結）
+npm run validate:full   # 完整驗證（含外部連結）
+npm run update:docs     # 批次更新文檔
+npm run setup:hooks     # 設定 Git hooks
+npm start               # 啟動本地開發伺服器
+```
+
+## 🔄 GitHub Actions 自動化
+
+專案已配置 GitHub Actions 自動化：
+
+- **sync-docs.yml**: 每日自動同步專案並更新文檔
+- **validate-pr.yml**: PR 時自動驗證文檔品質
+
+觸發時間：每日 UTC 18:00（台灣時間 02:00）

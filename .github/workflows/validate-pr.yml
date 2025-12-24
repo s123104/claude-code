@@ -1,0 +1,136 @@
+name: 🔍 PR 驗證
+
+on:
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "docs/**"
+      - "*.md"
+      - "index.html"
+      - "scripts/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: 📋 文檔驗證
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout 代碼
+        uses: actions/checkout@v4
+
+      - name: 🟢 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: 📦 安裝依賴
+        run: npm ci
+
+      - name: 🔍 檢查 Markdown 格式
+        run: |
+          echo "## Markdown 格式檢查" >> $GITHUB_STEP_SUMMARY
+          
+          # 檢查是否有未關閉的程式碼區塊
+          error_count=0
+          for file in $(find docs -name "*.md"); do
+            count=$(grep -c "^\`\`\`" "$file" 2>/dev/null || echo "0")
+            if [ $((count % 2)) -ne 0 ]; then
+              echo "❌ $file: 程式碼區塊未正確關閉" >> $GITHUB_STEP_SUMMARY
+              error_count=$((error_count + 1))
+            fi
+          done
+          
+          if [ $error_count -eq 0 ]; then
+            echo "✅ 所有文檔格式正確" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "發現 $error_count 個格式錯誤" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: 📊 檢查元資料
+        run: |
+          echo "## 元資料檢查" >> $GITHUB_STEP_SUMMARY
+          
+          missing_count=0
+          for file in docs/*-zh-tw.md; do
+            if [ -f "$file" ]; then
+              if ! grep -q "專案版本" "$file"; then
+                echo "⚠️ $(basename $file): 缺少專案版本資訊" >> $GITHUB_STEP_SUMMARY
+                missing_count=$((missing_count + 1))
+              fi
+              if ! grep -q "專案最後更新" "$file"; then
+                echo "⚠️ $(basename $file): 缺少專案最後更新時間" >> $GITHUB_STEP_SUMMARY
+                missing_count=$((missing_count + 1))
+              fi
+              if ! grep -q "文件整理時間" "$file"; then
+                echo "⚠️ $(basename $file): 缺少文件整理時間" >> $GITHUB_STEP_SUMMARY
+                missing_count=$((missing_count + 1))
+              fi
+            fi
+          done
+          
+          if [ $missing_count -eq 0 ]; then
+            echo "✅ 所有文檔元資料完整" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "發現 $missing_count 個元資料缺失" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 🔗 驗證內部連結
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          folder-path: "docs/"
+          config-file: ".github/markdown-link-check.json"
+          use-quiet-mode: "yes"
+        continue-on-error: true
+
+  lint-scripts:
+    name: 📝 腳本檢查
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout 代碼
+        uses: actions/checkout@v4
+
+      - name: 🟢 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 🔍 Shell 腳本語法檢查
+        run: |
+          echo "## Shell 腳本檢查" >> $GITHUB_STEP_SUMMARY
+          error_count=0
+          
+          for script in scripts/*.sh; do
+            if [ -f "$script" ]; then
+              if bash -n "$script" 2>/dev/null; then
+                echo "✅ $(basename $script): 語法正確" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "❌ $(basename $script): 語法錯誤" >> $GITHUB_STEP_SUMMARY
+                error_count=$((error_count + 1))
+              fi
+            fi
+          done
+          
+          if [ $error_count -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: 🔍 JavaScript 語法檢查
+        run: |
+          echo "## JavaScript 檢查" >> $GITHUB_STEP_SUMMARY
+          
+          for script in scripts/*.js scripts/doc-sync/*.js scripts/doc-sync/*.cjs; do
+            if [ -f "$script" ]; then
+              if node --check "$script" 2>/dev/null; then
+                echo "✅ $(basename $script): 語法正確" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "❌ $(basename $script): 語法錯誤" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done

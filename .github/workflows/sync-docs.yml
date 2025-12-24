@@ -1,0 +1,111 @@
+name: 📚 文檔自動同步
+
+on:
+  schedule:
+    # 每日 UTC 18:00 (台灣時間 02:00) 執行
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      force_sync:
+        description: "強制同步所有專案"
+        required: false
+        default: "false"
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  sync-projects:
+    name: 🔄 同步專案版本
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check_changes.outputs.has_changes }}
+
+    steps:
+      - name: 📥 Checkout 代碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: 🟢 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: 📦 安裝依賴
+        run: npm ci
+
+      - name: 🔄 同步 analysis-projects
+        run: |
+          cd analysis-projects
+          for dir in */; do
+            echo "Syncing $dir..."
+            cd "$dir"
+            git fetch origin 2>/dev/null || true
+            default_branch=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main")
+            git reset --hard "origin/$default_branch" 2>/dev/null || git reset --hard origin/master 2>/dev/null || true
+            cd ..
+          done
+
+      - name: 📊 更新專案日期
+        run: |
+          cd analysis-projects
+          for dir in */; do
+            project="${dir%/}"
+            cd "$dir"
+            last_date=$(git log -1 --format='%cd' --date=short 2>/dev/null || echo "")
+            cd ..
+            if [ -n "$last_date" ]; then
+              echo "$project: $last_date"
+            fi
+          done
+
+      - name: 🔄 同步 index.html
+        run: node scripts/sync-index-docs.js
+
+      - name: 📝 檢查變更
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 💾 提交變更
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "docs: 自動同步專案文檔 $(date +%Y-%m-%d)"
+          git push
+
+  validate-docs:
+    name: 🔍 驗證文檔品質
+    runs-on: ubuntu-latest
+    needs: sync-projects
+    if: always()
+
+    steps:
+      - name: 📥 Checkout 代碼
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: 🔍 驗證 Markdown 連結
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          folder-path: "docs/"
+          config-file: ".github/markdown-link-check.json"
+          use-quiet-mode: "yes"
+        continue-on-error: true
+
+      - name: 📊 生成驗證報告
+        run: |
+          echo "## 文檔驗證報告" >> $GITHUB_STEP_SUMMARY
+          echo "- 驗證時間: $(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+          echo "- 文檔數量: $(find docs -name '*.md' | wc -l)" >> $GITHUB_STEP_SUMMARY

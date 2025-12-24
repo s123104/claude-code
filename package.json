@@ -4,21 +4,23 @@
   "description": "Claude Code 繁體中文文件整合專案 - 完整的 Claude Code 與 Cursor AI 整合說明書集合",
   "main": "index.js",
   "scripts": {
-    "start": "node scripts/auto-doc-updater.js",
-    "update": "node scripts/auto-doc-updater.js",
-    "quality-check": "node scripts/quality-checker.js",
-    "auto-fix": "node scripts/auto-fix.js",
+    "start": "npx http-server . -p 3000 -o index.html",
     "dev": "npx http-server . -p 8080 -o",
-    "build": "npm run quality-check && npm run update",
-    "test": "npm run quality-check",
+    "sync:index": "node scripts/sync-index-docs.js",
+    "sync:changelog": "node scripts/sync-changelog.js",
+    "sync:projects": "bash scripts/batch-sync-projects.sh",
+    "sync:all": "npm run sync:projects && npm run sync:index",
+    "validate": "bash scripts/validate-docs.sh --no-external",
+    "validate:full": "bash scripts/validate-docs.sh",
+    "update:docs": "bash scripts/update-all-docs.sh",
+    "update:versions": "bash scripts/sync-versions.sh",
     "docs:serve": "npx http-server . -p 3000 -o index.html",
-    "docs:build": "npm run build",
-    "lint": "eslint scripts/*.js",
-    "format": "prettier --write scripts/*.js docs/*.md",
+    "lint": "eslint scripts/*.js --ignore-pattern 'scripts/doc-sync/*'",
+    "format": "prettier --write 'scripts/*.js' 'docs/*.md'",
     "install-claude": "npm install -g @anthropic-ai/claude-code",
-    "check-updates": "node scripts/check-repo-updates.js",
-    "sync-repos": "node scripts/sync-repositories.js",
-    "deploy": "npm run build && gh-pages -d ."
+    "setup:hooks": "bash scripts/setup-git-hooks.sh",
+    "deploy": "gh-pages -d .",
+    "test": "npm run validate"
   },
   "keywords": [
     "claude-code",
@@ -62,10 +64,10 @@
     "@anthropic-ai/claude-code": ">=6.0.0"
   },
   "config": {
-    "update_interval": "6h",
-    "quality_check_on_build": true,
-    "auto_fix_enabled": true,
-    "claude_code_version": "6.0.0"
+    "update_interval": "daily",
+    "validate_on_commit": true,
+    "auto_sync_enabled": true,
+    "claude_code_version": "latest"
   },
   "claude-code": {
     "project_type": "documentation",
