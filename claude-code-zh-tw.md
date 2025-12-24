@@ -1,9 +1,9 @@
 # Claude Code 官方驗證使用手冊 📚
 
 > **經官方文檔驗證的完整 Claude Code 中文指南**  
-> 最後更新時間：2025-10-29T22:30:00+08:00  
+> 最後更新時間：2025-12-24T23:35:00+08:00  
 > 文件語言：繁體中文  
-> 版本：v2.0.28 - 2025 年 10 月最新版本，包含 Plugins、Agent Skills、Subagents 多代理協作系統  
+> 版本：v2.0.75 - 2025 年 12 月最新版本，包含 Opus 4.5、Background Agents、Skills 開放標準  
 > GitHub 作者：[s123104](https://github.com/s123104) 整理
 >
 > **🎯 本手冊特色**
@@ -16,13 +16,13 @@
 > **專案資訊**
 >
 > - **專案名稱**: Claude Code Official Documentation
-> - **專案版本**: v2.0.28
-> - **專案最後更新**: 2025-10-29
-> - **文件整理時間**: 2025-10-29
+> - **專案版本**: v2.0.75
+> - **專案最後更新**: 2025-12-20
+> - **文件整理時間**: 2025-12-24T23:35:00+08:00
 >
 > **核心定位**
 >
-> - **功能**: CLI 開發工具、Subagents 多代理協作、Agent Skills 模組化、Plugins 外掛系統、MCP 協議整合、企業級安全控制
+> - **功能**: CLI 開發工具、Subagents 多代理協作、Agent Skills 模組化、Plugins 外掛系統、MCP 協議整合、企業級安全控制、Background Agents
 > - **場景**: AI 輔助開發、程式碼自動生成、多語言專案開發、企業 DevOps 自動化、團隊協作編程、安全審查與合規
 > - **客群**: 全端開發者、DevOps 工程師、技術主管、企業團隊、AI 工程師、個人開發者
 
@@ -2567,6 +2567,66 @@ which claude
 ---
 
 ### CHANGELOG 新功能摘錄（依版本，來源：GitHub CHANGELOG）
+
+> 📋 **最新版本**：v2.0.75（2025-12-20）
+> 完整版本歷史請參考 [claudefa.st/changelog](https://claudefa.st/blog/guide/changelog)
+
+## 2.0.75（2025-12-20）
+
+- 精簡任務工具指令
+- 移除工具呼叫前不使用冒號的指令
+
+## 2.0.65
+
+- **模型切換**：使用 Alt+P（Mac 為 Option+P）在提示中途切換模型
+- **上下文資訊**：檢視詳細的上下文視窗資訊
+- **檔案建議**：新增設定以配置檔案建議行為
+- **Shell 偵測**：新增用於自訂 shell 偵測的環境變數
+- **提示歷史修復**：修復提示歷史導航問題
+- **圖片格式**：改善圖片格式偵測
+
+## 2.0.64
+
+- **即時自動壓縮**：更快的上下文管理，即時自動壓縮
+- **非同步執行**：代理和 bash 命令現可非同步執行
+- **統計指令**：`/stats` 指令顯示使用指標和統計資料
+- **命名會話**：支援透過 `/rename` 和 `/resume` 指令命名會話
+- **規則目錄**：支援 `.claude/rules/` 目錄存放專案規則
+- **圖片中繼資料**：新增圖片尺寸中繼資料支援
+- **環境檔案**：修復環境檔案自動載入問題
+- **VSCode 剪貼簿**：在 VSCode 擴充套件中新增剪貼簿按鈕
+- **Windows ARM64**：修復 Windows ARM64 相容性問題
+- **統一 TaskOutputTool**：整合代理輸出處理
+
+## 2.0.60
+
+- **背景代理**：代理在您工作時於背景執行
+- **CLI 參數**：新增 `--disable-slash-commands` CLI 參數以停用所有斜線命令
+- **提交署名**：在「Co-Authored-By」提交訊息中加入模型名稱
+- **MCP 切換**：`/mcp enable [server-name]` 或 `/mcp disable [server-name]` 快速切換
+- **Fetch 優化**：更新 Fetch 以跳過預先批准網站的摘要
+- **VSCode 多客戶端**：新增支援多個終端機客戶端連接至 IDE 伺服器
+
+## 2.0.58
+
+- **Opus 4.5 for Pro**：Pro 用戶現可使用 Opus 4.5
+- **計時器修復**：修復計時器顯示「11m 60s」而非「12m 0s」的問題
+- **Windows 路徑**：受管設定現優先使用 `C:\Program Files\ClaudeCode`
+
+## 2.0.51
+
+- **Opus 4.5 發布**：[Opus 4.5](https://www.anthropic.com/news/claude-opus-4-5) 現已推出
+- **Claude Code for Desktop**：推出 [Claude Code for Desktop](https://claude.com/download)
+- **更新使用限制**：更新 Claude Code 用戶限制
+- **Pro 額外用量**：Pro 用戶可購買 Opus 4.5 額外用量
+- **計劃模式改善**：更精確的計劃和更徹底的執行
+- **用量通知**：更易理解的用量限制通知
+
+## 2.0.45
+
+- **Microsoft Foundry**：新增支援 Microsoft Foundry
+- **PermissionRequest hook**：透過自訂邏輯自動批准或拒絕工具權限請求
+- **Web 背景任務**：透過以 `&` 開頭的訊息發送背景任務至 Claude Code on the web
 
 ## 2.0.28
 
