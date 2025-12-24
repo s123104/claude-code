@@ -9,6 +9,7 @@ scripts/
 ├── README.md                    # 本說明文件
 ├── auto-maintenance.sh          # 🤖 綜合自動維護腳本（推薦）
 ├── sync-changelog.js            # ⭐ CHANGELOG 自動同步
+├── sync-html-versions.js        # 🆕 SSOT 版本同步到 index.html
 ├── sync-index-docs.js           # 📊 文檔元資料同步到 index.html
 ├── validate-docs.sh             # 🔍 文檔驗證工具
 ├── sync-versions.sh             # 🔄 版本同步機制
@@ -290,7 +291,26 @@ bash scripts/validate-docs.sh --no-external  # 跳過外部連結
 bash scripts/validate-docs.sh --quick-fix    # 快速修復
 ```
 
-### 5. 版本同步工具 (`sync-versions.sh`, `update-all-docs.sh`) 🔄
+### 5. SSOT 版本同步工具 (`sync-html-versions.js`) 🆕
+
+從 SSOT (config/metadata.json) 自動同步版本資訊到 index.html。
+
+**核心功能**：
+
+- ✅ **SSOT 讀取** - 從 metadata.json 讀取最新版本資訊
+- ✅ **精確替換** - 僅更新 meta 標籤和 footer，不影響專案卡片
+- ✅ **Dry Run 模式** - 預覽變更不實際寫入
+- ✅ **詳細日誌** - 顯示每個替換的詳細資訊
+
+**快速使用**：
+
+```bash
+node scripts/sync-html-versions.js              # 執行同步
+node scripts/sync-html-versions.js --dry-run    # 預覽模式
+node scripts/sync-html-versions.js --verbose    # 詳細輸出
+```
+
+### 6. 專案版本同步工具 (`sync-versions.sh`, `update-all-docs.sh`) 🔄
 
 自動同步專案版本資訊到對應文檔。
 
@@ -308,7 +328,7 @@ bash scripts/sync-versions.sh           # 完整版本同步
 bash scripts/update-all-docs.sh         # 批次更新文檔
 ```
 
-### 6. 專案同步工具 (`batch-sync-projects.sh`) 🚀
+### 7. 專案同步工具 (`batch-sync-projects.sh`) 🚀
 
 批次同步 18 個 Claude Code 相關專案到最新版本。
 
@@ -325,7 +345,7 @@ bash scripts/batch-sync-projects.sh
 # 查看報告：PROJECT-SYNC-REPORT.md
 ```
 
-### 7. Git 自動化工具 (`setup-git-hooks.sh`) 🔧
+### 8. Git 自動化工具 (`setup-git-hooks.sh`) 🔧
 
 設定 Git Hooks 實現提交品質自動檢查。
 
@@ -343,7 +363,7 @@ bash scripts/setup-git-hooks.sh          # 安裝 hooks
 bash scripts/setup-git-hooks.sh --uninstall  # 移除 hooks
 ```
 
-### 8. MCP 伺服器導入工具 (`import-mcp-servers.sh`) 🔌
+### 9. MCP 伺服器導入工具 (`import-mcp-servers.sh`) 🔌
 
 從 Claude Desktop 配置自動導入 MCP 伺服器到 Claude Code。
 
@@ -457,6 +477,7 @@ jobs:
 | 工具                   | 類別     | 維護難度 | 使用頻率           |
 | ---------------------- | -------- | -------- | ------------------ |
 | sync-changelog.js      | 文檔同步 | 低       | 每次更新 CHANGELOG |
+| sync-html-versions.js  | SSOT 同步| 低       | 每次版本更新       |
 | sync-index-docs.js     | 文檔同步 | 中       | 每次文檔更新       |
 | doc-sync/              | 文檔同步 | 中       | 每日自動           |
 | validate-docs.sh       | 品質檢查 | 低       | 每次提交前         |
@@ -480,10 +501,10 @@ MIT License - 請參考 LICENSE 文件。
 
 ---
 
-**最後更新**: 2025-12-24  
-**版本**: 5.0  
+**最後更新**: 2025-12-25  
+**版本**: 5.1  
 **維護者**: s123104  
-**腳本總數**: 9 個核心工具 + doc-sync 模組
+**腳本總數**: 10 個核心工具 + doc-sync 模組
 
 ## 📦 npm 腳本
 
