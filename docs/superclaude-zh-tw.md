@@ -10,8 +10,8 @@ SuperClaude 是一套 **meta-programming 配置框架**，透過行為指令注�
 >
 > - **專案名稱**：SuperClaude Framework
 > - **專案版本**：v4.1.9
-> - **專案最後更新**：2025-12-15
-> - **文件整理時間**：2025-12-24T01:59:00+08:00
+> - **專案最後更新**：2025-12-16
+> - **文件整理時間**：2025-12-24T22:00:00+08:00
 >
 > **核心定位**
 >
@@ -244,7 +244,16 @@ cd SuperClaude_Framework
 - **Sequential**：Token 效率推理（30-50% 減少 tokens）
 - **Tavily**：Deep Research 的網路搜尋
 - **Context7**：官方文檔查詢
-- **Mindbase**：語義搜尋增強（選用）
+- **Mindbase**：跨對話語義搜尋（選用增強，需 "recommended" 設定檔）
+- **Airis Agent**：智能代理協調（v4.1.9 新增）
+
+**統一安裝選項（推薦）**：
+
+透過 [AIRIS MCP Gateway](https://github.com/agiletec-inc/airis-mcp-gateway) 可一次性安裝所有推薦的 MCP 伺服器。
+
+> **注意**：錯誤學習功能透過內建 ReflexionMemory 提供（無需安裝）。  
+> Mindbase 提供語義搜尋增強（需 "recommended" 設定檔）。  
+> 詳見 `docs/mcp/mcp-integration-policy.md`。
 
 **效能對比**：
 
@@ -1026,5 +1035,10 @@ A：目前僅支援 Claude Code，但 v4 將有更廣泛的相容性。
 > **注意**：本文件為社群整理版本，詳細內容與最新資源請參閱 [官方 GitHub](https://github.com/SuperClaude-Org/SuperClaude_Framework) 與相關文檔。
 >
 > **版本資訊**：SuperClaude v4.1.9 - Meta-programming 配置框架（30 個斜線指令、16 個專業代理、7 種行為模式、8 個 MCP 伺服器）  
-> **最後更新**：2025-11-25T02:49:00+08:00  
-> **主要變更**：更新安裝流程（pipx）、修正架構說明（v4.1.9 使用 slash commands，TypeScript plugins 計劃在 v5.0）、更新統計數字、確認 Deep Research 功能已包含在 v4.1.9、驗證所有 30 個指令和 16 個代理
+> **最後更新**：2025-12-24T22:00:00+08:00  
+> **主要變更**：
+>
+> - 新增 AIRIS MCP Gateway 作為統一安裝選項
+> - 新增 Airis Agent 和 MindBase MCP 伺服器說明
+> - 更新 Run in Smithery 徽章
+> - 修復 macOS 相容性問題（移除重複的大寫路徑）
