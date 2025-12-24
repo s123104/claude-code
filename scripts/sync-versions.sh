@@ -186,22 +186,17 @@ update_doc_version() {
 get_doc_filename() {
     local project_name="$1"
     
+    # 已淘汰（2025-12-24）：Claude-Code-Usage-Monitor, claudia, claude-code-hooks, claude-agents, ClaudeCode-Debugger, claude-code-leaderboard
     case "$project_name" in
-        "Claude-Code-Usage-Monitor") echo "claude-code-usage-monitor-zh-tw.md" ;;
         "agents") echo "agents-zh-tw.md" ;;
         "awesome-claude-code") echo "awesome-claude-code-zh-tw.md" ;;
         "SuperClaude_Framework") echo "superclaude-zh-tw.md" ;;
         "claude-code-guide") echo "claude-code-guide-zh-tw.md" ;;
         "claudecodeui") echo "claudecodeui-zh-tw.md" ;;
         "BPlusTree3") echo "bplustree3-zh-tw.md" ;;
-        "claudia") echo "claudia-zh-tw.md" ;;
-        "claude-code-hooks") echo "claude-code-hooks-zh-tw.md" ;;
         "claude-code-spec") echo "claude-code-spec-zh-tw.md" ;;
         "ccusage") echo "ccusage-zh-tw.md" ;;
         "vibe-kanban") echo "vibe-kanban-zh-tw.md" ;;
-        "claude-agents") echo "claude-agents-zh-tw.md" ;;
-        "ClaudeCode-Debugger") echo "claudecode-debugger-zh-tw.md" ;;
-        "claude-code-leaderboard") echo "claude-code-leaderboard-zh-tw.md" ;;
         "context-engineering-intro") echo "context-engineering-intro-zh-tw.md" ;;
         "contains-studio-agents") echo "contains-studio-agents-zh-tw.md" ;;
         "claude-code-security-review") echo "claude-code-security-review-zh-tw.md" ;;

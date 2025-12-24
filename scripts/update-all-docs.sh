@@ -21,22 +21,18 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 ANALYSIS_DIR="$ROOT_DIR/analysis-projects"
 DOCS_DIR="$ROOT_DIR/docs"
 
-# 專案對應文檔映射
+# 專案對應文檔映射（已移除過時專案：2025-12-24）
+# 已淘汰：Claude-Code-Usage-Monitor, claudia, claude-agents, ClaudeCode-Debugger, claude-code-leaderboard
 declare -A PROJECT_DOCS=(
-    ["Claude-Code-Usage-Monitor"]="claude-code-usage-monitor-zh-tw.md"
     ["agents"]="agents-zh-tw.md"
     ["awesome-claude-code"]="awesome-claude-code-zh-tw.md"
     ["SuperClaude_Framework"]="superclaude-zh-tw.md"
     ["claude-code-guide"]="claude-code-guide-zh-tw.md"
     ["claudecodeui"]="claudecodeui-zh-tw.md"
     ["BPlusTree3"]="bplustree3-zh-tw.md"
-    ["claudia"]="claudia-zh-tw.md"
     ["claude-code-spec"]="claude-code-spec-zh-tw.md"
     ["ccusage"]="ccusage-zh-tw.md"
     ["vibe-kanban"]="vibe-kanban-zh-tw.md"
-    ["claude-agents"]="claude-agents-zh-tw.md"
-    ["ClaudeCode-Debugger"]="claudecode-debugger-zh-tw.md"
-    ["claude-code-leaderboard"]="claude-code-leaderboard-zh-tw.md"
     ["context-engineering-intro"]="context-engineering-intro-zh-tw.md"
     ["contains-studio-agents"]="contains-studio-agents-zh-tw.md"
     ["claude-code-security-review"]="claude-code-security-review-zh-tw.md"

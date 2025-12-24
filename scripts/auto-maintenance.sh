@@ -154,7 +154,7 @@ update_doc_dates() {
             continue
         fi
         
-        # 找到對應的文檔
+        # 找到對應的文檔（已淘汰 2025-12-24：claudia, claude-code-leaderboard, ClaudeCode-Debugger, Claude-Code-Usage-Monitor, claude-agents, claude-code-hooks）
         local doc_file=""
         case "$project" in
             "agents") doc_file="agents-zh-tw.md" ;;
@@ -162,17 +162,11 @@ update_doc_dates() {
             "SuperClaude_Framework") doc_file="superclaude-zh-tw.md" ;;
             "claudecodeui") doc_file="claudecodeui-zh-tw.md" ;;
             "vibe-kanban") doc_file="vibe-kanban-zh-tw.md" ;;
-            "claudia") doc_file="claudia-zh-tw.md" ;;
             "claude-code-spec") doc_file="claude-code-spec-zh-tw.md" ;;
-            "claude-code-leaderboard") doc_file="claude-code-leaderboard-zh-tw.md" ;;
-            "ClaudeCode-Debugger") doc_file="claudecode-debugger-zh-tw.md" ;;
-            "Claude-Code-Usage-Monitor") doc_file="claude-code-usage-monitor-zh-tw.md" ;;
             "awesome-claude-code") doc_file="awesome-claude-code-zh-tw.md" ;;
             "claude-code-guide") doc_file="claude-code-guide-zh-tw.md" ;;
             "BPlusTree3") doc_file="bplustree3-zh-tw.md" ;;
             "context-engineering-intro") doc_file="context-engineering-intro-zh-tw.md" ;;
-            "claude-agents") doc_file="claude-agents-zh-tw.md" ;;
-            "claude-code-hooks") doc_file="claude-code-hooks-zh-tw.md" ;;
             "claude-code-security-review") doc_file="claude-code-security-review-zh-tw.md" ;;
             "contains-studio-agents") doc_file="contains-studio-agents-zh-tw.md" ;;
         esac

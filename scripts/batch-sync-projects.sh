@@ -10,23 +10,18 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# 專案清單
+# 專案清單（已移除過時專案：2025-12-24）
+# 已淘汰：Claude-Code-Usage-Monitor, claudia, claude-code-hooks, claude-agents, ClaudeCode-Debugger, claude-code-leaderboard
 PROJECTS=(
     "agents"
     "SuperClaude_Framework"
-    "Claude-Code-Usage-Monitor"
     "awesome-claude-code"
     "claude-code-guide"
     "claudecodeui"
     "BPlusTree3"
-    "claudia"
-    "claude-code-hooks"
     "claude-code-spec"
     "ccusage"
     "vibe-kanban"
-    "claude-agents"
-    "ClaudeCode-Debugger"
-    "claude-code-leaderboard"
     "context-engineering-intro"
     "contains-studio-agents"
     "claude-code-security-review"
