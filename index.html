@@ -281,6 +281,24 @@
         scroll-behavior: smooth;
       }
 
+      /* 無障礙：減少動態效果 (prefers-reduced-motion) */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+        
+        .gradient-text {
+          animation: none;
+        }
+        
+        .loading-spinner {
+          display: none;
+        }
+      }
+
       /* 漸層文字效果 */
       .gradient-text {
         background: linear-gradient(135deg, #06b6d4, #8b5cf6, #06b6d4);
@@ -765,14 +783,15 @@
   </head>
 
   <body class="min-h-screen text-white relative overflow-x-hidden">
-    <!-- 載入動畫 -->
+    <!-- 載入動畫 (支援 motion-reduce 無障礙設定) -->
     <div id="loading-overlay" class="loading-overlay">
-      <div class="loading-spinner"></div>
+      <div class="loading-spinner motion-reduce:hidden"></div>
+      <div class="hidden motion-reduce:block text-primary-400 text-lg">載入中...</div>
     </div>
 
     <!-- Header Navigation -->
     <header
-      class="glass-effect fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      class="glass-effect fixed top-0 left-0 right-0 z-50 transition-all duration-300 motion-reduce:transition-none"
     >
       <nav
         class="container mx-auto px-4 py-4 flex items-center justify-between"
@@ -2584,7 +2603,7 @@
             完整專案文檔導覽
           </h2>
           <p class="text-xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-            Claude Code 史上最完整生態系統文檔庫 - 14 個活躍專案文檔，包含 Agent Skills、Deep Research、Plugin Marketplace 等最新功能，100% 繁體中文覆蓋
+            Claude Code 史上最完整生態系統文檔庫 - 14 個活躍專案 + 3 個核心文檔，包含 Agent Skills、Deep Research、Plugin Marketplace 等最新功能，100% 繁體中文覆蓋
           </p>
           <p class="text-sm text-neutral-400 mt-2">最後更新：2025-12-25 | Claude Code v2.0.75 | 超級工作流 + 自動化工具鏈 + Hooks 系統</p>
         </div>
@@ -2607,10 +2626,10 @@
         <!-- Filter Tabs -->
         <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-tabs">
           <button class="filter-btn active px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-primary-500 text-white" data-filter="all">
-            <i class="fas fa-globe mr-1"></i> 全部項目 (14)
+            <i class="fas fa-globe mr-1"></i> 全部項目 (17)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="core">
-            <i class="fas fa-book mr-1"></i> 核心文檔 (2)
+            <i class="fas fa-book mr-1"></i> 核心文檔 (3)
           </button>
           <button class="filter-btn px-4 py-2 rounded-lg text-sm transition-all duration-300 bg-neutral-700 text-neutral-300 hover:bg-neutral-600" data-filter="framework">
             <i class="fas fa-magic mr-1"></i> 增強框架 (2)
