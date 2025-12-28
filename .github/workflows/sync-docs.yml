@@ -40,31 +40,44 @@ jobs:
 
       - name: 🔄 同步 analysis-projects
         run: |
-          cd analysis-projects
-          for dir in */; do
-            echo "Syncing $dir..."
-            cd "$dir"
-            git fetch origin 2>/dev/null || true
-            default_branch=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main")
-            git reset --hard "origin/$default_branch" 2>/dev/null || git reset --hard origin/master 2>/dev/null || true
-            cd ..
-          done
+          if [ -d "analysis-projects" ]; then
+            cd analysis-projects
+            for dir in */; do
+              echo "Syncing $dir..."
+              cd "$dir"
+              git fetch origin 2>/dev/null || true
+              default_branch=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}' || echo "main")
+              git reset --hard "origin/$default_branch" 2>/dev/null || git reset --hard origin/master 2>/dev/null || true
+              cd ..
+            done
+          else
+            echo "⚠️ analysis-projects 目錄不存在，跳過同步"
+          fi
 
       - name: 📊 更新專案日期
         run: |
-          cd analysis-projects
-          for dir in */; do
-            project="${dir%/}"
-            cd "$dir"
-            last_date=$(git log -1 --format='%cd' --date=short 2>/dev/null || echo "")
-            cd ..
-            if [ -n "$last_date" ]; then
-              echo "$project: $last_date"
-            fi
-          done
+          if [ -d "analysis-projects" ]; then
+            cd analysis-projects
+            for dir in */; do
+              project="${dir%/}"
+              cd "$dir"
+              last_date=$(git log -1 --format='%cd' --date=short 2>/dev/null || echo "")
+              cd ..
+              if [ -n "$last_date" ]; then
+                echo "$project: $last_date"
+              fi
+            done
+          else
+            echo "⚠️ analysis-projects 目錄不存在，跳過日期更新"
+          fi
 
       - name: 🔄 同步 index.html
-        run: node scripts/sync-index-docs.js
+        run: |
+          if [ -f "scripts/sync-index-docs.js" ]; then
+            node scripts/sync-index-docs.js || echo "⚠️ sync-index-docs.js 執行失敗，繼續執行"
+          else
+            echo "⚠️ scripts/sync-index-docs.js 不存在，跳過"
+          fi
 
       - name: 📝 檢查變更
         id: check_changes
