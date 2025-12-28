@@ -49,9 +49,6 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "dependencies": {
-    "@anthropic-ai/claude-code": "^6.0.0"
-  },
   "devDependencies": {
     "eslint": "^8.50.0",
     "prettier": "^3.0.3",
@@ -61,7 +58,12 @@
     "nodemon": "^3.0.1"
   },
   "peerDependencies": {
-    "@anthropic-ai/claude-code": ">=6.0.0"
+    "@anthropic-ai/claude-code": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/claude-code": {
+      "optional": true
+    }
   },
   "config": {
     "update_interval": "daily",
